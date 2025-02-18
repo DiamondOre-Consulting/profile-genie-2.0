@@ -1,10 +1,9 @@
+import { NavbarSegmented } from "./components/Navbar"
 
 function App() {
 
   return (
-    <div className=''>
-      Hello
-    </div>
+    <NavbarSegmented />
   )
 }
 
