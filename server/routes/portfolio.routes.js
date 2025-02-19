@@ -5,11 +5,11 @@ import { createMetaData, updateMetaData } from "../controller/metaData.controlle
 const portfolioRouter = Router()
 
 portfolioRouter.route('/')
-    .post(upload.array("files", 2), createPortfolio)
+    .post(upload.array("files", 3), createPortfolio)
     .get(getAllPortfolio)
 
 portfolioRouter.route('/:id')
-    .put(upload.array("files", 2), updatePortfolio)
+    .put(upload.array("files", 3), updatePortfolio)
     .delete(deletePortfolio)
     .get(getSinglePortfolio)
 

@@ -8,18 +8,24 @@ import { multipleFileUpload } from "../utils/fileUpload.utils.js"
 
 const createPortfolio = asyncHandler(async (req, res) => {
 
-    const { fullName, userName, tagline, about, } = req.body
+    const { fullName, userName, phoneNumber, email, tagline, about, } = req.body
 
     const portfolio = await Portfolio.create({
         fullName,
         userName,
         tagline,
+        phoneNumber,
+        email,
         about: JSON.parse(about),
         backgroundImage: {
             publicId: "",
             url: ""
         },
         image: {
+            publicId: "",
+            url: ""
+        },
+        logo: {
             publicId: "",
             url: ""
         }
@@ -39,6 +45,8 @@ const createPortfolio = asyncHandler(async (req, res) => {
             portfolio.image = file.result;
         } else if (file.uniqueId === "backgroundImage") {
             portfolio.backgroundImage.url = file.result;
+        } else if (file.uniqueId === "logo") {
+            portfolio.logo.url = file.result;
         }
     });
 
@@ -53,7 +61,7 @@ const createPortfolio = asyncHandler(async (req, res) => {
 
 const updatePortfolio = asyncHandler(async (req, res) => {
 
-    const { fullName, userName, tagline, about } = req.body
+    const { fullName, phoneNumber, email, userName, tagline, about } = req.body
 
     const { id } = req.params
 
@@ -74,6 +82,8 @@ const updatePortfolio = asyncHandler(async (req, res) => {
     portfolio.fullName = await fullName
     portfolio.userName = await userName
     portfolio.tagline = await tagline
+    portfolio.phoneNumber = await phoneNumber
+    portfolio.email = await email
     portfolio.about = await JSON.parse(about)
 
     let uploadedFiles = []
@@ -86,6 +96,8 @@ const updatePortfolio = asyncHandler(async (req, res) => {
             portfolio.image = file.result;
         } else if (file.uniqueId === "backgroundImage") {
             portfolio.backgroundImage.url = file.result;
+        } else if (file.uniqueId === "logo") {
+            portfolio.logo.url = file.result;
         }
     });
 
@@ -568,7 +580,6 @@ const updatePortfolioContact = asyncHandler(async (req, res) => {
         message: "Contact details updated successfully"
     })
 })
-
 
 export {
     createPortfolio,

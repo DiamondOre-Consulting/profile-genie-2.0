@@ -14,6 +14,14 @@ const portfolioSchema = new Schema({
         type: String,
         required: true
     },
+    email: {
+        type: String,
+        required: true
+    },
+    phoneNumber: {
+        type: Number,
+        required: true
+    },
     image: {
         publicId: {
             type: String,
@@ -25,6 +33,16 @@ const portfolioSchema = new Schema({
         }
     },
     backgroundImage: {
+        publicId: {
+            type: String,
+            default: ""
+        },
+        url: {
+            type: String,
+            default: ""
+        }
+    },
+    logo: {
         publicId: {
             type: String,
             default: ""
