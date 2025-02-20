@@ -2,11 +2,12 @@ import TextEditor from '../../TextEditor'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { addProfileDetailSchema } from '@/validations/PortfolioValidation'
-import { IconCamera, IconSquareRoundedArrowLeftFilled, IconSquareRoundedArrowRightFilled, IconWhirl } from '@tabler/icons-react'
-import React, { useEffect, useState } from 'react'
+import { IconCamera, IconRosetteDiscountCheckFilled, IconSquareRoundedArrowLeftFilled, IconSquareRoundedArrowRightFilled, IconWhirl } from '@tabler/icons-react'
+import React, { useState } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Switch } from '@/components/ui/switch'
 
 type profileDetail = z.infer<typeof addProfileDetailSchema>
 
@@ -14,12 +15,13 @@ const AddProfileDetail = ({ setCurrentStep, currentStep, stepsLength }: { setCur
 
 
 
-    const { register, handleSubmit, setValue, trigger, getValues, formState: { errors } } = useForm<profileDetail>({
+    const { register, handleSubmit, setValue, trigger, watch, getValues, formState: { errors, isSubmitting } } = useForm<profileDetail>({
         resolver: zodResolver(addProfileDetailSchema)
     })
     console.log(errors)
 
-    console.log(getValues("about"))
+    console.log(getValues("isPaid"))
+    console.log(getValues("isActive"))
 
     const [files, setFiles] = useState<File[]>([]);
 
@@ -40,6 +42,7 @@ const AddProfileDetail = ({ setCurrentStep, currentStep, stepsLength }: { setCur
 
     const onSubmit = (data: profileDetail) => {
         console.log("object")
+        setCurrentStep(currentStep + 1)
         console.log(JSON.stringify(data))
         const formData = new FormData()
         formData.append("formData", JSON.stringify(data))
@@ -47,57 +50,97 @@ const AddProfileDetail = ({ setCurrentStep, currentStep, stepsLength }: { setCur
         files.forEach((file) => formData.append("files", file))
     }
 
-    const isLoading = true
 
     return (
         <form className='' onSubmit={handleSubmit(onSubmit)} noValidate >
-            <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3'>
+            <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2'>
+                <div onClick={() => setValue("isActive", !getValues("isActive"))} className="relative flex w-full items-start gap-2 rounded-lg border border-red-500 p-3 shadow-sm shadow-black/5 has-[[data-state=checked]]:border-green-600 ">
+                    <Switch
+                        className="order-1 h-4 w-6 after:absolute after:inset-0 [&_span]:size-3 [&_span]:data-[state=checked]:translate-x-2 rtl:[&_span]:data-[state=checked]:-translate-x-2"
+                    />
+                    <div className="flex grow items-center gap-2">
+                        <IconRosetteDiscountCheckFilled className='w-8 h-8 text-green-500' />
+                        <div className="grid grow gap-1">
+                            <Label>
+                                Active
+
+                            </Label>
+                            <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                                {watch("isActive") ? "Link is active!" : "Click to activate link!"}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div onClick={() => setValue("isPaid", !getValues("isPaid"))} className="relative flex w-full items-start gap-2 rounded-lg border border-red-500 p-3 shadow-sm shadow-black/5 has-[[data-state=checked]]:border-green-600 ">
+                    <Switch
+
+                        className="order-1 h-4 w-6 after:absolute after:inset-0 [&_span]:size-3 [&_span]:data-[state=checked]:translate-x-2 rtl:[&_span]:data-[state=checked]:-translate-x-2"
+                    />
+                    <div className="flex grow items-center gap-3">
+                        <img className='w-8 h-8' src="https://img.icons8.com/color/48/paid.png" alt="paid" />
+                        <div className="grid grow gap-1">
+                            <Label>
+                                Paid
+
+                            </Label>
+                            <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                                {watch("isPaid") ? `Start Date - ${new Date().toDateString()}` : "Click to make profile paid!"}
+                            </p>
+                        </div>
+                    </div>
+                </div>
                 <div className="space-y-1">
-                    <Label htmlFor={"fullName"} className="text-neutral-400 text-[0.85rem]">
+                    <Label htmlFor={"fullName"} className="text-neutral-300 ">
                         Your Name <span className="text-[#ff3f69]">*</span>
                     </Label>
-                    <Input {...register("fullName")} placeholder="Enter full name..." type="text" className={`${errors.fullName && "border-[#E11D48] "} py-[0.65rem]  text-neutral-200`} />
+                    <Input {...register("fullName")} placeholder="Enter full name..." type="text" className={`${errors.fullName && "border-[#E11D48] "} py-[0.45rem]  text-neutral-200`} />
                     {errors.fullName && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.fullName.message}</p>}
                 </div>
                 <div className="space-y-1">
-                    <Label htmlFor={"userName"} className="text-neutral-400 text-[0.85rem]">
+                    <Label htmlFor={"userName"} className="text-neutral-300 ">
                         Username <span className="text-[#ff3f69]">*</span>
                     </Label>
-                    <Input {...register("userName")} placeholder="Enter username..." type="text" className={`${errors.userName && "border-[#E11D48] "} py-[0.65rem]  text-neutral-200`} />
+                    <Input {...register("userName")} placeholder="Enter username..." type="text" className={`${errors.userName && "border-[#E11D48] "} py-[0.45rem]  text-neutral-200`} />
                     {errors.userName && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.userName.message}</p>}
                 </div>
 
                 <div className="space-y-1">
-                    <Label htmlFor={"phoneNumber"} className="text-neutral-400 text-[0.85rem]">
+                    <Label htmlFor={"phoneNumber"} className="text-neutral-300 ">
                         Phone Number <span className="text-[#ff3f69]">*</span>
                     </Label>
-                    <Input {...register("phoneNumber", { valueAsNumber: true })} placeholder="Enter phone number..." type="number" className={`${errors.phoneNumber && "border-[#E11D48] "} py-[0.65rem]  text-neutral-200`} />
+                    <Input {...register("phoneNumber", { valueAsNumber: true })} placeholder="Enter phone number..." type="number" className={`${errors.phoneNumber && "border-[#E11D48] "} py-[0.45rem]  text-neutral-200`} />
                     {errors.phoneNumber && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.phoneNumber.message}</p>}
                 </div>
 
                 <div className="space-y-1">
-                    <Label htmlFor={"email"} className="text-neutral-400 text-[0.85rem]">
+                    <Label htmlFor={"email"} className="text-neutral-300 ">
                         Your Email <span className="text-[#ff3f69]">*</span>
                     </Label>
-                    <Input {...register("email")} placeholder="Enter email..." type="email" className={`${errors.email && "border-[#E11D48] "} py-[0.65rem]  text-neutral-200`} />
+                    <Input {...register("email")} placeholder="Enter email..." type="email" className={`${errors.email && "border-[#E11D48] "} py-[0.45rem]  text-neutral-200`} />
                     {errors.email && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.email.message}</p>}
+                </div>
+                <div>
+                    <Label htmlFor={"tagline"} className="text-neutral-300 ">
+                        Tagline/title <span className="text-[#ff3f69]">*</span>
+                    </Label>
+                    <Input {...register("tagline")} placeholder="Enter tagline..." type="text" className={`${errors.tagline && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                    {errors.tagline && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.tagline.message}</p>}
+                </div>
+                <div>
+                    <Label htmlFor={"about.head"} className="text-neutral-300 ">
+                        About Heading <span className="text-[#ff3f69]">*</span>
+                    </Label>
+                    <Input {...register("about.head")} placeholder="Enter heading..." type="text" className={`${errors.about?.head && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                    {errors.about?.head && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.about?.head.message}</p>}
                 </div>
             </div>
 
-
-
             <div className='mt-3'>
-                <div>
-                    <Label htmlFor={"head"} className="text-neutral-400 text-[0.85rem]">
-                        About Heading <span className="text-[#ff3f69]">*</span>
-                    </Label>
-                    <Input {...register("about.head")} placeholder="Enter heading..." type="text" className={`${errors.about?.head && "border-[#E11D48] "} py-[0.65rem] text-neutral-200`} />
-                    {errors.about?.head && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.about?.head.message}</p>}
-                </div>
+
                 <div className="mt-3">
                     <Label
                         htmlFor={"about.body"}
-                        className="text-neutral-400 text-[0.85rem]"
+                        className="text-neutral-300 "
                     >
                         About Body <span className="text-[#ff3f69]">*</span>
                     </Label>
@@ -138,7 +181,7 @@ const AddProfileDetail = ({ setCurrentStep, currentStep, stepsLength }: { setCur
                                 className="w-full h-full object-contain"
                             />
                         ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                            <div className="w-full h-full flex items-center justify-center bg-neutral-950">
                                 <p className="text-gray-400 text-center">Select Image</p>
                             </div>
                         )}
@@ -162,7 +205,7 @@ const AddProfileDetail = ({ setCurrentStep, currentStep, stepsLength }: { setCur
                                 className="w-full h-full object-contain"
                             />
                         ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                            <div className="w-full h-full flex items-center justify-center bg-neutral-950">
                                 <p className="text-gray-400 text-center">Select Logo</p>
                             </div>
                         )}
@@ -187,7 +230,7 @@ const AddProfileDetail = ({ setCurrentStep, currentStep, stepsLength }: { setCur
                             className="w-full h-full object-contain"
                         />
                     ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                        <div className="w-full h-full flex items-center justify-center bg-neutral-950">
                             <p className="text-gray-400 text-center">Select Background</p>
                         </div>
                     )}
@@ -211,11 +254,10 @@ const AddProfileDetail = ({ setCurrentStep, currentStep, stepsLength }: { setCur
                 <button
                     type='submit'
                     className="bg-[#E11D48] cursor-pointer text-white flex items-center gap-3 py-1.5 text-sm px-4 rounded"
-
-                // disabled={isLoading || currentStep > stepsLength}
+                    disabled={isSubmitting || currentStep > stepsLength}
                 >
                     Next   {
-                        isLoading ? (
+                        isSubmitting ? (
                             <IconWhirl className="animate-spin" />
                         ) :
                             <IconSquareRoundedArrowRightFilled />

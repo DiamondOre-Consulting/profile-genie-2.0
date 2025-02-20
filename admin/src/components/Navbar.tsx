@@ -1,6 +1,5 @@
 import { ReactNode, useState } from "react";
 import {
-    Icon2fa,
     IconDatabaseImport,
     IconFileCvFilled,
     IconFingerprint,
@@ -15,9 +14,8 @@ const tabs = [
     { link: "/", label: "Dashboard", icon: IconLayoutDashboardFilled },
     { link: "/all-portfolio", label: "All Portfolio", icon: IconFileCvFilled },
     { link: "/add-portfolio", label: "Add Portfolio", icon: IconFingerprint },
-    { link: "", label: "SSH Keys", icon: IconKey },
-    { link: "", label: "Databases", icon: IconDatabaseImport },
-    { link: "", label: "Authentication", icon: Icon2fa },
+    { link: "/all-catalogue", label: "All Catalogue", icon: IconKey },
+    { link: "/add-catalogue", label: "Add Catalogue", icon: IconDatabaseImport },
     { link: "", label: "Other Settings", icon: IconSettings },
 ];
 
