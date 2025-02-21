@@ -62,6 +62,17 @@ const portfolioSchema = new Schema({
             required: true
         }]
     },
+    isPaid: {
+        type: Boolean,
+        default: false
+    },
+    isActive: {
+        type: Boolean,
+        default: false
+    },
+    paidDate: {
+        type: Date
+    },
     otherDetails: {
         type: Schema.Types.ObjectId,
         ref: "PortfolioDetail"

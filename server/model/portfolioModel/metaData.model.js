@@ -21,9 +21,9 @@ const metaDataSchema = new Schema({
     description: {
         type: String
     },
-    keywords: [{
+    keywords: {
         type: String
-    }],
+    },
     canonical: {
         type: String
     }

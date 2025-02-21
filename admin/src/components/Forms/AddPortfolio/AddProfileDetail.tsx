@@ -8,17 +8,17 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Switch } from '@/components/ui/switch'
+import { useAddPortfolioMutation } from '@/Redux/API/PortfolioApi'
 
 type profileDetail = z.infer<typeof addProfileDetailSchema>
 
 const AddProfileDetail = ({ setCurrentStep, currentStep, stepsLength }: { setCurrentStep: React.Dispatch<React.SetStateAction<number>>, currentStep: number, stepsLength: number }) => {
 
-
+    const [addPortfolio] = useAddPortfolioMutation()
 
     const { register, handleSubmit, setValue, trigger, watch, getValues, formState: { errors, isSubmitting } } = useForm<profileDetail>({
         resolver: zodResolver(addProfileDetailSchema)
     })
-    console.log(errors)
 
     console.log(getValues("isPaid"))
     console.log(getValues("isActive"))
@@ -40,7 +40,7 @@ const AddProfileDetail = ({ setCurrentStep, currentStep, stepsLength }: { setCur
     };
 
 
-    const onSubmit = (data: profileDetail) => {
+    const onSubmit = async (data: profileDetail) => {
         console.log("object")
         setCurrentStep(currentStep + 1)
         console.log(JSON.stringify(data))
@@ -48,6 +48,8 @@ const AddProfileDetail = ({ setCurrentStep, currentStep, stepsLength }: { setCur
         formData.append("formData", JSON.stringify(data))
 
         files.forEach((file) => formData.append("files", file))
+
+        await addPortfolio(formData)
     }
 
 
@@ -61,7 +63,8 @@ const AddProfileDetail = ({ setCurrentStep, currentStep, stepsLength }: { setCur
                     <div className="flex grow items-center gap-2">
                         <IconRosetteDiscountCheckFilled className='w-8 h-8 text-green-500' />
                         <div className="grid grow gap-1">
-                            <Label>
+                            <Label className='text-white'>
+
                                 Active
 
                             </Label>
@@ -79,7 +82,7 @@ const AddProfileDetail = ({ setCurrentStep, currentStep, stepsLength }: { setCur
                     <div className="flex grow items-center gap-3">
                         <img className='w-8 h-8' src="https://img.icons8.com/color/48/paid.png" alt="paid" />
                         <div className="grid grow gap-1">
-                            <Label>
+                            <Label className='text-white'>
                                 Paid
 
                             </Label>
