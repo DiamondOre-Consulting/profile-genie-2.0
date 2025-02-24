@@ -13,8 +13,8 @@ export const addProfileDetailSchema = z.object({
         url: z.string().min(1, 'Image is required')
     }),
     backgroundImage: z.object({
-        publicId: z.string(),
-        url: z.string()
+        publicId: z.string().optional(),
+        url: z.string().optional()
     }).optional(),
     logo: z.object({
         publicId: z.string().optional(),
@@ -75,7 +75,7 @@ export const addOthersDetailSchema = z.object({
 })
 
 export const addContactDetailSchema = z.object({
-    testimonialTagline: z.string(),
+    testimonialTagline: z.string().optional(),
     testimonialList: z.array(
         z.object({
             uniqueId: z.string(),
@@ -84,43 +84,46 @@ export const addContactDetailSchema = z.object({
             star: z.number(),
         })
     ),
-    mapLink: z.string(),
+    mapLink: z.string().optional(),
     emailList: z.array(z.object({
-        email: z.string()
-    })),
+        email: z.string().optional()
+    })).optional(),
     phoneList: z.array(z.object({
-        phone: z.number()
-    })),
-    whatsappNo: z.number(),
-    brochureLink: z.string(),
+        phone: z.number().optional()
+    })).optional(),
+    whatsappNo: z.number().optional(),
+    brochureLink: z.object({
+        tagline: z.string().optional(),
+        link: z.string().optional()
+    }).optional(),
     address: z.array(
         z.object({
-            title: z.string(),
-            detail: z.string()
+            title: z.string().optional(),
+            detail: z.string().optional()
         })
-    ),
-    facebook: z.string(),
-    instagram: z.string(),
-    linkedin: z.string(),
-    twitter: z.string(),
-    youtube: z.string(),
-    googleLink: z.string(),
+    ).optional(),
+    facebook: z.string().optional(),
+    instagram: z.string().optional(),
+    linkedin: z.string().optional(),
+    twitter: z.string().optional(),
+    youtube: z.string().optional(),
+    googleLink: z.string().optional(),
     otherSocialList: z.array(
         z.object({
-            uniqueId: z.string(),
+            uniqueId: z.string().optional(),
             img: z.object({
                 publicId: z.string().optional(),
                 url: z.string()
             }),
-            link: z.string()
+            link: z.string().optional()
         })
-    )
+    ).optional()
 })
 
-export const addMetaDetails = z.object({
+export const addMetaDetailsSchema = z.object({
     favIcon: z.object({
         url: z.string().min(1, 'Image is required'),
-        publicId: z.string()
+        publicId: z.string().optional()
     }),
     title: z.string().min(1, 'Title is required'),
     description: z.string().min(50, 'Description is required(MIN 50 Characters)'),

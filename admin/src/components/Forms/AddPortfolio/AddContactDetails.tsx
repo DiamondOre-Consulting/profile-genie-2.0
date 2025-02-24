@@ -17,11 +17,22 @@ import { v4 as uuidv4 } from 'uuid'
 import { Textarea } from '@/components/ui/textarea'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { RiStarFill } from '@remixicon/react'
+import { useAddContactDetailsMutation } from '@/Redux/API/PortfolioApi'
+
 
 
 type profileContactDetail = z.infer<typeof addContactDetailSchema>
 
-const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep }: { currentStep: number, stepsLength: number, setCurrentStep: React.Dispatch<React.SetStateAction<number>> }) => {
+interface apiRes {
+    success: boolean
+    message: string,
+    data: { _id: string, contactDetail: profileContactDetail }
+}
+
+
+const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolioId }: { currentStep: number, stepsLength: number, setCurrentStep: React.Dispatch<React.SetStateAction<number>>, portfolioId: string }) => {
+
+    const [addContactDetails] = useAddContactDetailsMutation()
 
     const { register, handleSubmit, getValues, setValue, control, watch, formState: { errors, isSubmitting } } = useForm<profileContactDetail>({
         resolver: zodResolver(addContactDetailSchema),
@@ -124,7 +135,11 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep }: { curre
         name: 'address'
     })
 
-    const onSubmit = (data: profileContactDetail) => {
+    console.log(1)
+    console.log(errors)
+    const onSubmit = async (data: profileContactDetail) => {
+        console.log(2)
+
         const formData = new FormData()
 
         formData.append('data', JSON.stringify(data))
@@ -133,8 +148,11 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep }: { curre
             formData.append('otherSocial', img)
         })
 
-        setCurrentStep(currentStep + 1)
+        const response = await addContactDetails({ formData, id: portfolioId }) as { data: apiRes }
 
+        if (response?.data?.success) {
+            setCurrentStep(currentStep + 1)
+        }
     }
 
     const items = [
@@ -383,7 +401,7 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep }: { curre
                                     <Label htmlFor={`services.${ind}.serviceName`} className="text-neutral-300 ">
                                         Phone Number <span className="text-[#ff3f69]">*</span>
                                     </Label>
-                                    <Input {...register(`phoneList.${ind}.phone`)} placeholder="Enter service name..." type="number" className={`${errors.phoneList?.[ind]?.phone && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                                    <Input {...register(`phoneList.${ind}.phone`, { valueAsNumber: true })} placeholder="Enter service name..." type="number" className={`${errors.phoneList?.[ind]?.phone && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
                                     {errors.phoneList?.[ind]?.phone && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.phoneList?.[ind]?.phone.message}</p>}
                                 </div>
                                 <div className='flex gap-2 justify-evenly mt-3'>
@@ -418,14 +436,14 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep }: { curre
                             return <div className='space-y-2  p-2 my-3 rounded bg-[#ff17a21b] border border-rose-800' key={ind}>
                                 <div>
                                     <Label htmlFor={`address.${ind}.title`} className="text-neutral-300 ">
-                                        Title <span className="text-[#ff3f69]">*</span>
+                                        Address type <span className="text-[#ff3f69]">*</span>
                                     </Label>
                                     <Input {...register(`address.${ind}.title`)} placeholder="Enter service name..." type="text" className={`${errors.address?.[ind]?.title && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
                                     {errors.address?.[ind]?.title && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.address?.[ind]?.title.message}</p>}
                                 </div>
                                 <div>
                                     <Label htmlFor={`address.${ind}.detail`} className="text-neutral-300 ">
-                                        Detail <span className="text-[#ff3f69]">*</span>
+                                        Full address <span className="text-[#ff3f69]">*</span>
                                     </Label>
                                     <Input {...register(`address.${ind}.detail`)} placeholder="Enter service name..." type="text" className={`${errors.address?.[ind]?.detail && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
                                     {errors.address?.[ind]?.detail && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.address?.[ind]?.detail.message}</p>}
@@ -457,79 +475,32 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep }: { curre
                             <IconPlus className='size-4.5' /> Add more
                         </button>
                     </div>
+                    <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2'>
+
+                        <div>
+                            <Label className="text-neutral-300 ">
+                                Brochure Tagline <span className="text-[#ff3f69]">*</span>
+                            </Label>
+                            <Input {...register("brochureLink.tagline")} placeholder="Enter service tagline..." type="text" className={`${errors?.brochureLink?.tagline && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                            {errors?.brochureLink?.tagline && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors?.brochureLink?.tagline?.message}</p>}
+                        </div>
+                        <div>
+                            <Label className="text-neutral-300 ">
+                                Brochure Link <span className="text-[#ff3f69]">*</span>
+                            </Label>
+                            <Input {...register("brochureLink.link")} placeholder="Enter service tagline..." type="text" className={`${errors?.brochureLink?.link && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                            {errors?.brochureLink?.link && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors?.brochureLink?.link?.message}</p>}
+                        </div>
+                        <div>
+                            <Label className="text-neutral-300 ">
+                                Whatsapp No <span className="text-[#ff3f69]">*</span>
+                            </Label>
+                            <Input {...register("whatsappNo", { valueAsNumber: true })} placeholder="Enter service tagline..." type="number" className={`${errors?.whatsappNo && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                            {errors?.whatsappNo && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors?.whatsappNo?.message}</p>}
+                        </div>
+                    </div>
                 </div>,
-        },
-        // {
-        //     id: "4",
-        //     icon: AtSign,
-        //     title: "Products",
-        //     content:
-        //         <div>
-        //             <div>
-        //                 <Label htmlFor={"productTagline"} className="text-neutral-300 ">
-        //                     Product Tagline <span className="text-[#ff3f69]">*</span>
-        //                 </Label>
-        //                 <Input {...register("productTagline")} placeholder="Enter service tagline..." type="text" className={`${errors.productTagline && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-        //                 {errors.productTagline && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.productTagline.message}</p>}
-        //             </div>
-        //             <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2'>
-        //                 {productsFields?.map((_, ind) => {
-        //                     return <div className='space-y-2  p-2 my-3 rounded bg-[#ff17a21b] border border-rose-800' key={ind}>
-        //                         <div>
-        //                             <Label htmlFor={`products.${ind}.serviceName`} className="text-neutral-300 ">
-        //                                 Product title <span className="text-[#ff3f69]">*</span>
-        //                             </Label>
-        //                             <Input {...register(`products.${ind}.title`)} placeholder="Enter service name..." type="text" className={`${errors.products?.[ind]?.title && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-        //                             {errors.products?.[ind]?.title && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.products?.[ind]?.title.message}</p>}
-        //                         </div>
-        //                         <div>
-        //                             <Label htmlFor={`products.${ind}.detail`} className="text-neutral-300 ">
-        //                                 Product description <span className="text-[#ff3f69]">*</span>
-        //                             </Label>
-        //                             <Textarea {...register(`products.${ind}.detail`)} placeholder="Enter service detail..." className={`${errors.products?.[ind]?.detail && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-        //                             {errors.products?.[ind]?.detail && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.products?.[ind]?.detail.message}</p>}
-        //                         </div>
-        //                         <div className='flex  justify-evenly'>
-        //                             <div className="h-24  w-24 relative group border border-dashed border-[#E11D48] rounded overflow-hidden">
-
-        //                                 <input
-        //                                     type="file"
-        //                                     onChange={(e) => handleProductFileChange(e, ind)}
-        //                                     name='imageImage'
-        //                                     className="absolute z-10 inset-0 w-full h-full opacity-0 cursor-pointer"
-        //                                 />
-        //                                 {getValues(`products.${ind}.image.url`) ? (
-        //                                     <img
-        //                                         src={getValues(`products.${ind}.image.url`)}
-        //                                         alt="Preview"
-        //                                         className="w-full h-full object-contain"
-        //                                     />
-        //                                 ) : (
-        //                                     <div className="w-full h-full flex items-center justify-center bg-neutral-950">
-        //                                         <p className="text-gray-400 text-center">Select image</p>
-        //                                     </div>
-        //                                 )}
-        //                                 <div className="absolute inset-0  bg-black/80 hidden group-hover:flex items-center justify-center transition-all duration-300">
-        //                                     <IconCamera className="text-white text-5xl" />
-        //                                 </div>
-        //                                 <label htmlFor="image" className="cursor-pointer absolute inset-0"></label>
-        //                             </div>
-
-        //                             {
-        //                                 brandsFields.length && (
-        //                                     <button type='button' onClick={() => removeProducts(ind)} className='flex size-24 gap-2 items-center justify-center bg-[#E11D48] text-white p-1 px-2 rounded'><IconX className='size-4' /> {productsFields.length !== 1 ? "Remove" : "Clear"}</button>
-        //                                 )
-        //                             }
-        //                         </div>
-        //                     </div>
-        //                 })}
-
-        //                 <button type='button' className='bg-[#E11D48] flex items-center justify-center cursor-pointer gap-2 my-3 p-2 px-4 rounded text-white' onClick={() => productsAppend({ uniqueId: "", title: "", image: { publicId: "", url: "" }, detail: "" })}>
-        //                     <IconPlus className='size-4.5' /> Add more
-        //                 </button>
-        //             </div>
-        //         </div>,
-        // },
+        }
     ];
 
     return (

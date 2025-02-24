@@ -3,7 +3,6 @@ import axiosBaseQuery from "../../Helper/axiosBaseQuery"
 
 interface AddAccessoriesProps {
     formData: FormData;
-    id: string;
 }
 
 export const portfolioApi = createApi({
@@ -43,9 +42,38 @@ export const portfolioApi = createApi({
             }),
             invalidatesTags: (result) => result ? [{ type: "PORTFOLIO" as const }] : [],
         }),
+        getSinglePortfolio: builder.query({
+            query: ({ id }) => ({
+                url: `/portfolio/${id}`,
+                method: "GET",
+                data: {}
+            })
+        }),
+        addOtherDetails: builder.mutation({
+            query: ({ formData, id }) => ({
+                url: `/portfolio/others/${id}`,
+                method: "POST",
+                data: formData
+            }),
+            invalidatesTags: (result) => result ? [{ type: "PORTFOLIO" as const }] : [],
+        }),
+        addContactDetails: builder.mutation({
+            query: ({ formData, id }) => ({
+                url: `/portfolio/contact/${id}`,
+                method: "POST",
+                data: formData
+            })
+        }),
+        addMetaDetails: builder.mutation({
+            query: ({ formData, id }) => ({
+                url: `/portfolio/meta/${id}`,
+                method: "POST",
+                data: formData
+            })
+        })
 
 
     }),
 })
 
-export const { useAddPortfolioMutation, useUpdatePortfolioMutation, useDeletePortfolioMutation, useGetAllPortfolioQuery } = portfolioApi
+export const { useAddPortfolioMutation, useAddContactDetailsMutation, useAddMetaDetailsMutation, useAddOtherDetailsMutation, useUpdatePortfolioMutation, useDeletePortfolioMutation, useGetAllPortfolioQuery, useGetSinglePortfolioQuery } = portfolioApi

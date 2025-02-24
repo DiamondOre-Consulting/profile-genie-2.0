@@ -51,8 +51,6 @@ const fileUpload = async (file, publicId = "") => {
 const multipleFileUpload = async (files, publicId = "") => {
     try {
         const uploadedFiles = [];
-        console.log(uploadedFiles)
-        console.log(files)
         for (const file of Object.values(files)) {
             console.log(1)
             const result = await cloudinary.uploader.upload(file.path, {
@@ -68,7 +66,6 @@ const multipleFileUpload = async (files, publicId = "") => {
             console.log(4)
         }
         console.log(5)
-        console.log("scscs", uploadedFiles)
         return uploadedFiles
     }
     catch (err) {

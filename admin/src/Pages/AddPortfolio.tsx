@@ -36,7 +36,8 @@ const steps = [
 
 export default function AddPortfolio() {
   const [currentStep, setCurrentStep] = useState(1)
-
+  const [portfolioId, setPortfolioId] = useState('')
+  console.log(portfolioId)
   return (
     <div className="space-y-8 overflow-hidden relative max-w-[50rem] mx-auto bg-[#010101] pb-0 border border-[#3c3c3c] p-4 sm:p-6 lg:p-8 py-8 rounded">
       <Stepper onValueChange={setCurrentStep} value={currentStep} >
@@ -57,13 +58,13 @@ export default function AddPortfolio() {
 
       </Stepper>
       {currentStep === 1 &&
-        <AddProfileDetail setCurrentStep={setCurrentStep} stepsLength={steps.length} currentStep={currentStep} />}
+        <AddProfileDetail setId={setPortfolioId} setCurrentStep={setCurrentStep} stepsLength={steps.length} currentStep={currentStep} />}
       {currentStep === 2 &&
-        <AddOthersDetail setCurrentStep={setCurrentStep} stepsLength={steps.length} currentStep={currentStep} />}
+        <AddOthersDetail portfolioId={portfolioId} setCurrentStep={setCurrentStep} stepsLength={steps.length} currentStep={currentStep} />}
       {currentStep === 3 &&
-        <AddContactDetails setCurrentStep={setCurrentStep} stepsLength={steps.length} currentStep={currentStep} />}
+        <AddContactDetails portfolioId={portfolioId} setCurrentStep={setCurrentStep} stepsLength={steps.length} currentStep={currentStep} />}
       {currentStep === 4 &&
-        <AddMetaDetails setCurrentStep={setCurrentStep} stepsLength={steps.length} currentStep={currentStep} />}
+        <AddMetaDetails portfolioId={portfolioId} setCurrentStep={setCurrentStep} stepsLength={steps.length} currentStep={currentStep} />}
 
       <p className="bg-[#E11D48] w-full bottom-0 p-1 pr-4 left-0 absolute text-xs text-end text-white" role="region" aria-live="polite">
         <span className="">

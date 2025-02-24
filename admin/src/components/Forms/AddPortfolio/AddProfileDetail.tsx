@@ -9,19 +9,23 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Switch } from '@/components/ui/switch'
 import { useAddPortfolioMutation } from '@/Redux/API/PortfolioApi'
+import { toast } from 'sonner'
 
 type profileDetail = z.infer<typeof addProfileDetailSchema>
 
-const AddProfileDetail = ({ setCurrentStep, currentStep, stepsLength }: { setCurrentStep: React.Dispatch<React.SetStateAction<number>>, currentStep: number, stepsLength: number }) => {
+interface apiRes {
+    success: boolean
+    message: string,
+    data: { _id: string, profileDetail: profileDetail }
+}
+
+const AddProfileDetail = ({ setCurrentStep, currentStep, stepsLength, setId }: { setCurrentStep: React.Dispatch<React.SetStateAction<number>>, currentStep: number, stepsLength: number, setId: React.Dispatch<React.SetStateAction<string>> }) => {
 
     const [addPortfolio] = useAddPortfolioMutation()
 
     const { register, handleSubmit, setValue, trigger, watch, getValues, formState: { errors, isSubmitting } } = useForm<profileDetail>({
         resolver: zodResolver(addProfileDetailSchema)
     })
-
-    console.log(getValues("isPaid"))
-    console.log(getValues("isActive"))
 
     const [files, setFiles] = useState<File[]>([]);
 
@@ -39,17 +43,22 @@ const AddProfileDetail = ({ setCurrentStep, currentStep, stepsLength }: { setCur
         }
     };
 
-
     const onSubmit = async (data: profileDetail) => {
-        console.log("object")
-        setCurrentStep(currentStep + 1)
-        console.log(JSON.stringify(data))
-        const formData = new FormData()
-        formData.append("formData", JSON.stringify(data))
+        try {
+            console.log(JSON.stringify(data))
+            const formData = new FormData()
+            formData.append("formData", JSON.stringify(data))
+            files.forEach((file) => formData.append("files", file))
 
-        files.forEach((file) => formData.append("files", file))
-
-        await addPortfolio(formData)
+            const res = await addPortfolio({ formData }) as { data: apiRes }
+            console.log(res)
+            if (res?.data?.success) {
+                setId(res?.data?.data?._id)
+                setCurrentStep((prev) => prev + 1)
+            }
+        } catch (error) {
+            toast.error("Error submitting form")
+        }
     }
 
 
@@ -267,8 +276,6 @@ const AddProfileDetail = ({ setCurrentStep, currentStep, stepsLength }: { setCur
                     }
                 </button>
             </div>
-
-
         </form>
     )
 }

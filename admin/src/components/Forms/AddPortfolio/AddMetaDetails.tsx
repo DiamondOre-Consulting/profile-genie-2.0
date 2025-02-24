@@ -1,22 +1,32 @@
 import TextEditor from '../../TextEditor'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { addMetaDetails, addProfileDetailSchema } from '@/validations/PortfolioValidation'
+import { addMetaDetailsSchema } from '@/validations/PortfolioValidation'
 import { IconCamera, IconSquareRoundedArrowLeftFilled, IconSquareRoundedArrowRightFilled, IconWhirl } from '@tabler/icons-react'
 import React, { useState } from 'react'
 import { z } from 'zod'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Textarea } from '@/components/ui/textarea'
+import { useAddMetaDetailsMutation } from '@/Redux/API/PortfolioApi'
 
-type metaDetails = z.infer<typeof addMetaDetails>
+type metaDetails = z.infer<typeof addMetaDetailsSchema>
 
-const AddMetaDetails = ({ setCurrentStep, currentStep, stepsLength }: { setCurrentStep: React.Dispatch<React.SetStateAction<number>>, currentStep: number, stepsLength: number }) => {
+interface apiRes {
+    success: boolean
+    message: string,
+    data: { _id: string, metaDetail: metaDetails }
+}
 
 
+const AddMetaDetails = ({ setCurrentStep, currentStep, stepsLength, portfolioId }: { setCurrentStep: React.Dispatch<React.SetStateAction<number>>, currentStep: number, stepsLength: number, portfolioId: string }) => {
 
-    const { register, handleSubmit, setValue, trigger, control, getValues, formState: { errors, isSubmitting } } = useForm<metaDetails>({
-        resolver: zodResolver(addMetaDetails)
+
+    const [addMetaDetails] = useAddMetaDetailsMutation()
+
+
+    const { register, handleSubmit, setValue, getValues, formState: { errors, isSubmitting } } = useForm<metaDetails>({
+        resolver: zodResolver(addMetaDetailsSchema)
     })
 
 
@@ -32,14 +42,19 @@ const AddMetaDetails = ({ setCurrentStep, currentStep, stepsLength }: { setCurre
         }
     };
 
-
-    const onSubmit = (data: metaDetails) => {
+    const onSubmit = async (data: metaDetails) => {
         console.log("object")
-        setCurrentStep(currentStep + 1)
         console.log(JSON.stringify(data))
         const formData = new FormData()
         formData.append("formData", JSON.stringify(data))
         formData.append("favIcon", files as File)
+
+        const res = await addMetaDetails({ formData, id: portfolioId }).unwrap() as { data: apiRes }
+
+        if (res?.data?.success) {
+            console.log("success")
+        }
+        console.log(res)
     }
 
 

@@ -57,10 +57,10 @@ const portfolioSchema = new Schema({
             type: String,
             required: true
         },
-        body: [{
+        body: {
             type: String,
             required: true
-        }]
+        }
     },
     isPaid: {
         type: Boolean,

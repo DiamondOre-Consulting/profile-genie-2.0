@@ -27,7 +27,7 @@ app.use('/ping', function (req, res) {
     res.send('/pong')
 })
 
-app.use('/portfolio', portfolioRouter)
+app.use('/api/v1/portfolio', portfolioRouter)
 
 app.all('*', (req, res) => {
     res.status(404).send('OOPS! 404 Page not found')

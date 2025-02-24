@@ -15,11 +15,20 @@ import { Input } from '@/components/ui/input'
 import { IconCamera, IconPlus, IconSquareRoundedArrowLeftFilled, IconSquareRoundedArrowRightFilled, IconWhirl, IconX } from '@tabler/icons-react'
 import { v4 as uuidv4 } from 'uuid'
 import { Textarea } from '@/components/ui/textarea'
+import { useAddOtherDetailsMutation } from '@/Redux/API/PortfolioApi'
 
 
 type othersProfileDetail = z.infer<typeof addOthersDetailSchema>
 
-const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep }: { currentStep: number, stepsLength: number, setCurrentStep: React.Dispatch<React.SetStateAction<number>> }) => {
+interface apiRes {
+    success: boolean
+    message: string,
+    data: { _id: string, othersDetail: othersProfileDetail }
+}
+
+const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId }: { currentStep: number, stepsLength: number, setCurrentStep: React.Dispatch<React.SetStateAction<number>>, portfolioId: string }) => {
+
+    const [addOtherDetails] = useAddOtherDetailsMutation()
 
     const { register, handleSubmit, getValues, setValue, control, formState: { errors, isSubmitting } } = useForm<othersProfileDetail>({
         resolver: zodResolver(addOthersDetailSchema),
@@ -198,7 +207,7 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep }: { current
         }
     }
 
-    const onSubmit = (data: othersProfileDetail) => {
+    const onSubmit = async (data: othersProfileDetail) => {
         const formData = new FormData()
 
         formData.append('data', JSON.stringify(data))
@@ -215,7 +224,11 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep }: { current
             formData.append('products', img)
         })
 
-        setCurrentStep(currentStep + 1)
+        const response = await addOtherDetails({ formData, id: portfolioId }).unwrap() as apiRes
+        console.log(response)
+        if (response?.success) {
+            setCurrentStep(currentStep + 1)
+        }
 
     }
 

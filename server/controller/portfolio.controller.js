@@ -8,15 +8,25 @@ import { multipleFileUpload } from "../utils/fileUpload.utils.js"
 
 const createPortfolio = asyncHandler(async (req, res) => {
 
-    const { fullName, userName, phoneNumber, email, tagline, about, } = req.body
+    const { formData } = req.body
+    const { fullName, userName, phoneNumber, email, tagline, about, isActive, isPaid } = JSON.parse(formData)
 
-    const portfolio = await Portfolio.create({
+    const uniquePortfolio = await Portfolio.findOne({ userName })
+
+    if (uniquePortfolio) {
+        throw new AppError("Username already exists!", 400)
+    }
+
+    const portfolio = new Portfolio({
         fullName,
         userName,
         tagline,
         phoneNumber,
         email,
-        about: JSON.parse(about),
+        isPaid,
+        isActive,
+        paidDate: isPaid ? new Date() : null,
+        about,
         backgroundImage: {
             publicId: "",
             url: ""
@@ -41,12 +51,17 @@ const createPortfolio = asyncHandler(async (req, res) => {
     }
 
     uploadedFiles.forEach(file => {
+        console.log(2)
         if (file.uniqueId === "image") {
-            portfolio.image = file.result;
+            portfolio.image.url = file.result.secret_url;
+            portfolio.image.publicId = file.result.public_id;
         } else if (file.uniqueId === "backgroundImage") {
-            portfolio.backgroundImage.url = file.result;
+            portfolio.backgroundImage.url = file.result.secret_url;
+            portfolio.backgroundImage.publicId = file.result.public_id;
+
         } else if (file.uniqueId === "logo") {
-            portfolio.logo.url = file.result;
+            portfolio.logo.url = file.result.secret_url;
+            portfolio.logo.publicId = file.result.public_id;
         }
     });
 
@@ -175,12 +190,15 @@ const getAllPortfolio = asyncHandler(async (req, res) => {
 
 const createPortfolioDetail = asyncHandler(async (req, res) => {
     const { id } = req.params
-    const { brands: brandsList, bulkLinkTagline, brandTagline, productTagline, serviceTagline, bulkLink: bulkLinkList, services: servicesList, products: productList } = req.body
 
-    const bulkLink = JSON.parse(bulkLinkList)
-    const brands = JSON.parse(brandsList)
-    const services = JSON.parse(servicesList)
-    const products = JSON.parse(productList)
+    const uniquePortfolioDetail = await PortfolioDetail.findOne({ portfolio: id })
+
+    if (uniquePortfolioDetail) {
+        throw new AppError("Portfolio detail already exists!", 400)
+    }
+
+    const otherData = JSON.parse(req.body.data)
+    const { brands, bulkLinkTagline, brandTagline, productTagline, serviceTagline, bulkLink, services, products } = otherData
 
     const portfolioDetail = await PortfolioDetail.create({
         portfolio: id,
@@ -436,11 +454,9 @@ const updatePortfolioDetail = asyncHandler(async (req, res) => {
 })
 
 const createPortfolioContact = asyncHandler(async (req, res) => {
-    const { whatsappNo, mapLink, address, email, facebook, instagram, linkedin, twitter, youtube, testimonialTagline, testimonialList: testimonialData, brochureLink, otherSocial: otherSocialList, phone } = req.body
+    const contactData = JSON.parse(req.body.data)
+    const { whatsappNo, mapLink, address, email, facebook, instagram, linkedin, twitter, youtube, testimonialTagline, testimonialList, brochureLink, otherSocialList, phone } = contactData
     const { id } = req.params
-
-    const testimonialList = JSON.parse(testimonialData)
-    const otherSocial = JSON.parse(otherSocialList)
 
     const portfolioContact = await PortfolioContact.create({
         portfolio: id,
@@ -449,18 +465,18 @@ const createPortfolioContact = asyncHandler(async (req, res) => {
             testimonialList: testimonialList
         },
         mapLink: mapLink,
-        email: JSON.parse(email),
-        phone: JSON.parse(phone),
-        address: JSON.parse(address),
+        email: email,
+        phone: phone,
+        address: address,
         whatsappNo: whatsappNo,
-        brochureLink: JSON.parse(brochureLink),
+        brochureLink: brochureLink,
         social: {
             facebook: facebook,
             instagram: instagram,
             linkedin: linkedin,
             twitter: twitter,
             youtube: youtube,
-            otherSocial: []
+            otherSocialList: []
         }
     })
 
@@ -469,16 +485,21 @@ const createPortfolioContact = asyncHandler(async (req, res) => {
     }
 
     let uploadedFiles = []
+    console.log(req.files.otherSocial)
     if (req.files.otherSocial) {
         uploadedFiles = await multipleFileUpload(req.files.otherSocial)
     }
 
-    otherSocial.forEach(social => {
-        let existingSocial = portfolioContact.social.otherSocial.find(os => os.uniqueId === social.uniqueId);
+    console.log(otherSocialList)
+    console.log(portfolioContact)
+    otherSocialList.forEach(social => {
+        let existingSocial = portfolioContact.social.otherSocialList.find(os => os.uniqueId === social.uniqueId);
+        console.log(existingSocial)
         if (!existingSocial) {
             const uploadedFile = uploadedFiles.find(uf => uf.uniqueId === social.uniqueId);
+            console.log(uploadedFile)
             if (uploadedFile) {
-                portfolioContact.social.otherSocial.push({ ...social, img: { url: uploadedFile.result.url, publicId: uploadedFile.result.public_id } });
+                portfolioContact.social.otherSocialList.push({ ...social, img: { url: uploadedFile.result.url, publicId: uploadedFile.result.public_id } });
             }
         } else {
             const uploadedFile = uploadedFiles.find(uf => uf.uniqueId === existingSocial.uniqueId);
@@ -509,11 +530,10 @@ const createPortfolioContact = asyncHandler(async (req, res) => {
 })
 
 const updatePortfolioContact = asyncHandler(async (req, res) => {
-    const { whatsappNo, mapLink, address, email, facebook, instagram, linkedin, twitter, youtube, testimonialTagline, testimonialList: testimonialData, brochureLink, otherSocial: otherSocialList, phone } = req.body
+    const { whatsappNo, mapLink, address, email, facebook, instagram, linkedin, twitter, youtube, testimonialTagline, testimonialList: testimonialData, brochureLink, otherSocialList: otherSocialList, phone } = req.body
     const { id } = req.params
 
     const testimonialList = JSON.parse(testimonialData)
-    const otherSocial = JSON.parse(otherSocialList)
 
     const portfolioContact = await PortfolioContact.findOneAndUpdate({
         portfolio: id
@@ -535,7 +555,7 @@ const updatePortfolioContact = asyncHandler(async (req, res) => {
                 linkedin: linkedin,
                 twitter: twitter,
                 youtube: youtube,
-                otherSocial: []
+                otherSocialList: []
             }
         }
     }, {
@@ -552,12 +572,12 @@ const updatePortfolioContact = asyncHandler(async (req, res) => {
         uploadedFiles = await multipleFileUpload(req.files.otherSocial)
     }
 
-    otherSocial.forEach(social => {
-        let existingSocial = portfolioContact.social.otherSocial.find(os => os.uniqueId === social.uniqueId);
+    otherSocialList.forEach(social => {
+        let existingSocial = portfolioContact.social.otherSocialList.find(os => os.uniqueId === social.uniqueId);
         if (!existingSocial) {
             const uploadedFile = uploadedFiles.find(uf => uf.uniqueId === social.uniqueId);
             if (uploadedFile) {
-                portfolioContact.social.otherSocial.push({ ...social, img: { url: uploadedFile.result.url, publicId: uploadedFile.result.public_id } });
+                portfolioContact.social.otherSocialList.push({ ...social, img: { url: uploadedFile.result.url, publicId: uploadedFile.result.public_id } });
             }
         } else {
             const uploadedFile = uploadedFiles.find(uf => uf.uniqueId === existingSocial.uniqueId);
