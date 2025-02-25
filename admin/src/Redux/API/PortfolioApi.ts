@@ -26,7 +26,7 @@ export const portfolioApi = createApi({
             }),
             invalidatesTags: (result) => result ? [{ type: "PORTFOLIO" as const }] : [],
         }),
-        updatePortfolio: builder.mutation<object, AddAccessoriesProps>({
+        updatePortfolio: builder.mutation({
             query: ({ formData, id }) => ({
                 url: `/portfolio/${id}`,
                 method: "PUT",

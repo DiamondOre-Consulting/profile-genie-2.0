@@ -9,6 +9,7 @@ import {
     IconLogout,
     IconSettings
 } from "@tabler/icons-react";
+import { Link, useNavigate } from "react-router-dom";
 
 const tabs = [
     { link: "/", label: "Dashboard", icon: IconLayoutDashboardFilled },
@@ -16,33 +17,17 @@ const tabs = [
     { link: "/add-portfolio", label: "Add Portfolio", icon: IconFingerprint },
     { link: "/all-catalogue", label: "All Catalogue", icon: IconKey },
     { link: "/add-catalogue", label: "Add Catalogue", icon: IconDatabaseImport },
-    { link: "", label: "Other Settings", icon: IconSettings },
+    { link: "/other-settings", label: "Other Settings", icon: IconSettings },
 ];
 
-export function NavbarSegmented({ children }: { children: ReactNode }) {
+export function HomeLayout({ children }: { children: ReactNode }) {
     const [active, setActive] = useState("Dashboard");
     const [collapsed, setCollapsed] = useState(false);
-
+    const navigate = useNavigate()
     const toggleSidebar = () => {
         setCollapsed((prev) => !prev);
     };
 
-    const links = tabs.map((item) => (
-        <a
-            className={`flex items-center overflow-hidden space-y-2 space-x-2 h-[2.3rem]  rounded transition-all duration-300 
-                ${active === item.label ? "bg-[#E11D48] text-white" : "text-gray-300 hover:bg-gray-700"} 
-                ${collapsed ? "justify-center " : " items-center px-2"}`}
-            href={item.link}
-            key={item.label}
-            onClick={(event) => {
-                event.preventDefault();
-                setActive(item.label);
-            }}
-        >
-            <item.icon className={`${collapsed ? "w-5 h-5" : "min-w-5 min-h-5"}  my-auto`} />
-            {!collapsed && <span className="min-w-[15rem] text-sm">{item.label}</span>}
-        </a>
-    ));
 
     const ToggleButton = ({ opened, onClick, ariaLabel }: { opened: boolean, onClick: () => void, ariaLabel: string }) => {
         return (
@@ -66,8 +51,24 @@ export function NavbarSegmented({ children }: { children: ReactNode }) {
                     {!collapsed && <span className="ml-4 text-sm min-w-[10rem] font-semibold uppercase tracking-wide">Profile Genie</span>}
                 </div>
 
-
-                <div className={`px-1.5  border-t border-gray-700 flex flex-col  py-1 space-y-2`}>{links}</div>
+                <div className={`px-1.5  border-t border-gray-700 flex flex-col w-full py-1 space-y-2`}>{
+                    tabs.map((item) => {
+                        return (<div
+                            className={`flex items-center w-full overflow-hidden space-y-2  space-x-2 h-[2.3rem]  rounded transition-all duration-300 
+                ${active === item.label ? "bg-[#E11D48] text-white" : "text-gray-300 hover:bg-gray-700"} 
+                ${collapsed ? "justify-center " : " items-center px-2"}`}
+                            key={item.label}
+                            onClick={(event) => {
+                                event.preventDefault();
+                                setActive(item.label);
+                                navigate(item.link)
+                            }}
+                        >
+                            <item.icon className={`${collapsed ? "w-5 h-5" : "min-w-5 min-h-5"}  my-auto`} />
+                            {!collapsed && <span className="min-w-[15rem] text-sm">{item.label}</span>}
+                        </div>)
+                    })
+                }</div>
 
                 <div className="px-1.5  border-t pt-1 border-gray-700">
                     {/* <a
