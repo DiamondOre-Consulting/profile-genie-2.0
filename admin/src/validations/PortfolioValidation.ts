@@ -30,48 +30,56 @@ export const addProfileDetailSchema = z.object({
 })
 
 export const addOthersDetailSchema = z.object({
-    brandTagline: z.string(),
-    brands: z.array(
-        z.object({
-            uniqueId: z.string(),
-            brandName: z.string(),
-            image: z.object({
-                publicId: z.string().optional(),
-                url: z.string()
+    brands: z.object({
+        tagline: z.string(),
+        brandList: z.array(
+            z.object({
+                uniqueId: z.string(),
+                brandName: z.string(),
+                image: z.object({
+                    publicId: z.string().optional(),
+                    url: z.string()
+                })
             })
-        })
-    ),
-    bulkLinkTagline: z.string(),
-    bulkLink: z.array(
-        z.object({
-            linkName: z.string(),
-            link: z.string()
-        })
-    ),
-    serviceTagline: z.string(),
-    services: z.array(
-        z.object({
-            uniqueId: z.string(),
-            title: z.string(),
-            detail: z.string(),
-            image: z.object({
-                publicId: z.string().optional(),
-                url: z.string()
+        )
+    }),
+    bulkLink: z.object({
+        tagline: z.string(),
+        bulkLinkList: z.array(
+            z.object({
+                linkName: z.string().optional(),
+                link: z.string().optional()
             })
-        })
-    ),
-    productTagline: z.string(),
-    products: z.array(
-        z.object({
-            uniqueId: z.string(),
-            title: z.string(),
-            detail: z.string(),
-            image: z.object({
-                publicId: z.string().optional(),
-                url: z.string()
+        )
+    }),
+    services: z.object({
+        tagline: z.string().optional(),
+        serviceList: z.array(
+            z.object({
+                uniqueId: z.string(),
+                title: z.string(),
+                detail: z.string(),
+                image: z.object({
+                    publicId: z.string().optional(),
+                    url: z.string()
+                })
             })
-        })
-    )
+        )
+    }),
+    products: z.object({
+        tagline: z.string().optional(),
+        productList: z.array(
+            z.object({
+                uniqueId: z.string(),
+                title: z.string(),
+                detail: z.string(),
+                image: z.object({
+                    publicId: z.string().optional(),
+                    url: z.string()
+                })
+            })
+        )
+    })
 })
 
 export const addContactDetailSchema = z.object({
@@ -143,4 +151,11 @@ export interface portfolioResponse extends profileDetail {
     metaDetails: metaDetails,
     contactData: contactDetails,
     otherDetails: otherDetails
+}
+
+
+export interface apiRes {
+    success: boolean
+    message?: string,
+    data: portfolioResponse
 }

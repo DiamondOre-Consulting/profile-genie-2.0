@@ -19,8 +19,8 @@ interface apiRes {
     data: portfolioResponse
 }
 
-const EditProfileDetail = ({ setCurrentStep, currentStep, stepsLength, setId, portfolioDetail }: { setCurrentStep: React.Dispatch<React.SetStateAction<number>>, currentStep: number, stepsLength: number, setId: React.Dispatch<React.SetStateAction<string>>, portfolioDetail: apiRes }) => {
-    console.log(portfolioDetail.data)
+const EditProfileDetail = ({ setCurrentStep, currentStep, stepsLength, setId, portfolioDetail }: { setCurrentStep: React.Dispatch<React.SetStateAction<number>>, currentStep: number, stepsLength: number, setId: React.Dispatch<React.SetStateAction<string>>, portfolioDetail: apiRes | undefined }) => {
+    console.log(portfolioDetail?.data)
     const [addPortfolio] = useAddPortfolioMutation()
 
     const { register, handleSubmit, setValue, reset, trigger, watch, getValues, formState: { errors, isSubmitting } } = useForm<profileDetail>({
@@ -75,10 +75,11 @@ const EditProfileDetail = ({ setCurrentStep, currentStep, stepsLength, setId, po
     return (
         <form className='' onSubmit={handleSubmit(onSubmit)} noValidate >
             <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2'>
-                <div onClick={() => setValue("isActive", !getValues("isActive"))} className="relative flex w-full items-start gap-2 rounded-lg border border-red-500 p-3 shadow-sm shadow-black/5 has-[[data-state=checked]]:border-green-600 ">
+                <div className="relative flex w-full items-start gap-2 rounded-lg border border-red-500 p-3 shadow-sm shadow-black/5 has-[[data-state=checked]]:border-green-600 ">
                     <Switch
-                        defaultChecked={getValues("isPaid")}
-
+                        defaultChecked={!!getValues("isActive")}
+                        checked={!!getValues("isActive")}
+                        onCheckedChange={(e) => setValue("isActive", e)}
                         className="order-1 h-4 w-6 after:absolute after:inset-0 [&_span]:size-3 [&_span]:data-[state=checked]:translate-x-2 rtl:[&_span]:data-[state=checked]:-translate-x-2"
                     />
                     <div className="flex grow items-center gap-2">
@@ -95,9 +96,11 @@ const EditProfileDetail = ({ setCurrentStep, currentStep, stepsLength, setId, po
                         </div>
                     </div>
                 </div>
-                <div onClick={() => setValue("isPaid", !getValues("isPaid"))} className="relative flex w-full items-start gap-2 rounded-lg border border-red-500 p-3 shadow-sm shadow-black/5 has-[[data-state=checked]]:border-green-600 ">
+                <div className="relative flex w-full items-start gap-2 rounded-lg border border-red-500 p-3 shadow-sm shadow-black/5 has-[[data-state=checked]]:border-green-600 ">
                     <Switch
-                        defaultChecked={getValues("isPaid")}
+                        defaultChecked={!!getValues("isPaid")}
+                        checked={!!getValues("isPaid")}
+                        onCheckedChange={(e) => setValue("isPaid", e)}
                         className="order-1 h-4 w-6 after:absolute after:inset-0 [&_span]:size-3 [&_span]:data-[state=checked]:translate-x-2 rtl:[&_span]:data-[state=checked]:-translate-x-2"
                     />
                     <div className="flex grow items-center gap-3">
@@ -108,7 +111,7 @@ const EditProfileDetail = ({ setCurrentStep, currentStep, stepsLength, setId, po
 
                             </Label>
                             <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                                {watch("isPaid") ? `Start Date - ${new Date().toDateString()}` : "Click to make profile paid!"}
+                                {watch("isPaid") ? `${new Date().toDateString()}` : "Click to make profile paid!"}
                             </p>
                         </div>
                     </div>

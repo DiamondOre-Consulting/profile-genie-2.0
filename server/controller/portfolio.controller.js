@@ -230,24 +230,24 @@ const createPortfolioDetail = asyncHandler(async (req, res) => {
     }
 
     const otherData = JSON.parse(req.body.data)
-    const { brands, bulkLinkTagline, brandTagline, productTagline, serviceTagline, bulkLink, services, products } = otherData
+    const { brands, bulkLink, services, products } = otherData
 
     const portfolioDetail = await PortfolioDetail.create({
         portfolio: id,
         brands: {
-            tagline: brandTagline,
+            tagline: brands.tagline || "",
             brandList: []
         },
         bulkLink: {
-            tagline: bulkLinkTagline,
+            tagline: bulkLink.tagline || "",
             bulkLinkList: bulkLink
         },
         services: {
-            tagline: serviceTagline,
+            tagline: services.tagline || "",
             serviceList: []
         },
         products: {
-            tagline: productTagline,
+            tagline: products.tagline || "",
             productList: []
         }
     })
@@ -258,7 +258,7 @@ const createPortfolioDetail = asyncHandler(async (req, res) => {
         brandImages = await multipleFileUpload(req?.files?.brands)
     }
 
-    brands.forEach(brand => {
+    brands.brandList.forEach(brand => {
         let existingBrand = portfolioDetail.brands.brandList.find(b => b.uniqueId === brand.uniqueId);
         if (!existingBrand) {
             const uploadedFile = brandImages.find(uf => uf.uniqueId === brand.uniqueId);
@@ -284,7 +284,7 @@ const createPortfolioDetail = asyncHandler(async (req, res) => {
         serviceImages = await multipleFileUpload(req?.files?.services)
     }
 
-    services.forEach(service => {
+    services.serviceList.forEach(service => {
         let existingService = portfolioDetail.services.serviceList.find(s => s.uniqueId === service.uniqueId);
         if (!existingService) {
             const uploadedFile = serviceImages.find(uf => uf.uniqueId === service.uniqueId);
@@ -314,7 +314,7 @@ const createPortfolioDetail = asyncHandler(async (req, res) => {
     }
 
 
-    products.forEach(product => {
+    products.productList.forEach(product => {
         let existingProduct = portfolioDetail.products.productList.find(p => p.uniqueId === product.uniqueId);
         if (!existingProduct) {
             const uploadedFile = productImages.find(uf => uf.uniqueId === product.uniqueId);
@@ -358,29 +358,26 @@ const createPortfolioDetail = asyncHandler(async (req, res) => {
 
 const updatePortfolioDetail = asyncHandler(async (req, res) => {
     const { id } = req.params
-    const { brands: brandsList, bulkLinkTagline, brandTagline, productTagline, serviceTagline, bulkLink: bulkLinkList, services: servicesList, products: productList } = req.body
 
-    const bulkLink = JSON.parse(bulkLinkList)
-    const brands = JSON.parse(brandsList)
-    const services = JSON.parse(servicesList)
-    const products = JSON.parse(productList)
+    const otherData = JSON.parse(req.body.data)
+    const { brands, bulkLink, services, products } = otherData
 
     const portfolioDetail = await PortfolioDetail.findOneAndUpdate(
         { portfolio: id },
         {
             $set: {
                 brands: {
-                    tagline: brandTagline,
+                    tagline: brands.tagline,
                 },
                 bulkLink: {
-                    tagline: bulkLinkTagline,
-                    bulkLinkList: bulkLink
+                    tagline: bulkLink.tagline,
+                    bulkLinkList: bulkLink.bulkLinkList
                 },
                 services: {
-                    tagline: serviceTagline,
+                    tagline: services.tagline,
                 },
                 products: {
-                    tagline: productTagline,
+                    tagline: products.tagline,
                 }
             }
         },
@@ -396,7 +393,7 @@ const updatePortfolioDetail = asyncHandler(async (req, res) => {
         brandImages = await multipleFileUpload(req?.files?.brands)
     }
 
-    brands.forEach(brand => {
+    brands.brandList.forEach(brand => {
         let existingBrand = portfolioDetail.brands.brandList.find(b => b.uniqueId === brand.uniqueId);
         if (!existingBrand) {
             const uploadedFile = brandImages.find(uf => uf.uniqueId === brand.uniqueId);
@@ -422,7 +419,7 @@ const updatePortfolioDetail = asyncHandler(async (req, res) => {
         serviceImages = await multipleFileUpload(req?.files?.services)
     }
 
-    services.forEach(service => {
+    services.serviceList.forEach(service => {
         let existingService = portfolioDetail.services.serviceList.find(s => s.uniqueId === service.uniqueId);
         if (!existingService) {
             const uploadedFile = serviceImages.find(uf => uf.uniqueId === service.uniqueId);
@@ -450,7 +447,7 @@ const updatePortfolioDetail = asyncHandler(async (req, res) => {
         productImages = await multipleFileUpload(req?.files?.products)
     }
 
-    products.forEach(product => {
+    products.productList.forEach(product => {
         let existingProduct = portfolioDetail.products.productList.find(p => p.uniqueId === product.uniqueId);
         if (!existingProduct) {
             const uploadedFile = productImages.find(uf => uf.uniqueId === product.uniqueId);

@@ -2,6 +2,7 @@ import AddContactDetails from "@/components/Forms/AddPortfolio/AddContactDetails
 import AddMetaDetails from "@/components/Forms/AddPortfolio/AddMetaDetails";
 import AddOthersDetail from "@/components/Forms/AddPortfolio/AddOthersDetail";
 import AddProfileDetail from "@/components/Forms/AddPortfolio/AddProfileDetail";
+import EditOthersDetail from "@/components/Forms/EditPortfolio/EditOthersDetail";
 import EditProfileDetail from "@/components/Forms/EditPortfolio/EditProfileDetail";
 import {
     Stepper,
@@ -13,10 +14,10 @@ import {
 } from "@/components/ui/stepper";
 import { HomeLayout } from "@/Layout/HomeLayout";
 import { useGetSinglePortfolioQuery } from "@/Redux/API/PortfolioApi";
-import { portfolioResponse } from "@/validations/PortfolioValidation";
+import { apiRes } from "@/validations/PortfolioValidation";
 
-import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 const steps = [
     {
@@ -41,12 +42,28 @@ const steps = [
 export default function EditPortfolio() {
     const [currentStep, setCurrentStep] = useState(1)
     const [portfolioId, setPortfolioId] = useState('')
-
+    const [portfolioData, setPortfolioData] = useState<apiRes>()
+    const navigate = useNavigate()
     const { username } = useParams()
-
-    const { data: portfolioData } = useGetSinglePortfolioQuery({ username }) as { data: { data: portfolioResponse, success: boolean } }
-
+    console.log(username)
+    const { data, isLoading } = useGetSinglePortfolioQuery({ username })
     console.log(portfolioData)
+    console.log(isLoading)
+    useEffect(() => {
+        if (!isLoading && !data) {
+            // toast.error("No data found!")
+            navigate('/all-portfolio')
+        }
+
+        console.log(data)
+
+        if (data) {
+            setPortfolioData(data)
+            setPortfolioId(data._id)
+        }
+    }, [isLoading, data, navigate])
+
+    console.log(data)
     return (
         <HomeLayout>
             <div className="space-y-8 overflow-hidden relative max-w-[50rem] mx-auto bg-[#010101] pb-0 border border-[#3c3c3c] p-4 sm:p-6 lg:p-8 py-8 rounded">
@@ -70,7 +87,16 @@ export default function EditPortfolio() {
                 {currentStep === 1 &&
                     <EditProfileDetail setId={setPortfolioId} portfolioDetail={portfolioData} setCurrentStep={setCurrentStep} stepsLength={steps.length} currentStep={currentStep} />}
                 {currentStep === 2 &&
-                    <AddOthersDetail portfolioId={portfolioId} setCurrentStep={setCurrentStep} stepsLength={steps.length} currentStep={currentStep} />}
+                    portfolioData?.data?.otherDetails && (
+                        <EditOthersDetail
+                            othersDetail={portfolioData.data.otherDetails}
+                            portfolioId={portfolioId}
+                            setCurrentStep={setCurrentStep}
+                            stepsLength={steps.length}
+                            currentStep={currentStep}
+                        />
+                    )
+                }
                 {currentStep === 3 &&
                     <AddContactDetails portfolioId={portfolioId} setCurrentStep={setCurrentStep} stepsLength={steps.length} currentStep={currentStep} />}
                 {currentStep === 4 &&

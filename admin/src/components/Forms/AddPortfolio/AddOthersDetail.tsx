@@ -33,10 +33,18 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId
     const { register, handleSubmit, getValues, setValue, control, formState: { errors, isSubmitting } } = useForm<othersProfileDetail>({
         resolver: zodResolver(addOthersDetailSchema),
         defaultValues: {
-            brands: [{ uniqueId: "", brandName: "", image: { publicId: "", url: "" } }],
-            bulkLink: [{ linkName: "", link: "" }],
-            services: [{ uniqueId: "", title: "", detail: "", image: { publicId: "", url: "" } }],
-            products: [{ uniqueId: "", title: "", detail: "", image: { publicId: "", url: "" } }],
+            brands: {
+                brandList: [{ uniqueId: "", brandName: "", image: { publicId: "", url: "" } }],
+            },
+            bulkLink: {
+                bulkLinkList: [{ linkName: "", link: "" }]
+            },
+            services: {
+                serviceList: [{ uniqueId: "", title: "", detail: "", image: { publicId: "", url: "" } }]
+            },
+            products: {
+                productList: [{ uniqueId: "", title: "", detail: "", image: { publicId: "", url: "" } }]
+            },
         }
     })
 
@@ -57,11 +65,11 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId
         if (selectedFile) {
             const uniqueCode = getUniqueCode()
             const fileExtension = getFileExtension(selectedFile.name)
-            if (!getValues(`brands.${ind}.uniqueId`)) {
+            if (!getValues(`brands.brandList.${ind}.uniqueId`)) {
 
                 const fileName = `${uniqueCode}.${fileExtension}`
-                setValue(`brands.${ind}.uniqueId`, uniqueCode)
-                setValue(`brands.${ind}.image.url`, URL.createObjectURL(selectedFile))
+                setValue(`brands.brandList.${ind}.uniqueId`, uniqueCode)
+                setValue(`brands.brandList.${ind}.image.url`, URL.createObjectURL(selectedFile))
 
                 setBrandsFiles((prevFiles: File[] | null) => {
                     const newFiles = [...(prevFiles) || []]
@@ -69,10 +77,10 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId
                     return newFiles
                 })
             } else {
-                const uniqueId = getValues(`brands.${ind}.uniqueId`);
+                const uniqueId = getValues(`brands.brandList.${ind}.uniqueId`);
                 const fileName = `${uniqueId}.${fileExtension}`;
-                setValue(`brands.${ind}.uniqueId`, uniqueId);
-                setValue(`brands.${ind}.image.url`, URL.createObjectURL(selectedFile));
+                setValue(`brands.brandList.${ind}.uniqueId`, uniqueId);
+                setValue(`brands.brandList.${ind}.image.url`, URL.createObjectURL(selectedFile));
 
                 setBrandsFiles((prevFiles: File[] | null) => {
                     const newFiles = [...(prevFiles || [])];
@@ -85,7 +93,7 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId
 
     const { fields: brandsFields, append: brandsAppend, remove: brandsRemove } = useFieldArray({
         control,
-        name: 'brands'
+        name: 'brands.brandList'
     })
 
     const removeBrand = (ind: number) => {
@@ -96,7 +104,7 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId
         })
 
         if (brandsFields.length === 1) {
-            setValue(`brands.${ind}`, { uniqueId: "", brandName: "", image: { url: "", publicId: "" } })
+            setValue(`brands.brandList.${ind}`, { uniqueId: "", brandName: "", image: { url: "", publicId: "" } })
         } else {
             brandsRemove(ind)
         }
@@ -104,7 +112,7 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId
 
     const { fields: linkFields, append: linkAppend, remove: linkRemove } = useFieldArray({
         control,
-        name: 'bulkLink'
+        name: 'bulkLink.bulkLinkList'
     })
 
     const handleServiceFileChange = (e: React.ChangeEvent<HTMLInputElement> | null, ind: number) => {
@@ -112,11 +120,11 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId
         if (selectedFile) {
             const uniqueCode = getUniqueCode()
             const fileExtension = getFileExtension(selectedFile.name)
-            if (!getValues(`services.${ind}.uniqueId`)) {
+            if (!getValues(`services.serviceList.${ind}.uniqueId`)) {
 
                 const fileName = `${uniqueCode}.${fileExtension}`
-                setValue(`services.${ind}.uniqueId`, uniqueCode)
-                setValue(`services.${ind}.image.url`, URL.createObjectURL(selectedFile))
+                setValue(`services.serviceList.${ind}.uniqueId`, uniqueCode)
+                setValue(`services.serviceList.${ind}.image.url`, URL.createObjectURL(selectedFile))
 
                 setServicesFiles((prevFiles: File[] | null) => {
                     const newFiles = [...(prevFiles) || []]
@@ -124,10 +132,10 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId
                     return newFiles
                 })
             } else {
-                const uniqueId = getValues(`services.${ind}.uniqueId`);
+                const uniqueId = getValues(`services.serviceList.${ind}.uniqueId`);
                 const fileName = `${uniqueId}.${fileExtension}`;
-                setValue(`services.${ind}.uniqueId`, uniqueId);
-                setValue(`services.${ind}.image.url`, URL.createObjectURL(selectedFile));
+                setValue(`services.serviceList.${ind}.uniqueId`, uniqueId);
+                setValue(`services.serviceList.${ind}.image.url`, URL.createObjectURL(selectedFile));
 
                 setServicesFiles((prevFiles: File[] | null) => {
                     const newFiles = [...(prevFiles || [])];
@@ -140,7 +148,7 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId
 
     const { fields: serviceFields, append: serviceAppend, remove: serviceRemove } = useFieldArray({
         control,
-        name: 'services'
+        name: 'services.serviceList'
     })
 
     const removeService = (ind: number) => {
@@ -151,7 +159,7 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId
         })
 
         if (serviceFields.length === 1) {
-            setValue(`services.${ind}`, { uniqueId: "", title: "", image: { url: "", publicId: "" }, detail: "" })
+            setValue(`services.serviceList.${ind}`, { uniqueId: "", title: "", image: { url: "", publicId: "" }, detail: "" })
         } else {
             serviceRemove(ind)
         }
@@ -162,11 +170,11 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId
         if (selectedFile) {
             const uniqueCode = getUniqueCode()
             const fileExtension = getFileExtension(selectedFile.name)
-            if (!getValues(`products.${ind}.uniqueId`)) {
+            if (!getValues(`products.productList.${ind}.uniqueId`)) {
 
                 const fileName = `${uniqueCode}.${fileExtension}`
-                setValue(`products.${ind}.uniqueId`, uniqueCode)
-                setValue(`products.${ind}.image.url`, URL.createObjectURL(selectedFile))
+                setValue(`products.productList.${ind}.uniqueId`, uniqueCode)
+                setValue(`products.productList.${ind}.image.url`, URL.createObjectURL(selectedFile))
 
                 setProductsFiles((prevFiles: File[] | null) => {
                     const newFiles = [...(prevFiles) || []]
@@ -174,10 +182,10 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId
                     return newFiles
                 })
             } else {
-                const uniqueId = getValues(`products.${ind}.uniqueId`);
+                const uniqueId = getValues(`products.productList.${ind}.uniqueId`);
                 const fileName = `${uniqueId}.${fileExtension}`;
-                setValue(`products.${ind}.uniqueId`, uniqueId);
-                setValue(`products.${ind}.image.url`, URL.createObjectURL(selectedFile));
+                setValue(`products.productList.${ind}.uniqueId`, uniqueId);
+                setValue(`products.productList.${ind}.image.url`, URL.createObjectURL(selectedFile));
 
                 setProductsFiles((prevFiles: File[] | null) => {
                     const newFiles = [...(prevFiles || [])];
@@ -190,7 +198,7 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId
 
     const { fields: productsFields, append: productsAppend, remove: productsRemove } = useFieldArray({
         control,
-        name: 'products'
+        name: 'products.productList'
     })
 
     const removeProducts = (ind: number) => {
@@ -201,7 +209,7 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId
         })
 
         if (productsFields.length === 1) {
-            setValue(`products.${ind}`, { uniqueId: "", title: "", image: { url: "", publicId: "" }, detail: "" })
+            setValue(`products.productList.${ind}`, { uniqueId: "", title: "", image: { url: "", publicId: "" }, detail: "" })
         } else {
             productsRemove(ind)
         }
@@ -243,18 +251,18 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId
                         <Label htmlFor={"tagline"} className="text-neutral-300 ">
                             Brand Tagline <span className="text-[#ff3f69]">*</span>
                         </Label>
-                        <Input {...register("brandTagline")} placeholder="Enter tagline..." type="text" className={`${errors.brandTagline && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                        {errors.brandTagline && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.brandTagline.message}</p>}
+                        <Input {...register("brands.tagline")} placeholder="Enter tagline..." type="text" className={`${errors.brands?.tagline && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                        {errors.brands?.tagline && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.brands?.tagline.message}</p>}
                     </div>
                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2'>
                         {brandsFields?.map((_, ind) => {
                             return <div className='space-y-2  p-2 my-3 rounded bg-[#ff17a21b] border border-rose-800' key={ind}>
                                 <div>
-                                    <Label htmlFor={`brands.${ind}.brandName`} className="text-neutral-300 ">
+                                    <Label htmlFor={`brands.brandList${ind}.brandName`} className="text-neutral-300 ">
                                         Brand name <span className="text-[#ff3f69]">*</span>
                                     </Label>
-                                    <Input {...register(`brands.${ind}.brandName`)} placeholder="Enter brand name..." type="text" className={`${errors.brands?.[ind]?.brandName && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                                    {errors.brands?.[ind]?.brandName && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.brands?.[ind]?.brandName.message}</p>}
+                                    <Input {...register(`brands.brandList.${ind}.brandName`)} placeholder="Enter brand name..." type="text" className={`${errors.brands?.brandList?.[ind]?.brandName && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                                    {errors.brands?.brandList?.[ind]?.brandName && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.brands?.brandList?.[ind]?.brandName.message}</p>}
                                 </div>
                                 <div className='flex  justify-evenly'>
                                     <div className="h-24  w-24 relative group border border-dashed border-[#E11D48] rounded overflow-hidden">
@@ -265,9 +273,9 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId
                                             name='imageImage'
                                             className="absolute z-10 inset-0 w-full h-full opacity-0 cursor-pointer"
                                         />
-                                        {getValues(`brands.${ind}.image.url`) ? (
+                                        {getValues(`brands.brandList.${ind}.image.url`) ? (
                                             <img
-                                                src={getValues(`brands.${ind}.image.url`)}
+                                                src={getValues(`brands.brandList.${ind}.image.url`)}
                                                 alt="Preview"
                                                 className="w-full h-full object-contain"
                                             />
@@ -304,28 +312,28 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId
             content:
                 <div>
                     <div>
-                        <Label htmlFor={"bulkLinkTagline"} className="text-neutral-300 ">
+                        <Label htmlFor={"bulkLink.tagline"} className="text-neutral-300 ">
                             Bulk link Tagline <span className="text-[#ff3f69]">*</span>
                         </Label>
-                        <Input {...register("bulkLinkTagline")} placeholder="Enter bulk link tagline..." type="text" className={`${errors.bulkLinkTagline && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                        {errors.bulkLinkTagline && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.bulkLinkTagline.message}</p>}
+                        <Input {...register("bulkLink.tagline")} placeholder="Enter bulk link tagline..." type="text" className={`${errors.bulkLink?.tagline && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                        {errors.bulkLink?.tagline && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.bulkLink.tagline.message}</p>}
                     </div>
                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2'>
                         {linkFields?.map((_, ind) => {
                             return <div className='space-y-2  p-2 my-3 rounded bg-[#ff17a21b] border border-rose-800' key={ind}>
                                 <div>
-                                    <Label htmlFor={`bulkLink.${ind}.linkName`} className="text-neutral-300 ">
+                                    <Label htmlFor={`bulkLink.bulkLinkList.${ind}.linkName`} className="text-neutral-300 ">
                                         Link name <span className="text-[#ff3f69]">*</span>
                                     </Label>
-                                    <Input {...register(`bulkLink.${ind}.linkName`)} placeholder="Enter brand name..." type="text" className={`${errors.bulkLink?.[ind]?.linkName && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                                    {errors.bulkLink?.[ind]?.linkName && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.bulkLink?.[ind]?.linkName.message}</p>}
+                                    <Input {...register(`bulkLink.bulkLinkList.${ind}.linkName`)} placeholder="Enter brand name..." type="text" className={`${errors.bulkLink?.bulkLinkList?.[ind]?.linkName && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                                    {errors.bulkLink?.bulkLinkList?.[ind]?.linkName && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.bulkLink?.bulkLinkList?.[ind]?.linkName.message}</p>}
                                 </div>
                                 <div>
                                     <Label htmlFor={`bulkLink.${ind}.link`} className="text-neutral-300 ">
                                         Link <span className="text-[#ff3f69]">*</span>
                                     </Label>
-                                    <Input {...register(`bulkLink.${ind}.link`)} placeholder="Enter link ..." type="text" className={`${errors.bulkLink?.[ind]?.link && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                                    {errors.bulkLink?.[ind]?.link && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.bulkLink?.[ind]?.link.message}</p>}
+                                    <Input {...register(`bulkLink.bulkLinkList.${ind}.link`)} placeholder="Enter link ..." type="text" className={`${errors.bulkLink?.bulkLinkList?.[ind]?.link && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                                    {errors.bulkLink?.bulkLinkList?.[ind]?.link && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.bulkLink?.bulkLinkList?.[ind]?.link.message}</p>}
                                 </div>
                                 <div className='flex gap-2 justify-evenly mt-3'>
 
@@ -337,7 +345,7 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId
                                             <button type='button'
                                                 onClick={() => {
                                                     if (linkFields.length === 1) {
-                                                        setValue(`bulkLink.${ind}`, { link: "", linkName: "" });
+                                                        setValue(`bulkLink.bulkLinkList.${ind}`, { link: "", linkName: "" });
                                                     } else {
                                                         linkRemove(ind);
                                                     }
@@ -363,28 +371,28 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId
             content:
                 <div>
                     <div>
-                        <Label htmlFor={"serviceTagline"} className="text-neutral-300 ">
+                        <Label htmlFor={"services.tagline"} className="text-neutral-300 ">
                             Service Tagline <span className="text-[#ff3f69]">*</span>
                         </Label>
-                        <Input {...register("serviceTagline")} placeholder="Enter service tagline..." type="text" className={`${errors.serviceTagline && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                        {errors.serviceTagline && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.serviceTagline.message}</p>}
+                        <Input {...register("services.tagline")} placeholder="Enter service tagline..." type="text" className={`${errors.services?.tagline && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                        {errors.services?.tagline && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.services?.tagline.message}</p>}
                     </div>
                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2'>
                         {serviceFields?.map((_, ind) => {
                             return <div className='space-y-2  p-2 my-3 rounded bg-[#ff17a21b] border border-rose-800' key={ind}>
                                 <div>
-                                    <Label htmlFor={`services.${ind}.serviceName`} className="text-neutral-300 ">
+                                    <Label htmlFor={`services.serviceList.${ind}.serviceName`} className="text-neutral-300 ">
                                         Service title <span className="text-[#ff3f69]">*</span>
                                     </Label>
-                                    <Input {...register(`services.${ind}.title`)} placeholder="Enter service name..." type="text" className={`${errors.services?.[ind]?.title && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                                    {errors.services?.[ind]?.title && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.services?.[ind]?.title.message}</p>}
+                                    <Input {...register(`services.serviceList.${ind}.title`)} placeholder="Enter service name..." type="text" className={`${errors.services?.serviceList?.[ind]?.title && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                                    {errors.services?.serviceList?.[ind]?.title && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.services?.serviceList?.[ind]?.title.message}</p>}
                                 </div>
                                 <div>
-                                    <Label htmlFor={`services.${ind}.detail`} className="text-neutral-300 ">
+                                    <Label htmlFor={`services.serviceList.${ind}.detail`} className="text-neutral-300 ">
                                         Service description <span className="text-[#ff3f69]">*</span>
                                     </Label>
-                                    <Textarea {...register(`services.${ind}.detail`)} placeholder="Enter service detail..." className={`${errors.services?.[ind]?.detail && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                                    {errors.services?.[ind]?.detail && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.services?.[ind]?.detail.message}</p>}
+                                    <Textarea {...register(`services.serviceList.${ind}.detail`)} placeholder="Enter service detail..." className={`${errors.services?.serviceList?.[ind]?.detail && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                                    {errors.services?.serviceList?.[ind]?.detail && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.services?.serviceList?.[ind]?.detail.message}</p>}
                                 </div>
                                 <div className='flex  justify-evenly'>
                                     <div className="h-24  w-24 relative group border border-dashed border-[#E11D48] rounded overflow-hidden">
@@ -395,9 +403,9 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId
                                             name='imageImage'
                                             className="absolute z-10 inset-0 w-full h-full opacity-0 cursor-pointer"
                                         />
-                                        {getValues(`services.${ind}.image.url`) ? (
+                                        {getValues(`services.serviceList.${ind}.image.url`) ? (
                                             <img
-                                                src={getValues(`services.${ind}.image.url`)}
+                                                src={getValues(`services.serviceList.${ind}.image.url`)}
                                                 alt="Preview"
                                                 className="w-full h-full object-contain"
                                             />
@@ -434,28 +442,28 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId
             content:
                 <div>
                     <div>
-                        <Label htmlFor={"productTagline"} className="text-neutral-300 ">
+                        <Label htmlFor={"products?.tagline"} className="text-neutral-300 ">
                             Product Tagline <span className="text-[#ff3f69]">*</span>
                         </Label>
-                        <Input {...register("productTagline")} placeholder="Enter service tagline..." type="text" className={`${errors.productTagline && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                        {errors.productTagline && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.productTagline.message}</p>}
+                        <Input {...register("products.tagline")} placeholder="Enter service tagline..." type="text" className={`${errors.products?.tagline && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                        {errors.products?.tagline && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.products?.tagline.message}</p>}
                     </div>
                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2'>
                         {productsFields?.map((_, ind) => {
                             return <div className='space-y-2  p-2 my-3 rounded bg-[#ff17a21b] border border-rose-800' key={ind}>
                                 <div>
-                                    <Label htmlFor={`products.${ind}.serviceName`} className="text-neutral-300 ">
+                                    <Label htmlFor={`products.productList.${ind}.serviceName`} className="text-neutral-300 ">
                                         Product title <span className="text-[#ff3f69]">*</span>
                                     </Label>
-                                    <Input {...register(`products.${ind}.title`)} placeholder="Enter service name..." type="text" className={`${errors.products?.[ind]?.title && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                                    {errors.products?.[ind]?.title && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.products?.[ind]?.title.message}</p>}
+                                    <Input {...register(`products.productList.${ind}.title`)} placeholder="Enter service name..." type="text" className={`${errors.products?.productList?.[ind]?.title && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                                    {errors.products?.productList?.[ind]?.title && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.products?.productList?.[ind]?.title.message}</p>}
                                 </div>
                                 <div>
-                                    <Label htmlFor={`products.${ind}.detail`} className="text-neutral-300 ">
+                                    <Label htmlFor={`products.productList.${ind}.detail`} className="text-neutral-300 ">
                                         Product description <span className="text-[#ff3f69]">*</span>
                                     </Label>
-                                    <Textarea {...register(`products.${ind}.detail`)} placeholder="Enter service detail..." className={`${errors.products?.[ind]?.detail && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                                    {errors.products?.[ind]?.detail && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.products?.[ind]?.detail.message}</p>}
+                                    <Textarea {...register(`products.productList.${ind}.detail`)} placeholder="Enter service detail..." className={`${errors.products?.productList?.[ind]?.detail && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                                    {errors.products?.productList?.[ind]?.detail && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.products?.productList?.[ind]?.detail.message}</p>}
                                 </div>
                                 <div className='flex  justify-evenly'>
                                     <div className="h-24  w-24 relative group border border-dashed border-[#E11D48] rounded overflow-hidden">
@@ -466,9 +474,9 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId
                                             name='imageImage'
                                             className="absolute z-10 inset-0 w-full h-full opacity-0 cursor-pointer"
                                         />
-                                        {getValues(`products.${ind}.image.url`) ? (
+                                        {getValues(`products.productList.${ind}.image.url`) ? (
                                             <img
-                                                src={getValues(`products.${ind}.image.url`)}
+                                                src={getValues(`products.productList.${ind}.image.url`)}
                                                 alt="Preview"
                                                 className="w-full h-full object-contain"
                                             />
