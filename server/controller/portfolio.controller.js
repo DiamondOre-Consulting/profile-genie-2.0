@@ -7,7 +7,7 @@ import AppError from "../utils/error.utils.js"
 import { multipleFileUpload } from "../utils/fileUpload.utils.js"
 
 const createPortfolio = asyncHandler(async (req, res) => {
-
+    console.log(2)
     const { formData } = req.body
     const { fullName, userName, phoneNumber, email, tagline, about, isActive, isPaid } = JSON.parse(formData)
 
@@ -16,6 +16,8 @@ const createPortfolio = asyncHandler(async (req, res) => {
     if (uniquePortfolio) {
         throw new AppError("Username already exists!", 400)
     }
+
+    console.log(1)
 
     const portfolio = new Portfolio({
         fullName,
@@ -46,6 +48,9 @@ const createPortfolio = asyncHandler(async (req, res) => {
     }
 
     let uploadedFiles = []
+
+    console.log(req.files)
+
     if (req?.files) {
         uploadedFiles = await multipleFileUpload(req?.files);
     }
@@ -53,14 +58,15 @@ const createPortfolio = asyncHandler(async (req, res) => {
     uploadedFiles.forEach(file => {
         console.log(2)
         if (file.uniqueId === "image") {
-            portfolio.image.url = file.result.secret_url;
+            console.log(file)
+            portfolio.image.url = file.result.secure_url;
             portfolio.image.publicId = file.result.public_id;
         } else if (file.uniqueId === "backgroundImage") {
-            portfolio.backgroundImage.url = file.result.secret_url;
+            portfolio.backgroundImage.url = file.result.secure_url;
             portfolio.backgroundImage.publicId = file.result.public_id;
 
         } else if (file.uniqueId === "logo") {
-            portfolio.logo.url = file.result.secret_url;
+            portfolio.logo.url = file.result.secure_url;
             portfolio.logo.publicId = file.result.public_id;
         }
     });
@@ -152,6 +158,18 @@ const getSinglePortfolio = asyncHandler(async (req, res) => {
     const { userName } = req.params
 
     const portfolio = await Portfolio.findOne({ userName })
+        .populate({
+            path: "contactData",
+            model: "PortfolioContact",
+        })
+        .populate({
+            path: "otherDetails",
+            model: "PortfolioDetail",
+        })
+        .populate({
+            path: "metaDetails",
+            model: "MetaData",
+        })
 
     if (!portfolio) {
         throw new AppError("Portfolio not found!", 400)
@@ -166,17 +184,31 @@ const getSinglePortfolio = asyncHandler(async (req, res) => {
 const getAllPortfolio = asyncHandler(async (req, res) => {
     const portfolios = await Portfolio.aggregate([
         {
+            $lookup: {
+                from: "portfoliocontacts",
+                localField: "contactData",
+                foreignField: "_id",
+                as: "contactData"
+            }
+        },
+        {
+            $unwind: "$contactData"
+        },
+        {
             $project: {
                 _id: 1,
                 userName: 1,
                 fullName: 1,
                 image: 1,
                 tagline: 1,
+                paidDate: 1,
+                isActive: 1,
+                isPaid: 1,
                 facebook: "$contactData.social.facebook",
                 instagram: "$contactData.social.instagram",
                 whatsappNo: "$contactData.whatsappNo",
-                email: { $arrayElemAt: ["$contactData.email", 0] },
-                phone: { $arrayElemAt: ["$contactData.phone", 0] },
+                email: 1,
+                phoneNumber: 1,
             }
         }
     ])
@@ -231,14 +263,14 @@ const createPortfolioDetail = asyncHandler(async (req, res) => {
         if (!existingBrand) {
             const uploadedFile = brandImages.find(uf => uf.uniqueId === brand.uniqueId);
             if (uploadedFile) {
-                portfolioDetail.brands.brandList.push({ ...brand, image: { url: uploadedFile.result.url, publicId: uploadedFile.result.public_id } });
+                portfolioDetail.brands.brandList.push({ ...brand, image: { url: uploadedFile.result.secure_url, publicId: uploadedFile.result.public_id } });
             }
         } else {
             const uploadedFile = brandImages.find(uf => uf.uniqueId === existingBrand.uniqueId);
             if (uploadedFile) {
                 existingBrand.brandName = brand.brandName;
                 existingBrand.uniqueId = brand.uniqueId;
-                existingBrand.image = { url: uploadedFile.result.url, publicId: uploadedFile.result.public_id };
+                existingBrand.image = { url: uploadedFile.result.secure_url, publicId: uploadedFile.result.public_id };
             } else {
                 existingBrand.brandName = brand.brandName;
                 existingBrand.uniqueId = brand.uniqueId;
@@ -257,12 +289,12 @@ const createPortfolioDetail = asyncHandler(async (req, res) => {
         if (!existingService) {
             const uploadedFile = serviceImages.find(uf => uf.uniqueId === service.uniqueId);
             if (uploadedFile) {
-                portfolioDetail.services.serviceList.push({ ...service, image: { url: uploadedFile.result.url, publicId: uploadedFile.result.public_id } });
+                portfolioDetail.services.serviceList.push({ ...service, image: { url: uploadedFile.result.secure_url, publicId: uploadedFile.result.public_id } });
             }
         } else {
             const uploadedFile = serviceImages.find(uf => uf.uniqueId === existingService.uniqueId);
             if (uploadedFile) {
-                existingService.image = { url: uploadedFile.result.url, publicId: uploadedFile.result.public_id };
+                existingService.image = { url: uploadedFile.result.secure_url, publicId: uploadedFile.result.public_id };
                 existingService.uniqueId = service.uniqueId;
                 existingService.title = service.title;
                 existingService.detail = service.detail;
@@ -287,12 +319,12 @@ const createPortfolioDetail = asyncHandler(async (req, res) => {
         if (!existingProduct) {
             const uploadedFile = productImages.find(uf => uf.uniqueId === product.uniqueId);
             if (uploadedFile) {
-                portfolioDetail.products.productList.push({ ...product, image: { url: uploadedFile.result.url, publicId: uploadedFile.result.public_id } });
+                portfolioDetail.products.productList.push({ ...product, image: { url: uploadedFile.result.secure_url, publicId: uploadedFile.result.public_id } });
             }
         } else {
             const uploadedFile = productImages.find(uf => uf.uniqueId === existingProduct.uniqueId);
             if (uploadedFile) {
-                existingProduct.image = { url: uploadedFile.result.url, publicId: uploadedFile.result.public_id };
+                existingProduct.image = { url: uploadedFile.result.secure_url, publicId: uploadedFile.result.public_id };
                 existingProduct.uniqueId = product.uniqueId;
                 existingProduct.title = product.title;
                 existingProduct.detail = product.detail;
@@ -369,14 +401,14 @@ const updatePortfolioDetail = asyncHandler(async (req, res) => {
         if (!existingBrand) {
             const uploadedFile = brandImages.find(uf => uf.uniqueId === brand.uniqueId);
             if (uploadedFile) {
-                portfolioDetail.brands.brandList.push({ ...brand, image: { url: uploadedFile.result.url, publicId: uploadedFile.result.public_id } });
+                portfolioDetail.brands.brandList.push({ ...brand, image: { url: uploadedFile.result.secure_url, publicId: uploadedFile.result.public_id } });
             }
         } else {
             const uploadedFile = brandImages.find(uf => uf.uniqueId === existingBrand.uniqueId);
             if (uploadedFile) {
                 existingBrand.brandName = brand.brandName;
                 existingBrand.uniqueId = brand.uniqueId;
-                existingBrand.image = { url: uploadedFile.result.url, publicId: uploadedFile.result.public_id };
+                existingBrand.image = { url: uploadedFile.result.secure_url, publicId: uploadedFile.result.public_id };
             } else {
                 existingBrand.brandName = brand.brandName;
                 existingBrand.uniqueId = brand.uniqueId;
@@ -395,12 +427,12 @@ const updatePortfolioDetail = asyncHandler(async (req, res) => {
         if (!existingService) {
             const uploadedFile = serviceImages.find(uf => uf.uniqueId === service.uniqueId);
             if (uploadedFile) {
-                portfolioDetail.services.serviceList.push({ ...service, image: { url: uploadedFile.result.url, publicId: uploadedFile.result.public_id } });
+                portfolioDetail.services.serviceList.push({ ...service, image: { url: uploadedFile.result.secure_url, publicId: uploadedFile.result.public_id } });
             }
         } else {
             const uploadedFile = serviceImages.find(uf => uf.uniqueId === existingService.uniqueId);
             if (uploadedFile) {
-                existingService.image = { url: uploadedFile.result.url, publicId: uploadedFile.result.public_id };
+                existingService.image = { url: uploadedFile.result.secure_url, publicId: uploadedFile.result.public_id };
                 existingService.uniqueId = service.uniqueId;
                 existingService.title = service.title;
                 existingService.detail = service.detail;
@@ -423,12 +455,12 @@ const updatePortfolioDetail = asyncHandler(async (req, res) => {
         if (!existingProduct) {
             const uploadedFile = productImages.find(uf => uf.uniqueId === product.uniqueId);
             if (uploadedFile) {
-                portfolioDetail.products.productList.push({ ...product, image: { url: uploadedFile.result.url, publicId: uploadedFile.result.public_id } });
+                portfolioDetail.products.productList.push({ ...product, image: { url: uploadedFile.result.secure_url, publicId: uploadedFile.result.public_id } });
             }
         } else {
             const uploadedFile = productImages.find(uf => uf.uniqueId === existingProduct.uniqueId);
             if (uploadedFile) {
-                existingProduct.image = { url: uploadedFile.result.url, publicId: uploadedFile.result.public_id };
+                existingProduct.image = { url: uploadedFile.result.secure_url, publicId: uploadedFile.result.public_id };
                 existingProduct.uniqueId = product.uniqueId;
                 existingProduct.title = product.title;
                 existingProduct.detail = product.detail;
@@ -499,12 +531,12 @@ const createPortfolioContact = asyncHandler(async (req, res) => {
             const uploadedFile = uploadedFiles.find(uf => uf.uniqueId === social.uniqueId);
             console.log(uploadedFile)
             if (uploadedFile) {
-                portfolioContact.social.otherSocialList.push({ ...social, img: { url: uploadedFile.result.url, publicId: uploadedFile.result.public_id } });
+                portfolioContact.social.otherSocialList.push({ ...social, img: { url: uploadedFile.result.secure_url, publicId: uploadedFile.result.public_id } });
             }
         } else {
             const uploadedFile = uploadedFiles.find(uf => uf.uniqueId === existingSocial.uniqueId);
             if (uploadedFile) {
-                existingSocial.img = { url: uploadedFile.result.url, publicId: uploadedFile.result.public_id };
+                existingSocial.img = { url: uploadedFile.result.secure_url, publicId: uploadedFile.result.public_id };
                 existingSocial.uniqueId = social.uniqueId;
                 existingSocial.link = social.link;
             } else {
@@ -577,12 +609,12 @@ const updatePortfolioContact = asyncHandler(async (req, res) => {
         if (!existingSocial) {
             const uploadedFile = uploadedFiles.find(uf => uf.uniqueId === social.uniqueId);
             if (uploadedFile) {
-                portfolioContact.social.otherSocialList.push({ ...social, img: { url: uploadedFile.result.url, publicId: uploadedFile.result.public_id } });
+                portfolioContact.social.otherSocialList.push({ ...social, img: { url: uploadedFile.result.secure_url, publicId: uploadedFile.result.public_id } });
             }
         } else {
             const uploadedFile = uploadedFiles.find(uf => uf.uniqueId === existingSocial.uniqueId);
             if (uploadedFile) {
-                existingSocial.img = { url: uploadedFile.result.url, publicId: uploadedFile.result.public_id };
+                existingSocial.img = { url: uploadedFile.result.secure_url, publicId: uploadedFile.result.public_id };
                 existingSocial.uniqueId = social.uniqueId;
                 existingSocial.link = social.link;
             } else {

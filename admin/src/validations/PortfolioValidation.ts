@@ -130,3 +130,17 @@ export const addMetaDetailsSchema = z.object({
     keywords: z.string().min(1, 'Keywords is required'),
     canonical: z.string().min(3, 'Canonical is required')
 })
+
+export type profileDetail = z.infer<typeof addProfileDetailSchema>
+export type metaDetails = z.infer<typeof addMetaDetailsSchema>
+export type contactDetails = z.infer<typeof addContactDetailSchema>
+export type otherDetails = z.infer<typeof addOthersDetailSchema>
+
+export interface portfolioResponse extends profileDetail {
+    _id: string,
+    createdAt: string,
+    updatedAt: string,
+    metaDetails: metaDetails,
+    contactData: contactDetails,
+    otherDetails: otherDetails
+}

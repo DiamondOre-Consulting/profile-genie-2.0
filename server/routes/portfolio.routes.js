@@ -11,7 +11,9 @@ portfolioRouter.route('/')
 portfolioRouter.route('/:id')
     .put(upload.array("files", 3), updatePortfolio)
     .delete(deletePortfolio)
-    .get(getSinglePortfolio)
+
+portfolioRouter.route('/:userName').get(getSinglePortfolio)
+
 portfolioRouter.route('/others/:id')
     .post(upload.fields([{ name: "brands", maxCount: 30 },
     { name: "services", maxCount: 30 },

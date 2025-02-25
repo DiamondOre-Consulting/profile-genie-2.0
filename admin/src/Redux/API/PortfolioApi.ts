@@ -43,8 +43,8 @@ export const portfolioApi = createApi({
             invalidatesTags: (result) => result ? [{ type: "PORTFOLIO" as const }] : [],
         }),
         getSinglePortfolio: builder.query({
-            query: ({ id }) => ({
-                url: `/portfolio/${id}`,
+            query: ({ username }) => ({
+                url: `/portfolio/${username}`,
                 method: "GET",
                 data: {}
             })

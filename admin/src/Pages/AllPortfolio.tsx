@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { BoltIcon, BookOpenIcon, CircleUserRoundIcon, Layers2Icon, PinIcon, UserPenIcon } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const backdropVariants = {
     hidden: { opacity: 0 },
@@ -19,7 +20,7 @@ const modalVariants = {
 };
 
 const AllPortfolio = () => {
-
+    const navigate = useNavigate()
     const { data } = useGetAllPortfolioQuery({})
     const [deleteModalActive, setDeleteModalActive] = useState(false)
 
@@ -86,7 +87,7 @@ const AllPortfolio = () => {
 
             {
                 data?.data.map((item: any) => (
-                    <button key={item._id} className="group relative min-w-[18rem] sm:w-[22rem]">
+                    <div key={item._id} className="group relative min-w-[18rem] sm:w-[22rem]">
                         <div
                             className="absolute rounded- bg-gradient-to-r from-[#E11D48] via-[#E11D48] to-orange-500 opacity-10 blur-sm transition-all duration-500 group-hover:opacity-80 group-hover:blur-lg"
                         ></div>
@@ -241,7 +242,7 @@ const AllPortfolio = () => {
                                     <div className="absolute inset-[3px] rounded-full bg-gray-950"></div>
                                     <span className="relative text-sm font-bold text-[#E11D48]"><IconTrash /></span>
                                 </div>
-                                <div className="relative cursor-pointer flex size-10 items-center justify-center group/inner">
+                                <div onClick={() => navigate(`/edit-portfolio/${item?.userName}`)} className="relative cursor-pointer flex size-10 items-center justify-center group/inner">
                                     <div
                                         className="absolute inset-0 rounded-full border border-amber-400/20 border-t-purple-400 transition-transform duration-1000 group-hover/inner:rotate-180"
                                     >
@@ -262,7 +263,7 @@ const AllPortfolio = () => {
                         </div>
 
 
-                    </button>
+                    </div>
                 ))
             }
 

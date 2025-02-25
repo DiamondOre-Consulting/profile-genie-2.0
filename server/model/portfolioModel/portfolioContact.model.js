@@ -30,11 +30,15 @@ const portfolioContactSchema = new Schema({
     mapLink: {
         type: String
     },
-    email: [{
-        type: String
+    emailList: [{
+        email: {
+            type: String
+        }
     }],
-    phone: [{
-        type: Number
+    phoneList: [{
+        phone: {
+            type: Number
+        }
     }],
     address: [{
         title: {

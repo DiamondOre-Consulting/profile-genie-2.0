@@ -1,29 +1,41 @@
 import TextEditor from '../../TextEditor'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { addProfileDetailSchema, profileDetail } from '@/validations/PortfolioValidation'
+import { addProfileDetailSchema, portfolioResponse } from '@/validations/PortfolioValidation'
 import { IconCamera, IconRosetteDiscountCheckFilled, IconSquareRoundedArrowLeftFilled, IconSquareRoundedArrowRightFilled, IconWhirl } from '@tabler/icons-react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Switch } from '@/components/ui/switch'
 import { useAddPortfolioMutation } from '@/Redux/API/PortfolioApi'
 import { toast } from 'sonner'
 
+type profileDetail = z.infer<typeof addProfileDetailSchema>
 
 interface apiRes {
     success: boolean
-    message: string,
-    data: { _id: string, profileDetail: profileDetail }
+    message?: string,
+    data: portfolioResponse
 }
 
-const AddProfileDetail = ({ setCurrentStep, currentStep, stepsLength, setId }: { setCurrentStep: React.Dispatch<React.SetStateAction<number>>, currentStep: number, stepsLength: number, setId: React.Dispatch<React.SetStateAction<string>> }) => {
-
+const EditProfileDetail = ({ setCurrentStep, currentStep, stepsLength, setId, portfolioDetail }: { setCurrentStep: React.Dispatch<React.SetStateAction<number>>, currentStep: number, stepsLength: number, setId: React.Dispatch<React.SetStateAction<string>>, portfolioDetail: apiRes }) => {
+    console.log(portfolioDetail.data)
     const [addPortfolio] = useAddPortfolioMutation()
 
-    const { register, handleSubmit, setValue, trigger, watch, getValues, formState: { errors, isSubmitting } } = useForm<profileDetail>({
-        resolver: zodResolver(addProfileDetailSchema)
+    const { register, handleSubmit, setValue, reset, trigger, watch, getValues, formState: { errors, isSubmitting } } = useForm<profileDetail>({
+        resolver: zodResolver(addProfileDetailSchema),
+        defaultValues: portfolioDetail?.data
     })
+
+    useEffect(() => {
+        if (portfolioDetail?.data) {
+            reset(portfolioDetail.data);
+        }
+    }, [portfolioDetail, reset]);
+
+    console.log(watch("isActive"))
+    console.log(watch("isPaid"))
 
     const [files, setFiles] = useState<File[]>([]);
 
@@ -65,6 +77,8 @@ const AddProfileDetail = ({ setCurrentStep, currentStep, stepsLength, setId }: {
             <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2'>
                 <div onClick={() => setValue("isActive", !getValues("isActive"))} className="relative flex w-full items-start gap-2 rounded-lg border border-red-500 p-3 shadow-sm shadow-black/5 has-[[data-state=checked]]:border-green-600 ">
                     <Switch
+                        defaultChecked={getValues("isPaid")}
+
                         className="order-1 h-4 w-6 after:absolute after:inset-0 [&_span]:size-3 [&_span]:data-[state=checked]:translate-x-2 rtl:[&_span]:data-[state=checked]:-translate-x-2"
                     />
                     <div className="flex grow items-center gap-2">
@@ -83,7 +97,7 @@ const AddProfileDetail = ({ setCurrentStep, currentStep, stepsLength, setId }: {
                 </div>
                 <div onClick={() => setValue("isPaid", !getValues("isPaid"))} className="relative flex w-full items-start gap-2 rounded-lg border border-red-500 p-3 shadow-sm shadow-black/5 has-[[data-state=checked]]:border-green-600 ">
                     <Switch
-
+                        defaultChecked={getValues("isPaid")}
                         className="order-1 h-4 w-6 after:absolute after:inset-0 [&_span]:size-3 [&_span]:data-[state=checked]:translate-x-2 rtl:[&_span]:data-[state=checked]:-translate-x-2"
                     />
                     <div className="flex grow items-center gap-3">
@@ -278,4 +292,4 @@ const AddProfileDetail = ({ setCurrentStep, currentStep, stepsLength, setId }: {
     )
 }
 
-export default AddProfileDetail
+export default EditProfileDetail
