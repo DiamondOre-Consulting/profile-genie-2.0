@@ -1,17 +1,20 @@
 import { HomeLayout } from "@/Layout/HomeLayout"
-import { useGetAllPortfolioQuery, useGetRecycledPortfolioQuery, useRecyclePortfolioMutation } from "@/Redux/API/PortfolioApi"
-import { IconArrowsExchange, IconBrandWhatsapp, IconClock, IconEdit, IconEye, IconLink, IconMail, IconPhone, IconTrash, IconX } from "@tabler/icons-react"
+import { useDeletePortfolioMutation, useGetAllPortfolioQuery, useGetRecycledPortfolioQuery, useRecyclePortfolioMutation, useRestorePortfolioMutation } from "@/Redux/API/PortfolioApi"
+import { IconArrowsExchange, IconBrandWhatsapp, IconClock, IconEdit, IconEye, IconLink, IconMail, IconPhone, IconRestore, IconTrash, IconWhirl, IconX } from "@tabler/icons-react"
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { BoltIcon, CircleUserRoundIcon, Layers2Icon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { apiRes } from "@/validations/PortfolioValidation";
 
 const backdropVariants = {
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { duration: 0.3 } },
 };
+
+
 
 const modalVariants = {
     hidden: { opacity: 0, y: "-50px", scale: 0.8 },
@@ -22,16 +25,29 @@ const modalVariants = {
 const RecycledPortfolio = () => {
     const navigate = useNavigate()
     const { data } = useGetRecycledPortfolioQuery({})
+    const [restoreModalActive, setRestoreModalActive] = useState(false)
     const [deleteModalActive, setDeleteModalActive] = useState(false)
-    const [recycleId, setRecycleId] = useState('')
-    const [recyclePortfolio, { isLoading }] = useRecyclePortfolioMutation()
+    const [id, setId] = useState('')
+    const [restorePortfolio, { isLoading }] = useRestorePortfolioMutation()
+    const [deletePortfolio, { isLoading: deleteLoading }] = useDeletePortfolioMutation()
 
-    const handleRecycle = async (id: string) => {
-        const res = await recyclePortfolio({ id }).unwrap()
+    const handleRestore = async (id: string) => {
+        const res = await restorePortfolio({ id }).unwrap() as apiRes
+        if (res?.success) {
+            setRestoreModalActive(false)
+            setId('')
+        }
         console.log(res)
     }
 
-    console.log(data)
+    const handleDelete = async (id: string) => {
+        const res = await deletePortfolio({ id }).unwrap() as apiRes
+        if (res?.success) {
+            setDeleteModalActive(false)
+            setId('')
+        }
+    }
+
 
     return (
         <HomeLayout>
@@ -79,18 +95,73 @@ const RecycledPortfolio = () => {
                                     Cancel
                                 </button>
                                 <button
-                                    onClick={() => handleRecycle(recycleId)}
-                                    className="bg-[#dc0030] flex items-center gap-2 cursor-pointer hover:bg-[#dc0030e1] text-white px-3 py-1.5 rounded transition"
+                                    disabled={deleteLoading}
+                                    onClick={() => handleDelete(id)}
+                                    className="bg-[#dc0030] flex items-center gap-2 cursor-pointer hover:bg-[#dc0030e1] text-white w-[6.3rem] px-3 py-1.5 rounded transition"
                                 >
-                                    <IconTrash />
-                                    Delete
+                                    {deleteLoading ? <IconWhirl className="animate-spin" /> : <>
+                                        <IconTrash />
+                                        <span>Delete</span>
+                                    </>}
                                 </button>
                             </div>
                         </motion.div>
                     </motion.div>
                 )}
             </AnimatePresence>
-
+            <AnimatePresence>
+                {restoreModalActive && (
+                    <motion.div
+                        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-start pt-30 justify-center"
+                        variants={backdropVariants}
+                        initial="hidden"
+                        animate="visible"
+                        exit="hidden"
+                    >
+                        <motion.div
+                            className="relative w-full max-w-[35rem] rounded-sm  bg-gradient-to-b from-gray-900 via-gray-950 to-black p-4 text-white border border-[#DC0030]/20 shadow-lg"
+                            variants={modalVariants}
+                            initial="hidden"
+                            animate="visible"
+                            exit="exit"
+                        >
+                            <button
+                                className="absolute top-3 right-3 text-gray-400 hover:text-white transition"
+                                onClick={() => setRestoreModalActive(false)}
+                            >
+                                <IconX size={24} />
+                            </button>
+                            <div className="flex items-center gap-3 mb-4">
+                                <IconRestore className="text-[#34D399] text-2xl" />
+                                <h2 className="text-lg font-semibold">You’re about to restore this page</h2>
+                            </div>
+                            <p className="text-gray-100 mb-2">
+                                Before you restore it, there’s some things you should know:
+                            </p>
+                            <ul className="text-gray-300 list-disc pl-6">
+                                <li>The page will be restored to its original state and will be marked as active.</li>
+                            </ul>
+                            <div className="mt-6 flex justify-end gap-4">
+                                <button
+                                    onClick={() => setRestoreModalActive(false)}
+                                    className="text-gray-300 hover:text-white px-4 py-1.5 rounded bg-neutral-900 transition"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={() => handleRestore(id)}
+                                    className="bg-[#00a838] flex items-center gap-2 cursor-pointer hover:bg-[#00a838e1] text-white px-3 py-1.5 rounded transition"
+                                >
+                                    {isLoading ? <IconWhirl className="animate-spin" /> : <>
+                                        <IconRestore />
+                                        <span>Restore</span>
+                                    </>}
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mx-auto">
                 {
                     data?.data.map((item: any) => (
@@ -235,16 +306,19 @@ const RecycledPortfolio = () => {
                                         <span className="relative text-sm font-bold text-green-500"><IconBrandWhatsapp /></span>
                                     </div>
 
-                                    <div onClick={() => window.open(``)} className="relative cursor-pointer flex size-10 items-center justify-center group/inner">
+                                    <div onClick={() => {
+                                        setId(item._id)
+                                        setRestoreModalActive(true)
+                                    }} className="relative cursor-pointer flex size-10 items-center justify-center group/inner">
                                         <div
                                             className="absolute inset-0 rounded-full border border-amber-400/20 border-t-amber-400 transition-transform duration-1000 group-hover/inner:rotate-180"
                                         >
                                         </div>
                                         <div className="absolute inset-[3px] rounded-full bg-gray-950"></div>
-                                        <span className="relative text-sm font-bold text-amber-400"><IconLink /></span>
+                                        <span className="relative text-sm font-bold text-amber-400"><IconRestore /></span>
                                     </div>
                                     <div onClick={() => {
-                                        setRecycleId(item._id)
+                                        setId(item._id)
                                         setDeleteModalActive(true)
                                     }} className="relative cursor-pointer flex size-10 items-center justify-center group/inner">
                                         <div

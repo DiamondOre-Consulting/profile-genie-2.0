@@ -114,7 +114,7 @@ export const portfolioApi = createApi({
         }),
         getRecycledPortfolio: builder.query({
             query: () => ({
-                url: `/portfolio/recycle/all-recycle`,
+                url: `/portfolio/recycle/all-portfolio`,
                 method: "GET",
                 data: {}
             }),

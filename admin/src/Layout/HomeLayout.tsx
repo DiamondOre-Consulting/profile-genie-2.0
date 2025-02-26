@@ -10,7 +10,7 @@ import {
     IconSettings,
     IconTrash
 } from "@tabler/icons-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const tabs = [
     { link: "/", label: "Dashboard", icon: IconLayoutDashboardFilled },
@@ -29,6 +29,8 @@ export function HomeLayout({ children }: { children: ReactNode }) {
     const toggleSidebar = () => {
         setCollapsed((prev) => !prev);
     };
+
+    const { pathname } = useLocation();
 
     const ToggleButton = ({ opened, onClick, ariaLabel }: { opened: boolean, onClick: () => void, ariaLabel: string }) => {
         return (
@@ -55,13 +57,12 @@ export function HomeLayout({ children }: { children: ReactNode }) {
                 <div className={`px-1.5  border-t border-gray-700 flex flex-col w-full py-1 space-y-2`}>{
                     tabs.map((item) => {
                         return (<div
-                            className={`flex items-center w-full overflow-hidden space-y-2  space-x-2 h-[2.3rem]  rounded transition-all duration-300 
-                ${active === item.label ? "bg-[#E11D48] text-white" : "text-gray-300 hover:bg-gray-700"} 
+                            className={`flex items-center cursor-pointer w-full overflow-hidden space-y-2  space-x-2 h-[2.3rem]  rounded transition-all duration-300 
+                ${pathname === item.link ? "bg-[#E11D48] text-white" : "text-gray-300 hover:bg-gray-700"} 
                 ${collapsed ? "justify-center " : " items-center px-2"}`}
                             key={item.label}
                             onClick={(event) => {
                                 event.preventDefault();
-                                setActive(item.label);
                                 navigate(item.link)
                             }}
                         >
