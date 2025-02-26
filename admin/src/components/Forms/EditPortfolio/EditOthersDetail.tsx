@@ -15,7 +15,7 @@ import { Input } from '@/components/ui/input'
 import { IconCamera, IconPlus, IconSquareRoundedArrowLeftFilled, IconSquareRoundedArrowRightFilled, IconWhirl, IconX } from '@tabler/icons-react'
 import { v4 as uuidv4 } from 'uuid'
 import { Textarea } from '@/components/ui/textarea'
-import { useAddOtherDetailsMutation } from '@/Redux/API/PortfolioApi'
+import { useUpdateOtherDetailsMutation } from '@/Redux/API/PortfolioApi'
 
 
 type othersProfileDetail = z.infer<typeof addOthersDetailSchema>
@@ -29,12 +29,32 @@ interface apiRes {
 const EditOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId, othersDetail }: { currentStep: number, stepsLength: number, setCurrentStep: React.Dispatch<React.SetStateAction<number>>, portfolioId: string, othersDetail: othersProfileDetail }) => {
 
 
-    const [addOtherDetails] = useAddOtherDetailsMutation()
+    const [updateOtherDetails] = useUpdateOtherDetailsMutation()
 
     const { register, handleSubmit, getValues, reset, setValue, control, formState: { errors, isSubmitting } } = useForm<othersProfileDetail>({
         resolver: zodResolver(addOthersDetailSchema),
-        defaultValues: othersDetail
+        defaultValues: {
+            ...othersDetail,
+            products: {
+                ...othersDetail.products,
+                productList: othersDetail.products.productList && (othersDetail.products.productList.length > 1) ? othersDetail.products.productList : [{ uniqueId: "", title: "", detail: "", image: { publicId: "", url: "" } }]
+            },
+            services: {
+                ...othersDetail.services,
+                serviceList: othersDetail.services.serviceList && (othersDetail.services.serviceList.length > 1) ? othersDetail.services.serviceList : [{ uniqueId: "", title: "", detail: "", image: { publicId: "", url: "" } }]
+            },
+            brands: {
+                ...othersDetail.brands,
+                brandList: othersDetail.brands.brandList && (othersDetail.brands.brandList.length > 1) ? othersDetail.brands.brandList : [{ uniqueId: "", brandName: "", image: { publicId: "", url: "" } }]
+            },
+            bulkLink: {
+                ...othersDetail.bulkLink,
+                bulkLinkList: othersDetail.bulkLink.bulkLinkList && (othersDetail.bulkLink.bulkLinkList.length > 1) ? othersDetail.bulkLink.bulkLinkList : [{ linkName: "", link: "" }]
+            }
+        }
     })
+
+    console.log(portfolioId)
 
     useEffect(() => {
         if (othersDetail) {
@@ -226,7 +246,7 @@ const EditOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioI
             formData.append('products', img)
         })
 
-        const response = await addOtherDetails({ formData, id: portfolioId }).unwrap() as apiRes
+        const response = await updateOtherDetails({ formData, id: portfolioId }).unwrap() as apiRes
         console.log(response)
         if (response?.success) {
             setCurrentStep(currentStep + 1)

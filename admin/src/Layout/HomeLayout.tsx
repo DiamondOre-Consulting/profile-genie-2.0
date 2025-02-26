@@ -7,7 +7,8 @@ import {
     IconLayoutDashboardFilled,
     IconLayoutSidebarRightCollapse,
     IconLogout,
-    IconSettings
+    IconSettings,
+    IconTrash
 } from "@tabler/icons-react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -15,6 +16,7 @@ const tabs = [
     { link: "/", label: "Dashboard", icon: IconLayoutDashboardFilled },
     { link: "/all-portfolio", label: "All Portfolio", icon: IconFileCvFilled },
     { link: "/add-portfolio", label: "Add Portfolio", icon: IconFingerprint },
+    { link: "/recycle-bin", label: "Recycle Bin", icon: IconTrash },
     { link: "/all-catalogue", label: "All Catalogue", icon: IconKey },
     { link: "/add-catalogue", label: "Add Catalogue", icon: IconDatabaseImport },
     { link: "/other-settings", label: "Other Settings", icon: IconSettings },
@@ -27,7 +29,6 @@ export function HomeLayout({ children }: { children: ReactNode }) {
     const toggleSidebar = () => {
         setCollapsed((prev) => !prev);
     };
-
 
     const ToggleButton = ({ opened, onClick, ariaLabel }: { opened: boolean, onClick: () => void, ariaLabel: string }) => {
         return (

@@ -8,7 +8,7 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Switch } from '@/components/ui/switch'
-import { useAddPortfolioMutation } from '@/Redux/API/PortfolioApi'
+import { useAddPortfolioMutation, useUpdatePortfolioMutation } from '@/Redux/API/PortfolioApi'
 import { toast } from 'sonner'
 
 type profileDetail = z.infer<typeof addProfileDetailSchema>
@@ -21,7 +21,7 @@ interface apiRes {
 
 const EditProfileDetail = ({ setCurrentStep, currentStep, stepsLength, setId, portfolioDetail }: { setCurrentStep: React.Dispatch<React.SetStateAction<number>>, currentStep: number, stepsLength: number, setId: React.Dispatch<React.SetStateAction<string>>, portfolioDetail: apiRes | undefined }) => {
     console.log(portfolioDetail?.data)
-    const [addPortfolio] = useAddPortfolioMutation()
+    const [updatePortfolio] = useUpdatePortfolioMutation()
 
     const { register, handleSubmit, setValue, reset, trigger, watch, getValues, formState: { errors, isSubmitting } } = useForm<profileDetail>({
         resolver: zodResolver(addProfileDetailSchema),
@@ -60,11 +60,12 @@ const EditProfileDetail = ({ setCurrentStep, currentStep, stepsLength, setId, po
             formData.append("formData", JSON.stringify(data))
             files.forEach((file) => formData.append("files", file))
 
-            const res = await addPortfolio({ formData }) as { data: apiRes }
+            const res = await updatePortfolio({ formData, id: portfolioDetail?.data?._id }) as { data: apiRes }
             console.log(res)
             if (res?.data?.success) {
-                setId(res?.data?.data?._id)
-                setCurrentStep((prev) => prev + 1)
+                console.log("success")
+                // setId(res?.data?.data?._id)
+                // setCurrentStep((prev) => prev + 1)
             }
         } catch (error) {
             toast.error("Error submitting form")

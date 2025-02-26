@@ -1,5 +1,5 @@
 import { HomeLayout } from "@/Layout/HomeLayout"
-import { useGetAllPortfolioQuery, useRecyclePortfolioMutation } from "@/Redux/API/PortfolioApi"
+import { useGetAllPortfolioQuery, useGetRecycledPortfolioQuery, useRecyclePortfolioMutation } from "@/Redux/API/PortfolioApi"
 import { IconArrowsExchange, IconBrandWhatsapp, IconClock, IconEdit, IconEye, IconLink, IconMail, IconPhone, IconTrash, IconX } from "@tabler/icons-react"
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion";
@@ -19,9 +19,9 @@ const modalVariants = {
     exit: { opacity: 0, y: "50px", scale: 0.8, transition: { duration: 0.3 } },
 };
 
-const AllPortfolio = () => {
+const RecycledPortfolio = () => {
     const navigate = useNavigate()
-    const { data } = useGetAllPortfolioQuery({})
+    const { data } = useGetRecycledPortfolioQuery({})
     const [deleteModalActive, setDeleteModalActive] = useState(false)
     const [recycleId, setRecycleId] = useState('')
     const [recyclePortfolio, { isLoading }] = useRecyclePortfolioMutation()
@@ -31,10 +31,12 @@ const AllPortfolio = () => {
         console.log(res)
     }
 
+    console.log(data)
+
     return (
         <HomeLayout>
             <div>
-                All portfolio
+                Recycled portfolio
             </div>
 
             <AnimatePresence>
@@ -283,4 +285,4 @@ const AllPortfolio = () => {
     )
 }
 
-export default AllPortfolio
+export default RecycledPortfolio

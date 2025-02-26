@@ -1,14 +1,13 @@
-import TextEditor from '../../TextEditor'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { addMetaDetailsSchema } from '@/validations/PortfolioValidation'
 import { IconCamera, IconSquareRoundedArrowLeftFilled, IconSquareRoundedArrowRightFilled, IconWhirl } from '@tabler/icons-react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { z } from 'zod'
-import { useFieldArray, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Textarea } from '@/components/ui/textarea'
-import { useAddMetaDetailsMutation } from '@/Redux/API/PortfolioApi'
+import { useUpdateMetaDetailsMutation } from '@/Redux/API/PortfolioApi'
 
 type metaDetails = z.infer<typeof addMetaDetailsSchema>
 
@@ -19,15 +18,19 @@ interface apiRes {
 }
 
 
-const AddMetaDetails = ({ setCurrentStep, currentStep, stepsLength, portfolioId }: { setCurrentStep: React.Dispatch<React.SetStateAction<number>>, currentStep: number, stepsLength: number, portfolioId: string }) => {
+const EditMetaDetails = ({ setCurrentStep, currentStep, stepsLength, portfolioId, metaDetails }: { setCurrentStep: React.Dispatch<React.SetStateAction<number>>, currentStep: number, stepsLength: number, portfolioId: string, metaDetails: metaDetails }) => {
 
 
-    const [addMetaDetails] = useAddMetaDetailsMutation()
+    const [updateMetaDetails] = useUpdateMetaDetailsMutation()
 
-
-    const { register, handleSubmit, setValue, getValues, formState: { errors, isSubmitting } } = useForm<metaDetails>({
-        resolver: zodResolver(addMetaDetailsSchema)
+    const { register, handleSubmit, setValue, getValues, reset, formState: { errors, isSubmitting } } = useForm<metaDetails>({
+        resolver: zodResolver(addMetaDetailsSchema),
+        defaultValues: metaDetails
     })
+
+    useEffect(() => {
+        reset(metaDetails)
+    }, [reset, metaDetails])
 
 
     const [files, setFiles] = useState<File | null>(null);
@@ -49,7 +52,7 @@ const AddMetaDetails = ({ setCurrentStep, currentStep, stepsLength, portfolioId 
         formData.append("formData", JSON.stringify(data))
         formData.append("favIcon", files as File)
 
-        const res = await addMetaDetails({ formData, id: portfolioId }).unwrap() as { data: apiRes }
+        const res = await updateMetaDetails({ formData, id: portfolioId }).unwrap() as { data: apiRes }
 
         if (res?.data?.success) {
             console.log("success")
@@ -153,4 +156,4 @@ const AddMetaDetails = ({ setCurrentStep, currentStep, stepsLength, portfolioId 
     )
 }
 
-export default AddMetaDetails
+export default EditMetaDetails

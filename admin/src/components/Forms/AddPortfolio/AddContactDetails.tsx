@@ -19,8 +19,6 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { RiStarFill } from '@remixicon/react'
 import { useAddContactDetailsMutation } from '@/Redux/API/PortfolioApi'
 
-
-
 type profileContactDetail = z.infer<typeof addContactDetailSchema>
 
 interface apiRes {
@@ -37,11 +35,11 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
     const { register, handleSubmit, getValues, setValue, control, watch, formState: { errors, isSubmitting } } = useForm<profileContactDetail>({
         resolver: zodResolver(addContactDetailSchema),
         defaultValues: {
-            testimonialList: [{ uniqueId: "", name: "", detail: "", star: 0 }],
+            testimonial: { testimonialList: [{ uniqueId: "", name: "", detail: "", star: 0 }] },
             address: [{ title: "", detail: "" }],
             emailList: [{ email: "" }],
             phoneList: [{ phone: 0 }],
-            otherSocialList: [{ uniqueId: "", img: { publicId: "", url: "" }, link: "" }]
+            social: { otherSocialList: [{ uniqueId: "", img: { publicId: "", url: "" }, link: "" }] }
         }
     })
 
@@ -62,11 +60,11 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
         if (selectedFile) {
             const uniqueCode = getUniqueCode()
             const fileExtension = getFileExtension(selectedFile.name)
-            if (!getValues(`otherSocialList.${ind}.uniqueId`)) {
+            if (!getValues(`social.otherSocialList.${ind}.uniqueId`)) {
 
                 const fileName = `${uniqueCode}.${fileExtension}`
-                setValue(`otherSocialList.${ind}.uniqueId`, uniqueCode)
-                setValue(`otherSocialList.${ind}.img.url`, URL.createObjectURL(selectedFile))
+                setValue(`social.otherSocialList.${ind}.uniqueId`, uniqueCode)
+                setValue(`social.otherSocialList.${ind}.img.url`, URL.createObjectURL(selectedFile))
 
                 setSocialFiles((prevFiles: File[] | null) => {
                     const newFiles = [...(prevFiles) || []]
@@ -74,10 +72,10 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                     return newFiles
                 })
             } else {
-                const uniqueId = getValues(`otherSocialList.${ind}.uniqueId`);
+                const uniqueId = getValues(`social.otherSocialList.${ind}.uniqueId`);
                 const fileName = `${uniqueId}.${fileExtension}`;
-                setValue(`otherSocialList.${ind}.uniqueId`, uniqueId);
-                setValue(`otherSocialList.${ind}.img.url`, URL.createObjectURL(selectedFile));
+                setValue(`social.otherSocialList.${ind}.uniqueId`, uniqueId);
+                setValue(`social.otherSocialList.${ind}.img.url`, URL.createObjectURL(selectedFile));
 
                 setSocialFiles((prevFiles: File[] | null) => {
                     const newFiles = [...(prevFiles || [])];
@@ -90,7 +88,7 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
 
     const { fields: socialFields, append: socialAppend, remove: socialRemove } = useFieldArray({
         control,
-        name: 'otherSocialList'
+        name: 'social.otherSocialList'
     })
 
     const removeSocial = (ind: number) => {
@@ -101,7 +99,7 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
         })
 
         if (socialFields.length === 1) {
-            setValue(`otherSocialList.${ind}`, { uniqueId: "", link: "", img: { url: "", publicId: "" } })
+            setValue(`social.otherSocialList.${ind}`, { uniqueId: "", link: "", img: { url: "", publicId: "" } })
         } else {
             socialRemove(ind)
         }
@@ -109,12 +107,12 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
 
     const { fields: testimonialFields, append: testimonialAppend, remove: testimonialRemove } = useFieldArray({
         control,
-        name: 'testimonialList'
+        name: 'testimonial.testimonialList'
     })
 
     const removeTestimonial = (ind: number) => {
         if (testimonialFields.length === 1) {
-            setValue(`testimonialList.${ind}`, { uniqueId: "", name: "", detail: "", star: 0 })
+            setValue(`testimonial.testimonialList.${ind}`, { uniqueId: "", name: "", detail: "", star: 0 })
         } else {
             testimonialRemove(ind)
         }
@@ -163,11 +161,11 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
             content:
                 <div>
                     <div>
-                        <Label htmlFor={"testimonialTagline"} className="text-neutral-300 ">
+                        <Label htmlFor={"testimonial.tagline"} className="text-neutral-300 ">
                             Testimonial Tagline <span className="text-[#ff3f69]">*</span>
                         </Label>
-                        <Input {...register("testimonialTagline")} placeholder="Enter tagline..." type="text" className={`${errors.testimonialTagline && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                        {errors.testimonialTagline && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.testimonialTagline.message}</p>}
+                        <Input {...register("testimonial.tagline")} placeholder="Enter tagline..." type="text" className={`${errors.testimonial?.tagline && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                        {errors.testimonial?.tagline && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.testimonial.tagline.message}</p>}
                     </div>
                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2'>
                         {testimonialFields?.map((_, ind) => {
@@ -176,16 +174,16 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                                     <Label htmlFor={`testimonial.${ind}.name`} className="text-neutral-300 ">
                                         Reviewer name <span className="text-[#ff3f69]">*</span>
                                     </Label>
-                                    <Input {...register(`testimonialList.${ind}.name`)} placeholder="Enter brand name..." type="text" className={`${errors.testimonialList?.[ind]?.name && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                                    {errors.testimonialList?.[ind]?.name && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.testimonialList?.[ind]?.name.message}</p>}
+                                    <Input {...register(`testimonial.testimonialList.${ind}.name`)} placeholder="Enter brand name..." type="text" className={`${errors.testimonial?.testimonialList?.[ind]?.name && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                                    {errors.testimonial?.testimonialList?.[ind]?.name && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.testimonial.testimonialList?.[ind]?.name.message}</p>}
                                 </div>
 
                                 <div>
                                     <Label htmlFor={`testimonial.${ind}.detail`} className="text-neutral-300 ">
                                         Review description <span className="text-[#ff3f69]">*</span>
                                     </Label>
-                                    <Textarea {...register(`testimonialList.${ind}.detail`)} placeholder="Enter review detail..." className={`${errors.testimonialList?.[ind]?.detail && "border-[#E11D48] "} py-[0.45rem] h-[5rem] text-neutral-200`} />
-                                    {errors.testimonialList?.[ind]?.detail && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.testimonialList?.[ind]?.detail.message}</p>}
+                                    <Textarea {...register(`testimonial.testimonialList.${ind}.detail`)} placeholder="Enter review detail..." className={`${errors.testimonial?.testimonialList?.[ind]?.detail && "border-[#E11D48] "} py-[0.45rem] h-[5rem] text-neutral-200`} />
+                                    {errors.testimonial?.testimonialList?.[ind]?.detail && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.testimonial?.testimonialList?.[ind]?.detail.message}</p>}
                                 </div>
                                 <div className='flex items-center justify-between'>
                                     <fieldset className="space-y-1">
@@ -198,14 +196,14 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                                                     key={value}
                                                     className="group outline-ring/30 dark:outline-ring/40 relative cursor-pointer rounded-lg p-0.5 has-focus-visible:outline-2"
                                                 >
-                                                    <RadioGroupItem id={`${id}-${value}`} value={value} onClick={() => setValue(`testimonialList.${ind}.star`, value)} className="sr-only" />
+                                                    <RadioGroupItem id={`${id}-${value}`} value={value} onClick={() => setValue(`testimonial.testimonialList.${ind}.star`, value)} className="sr-only" />
                                                     <RiStarFill
                                                         size={24}
-                                                        className={`transition-all ${(getValues(`testimonialList.${ind}.star`) || getValues(`testimonialList.${ind}.star`)) >= value ? "text-amber-500" : "text-input"
+                                                        className={`transition-all ${(getValues(`testimonial.testimonialList.${ind}.star`) || getValues(`testimonial.testimonialList.${ind}.star`)) >= value ? "text-amber-500" : "text-input"
                                                             } group-hover:scale-110`}
                                                     />
                                                     <span className="sr-only">
-                                                        {value} star{(watch(`testimonialList.${ind}.star`)) === 1 ? "" : "s"}
+                                                        {value} star{(watch(`testimonial.testimonialList.${ind}.star`)) === 1 ? "" : "s"}
                                                     </span>
                                                 </label>
                                             ))}
@@ -235,46 +233,46 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2'>
 
                         <div>
-                            <Label htmlFor={"facebook"} className="text-neutral-300 ">
+                            <Label htmlFor={"social.facebook"} className="text-neutral-300 ">
                                 Facebook <span className="text-[#ff3f69]">*</span>
                             </Label>
-                            <Input {...register("facebook")} placeholder="Enter bulk link tagline..." type="text" className={`${errors.facebook && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                            {errors.facebook && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.facebook.message}</p>}
+                            <Input {...register("social.facebook")} placeholder="Enter bulk link tagline..." type="text" className={`${errors.social?.facebook && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                            {errors.social?.facebook && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.social?.facebook.message}</p>}
                         </div>
                         <div>
-                            <Label htmlFor={"instagram"} className="text-neutral-300 ">
+                            <Label htmlFor={"social.instagram"} className="text-neutral-300 ">
                                 Instagram <span className="text-[#ff3f69]">*</span>
                             </Label>
-                            <Input {...register("instagram")} placeholder="Enter bulk link tagline..." type="text" className={`${errors.instagram && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                            {errors.instagram && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.instagram.message}</p>}
+                            <Input {...register("social.instagram")} placeholder="Enter bulk link tagline..." type="text" className={`${errors.social?.instagram && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                            {errors.social?.instagram && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.social?.instagram.message}</p>}
                         </div>
                         <div>
-                            <Label htmlFor={"linkedin"} className="text-neutral-300 ">
+                            <Label htmlFor={"social.linkedin"} className="text-neutral-300 ">
                                 Linkedin <span className="text-[#ff3f69]">*</span>
                             </Label>
-                            <Input {...register("linkedin")} placeholder="Enter bulk link tagline..." type="text" className={`${errors.linkedin && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                            {errors.linkedin && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.linkedin.message}</p>}
+                            <Input {...register("social.linkedin")} placeholder="Enter bulk link tagline..." type="text" className={`${errors.social?.linkedin && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                            {errors.social?.linkedin && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.social?.linkedin.message}</p>}
                         </div>
                         <div>
-                            <Label htmlFor={"twitter"} className="text-neutral-300 ">
+                            <Label htmlFor={"social.twitter"} className="text-neutral-300 ">
                                 Twitter <span className="text-[#ff3f69]">*</span>
                             </Label>
-                            <Input {...register("twitter")} placeholder="Enter bulk link tagline..." type="text" className={`${errors.twitter && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                            {errors.twitter && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.twitter.message}</p>}
+                            <Input {...register("social.twitter")} placeholder="Enter bulk link tagline..." type="text" className={`${errors.social?.twitter && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                            {errors.social?.twitter && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.social?.twitter.message}</p>}
                         </div>
                         <div>
-                            <Label htmlFor={"youtube"} className="text-neutral-300 ">
+                            <Label htmlFor={"social.youtube"} className="text-neutral-300 ">
                                 Youtube <span className="text-[#ff3f69]">*</span>
                             </Label>
-                            <Input {...register("youtube")} placeholder="Enter bulk link tagline..." type="text" className={`${errors.youtube && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                            {errors.youtube && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.youtube.message}</p>}
+                            <Input {...register("social.youtube")} placeholder="Enter bulk link tagline..." type="text" className={`${errors.social?.youtube && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                            {errors.social?.youtube && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.social?.youtube.message}</p>}
                         </div>
                         <div>
-                            <Label htmlFor={"googleLink"} className="text-neutral-300 ">
+                            <Label htmlFor={"social.googleLink"} className="text-neutral-300 ">
                                 Google Link <span className="text-[#ff3f69]">*</span>
                             </Label>
-                            <Input {...register("googleLink")} placeholder="Enter bulk link tagline..." type="text" className={`${errors.googleLink && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                            {errors.googleLink && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.googleLink.message}</p>}
+                            <Input {...register("social.googleLink")} placeholder="Enter bulk link tagline..." type="text" className={`${errors.social?.googleLink && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                            {errors.social?.googleLink && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.social?.googleLink.message}</p>}
                         </div>
                     </div>
                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2'>
@@ -289,9 +287,9 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                                             name='imageImage'
                                             className="absolute z-10 inset-0 w-full h-full opacity-0 cursor-pointer"
                                         />
-                                        {getValues(`otherSocialList.${ind}.img.url`) ? (
+                                        {getValues(`social.otherSocialList.${ind}.img.url`) ? (
                                             <img
-                                                src={getValues(`otherSocialList.${ind}.img.url`)}
+                                                src={getValues(`social.otherSocialList.${ind}.img.url`)}
                                                 alt="Preview"
                                                 className="w-full h-full object-contain"
                                             />
@@ -307,11 +305,11 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                                         <label htmlFor="image" className="cursor-pointer absolute inset-0"></label>
                                     </div>
                                     <div className='w-full'>
-                                        <Label htmlFor={`otherSocialList.${ind}.link`} className="text-neutral-300 ">
+                                        <Label htmlFor={`social.otherSocialList.${ind}.link`} className="text-neutral-300 ">
                                             Link  <span className="text-[#ff3f69]">*</span>
                                         </Label>
-                                        <Input {...register(`otherSocialList.${ind}.link`)} placeholder="Enter brand name..." type="text" className={`${errors.otherSocialList?.[ind]?.link && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                                        {errors.otherSocialList?.[ind]?.link && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.otherSocialList?.[ind]?.link.message}</p>}
+                                        <Input {...register(`social.otherSocialList.${ind}.link`)} placeholder="Enter brand name..." type="text" className={`${errors.social?.otherSocialList?.[ind]?.link && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                                        {errors.social?.otherSocialList?.[ind]?.link && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.social?.otherSocialList?.[ind]?.link.message}</p>}
                                     </div>
 
                                 </div>
@@ -325,7 +323,7 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                                             <button type='button'
                                                 onClick={() => {
                                                     if (socialFields.length === 1) {
-                                                        setValue(`otherSocialList.${ind}`, { link: "", uniqueId: "", img: { url: "", publicId: "" } });
+                                                        setValue(`social.otherSocialList.${ind}`, { link: "", uniqueId: "", img: { url: "", publicId: "" } });
                                                     } else {
                                                         removeSocial(ind);
                                                     }

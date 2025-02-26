@@ -31,67 +31,69 @@ export const addProfileDetailSchema = z.object({
 
 export const addOthersDetailSchema = z.object({
     brands: z.object({
-        tagline: z.string(),
+        tagline: z.string().optional(),
         brandList: z.array(
             z.object({
-                uniqueId: z.string(),
-                brandName: z.string(),
+                uniqueId: z.string().optional(),
+                brandName: z.string().optional(),
                 image: z.object({
                     publicId: z.string().optional(),
-                    url: z.string()
-                })
+                    url: z.string().optional()
+                }).optional()
             })
-        )
+        ).optional()
     }),
     bulkLink: z.object({
-        tagline: z.string(),
+        tagline: z.string().optional(),
         bulkLinkList: z.array(
             z.object({
                 linkName: z.string().optional(),
                 link: z.string().optional()
             })
-        )
+        ).optional()
     }),
     services: z.object({
         tagline: z.string().optional(),
         serviceList: z.array(
             z.object({
-                uniqueId: z.string(),
-                title: z.string(),
-                detail: z.string(),
+                uniqueId: z.string().optional(),
+                title: z.string().optional(),
+                detail: z.string().optional(),
                 image: z.object({
                     publicId: z.string().optional(),
-                    url: z.string()
-                })
+                    url: z.string().optional()
+                }).optional()
             })
-        )
+        ).optional()
     }),
     products: z.object({
         tagline: z.string().optional(),
         productList: z.array(
             z.object({
-                uniqueId: z.string(),
-                title: z.string(),
-                detail: z.string(),
+                uniqueId: z.string().optional(),
+                title: z.string().optional(),
+                detail: z.string().optional(),
                 image: z.object({
                     publicId: z.string().optional(),
-                    url: z.string()
-                })
+                    url: z.string().optional()
+                }).optional()
             })
-        )
+        ).optional()
     })
 })
 
 export const addContactDetailSchema = z.object({
-    testimonialTagline: z.string().optional(),
-    testimonialList: z.array(
-        z.object({
-            uniqueId: z.string(),
-            name: z.string(),
-            detail: z.string(),
-            star: z.number(),
-        })
-    ),
+    testimonial: z.object({
+        tagline: z.string().optional(),
+        testimonialList: z.array(
+            z.object({
+                uniqueId: z.string(),
+                name: z.string(),
+                detail: z.string(),
+                star: z.number(),
+            })
+        )
+    }),
     mapLink: z.string().optional(),
     emailList: z.array(z.object({
         email: z.string().optional()
@@ -110,22 +112,24 @@ export const addContactDetailSchema = z.object({
             detail: z.string().optional()
         })
     ).optional(),
-    facebook: z.string().optional(),
-    instagram: z.string().optional(),
-    linkedin: z.string().optional(),
-    twitter: z.string().optional(),
-    youtube: z.string().optional(),
-    googleLink: z.string().optional(),
-    otherSocialList: z.array(
-        z.object({
-            uniqueId: z.string().optional(),
-            img: z.object({
-                publicId: z.string().optional(),
-                url: z.string()
-            }),
-            link: z.string().optional()
-        })
-    ).optional()
+    social: z.object({
+        facebook: z.string().optional(),
+        instagram: z.string().optional(),
+        linkedin: z.string().optional(),
+        twitter: z.string().optional(),
+        youtube: z.string().optional(),
+        googleLink: z.string().optional(),
+        otherSocialList: z.array(
+            z.object({
+                uniqueId: z.string().optional(),
+                img: z.object({
+                    publicId: z.string().optional(),
+                    url: z.string()
+                }),
+                link: z.string().optional()
+            })
+        ).optional()
+    }),
 })
 
 export const addMetaDetailsSchema = z.object({

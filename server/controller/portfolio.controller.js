@@ -5,6 +5,7 @@ import PortfolioDetail from "../model/portfolioModel/portfolioDetail.model.js"
 import { asyncHandler } from "../utils/asyncHandler.js"
 import AppError from "../utils/error.utils.js"
 import { multipleFileUpload } from "../utils/fileUpload.utils.js"
+import cloudinary from "cloudinary"
 
 const createPortfolio = asyncHandler(async (req, res) => {
     console.log(2)
@@ -82,7 +83,8 @@ const createPortfolio = asyncHandler(async (req, res) => {
 
 const updatePortfolio = asyncHandler(async (req, res) => {
 
-    const { fullName, phoneNumber, email, userName, tagline, about } = req.body
+    const { formData } = req.body
+    const { fullName, userName, phoneNumber, email, tagline, about, isActive, isPaid } = JSON.parse(formData)
 
     const { id } = req.params
 
@@ -93,19 +95,24 @@ const updatePortfolio = asyncHandler(async (req, res) => {
     }
 
     if (portfolio.userName !== userName) {
+        console.log(portfolio.userName, userName)
         const uniquePortfolio = await Portfolio.findOne({ userName })
-
+        console.log("object")
         if (!uniquePortfolio) {
             throw new AppError("Username already exists!", 400)
         }
     }
+
+    console.log(isActive)
 
     portfolio.fullName = await fullName
     portfolio.userName = await userName
     portfolio.tagline = await tagline
     portfolio.phoneNumber = await phoneNumber
     portfolio.email = await email
-    portfolio.about = await JSON.parse(about)
+    portfolio.about = await about
+    portfolio.isActive = await isActive
+    portfolio.isPaid = await isPaid
 
     let uploadedFiles = []
     if (req?.files) {
@@ -114,20 +121,65 @@ const updatePortfolio = asyncHandler(async (req, res) => {
 
     uploadedFiles.forEach(file => {
         if (file.uniqueId === "image") {
-            portfolio.image = file.result;
+            portfolio.image.url = file.result.secure_url;
+            portfolio.image.publicId = file.result.public_id;
         } else if (file.uniqueId === "backgroundImage") {
-            portfolio.backgroundImage.url = file.result;
+            portfolio.backgroundImage.url = file.result.secure_url;
+            portfolio.backgroundImage.publicId = file.result.public_id;
         } else if (file.uniqueId === "logo") {
-            portfolio.logo.url = file.result;
+            portfolio.logo.url = file.result.secure_url;
+            portfolio.logo.publicId = file.result.public_id;
         }
     });
-
+    console.log(portfolio)
     await portfolio.save()
 
     res.status(200).json({
         success: true,
         data: portfolio,
         message: "Portfolio updated successfully"
+    })
+})
+
+const recyclePortfolio = asyncHandler(async (req, res) => {
+    const { id } = req.params
+
+    const portfolio = await Portfolio.findById(id)
+
+    if (!portfolio) {
+        throw new AppError("Portfolio not found!", 400)
+    }
+
+    portfolio.isRecycled = true
+    portfolio.isActive = false
+
+    await portfolio.save()
+
+    res.status(200).json({
+        success: true,
+        data: portfolio,
+        message: "Portfolio recycled successfully"
+    })
+})
+
+const restorePortfolio = asyncHandler(async (req, res) => {
+    const { id } = req.params
+
+    const portfolio = await Portfolio.findById(id)
+
+    if (!portfolio) {
+        throw new AppError("Portfolio not found!", 400)
+    }
+
+    portfolio.isRecycled = false
+    portfolio.isActive = true
+
+    await portfolio.save()
+
+    res.status(200).json({
+        success: true,
+        data: portfolio,
+        message: "Portfolio restored successfully"
     })
 })
 
@@ -172,7 +224,7 @@ const getSinglePortfolio = asyncHandler(async (req, res) => {
         })
 
     if (!portfolio) {
-        throw new AppError("Portfolio not found!", 400)
+        throw new AppError("Portfolio not found!", 404)
     }
 
     res.status(200).json({
@@ -183,6 +235,11 @@ const getSinglePortfolio = asyncHandler(async (req, res) => {
 
 const getAllPortfolio = asyncHandler(async (req, res) => {
     const portfolios = await Portfolio.aggregate([
+        {
+            $match: {
+                isRecycled: false
+            }
+        },
         {
             $lookup: {
                 from: "portfoliocontacts",
@@ -204,6 +261,53 @@ const getAllPortfolio = asyncHandler(async (req, res) => {
                 paidDate: 1,
                 isActive: 1,
                 isPaid: 1,
+                facebook: "$contactData.social.facebook",
+                instagram: "$contactData.social.instagram",
+                whatsappNo: "$contactData.whatsappNo",
+                email: 1,
+                phoneNumber: 1,
+            }
+        }
+    ])
+
+    res.status(200).json({
+        success: true,
+        data: portfolios,
+        message: "All Portfolios!"
+    })
+})
+
+const getRecycledPortfolio = asyncHandler(async (req, res) => {
+
+
+    const portfolios = await Portfolio.aggregate([
+        {
+            $match: {
+                isRecycled: true
+            }
+        },
+        {
+            $lookup: {
+                from: "portfoliocontacts",
+                localField: "contactData",
+                foreignField: "_id",
+                as: "contactData"
+            }
+        },
+        {
+            $unwind: "$contactData"
+        },
+        {
+            $project: {
+                _id: 1,
+                userName: 1,
+                fullName: 1,
+                image: 1,
+                tagline: 1,
+                paidDate: 1,
+                isActive: 1,
+                isPaid: 1,
+                isRecycled: 1,
                 facebook: "$contactData.social.facebook",
                 instagram: "$contactData.social.instagram",
                 whatsappNo: "$contactData.whatsappNo",
@@ -361,31 +465,23 @@ const updatePortfolioDetail = asyncHandler(async (req, res) => {
 
     const otherData = JSON.parse(req.body.data)
     const { brands, bulkLink, services, products } = otherData
-
+    console.log(otherData)
     const portfolioDetail = await PortfolioDetail.findOneAndUpdate(
         { portfolio: id },
         {
             $set: {
-                brands: {
-                    tagline: brands.tagline,
-                },
-                bulkLink: {
-                    tagline: bulkLink.tagline,
-                    bulkLinkList: bulkLink.bulkLinkList
-                },
-                services: {
-                    tagline: services.tagline,
-                },
-                products: {
-                    tagline: products.tagline,
-                }
+                'brands.tagline': brands.tagline,
+                'bulkLink.tagline': bulkLink.tagline,
+                'services.tagline': services.tagline,
+                'products.tagline': products.tagline
             }
         },
         {
             new: true,
             runValidators: true
         }
-    )
+    );
+
 
     let brandImages = []
 
@@ -393,8 +489,11 @@ const updatePortfolioDetail = asyncHandler(async (req, res) => {
         brandImages = await multipleFileUpload(req?.files?.brands)
     }
 
+    console.log(portfolioDetail.brands)
+
     brands.brandList.forEach(brand => {
         let existingBrand = portfolioDetail.brands.brandList.find(b => b.uniqueId === brand.uniqueId);
+
         if (!existingBrand) {
             const uploadedFile = brandImages.find(uf => uf.uniqueId === brand.uniqueId);
             if (uploadedFile) {
@@ -411,6 +510,20 @@ const updatePortfolioDetail = asyncHandler(async (req, res) => {
                 existingBrand.uniqueId = brand.uniqueId;
             }
         }
+    });
+
+    portfolioDetail.brands.brandList = portfolioDetail.brands.brandList.filter(brandData => {
+        const isExistingData = brands.brandList.some(data => data.uniqueId === brandData.uniqueId);
+        if (!isExistingData && brandData.image.publicId) {
+            cloudinary.v2.uploader.destroy(brandData.image.publicId, (error, result) => {
+                if (error) {
+                    console.error("Failed to destroy image:", error);
+                } else {
+                    console.log("Image destroyed:", result);
+                }
+            });
+        }
+        return isExistingData;
     });
 
     let serviceImages = []
@@ -469,7 +582,33 @@ const updatePortfolioDetail = asyncHandler(async (req, res) => {
         }
     });
 
+    portfolioDetail.products.productList = portfolioDetail.products.productList.filter(productData => {
+        const isExistingData = products.productList.some(data => data.uniqueId === productData.uniqueId);
+        if (!isExistingData && productData.image.publicId) {
+            cloudinary.v2.uploader.destroy(productData.image.publicId);
+        }
+        return isExistingData;
+    });
+
+    portfolioDetail.services.serviceList = portfolioDetail.services.serviceList.filter(serviceData => {
+        const isExistingData = services.serviceList.some(data => data.uniqueId === serviceData.uniqueId);
+        if (!isExistingData && serviceData.image.publicId) {
+            cloudinary.v2.uploader.destroy(serviceData.image.publicId);
+        }
+        return isExistingData;
+    });
+
+    portfolioDetail.products.productList = portfolioDetail.products.productList.filter(productData => {
+        const isExistingData = products.productList.some(data => data.uniqueId === productData.uniqueId);
+        if (!isExistingData && productData.image.publicId) {
+            cloudinary.v2.uploader.destroy(productData.image.publicId);
+        }
+        return isExistingData;
+    });
+
     await portfolioDetail.save()
+
+    console.log(portfolioDetail)
 
     if (!portfolioDetail) {
         throw new AppError("Portfolio detail not updated!", 400)
@@ -484,27 +623,25 @@ const updatePortfolioDetail = asyncHandler(async (req, res) => {
 
 const createPortfolioContact = asyncHandler(async (req, res) => {
     const contactData = JSON.parse(req.body.data)
-    const { whatsappNo, mapLink, address, email, facebook, instagram, linkedin, twitter, youtube, testimonialTagline, testimonialList, brochureLink, otherSocialList, phone } = contactData
+    const { whatsappNo, mapLink, address, emailList, brochureLink, phoneList, social, testimonial } = contactData
     const { id } = req.params
 
     const portfolioContact = await PortfolioContact.create({
         portfolio: id,
-        testimonial: {
-            tagline: testimonialTagline,
-            testimonialList: testimonialList
-        },
+        testimonial: testimonial,
         mapLink: mapLink,
-        email: email,
-        phone: phone,
+        emailList: emailList,
+        phoneList: phoneList,
         address: address,
         whatsappNo: whatsappNo,
         brochureLink: brochureLink,
         social: {
-            facebook: facebook,
-            instagram: instagram,
-            linkedin: linkedin,
-            twitter: twitter,
-            youtube: youtube,
+            facebook: social.facebook,
+            instagram: social.instagram,
+            linkedin: social.linkedin,
+            twitter: social.twitter,
+            youtube: social.youtube,
+            googleLink: social.googleLink,
             otherSocialList: []
         }
     })
@@ -519,11 +656,8 @@ const createPortfolioContact = asyncHandler(async (req, res) => {
         uploadedFiles = await multipleFileUpload(req.files.otherSocial)
     }
 
-    console.log(otherSocialList)
-    console.log(portfolioContact)
-    otherSocialList.forEach(social => {
+    social.otherSocialList.forEach(social => {
         let existingSocial = portfolioContact.social.otherSocialList.find(os => os.uniqueId === social.uniqueId);
-        console.log(existingSocial)
         if (!existingSocial) {
             const uploadedFile = uploadedFiles.find(uf => uf.uniqueId === social.uniqueId);
             console.log(uploadedFile)
@@ -543,6 +677,8 @@ const createPortfolioContact = asyncHandler(async (req, res) => {
         }
     });
 
+
+
     await portfolioContact.save()
 
     const portfolio = await Portfolio.findById(id)
@@ -559,38 +695,37 @@ const createPortfolioContact = asyncHandler(async (req, res) => {
 })
 
 const updatePortfolioContact = asyncHandler(async (req, res) => {
-    const { whatsappNo, mapLink, address, email, facebook, instagram, linkedin, twitter, youtube, testimonialTagline, testimonialList: testimonialData, brochureLink, otherSocialList: otherSocialList, phone } = req.body
+    const contactData = JSON.parse(req.body.data)
+    const { whatsappNo, mapLink, address, emailList, brochureLink, phoneList, social, testimonial } = contactData
     const { id } = req.params
-
-    const testimonialList = JSON.parse(testimonialData)
-
-    const portfolioContact = await PortfolioContact.findOneAndUpdate({
-        portfolio: id
-    }, {
-        $set: {
-            testimonial: {
-                tagline: testimonialTagline,
-                testimonialList: testimonialList
-            },
-            mapLink: mapLink,
-            email: JSON.parse(email),
-            phone: JSON.parse(phone),
-            address: JSON.parse(address),
-            whatsappNo: whatsappNo,
-            brochureLink: JSON.parse(brochureLink),
-            social: {
-                facebook: facebook,
-                instagram: instagram,
-                linkedin: linkedin,
-                twitter: twitter,
-                youtube: youtube,
-                otherSocialList: []
+    console.log(contactData)
+    const portfolioContact = await PortfolioContact.findOneAndUpdate(
+        { portfolio: id },
+        {
+            $set: {
+                testimonial: testimonial,
+                mapLink: mapLink,
+                emailList: emailList,
+                phoneList: phoneList,
+                address: address,
+                whatsappNo: whatsappNo,
+                brochureLink: brochureLink,
+                'social.googleLink': social.googleLink,
+                'social.facebook': social.facebook,
+                'social.instagram': social.instagram,
+                'social.linkedin': social.linkedin,
+                'social.twitter': social.twitter,
+                'social.youtube': social.youtube
             }
+        },
+        {
+            new: true,
+            runValidators: true
         }
-    }, {
-        new: true,
-        runValidators: true
-    })
+    );
+
+    console.log(portfolioContact)
+
 
     if (!portfolioContact) {
         throw new AppError("Something went wrong!", 400)
@@ -601,7 +736,7 @@ const updatePortfolioContact = asyncHandler(async (req, res) => {
         uploadedFiles = await multipleFileUpload(req.files.otherSocial)
     }
 
-    otherSocialList.forEach(social => {
+    social.otherSocialList.forEach(social => {
         let existingSocial = portfolioContact.social.otherSocialList.find(os => os.uniqueId === social.uniqueId);
         if (!existingSocial) {
             const uploadedFile = uploadedFiles.find(uf => uf.uniqueId === social.uniqueId);
@@ -619,6 +754,16 @@ const updatePortfolioContact = asyncHandler(async (req, res) => {
                 existingSocial.link = social.link;
             }
         }
+    });
+
+    portfolioContact.social.otherSocialList = portfolioContact.social.otherSocialList.filter(socialData => {
+        const isExistingData = social.otherSocialList.some(data => data.uniqueId === socialData.uniqueId);
+        if (!isExistingData && socialData.img.publicId) {
+            console.log(true)
+            console.log(socialData)
+            cloudinary.v2.uploader.destroy(socialData.img.publicId);
+        }
+        return isExistingData;
     });
 
     await portfolioContact.save()
@@ -639,5 +784,8 @@ export {
     createPortfolioDetail,
     updatePortfolioDetail,
     createPortfolioContact,
-    updatePortfolioContact
+    updatePortfolioContact,
+    recyclePortfolio,
+    restorePortfolio,
+    getRecycledPortfolio
 }

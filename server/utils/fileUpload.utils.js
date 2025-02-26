@@ -10,7 +10,7 @@ const avatarUpload = async (file, publicId = "") => {
         }
 
         const result = await cloudinary.v2.uploader.upload(file.path, {
-            folder: 'honda',
+            folder: 'profile-genie-2.0',
             width: 250,
             height: 250,
             gravity: 'faces',
@@ -35,7 +35,7 @@ const fileUpload = async (file, publicId = "") => {
         }
 
         const result = await cloudinary.v2.uploader.upload(file.path, {
-            folder: 'honda',
+            folder: 'profile-genie-2.0',
         })
         if (result) {
             fs.rm(`uploads/${file.filename}`)
@@ -54,7 +54,7 @@ const multipleFileUpload = async (files, publicId = "") => {
         for (const file of Object.values(files)) {
             console.log(1)
             const result = await cloudinary.uploader.upload(file.path, {
-                folder: 'honda'
+                folder: 'profile-genie-2.0',
             });
             console.log(2)
             const fileNameWithExtension = file.originalname

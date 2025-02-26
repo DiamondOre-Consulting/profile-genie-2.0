@@ -2,6 +2,8 @@ import AddContactDetails from "@/components/Forms/AddPortfolio/AddContactDetails
 import AddMetaDetails from "@/components/Forms/AddPortfolio/AddMetaDetails";
 import AddOthersDetail from "@/components/Forms/AddPortfolio/AddOthersDetail";
 import AddProfileDetail from "@/components/Forms/AddPortfolio/AddProfileDetail";
+import EditContactDetails from "@/components/Forms/EditPortfolio/EditContactDetails";
+import EditMetaDetails from "@/components/Forms/EditPortfolio/EditMetaDetails";
 import EditOthersDetail from "@/components/Forms/EditPortfolio/EditOthersDetail";
 import EditProfileDetail from "@/components/Forms/EditPortfolio/EditProfileDetail";
 import {
@@ -47,7 +49,7 @@ export default function EditPortfolio() {
     const { username } = useParams()
     console.log(username)
     const { data, isLoading } = useGetSinglePortfolioQuery({ username })
-    console.log(portfolioData)
+    console.log(portfolioId)
     console.log(isLoading)
     useEffect(() => {
         if (!isLoading && !data) {
@@ -59,7 +61,7 @@ export default function EditPortfolio() {
 
         if (data) {
             setPortfolioData(data)
-            setPortfolioId(data._id)
+            setPortfolioId(data?.data._id)
         }
     }, [isLoading, data, navigate])
 
@@ -98,9 +100,20 @@ export default function EditPortfolio() {
                     )
                 }
                 {currentStep === 3 &&
-                    <AddContactDetails portfolioId={portfolioId} setCurrentStep={setCurrentStep} stepsLength={steps.length} currentStep={currentStep} />}
+                    portfolioData?.data?.contactData && (
+                        <EditContactDetails
+                            contactDetails={portfolioData?.data?.contactData}
+                            portfolioId={portfolioId}
+                            setCurrentStep={setCurrentStep}
+                            stepsLength={steps.length}
+                            currentStep={currentStep}
+                        />
+                    )
+                }
                 {currentStep === 4 &&
-                    <AddMetaDetails portfolioId={portfolioId} setCurrentStep={setCurrentStep} stepsLength={steps.length} currentStep={currentStep} />}
+                    portfolioData?.data?.metaDetails && (
+                        <EditMetaDetails metaDetails={portfolioData?.data?.metaDetails} portfolioId={portfolioId} setCurrentStep={setCurrentStep} stepsLength={steps.length} currentStep={currentStep} />
+                    )}
 
                 <p className="bg-[#E11D48] w-full bottom-0 p-1 pr-4 left-0 absolute text-xs text-end text-white" role="region" aria-live="polite">
                     <span className="">

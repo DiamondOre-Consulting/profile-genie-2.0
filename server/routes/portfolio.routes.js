@@ -1,6 +1,6 @@
 import { Router } from "express"
 import upload from "../middleware/multer.middleware.js"
-import { createPortfolio, createPortfolioContact, createPortfolioDetail, deletePortfolio, getAllPortfolio, getSinglePortfolio, updatePortfolio, updatePortfolioContact, updatePortfolioDetail } from "../controller/portfolio.controller.js"
+import { createPortfolio, createPortfolioContact, createPortfolioDetail, deletePortfolio, getAllPortfolio, getRecycledPortfolio, getSinglePortfolio, recyclePortfolio, restorePortfolio, updatePortfolio, updatePortfolioContact, updatePortfolioDetail } from "../controller/portfolio.controller.js"
 import { createMetaData, updateMetaData } from "../controller/metaData.controller.js"
 const portfolioRouter = Router()
 
@@ -31,6 +31,15 @@ portfolioRouter.route('/contact/:id')
 portfolioRouter.route('/meta/:id')
     .post(upload.single("favIcon"), createMetaData)
     .put(upload.single("favIcon"), updateMetaData)
+
+portfolioRouter.route('/recycle/all-recycle')
+    .get(getRecycledPortfolio)
+
+portfolioRouter.route('/recycle/:id')
+    .put(recyclePortfolio)
+
+portfolioRouter.route('/restore/:id')
+    .put(restorePortfolio)
 
 
 export default portfolioRouter

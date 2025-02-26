@@ -70,6 +70,10 @@ const portfolioSchema = new Schema({
         type: Boolean,
         default: false
     },
+    isRecycled: {
+        type: Boolean,
+        default: false
+    },
     paidDate: {
         type: Date
     },

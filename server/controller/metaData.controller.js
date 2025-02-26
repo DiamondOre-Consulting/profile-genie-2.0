@@ -7,10 +7,7 @@ import { fileUpload } from "../utils/fileUpload.utils.js";
 
 const createMetaData = asyncHandler(async (req, res) => {
     const { id } = req.params
-    console.log(id)
-    console.log(req.body)
     const metaDetail = JSON.parse(req.body.formData)
-    console.log(metaDetail)
     const { title, description, keywords, canonical } = metaDetail
 
     const metaData = await MetaData.create({
@@ -51,15 +48,15 @@ const createMetaData = asyncHandler(async (req, res) => {
 const updateMetaData = asyncHandler(async (req, res) => {
     const { id } = req.params
 
-    const { title, description, keywords, canonical } = req.body
-
+    const metaDetail = JSON.parse(req.body.formData)
+    const { title, description, keywords, canonical } = metaDetail
     const metaData = await MetaData.findOneAndUpdate(
         { portfolio: id },
         {
             $set: {
                 title,
                 description,
-                keywords: JSON.parse(keywords),
+                keywords: keywords,
                 canonical
             }
         },

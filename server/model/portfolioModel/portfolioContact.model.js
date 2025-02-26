@@ -75,6 +75,9 @@ const portfolioContactSchema = new Schema({
         youtube: {
             type: String
         },
+        googleLink: {
+            type: String
+        },
         otherSocialList: [{
             img: {
                 publicId: {
