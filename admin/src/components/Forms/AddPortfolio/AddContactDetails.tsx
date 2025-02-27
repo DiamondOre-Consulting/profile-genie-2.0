@@ -231,7 +231,6 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
             content:
                 <div>
                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2'>
-
                         <div>
                             <Label htmlFor={"social.facebook"} className="text-neutral-300 ">
                                 Facebook <span className="text-[#ff3f69]">*</span>

@@ -14,7 +14,7 @@ const PageNotFound = () => {
       </FuzzyText>
       <FuzzyText
         baseIntensity={0.05}
-        hoverIntensity={0.4}
+        hoverIntensity={0.1}
         enableHover={true}
         fontSize={30}
         color='#fff'
