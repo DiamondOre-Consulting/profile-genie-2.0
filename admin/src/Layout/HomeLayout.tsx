@@ -23,7 +23,6 @@ const tabs = [
 ];
 
 export function HomeLayout({ children }: { children: ReactNode }) {
-    const [active, setActive] = useState("Dashboard");
     const [collapsed, setCollapsed] = useState(false);
     const navigate = useNavigate()
     const toggleSidebar = () => {

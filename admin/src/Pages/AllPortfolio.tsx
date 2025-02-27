@@ -1,5 +1,5 @@
 import { HomeLayout } from "@/Layout/HomeLayout"
-import { useGetAllPortfolioQuery, useRecyclePortfolioMutation } from "@/Redux/API/PortfolioApi"
+import { useGetAllPortfolioQuery, useRecyclePortfolioMutation, useUpdateActiveStatusMutation, useUpdatePaidStatusMutation } from "@/Redux/API/PortfolioApi"
 import { IconArrowsExchange, IconBrandWhatsapp, IconClock, IconEdit, IconEye, IconLink, IconMail, IconPhone, IconTrash, IconX } from "@tabler/icons-react"
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion";
@@ -24,11 +24,21 @@ const AllPortfolio = () => {
     const { data } = useGetAllPortfolioQuery({})
     const [deleteModalActive, setDeleteModalActive] = useState(false)
     const [recycleId, setRecycleId] = useState('')
+    const [updateActiveStatus, { isLoading: activeLoading }] = useUpdateActiveStatusMutation()
+    const [updatePaidStatus, { isLoading: paidLoading }] = useUpdatePaidStatusMutation()
     const [recyclePortfolio, { isLoading }] = useRecyclePortfolioMutation()
 
     const handleRecycle = async (id: string) => {
         const res = await recyclePortfolio({ id }).unwrap()
         console.log(res)
+    }
+
+    const handleUpdateStatus = async (id: string, type: string) => {
+        if (type === "isActive") {
+            await updateActiveStatus({ id }).unwrap()
+        } else if (type === "isPaid") {
+            await updatePaidStatus({ id }).unwrap()
+        }
     }
 
     return (
@@ -167,11 +177,11 @@ const AllPortfolio = () => {
                                                     </DropdownMenuLabel>
                                                     <DropdownMenuSeparator />
                                                     <DropdownMenuGroup>
-                                                        <DropdownMenuItem className="hover:bg-neutral-950 cursor-pointer">
+                                                        <DropdownMenuItem onClick={() => handleUpdateStatus(item?._id, "isActive")} className="hover:bg-neutral-950 cursor-pointer">
                                                             <BoltIcon size={16} className="opacity-60" aria-hidden="true" />
                                                             <span>Mark as {item?.isActive ? "Inactive" : "Active"}</span>
                                                         </DropdownMenuItem>
-                                                        <DropdownMenuItem className="hover:bg-neutral-950 cursor-pointer">
+                                                        <DropdownMenuItem onClick={() => handleUpdateStatus(item?._id, "isPaid")} className="hover:bg-neutral-950 cursor-pointer">
 
                                                             <Layers2Icon size={16} className="opacity-60" aria-hidden="true" />
                                                             <span>Mark as {item?.isPaid ? "Unpaid" : "Paid"}</span>

@@ -120,6 +120,22 @@ export const portfolioApi = createApi({
             }),
             providesTags: (result) => result ? [{ type: "PORTFOLIO" as const }] : [],
         }),
+        updateActiveStatus: builder.mutation({
+            query: ({ id }) => ({
+                url: `/portfolio/update-active-status/${id}`,
+                method: "PUT",
+                data: {}
+            }),
+            invalidatesTags: (result) => result ? [{ type: "PORTFOLIO" as const }] : [],
+        }),
+        updatePaidStatus: builder.mutation({
+            query: ({ id }) => ({
+                url: `/portfolio/update-paid-status/${id}`,
+                method: "PUT",
+                data: {}
+            }),
+            invalidatesTags: (result) => result ? [{ type: "PORTFOLIO" as const }] : [],
+        }),
     }),
 })
 
@@ -136,5 +152,7 @@ export const { useAddPortfolioMutation,
     useUpdateMetaDetailsMutation,
     useRestorePortfolioMutation,
     useRecyclePortfolioMutation,
-    useGetRecycledPortfolioQuery
+    useGetRecycledPortfolioQuery,
+    useUpdateActiveStatusMutation,
+    useUpdatePaidStatusMutation
 } = portfolioApi
