@@ -5,7 +5,8 @@ import cors from 'cors'
 import morgan from "morgan";
 import errorMiddleware from "./middleware/error.middleware.js";
 import portfolioRouter from "./routes/portfolio.routes.js";
-
+import authRouter from "./routes/auth.routes.js";
+import session from "express-session";
 config()
 
 const app = express()
@@ -21,12 +22,24 @@ app.use(cors({
     credentials: true
 }))
 
+app.use(session({
+    secret: 'your-secret',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'None'
+    }
+}));
+
 app.use(morgan('dev'))
 
 app.use('/ping', function (req, res) {
     res.send('/pong')
 })
 
+app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/portfolio', portfolioRouter)
 
 app.all('*', (req, res) => {

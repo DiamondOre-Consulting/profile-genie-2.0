@@ -206,6 +206,48 @@ const deletePortfolio = asyncHandler(async (req, res) => {
 
 })
 
+const updateStatusActive = asyncHandler(async (req, res) => {
+    const { id } = req.params
+
+    const portfolio = await Portfolio.findById(id)
+
+    if (!portfolio) {
+        throw new AppError("Portfolio not found!", 404)
+    }
+
+    portfolio.isActive = !portfolio.isActive
+
+    await portfolio.save()
+
+    res.status(200).json({
+        success: true,
+        data: portfolio,
+        message: "Portfolio status updated successfully"
+    })
+})
+
+const updateStatusPaid = asyncHandler(async (req, res) => {
+    const { id } = req.params
+
+    const portfolio = await Portfolio.findById(id)
+
+    if (!portfolio) {
+        throw new AppError("Portfolio not found!", 404)
+    }
+
+    portfolio.isPaid = !portfolio.isPaid
+    portfolio.isActive = portfolio.isPaid ? true : false
+    portfolio.paidDate = portfolio.isPaid ? new Date() : portfolio.paidDate
+
+    await portfolio.save()
+
+    res.status(200).json({
+        success: true,
+        data: portfolio,
+        message: "Portfolio status updated successfully"
+    })
+})
+
 const getSinglePortfolio = asyncHandler(async (req, res) => {
     const { userName } = req.params
 
@@ -273,7 +315,6 @@ const getAllPortfolio = asyncHandler(async (req, res) => {
     res.status(200).json({
         success: true,
         data: portfolios,
-        message: "All Portfolios!"
     })
 })
 
@@ -787,5 +828,7 @@ export {
     updatePortfolioContact,
     recyclePortfolio,
     restorePortfolio,
-    getRecycledPortfolio
+    getRecycledPortfolio,
+    updateStatusActive,
+    updateStatusPaid
 }

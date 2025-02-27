@@ -23,7 +23,9 @@ const tabs = [
 ];
 
 export function HomeLayout({ children }: { children: ReactNode }) {
-    const [collapsed, setCollapsed] = useState(false);
+    const [collapsed, setCollapsed] = useState(
+        window.innerWidth >= 768 ? false : true
+    );
     const navigate = useNavigate()
     const toggleSidebar = () => {
         setCollapsed((prev) => !prev);

@@ -1,11 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { toast } from 'sonner'
 import { axiosInstance } from '../../Helper/axiosInstance'
-
-interface loginFormData {
-    email: string
-    password: string
-}
+import { loginValidation } from '@/validations/PortfolioValidation'
 
 interface registerData {
     fullName: string
@@ -20,7 +16,7 @@ const initialState = {
     isLoggedIn: localStorage.getItem("isLoggedIn") === "true" ? true : false,
 }
 
-export const login = createAsyncThunk("auth/signin", async (data: loginFormData) => {
+export const login = createAsyncThunk("auth/signin", async (data: loginValidation) => {
     try {
         const res = await axiosInstance.post("auth/login", data)
         return res?.data

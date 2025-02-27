@@ -1,5 +1,10 @@
 import { z } from 'zod'
 
+export const loginValidationSchema = z.object({
+    email: z.string().email('Please enter a valid email!'),
+    password: z.string().min(8, 'Password must be at least 8 characters long!')
+})
+
 export const addProfileDetailSchema = z.object({
     fullName: z.string().min(1, 'Full Name is required'),
     phoneNumber: z.number().min(1, 'Phone Number is required'),
@@ -143,6 +148,7 @@ export const addMetaDetailsSchema = z.object({
     canonical: z.string().min(3, 'Canonical is required')
 })
 
+export type loginValidation = z.infer<typeof loginValidationSchema>
 export type profileDetail = z.infer<typeof addProfileDetailSchema>
 export type metaDetails = z.infer<typeof addMetaDetailsSchema>
 export type contactDetails = z.infer<typeof addContactDetailSchema>
@@ -156,7 +162,6 @@ export interface portfolioResponse extends profileDetail {
     contactData: contactDetails,
     otherDetails: otherDetails
 }
-
 
 export interface apiRes {
     success: boolean
