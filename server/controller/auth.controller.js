@@ -85,7 +85,7 @@ const login = asyncHandler(async (req, res) => {
 })
 
 const logout = asyncHandler(async (req, res) => {
-
+    console.log(req.user)
     await User.findByIdAndUpdate(req.user._id,
         {
             $set: { refreshToken: "" }
@@ -93,6 +93,7 @@ const logout = asyncHandler(async (req, res) => {
         { new: true }
     )
 
+    console.log("object")
     return res
         .status(200)
         .clearCookie("accessToken", accessTokenOptions)

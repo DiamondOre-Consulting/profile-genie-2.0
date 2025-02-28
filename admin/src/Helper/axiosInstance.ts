@@ -25,7 +25,7 @@ axiosInstance.interceptors.response.use(
                     { withCredentials: true }
                 );
 
-                originalRequest.headers.Authorization = `Bearer ${data.accessToken}`; // Attach new token
+                originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
                 return axios(originalRequest);
             } catch (refreshError) {
                 console.error("Error refreshing token:", refreshError);

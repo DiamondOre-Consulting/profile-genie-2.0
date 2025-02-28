@@ -10,7 +10,9 @@ import {
     IconSettings,
     IconTrash
 } from "@tabler/icons-react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { logout } from "@/Redux/Slice/AuthSlice";
+import { useDispatch } from "react-redux";
 
 const tabs = [
     { link: "/", label: "Dashboard", icon: IconLayoutDashboardFilled },
@@ -26,10 +28,18 @@ export function HomeLayout({ children }: { children: ReactNode }) {
     const [collapsed, setCollapsed] = useState(
         window.innerWidth >= 768 ? false : true
     );
+
+    const dispatch = useDispatch()
     const navigate = useNavigate()
     const toggleSidebar = () => {
         setCollapsed((prev) => !prev);
     };
+
+    const handleLogout = async () => {
+        const res = await dispatch(logout()) as { payload: { success: boolean } }
+
+        if (res?.payload?.success) navigate('/login')
+    }
 
     const { pathname } = useLocation();
 
@@ -83,14 +93,16 @@ export function HomeLayout({ children }: { children: ReactNode }) {
                         {!collapsed && <span>Change account</span>}
                     </a> */}
 
-                    <a
-                        href="#"
+                    <div
                         className={`p-2  flex items-center space-x-2 w-full  rounded-md hover:bg-gray-700`}
-                        onClick={(event) => event.preventDefault()}
+                        onClick={(event) => {
+                            event.preventDefault();
+                            handleLogout()
+                        }}
                     >
                         <IconLogout className={`min-w-5 min-h-5 `} stroke={1.5} />
                         {!collapsed && <span className="min-w-[15rem]">Logout</span>}
-                    </a>
+                    </div>
                 </div>
             </nav>
             <div className={`${collapsed ? "ml-13" : "ml-54"} py-6 px-2  min-h-screen transition-all bg-[#171717] duration-300`}>

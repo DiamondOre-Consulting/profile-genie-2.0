@@ -43,9 +43,9 @@ export const logout = createAsyncThunk("auth/signout", async () => {
     }
 })
 
-export const profile = createAsyncThunk("auth/fetch-profile", async () => {
+export const profile = createAsyncThunk("auth/profile", async () => {
     try {
-        const res = await axiosInstance.get("auth/fetch-profile")
+        const res = await axiosInstance.get("auth/profile")
         return res?.data
     } catch (err: any) {
         return toast.error(err.response.data.message)

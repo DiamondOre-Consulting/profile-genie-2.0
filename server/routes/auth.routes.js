@@ -10,7 +10,7 @@ router.post('/register', upload.single('avatar'), register)
 
 router.post('/login', login)
 
-router.get('/logout', logout)
+router.get('/logout', verifyJWT, logout)
 
 router.post('/forgot-password', forgotPassword)
 
