@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom"
 import PageNotFound from "./Pages/PageNotFound"
 import DashboardLoading from "./components/DashboardLoading"
 import ProtectedRoute from "./components/Auth/ProtectedRoute"
+import Template1 from "./Templates/Portfolio/templatePages/Template1"
 
 const Dashboard = lazy(() => import("./Pages/Dashboard"))
 const AddPortfolio = lazy(() => import("./Pages/AddPortfolio"))
@@ -23,6 +24,7 @@ function App() {
           <Route path="/all-portfolio" element={<AllPortfolio />} />
           <Route path="/edit-portfolio/:username" element={<EditPortfolio />} />
           <Route path="/recycle-bin" element={<RecycledPortfolio />} />
+          <Route path="/portfolio/preview/template1" element={<Template1 />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>
