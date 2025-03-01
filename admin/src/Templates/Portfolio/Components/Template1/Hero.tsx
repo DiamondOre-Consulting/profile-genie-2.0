@@ -4,10 +4,6 @@ import { IconBrandWhatsapp } from '@tabler/icons-react';
 
 
 const Hero = () => {
-
-
-
-
     const handleWhatsAppChat = () => {
         const url = `https://api.whatsapp.com/send?phone=${encodeURIComponent(916207234759)}`;
         window.open(url, '_blank');
