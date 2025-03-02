@@ -1,5 +1,5 @@
-import { renderCanvas } from '@/components/ui/canvas';
-import { ContainerScroll } from '@/components/ui/container-scroll-animation'
+import { renderCanvas } from '@/Templates/Portfolio/Components/Template1/ui/canvas';
+import { ContainerScroll } from '@/Templates/Portfolio/Components/Template1/ui/container-scroll-animation'
 import React, { useEffect } from 'react'
 
 const About = () => {
@@ -25,7 +25,7 @@ const About = () => {
                 </div>
             </ContainerScroll >
 
-        </ >
+        </>
     )
 }
 

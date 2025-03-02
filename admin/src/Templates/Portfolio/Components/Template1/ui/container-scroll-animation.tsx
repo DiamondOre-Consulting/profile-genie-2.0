@@ -20,12 +20,18 @@ export const ContainerScroll = ({
     damping: 20,
   });
 
+  const translateY = useTransform(scrollYProgress, [0, 0.65], [-61, 0])
+
   return (
-    <div className=" flex items-center justify-center relative " ref={containerRef}>
-      <div className="w-full relative" style={{ perspective: "900px" }}>
+    <motion.div
+      ref={containerRef}
+      style={{ translateY }}
+      className="w-full overflow-hidden"
+    >
+      <div className="w-full" style={{ perspective: "900px", paddingTop: "0px" }}>
         <Card rotate={smoothRotate}>{children}</Card>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
@@ -43,7 +49,7 @@ export const Card = ({
         boxShadow:
           "0 #0000004d, 9px 20px #0000004a, 37px #00000042, 84px 50px #00000026, 149px 60px #0000000a, 233px 65px #00000003",
       }}
-      className="max-w-[70rem] mx-auto  w-[95vw] backdrop-blur p-4 bg-[#1a1a1aec] rounded-[30px] shadow-2xl"
+      className="max-w-[70rem] mx-auto   w-[95vw] backdrop-blur p-4 bg-[#1a1a1aec] rounded-[30px] shadow-2xl"
     >
       <div className="h-full w-full overflow-hidden rounded-2xl bg-white dark:bg-zinc-900 md:rounded-2xl ">
         {children}

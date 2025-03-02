@@ -11,7 +11,7 @@ const Hero = () => {
 
 
     return (
-        <div className="relative bg-transparent pt-16 min-h-screen flex flex-col items-center max-w-[75rem] px-4 mx-auto md:flex-row sm:px-6 ">
+        <div className="relative bg-transparent pt-16 min-h-[94vh]  flex flex-col items-center justify-center max-w-[75rem] px-4 mx-auto md:flex-row sm:px-6 ">
             <div className="flex items-center py-5 md:w-1/2  md:pt-10 md:pr-10">
                 <section className=" md:text-left flex flex-col md:items-start items-center justify-center text-center bg-gradient-to-r  px-6">
                     <h1 className="text-2xl sm:text-3xl  font-semibold text-gray-900">
@@ -32,15 +32,15 @@ const Hero = () => {
                 </section>
 
             </div>
-            <div className="relative flex items-center w-full py-5 md:w-2/4 md:pt-10 md:pl-10 md:ml-10" >
+            <div className="relative flex items-center  w-full pt-5 md:w-2/4 md:pt-10 md:pl-10 md:ml-10" >
                 <img
                     src={heropattern}
                     className="absolute inset-0 z-0 object-cover w-full h-full"
                     alt="Pattern Image"
                 />
-                {<div className='relative bottom-0 z-10 flex items-end justify-center w-full '>
+                {<div className='relative bottom-0 z-1 flex items-end justify-center w-full '>
                     <img src={"https://portfoliopics.s3.tebi.io/d0224212-6f6b-464a-811e-bf516536a2f4.png"}
-                        className="relative object-cover w-auto bottom-[-1.2rem] h-auto"
+                        className="relative object-cover w-auto bottom-0 h-auto"
                         alt="Overlay Image"
                     />
                 </div>}

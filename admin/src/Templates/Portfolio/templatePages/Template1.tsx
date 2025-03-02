@@ -6,8 +6,9 @@ import Product from '../Components/Template1/Product'
 import Testimonial from '../Components/Template1/Testimonial'
 import { Contact } from 'lucide-react'
 import Template1Layout from '../Components/Template1/Layout/Template1Layout'
-import { renderCanvas } from '@/components/ui/canvas'
-import { HeroParallax } from '@/components/hero-parallax'
+import { renderCanvas } from '@/Templates/Portfolio/Components/Template1/ui/canvas'
+import { HeroParallax } from '@/Templates/Portfolio/Components/Template1/ui/hero-parallax'
+import CanvasCursor from '../Components/Template1/ui/hoverCursor'
 
 const products = [
     {
@@ -106,9 +107,9 @@ const products = [
 ];
 
 const Template1 = () => {
-    useEffect(() => {
-        renderCanvas();
-    }, []);
+    // useEffect(() => {
+    //     renderCanvas();
+    // }, []);
     return (
         <div className='relative'>
             <div style={{
@@ -120,21 +121,18 @@ const Template1 = () => {
       radial-gradient(at 34% 3%, hsla(261, 93%, 90%, 1) 0px, transparent 50%),
       radial-gradient(at 0% 100%, hsla(336, 97%, 86%, 0.57) 0px, transparent 50%)`
             }} className="   h-screen w-screen fixed top-0 left-0">
-                <canvas
-                    className="bg-skin-base absolute top-0 inset-0 pointer-events-none mx-auto"
-                    id="canvas"
-                ></canvas>
             </div>
+            <CanvasCursor />
             <Template1Layout />
-            <div className='bg-transparent backdrop-blur-2xl'>
-                <Hero />
-                <About />
-                <HeroParallax products={products} />
-                <Service />
-                <Product />
-                <Testimonial />
-                <Contact />
-            </div>
+            {/* <div className='bg-transparent w-full overflow-hidden '> */}
+            <Hero />
+            <About />
+            <HeroParallax products={products} />
+            <Service />
+            <Product />
+            <Testimonial />
+            <Contact />
+            {/* </div> */}
         </div>
     )
 }
