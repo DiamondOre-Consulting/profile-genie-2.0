@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react'
 import Hero from '../Components/Template1/Hero'
 import About from '../Components/Template1/About'
-import Service from '../Components/Template1/Service'
 import Product from '../Components/Template1/Product'
 import Testimonial from '../Components/Template1/Testimonial'
-import { Contact } from 'lucide-react'
 import Template1Layout from '../Components/Template1/Layout/Template1Layout'
-import { renderCanvas } from '@/Templates/Portfolio/Components/Template1/ui/canvas'
 import { HeroParallax } from '@/Templates/Portfolio/Components/Template1/ui/hero-parallax'
 import CanvasCursor from '../Components/Template1/ui/hoverCursor'
+import Service from '../Components/Template1/Service'
+import Contact from '../Components/Template1/Contact'
 
 const products = [
     {
@@ -124,15 +123,16 @@ const Template1 = () => {
             </div>
             <CanvasCursor />
             <Template1Layout />
-            {/* <div className='bg-transparent w-full overflow-hidden '> */}
+
             <Hero />
             <About />
-            <HeroParallax products={products} />
             <Service />
+            <HeroParallax products={products} />
             <Product />
+
             <Testimonial />
             <Contact />
-            {/* </div> */}
+
         </div>
     )
 }

@@ -2,10 +2,8 @@ import React, { useRef } from "react";
 import { useScroll, useTransform, motion, useSpring } from "framer-motion";
 
 export const ContainerScroll = ({
-  // titleComponent,
   children,
 }: {
-  // titleComponent: string | React.ReactNode;
   children: React.ReactNode;
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
