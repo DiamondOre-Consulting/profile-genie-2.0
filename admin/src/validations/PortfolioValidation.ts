@@ -13,6 +13,7 @@ export const addProfileDetailSchema = z.object({
     tagline: z.string().min(1, 'Tagline is required'),
     isPaid: z.boolean().default(false),
     isActive: z.boolean().default(false),
+    shortDescription: z.string().min(150, 'Short Description is required (MIN 200 Characters)').max(200, 'Short Description must be less than 400 characters'),
     image: z.object({
         publicId: z.string().optional(),
         url: z.string().min(1, 'Image is required')

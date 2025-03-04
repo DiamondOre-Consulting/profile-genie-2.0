@@ -10,7 +10,7 @@ import cloudinary from "cloudinary"
 const createPortfolio = asyncHandler(async (req, res) => {
     console.log(2)
     const { formData } = req.body
-    const { fullName, userName, phoneNumber, email, tagline, about, isActive, isPaid } = JSON.parse(formData)
+    const { fullName, userName, phoneNumber, email, tagline, about, shortDescription, isActive, isPaid } = JSON.parse(formData)
 
     const uniquePortfolio = await Portfolio.findOne({ userName })
 
@@ -28,6 +28,7 @@ const createPortfolio = asyncHandler(async (req, res) => {
         email,
         isPaid,
         isActive,
+        shortDescription,
         paidDate: isPaid ? new Date() : null,
         about,
         backgroundImage: {
@@ -84,13 +85,13 @@ const createPortfolio = asyncHandler(async (req, res) => {
 const updatePortfolio = asyncHandler(async (req, res) => {
 
     const { formData } = req.body
-    const { fullName, userName, phoneNumber, email, tagline, about, isActive, isPaid } = JSON.parse(formData)
-
+    const { fullName, userName, phoneNumber, email, tagline, about, isActive, isPaid, shortDescription } = JSON.parse(formData)
     const { id } = req.params
 
     const portfolio = await Portfolio.findById(id)
 
     if (!portfolio) {
+        console.log(1)
         throw new AppError("Portfolio not found!", 400)
     }
 
@@ -98,7 +99,8 @@ const updatePortfolio = asyncHandler(async (req, res) => {
         console.log(portfolio.userName, userName)
         const uniquePortfolio = await Portfolio.findOne({ userName })
         console.log("object")
-        if (!uniquePortfolio) {
+        if (!uniquePortfolio && portfolio._id.toString() !== id) {
+            console.log(2)
             throw new AppError("Username already exists!", 400)
         }
     }
@@ -113,6 +115,7 @@ const updatePortfolio = asyncHandler(async (req, res) => {
     portfolio.about = await about
     portfolio.isActive = await isActive
     portfolio.isPaid = await isPaid
+    portfolio.shortDescription = await shortDescription
 
     let uploadedFiles = []
     if (req?.files) {

@@ -9,6 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Switch } from '@/components/ui/switch'
 import { useAddPortfolioMutation } from '@/Redux/API/PortfolioApi'
 import { toast } from 'sonner'
+import { Textarea } from '@/components/ui/textarea'
 
 
 interface apiRes {
@@ -146,7 +147,21 @@ const AddProfileDetail = ({ setCurrentStep, currentStep, stepsLength, setId }: {
             </div>
 
             <div className='mt-3'>
+                <div className="mt-3">
+                    <Label
+                        htmlFor={"about.body"}
+                        className="text-neutral-300 "
+                    >
+                        Short Description (150-200 Characters) <span className="text-[#ff3f69]">*</span>
+                    </Label>
+                    <Textarea {...register("shortDescription")} placeholder="Enter meta keyword..." className={`${errors.shortDescription && "border-[#E11D48] "} py-[0.45rem]  text-neutral-200`} />
 
+                    {errors.shortDescription && (
+                        <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">
+                            {errors.shortDescription.message}
+                        </p>
+                    )}
+                </div>
                 <div className="mt-3">
                     <Label
                         htmlFor={"about.body"}

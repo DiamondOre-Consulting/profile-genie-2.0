@@ -121,18 +121,16 @@ const Template1 = () => {
       radial-gradient(at 0% 100%, hsla(336, 97%, 86%, 0.57) 0px, transparent 50%)`
             }} className="   h-screen w-screen fixed top-0 left-0">
             </div>
-            <CanvasCursor />
-            <Template1Layout />
-
-            <Hero />
-            <About />
-            <Service />
-            <HeroParallax products={products} />
-            <Product />
-
-            <Testimonial />
-            <Contact />
-
+            {/* <CanvasCursor /> */}
+            <Template1Layout>
+                <Hero />
+                <About />
+                <Service />
+                <HeroParallax products={products} />
+                <Product />
+                <Contact />
+                <Testimonial />
+            </Template1Layout>
         </div>
     )
 }

@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Switch } from '@/components/ui/switch'
 import { useAddPortfolioMutation, useUpdatePortfolioMutation } from '@/Redux/API/PortfolioApi'
 import { toast } from 'sonner'
+import { Textarea } from '@/components/ui/textarea'
 
 type profileDetail = z.infer<typeof addProfileDetailSchema>
 
@@ -87,9 +88,7 @@ const EditProfileDetail = ({ setCurrentStep, currentStep, stepsLength, setId, po
                         <IconRosetteDiscountCheckFilled className='w-8 h-8 text-green-500' />
                         <div className="grid grow gap-1">
                             <Label className='text-white'>
-
                                 Active
-
                             </Label>
                             <p className="text-xs text-zinc-500 dark:text-zinc-400">
                                 {watch("isActive") ? "Link is active!" : "Click to activate link!"}
@@ -164,7 +163,21 @@ const EditProfileDetail = ({ setCurrentStep, currentStep, stepsLength, setId, po
             </div>
 
             <div className='mt-3'>
+                <div className="mt-3">
+                    <Label
+                        htmlFor={"about.body"}
+                        className="text-neutral-300 "
+                    >
+                        Short Description (150-200 Characters) <span className="text-[#ff3f69]">*</span>
+                    </Label>
+                    <Textarea {...register("shortDescription")} placeholder="Enter meta keyword..." className={`${errors.shortDescription && "border-[#E11D48] "} py-[0.45rem]  text-neutral-200`} />
 
+                    {errors.shortDescription && (
+                        <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">
+                            {errors.shortDescription.message}
+                        </p>
+                    )}
+                </div>
                 <div className="mt-3">
                     <Label
                         htmlFor={"about.body"}

@@ -13,7 +13,7 @@ const Testimonial = () => {
                 handle: "@emmaai",
                 avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face"
             },
-            rate: "4",
+            rate: "3",
 
             text: "Using this AI platform has transformed how we handle data analysis. The speed and accuracy are unprecedented.",
             href: "https://twitter.com/emmaai"
@@ -42,14 +42,12 @@ const Testimonial = () => {
 
     return (
         <section className="relative z-10">
-            <div className="mx-auto flex max-w-container flex-col items-center gap-4 text-center sm:gap-16">
+            <div className="mx-auto flex max-w-container flex-col items-center gap-4 text-center sm:gap-8">
                 <div className="flex flex-col items-center gap-4 px-4 sm:gap-8">
                     <h2 className="max-w-[720px] text-3xl font-semibold leading-tight sm:text-5xl sm:leading-tight">
                         Trusted by developers worldwide
                     </h2>
-                    <p className="text-md max-w-[600px] font-medium text-muted-foreground sm:text-xl">
-                        Join thousands of developers who are already building the future with our AI platform
-                    </p>
+
                 </div>
 
                 <div className="relative flex w-full flex-col items-center justify-center overflow-hidden">

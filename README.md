@@ -75,16 +75,51 @@ After setup, you can interact with the API using tools like **Postman** or **cUR
 ## Folder Structure <a name = "folder_structure"></a>
 ```
 server/
-├── config/            # Database & server configurations
-├── controller/        # API controllers handling business logic
-├── middleware/        # Middleware functions (authentication, error handling, etc.)
-├── model/            # Mongoose models defining database schemas
-├── routes/           # Express.js route definitions
-├── utils/            # Utility functions for common tasks
-├── uploads/          # Directory for file uploads
-├── app.js            # Core app logic
-├── server.js         # Main entry point of the application
-├── .env.example      # Example environment variable file
+├─ .env
+├─ .env.example.js
+├─ .gitignore
+├─ app.js
+├─ config/
+│  └─ db.config.js
+├─ controller/
+│  ├─ auth.controller.js
+│  ├─ metaData.controller.js
+│  └─ portfolio.controller.js
+├─ middleware/
+│  ├─ auth.middleware.js
+│  ├─ error.middleware.js
+│  └─ multer.middleware.js
+├─ model/
+│  ├─ auth.model.js
+│  └─ portfolioModel/
+│     ├─ metaData.model.js
+│     ├─ portfolio.model.js
+│     ├─ portfolioContact.model.js
+│     └─ portfolioDetail.model.js
+├─ package-lock.json
+├─ package.json
+├─ passport/
+│  └─ passport.js
+├─ routes/
+│  ├─ auth.routes.js
+│  └─ portfolio.routes.js
+├─ server.js
+├─ uploads/
+│  ├─ 16da3ae6-9.png
+│  ├─ 19d723e2-3.png
+│  ├─ 6ca835a2-a.png
+│  ├─ 784facc2-8.png
+│  ├─ d9b50827-d.png
+│  ├─ f6f8712e-0.png
+│  ├─ fcd167d2-0.png
+│  └─ Heavy_Grey_Metallic_new9.png
+└─ utils/
+   ├─ asyncHandler.js
+   ├─ error.utils.js
+   ├─ fileUpload.utils.js
+   └─ mail.utils.js
+
+
 ```
 
 ## Server Overview <a name = "server_overview"></a>
