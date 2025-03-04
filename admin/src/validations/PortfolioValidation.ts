@@ -5,6 +5,22 @@ export const loginValidationSchema = z.object({
     password: z.string().min(8, 'Password must be at least 8 characters long!')
 })
 
+export const productListSchema = z.object({
+    tagline: z.string().optional(),
+    productList: z.array(
+        z.object({
+            uniqueId: z.string().optional(),
+            title: z.string().optional(),
+            detail: z.string().optional(),
+            image: z.object({
+                publicId: z.string().optional(),
+                url: z.string().optional()
+            }).optional()
+        })
+    ).optional()
+})
+
+
 export const addProfileDetailSchema = z.object({
     fullName: z.string().min(1, 'Full Name is required'),
     phoneNumber: z.number().min(1, 'Phone Number is required'),
@@ -72,20 +88,7 @@ export const addOthersDetailSchema = z.object({
             })
         ).optional()
     }),
-    products: z.object({
-        tagline: z.string().optional(),
-        productList: z.array(
-            z.object({
-                uniqueId: z.string().optional(),
-                title: z.string().optional(),
-                detail: z.string().optional(),
-                image: z.object({
-                    publicId: z.string().optional(),
-                    url: z.string().optional()
-                }).optional()
-            })
-        ).optional()
-    })
+    products: productListSchema
 })
 
 export const addContactDetailSchema = z.object({
@@ -154,6 +157,7 @@ export type profileDetail = z.infer<typeof addProfileDetailSchema>
 export type metaDetails = z.infer<typeof addMetaDetailsSchema>
 export type contactDetails = z.infer<typeof addContactDetailSchema>
 export type otherDetails = z.infer<typeof addOthersDetailSchema>
+export type productLists = z.infer<typeof productListSchema>
 
 export interface portfolioResponse extends profileDetail {
     _id: string,
@@ -169,3 +173,4 @@ export interface apiRes {
     message?: string,
     data: portfolioResponse
 }
+

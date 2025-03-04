@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react'
 import Hero from '../Components/Template1/Hero'
 import About from '../Components/Template1/About'
-import Product from '../Components/Template1/Product'
 import Testimonial from '../Components/Template1/Testimonial'
 import Template1Layout from '../Components/Template1/Layout/Template1Layout'
-import { HeroParallax } from '@/Templates/Portfolio/Components/Template1/ui/hero-parallax'
-import CanvasCursor from '../Components/Template1/ui/hoverCursor'
 import Service from '../Components/Template1/Service'
 import Contact from '../Components/Template1/Contact'
+import { useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useGetSinglePortfolioQuery } from '@/Redux/API/PortfolioApi'
+import { Product } from '../Components/Template1/Product'
 
 const products = [
     {
@@ -106,9 +106,20 @@ const products = [
 ];
 
 const Template1 = () => {
-    // useEffect(() => {
-    //     renderCanvas();
-    // }, []);
+    const { username } = useParams()
+
+    const [profileData, setProfileData] = useState()
+
+    const { data, isLoading } = useGetSinglePortfolioQuery({ username })
+
+    useEffect(() => {
+        if (!isLoading) setProfileData(data?.data)
+    }, [isLoading, data])
+
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [])
+
     return (
         <div className='relative'>
             <div style={{
@@ -123,12 +134,11 @@ const Template1 = () => {
             </div>
             {/* <CanvasCursor /> */}
             <Template1Layout>
-                <Hero />
-                <About />
-                <Service />
-                <HeroParallax products={products} />
-                <Product />
-                <Contact />
+                <Hero portfolio={profileData} />
+                <About about={profileData?.about} brands={profileData?.otherDetails?.brands} />
+                <Service services={profileData?.otherDetails?.services} />
+                <Product products={profileData?.otherDetails?.products} />
+                <Contact contact={profileData?.contactData} />
                 <Testimonial />
             </Template1Layout>
         </div>

@@ -10,17 +10,20 @@ import {
     IconBrandYoutube,
     IconDeviceFloppy,
     IconBrandFacebook,
-    IconBrandX
+    IconBrandX,
+    IconBrandTwitter,
+    IconBrandGoogleFilled
 } from "@tabler/icons-react";
 import { useState } from "react";
 import Marquee from "react-fast-marquee";
 
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
+import { Link } from "react-router-dom";
 
 
 
-const Contact: React.FC = () => {
+const Contact: React.FC = ({ contact }) => {
 
     const [whatsappNo, setWhatsAppNo] = useState('');
     const url = encodeURIComponent(window.location.href);
@@ -37,7 +40,7 @@ const Contact: React.FC = () => {
         window.open(`https://x.com/intent/tweet?url=${url}`, "_blank");
     };
 
-    console.log(whatsappNo)
+    console.log(contact?.mapLink.match(/src="([^"]+)"/)?.[1])
     return (
         <div className="bg-transparent relative z-20 py-10 px-2 sm:px-6 md:px-16">
 
@@ -48,9 +51,10 @@ const Contact: React.FC = () => {
                         <iframe
                             title="Google Maps"
                             className="w-full h-full rounded-lg rounded-r-none "
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14014.249050812883!2d77.35272185!3d28.5864514!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce567fdfcc2fb%3A0xa2fc39f8c6c92c91!2sSector%20122%2C%20Noida%2C%20Uttar%20Pradesh!5e0!3m2!1sen!2sin!4v1710000000000"
+                            src={contact?.mapLink.match(/src="([^"]+)"/)?.[1]}
                             loading="lazy"
                         ></iframe>
+
                     </div>
 
                     <div className="flex flex-col w-full md:min-w-[22rem] md:max-w-[23rem] text-white bg-[#141d2fcb] items-center">
@@ -86,7 +90,7 @@ const Contact: React.FC = () => {
                                     <IconDeviceFloppy size={18} /> Save Contact
                                 </button>
                                 <button
-                                    className="cursor-pointer w-full flex justify-between bg-rose-500 px-3 py-2 rounded-md text-white tracking-wider shadow-xl hover:bg-red-600 hover:scale-105 duration-500 hover:ring-1 font-mono "
+                                    className="cursor-pointer w-full flex justify-between bg-rose-500 px-3 py-2 rounded-md text-white tracking-wider shadow-xl hover:bg-red-600  duration-500 hover:ring-1 font-mono "
                                 >
                                     Download Brochure
                                     <svg
@@ -111,58 +115,150 @@ const Contact: React.FC = () => {
 
                 </div>
 
-                <Marquee speed={30} gradient={true} gradientColor="#000" className="flex items-center bg-black py-3  text-white ">
-                    <div className="bg-neutral-700 p-2 rounded-md mx-4">
-                        <IconBrandLinkedin className="hover:text-blue-700 cursor-pointer " size={24} />
-                    </div>
-                    <div className="bg-neutral-700 p-2 rounded-md mx-4">
-                        <IconBrandGoogle className="hover:text-red-500 cursor-pointer" size={28} />
-                    </div>
-                    <div className="bg-neutral-700 p-2 rounded-md mx-4">
-                        <IconBrandInstagram className="hover:text-pink-500 cursor-pointer" size={28} />
-                    </div>
-                    <div className="bg-neutral-700 p-2 rounded-md mx-4">
-                        <IconBrandYoutube className="hover:text-red-600 cursor-pointer" size={28} />
-                    </div>
-                    <div className="bg-neutral-700 p-2 rounded-md mx-4">
-                        <IconBrandLinkedin className="hover:text-blue-700 cursor-pointer " size={24} />
-                    </div>
-                    <div className="bg-neutral-700 p-2 rounded-md mx-4">
-                        <IconBrandGoogle className="hover:text-red-500 cursor-pointer" size={28} />
-                    </div>
-                    <div className="bg-neutral-700 p-2 rounded-md mx-4">
-                        <IconBrandInstagram className="hover:text-pink-500 cursor-pointer" size={28} />
-                    </div>
-                    <div className="bg-neutral-700 p-2 rounded-md mx-4">
-                        <IconBrandYoutube className="hover:text-red-600 cursor-pointer" size={28} />
-                    </div>
-                    <div className="bg-neutral-700 p-2 rounded-md mx-4">
-                        <IconBrandLinkedin className="hover:text-blue-700 cursor-pointer " size={24} />
-                    </div>
-                    <div className="bg-neutral-700 p-2 rounded-md mx-4">
-                        <IconBrandGoogle className="hover:text-red-500 cursor-pointer" size={28} />
-                    </div>
-                    <div className="bg-neutral-700 p-2 rounded-md mx-4">
-                        <IconBrandInstagram className="hover:text-pink-500 cursor-pointer" size={28} />
-                    </div>
-                    <div className="bg-neutral-700 p-2 rounded-md mx-4">
-                        <IconBrandYoutube className="hover:text-red-600 cursor-pointer" size={28} />
-                    </div>
-                    <div className="bg-neutral-700 p-2 rounded-md mx-4">
-                        <IconBrandYoutube className="hover:text-red-600 cursor-pointer" size={28} />
-                    </div>
-                    <div className="bg-neutral-700 p-2 rounded-md mx-4">
-                        <IconBrandLinkedin className="hover:text-blue-700 cursor-pointer " size={24} />
-                    </div>
-                    <div className="bg-neutral-700 p-2 rounded-md mx-4">
-                        <IconBrandGoogle className="hover:text-red-500 cursor-pointer" size={28} />
-                    </div>
-                    <div className="bg-neutral-700 p-2 rounded-md mx-4">
-                        <IconBrandInstagram className="hover:text-pink-500 cursor-pointer" size={28} />
-                    </div>
-                    <div className="bg-neutral-700 p-2 rounded-md mx-4">
-                        <IconBrandYoutube className="hover:text-red-600 cursor-pointer" size={28} />
-                    </div>
+                <Marquee speed={30} gradient={true} gradientColor="#000" pauseOnHover className="flex items-center bg-black py-3  text-white ">
+                    {contact?.social?.facebook &&
+                        <Link to={contact?.social?.facebook} className="hover:scale-110 duration-300  bg-neutral-700 block  p-2 rounded-md mx-4">
+                            <IconBrandFacebook className=" cursor-pointer " size={24} />
+                        </Link>
+                    }
+                    {contact?.social?.linkedin &&
+                        <Link to={contact?.social?.linkedin} className="hover:scale-110 duration-300  bg-neutral-700 block  p-2 rounded-md mx-4">
+                            <IconBrandLinkedin className=" cursor-pointer " size={24} />
+                        </Link>
+                    }
+                    {contact?.social?.twitter &&
+                        <Link to={contact?.social?.twitter} className="hover:scale-110 duration-300  bg-neutral-700 block  p-2 rounded-md mx-4">
+                            <IconBrandX className=" cursor-pointer " size={24} />
+                        </Link>
+                    }
+                    {contact?.social?.instagram &&
+                        <Link to={contact?.social?.instagram} className="hover:scale-110 duration-300  bg-neutral-700 block  p-2 rounded-md mx-4">
+                            <IconBrandInstagram className=" cursor-pointer " size={24} />
+                        </Link>
+                    }
+                    {contact?.social?.googleLink &&
+                        <Link to={contact?.social?.googleLink} className="hover:scale-110 duration-300  bg-neutral-700 block  p-2 rounded-md mx-4">
+                            <IconBrandGoogleFilled className=" cursor-pointer " size={24} />
+                        </Link>
+                    }
+
+                    {contact?.social?.otherSocialList?.length >= 0 &&
+                        contact?.social?.otherSocialList?.map((item: any, index: number) => {
+                            return (
+                                <Link key={index} to={item.link} className="hover:scale-110 duration-300  bg-neutral-700 block  p-2 rounded-md mx-4">
+                                    <img src={item?.img?.url} alt={item?.img?.link} className="w-6 h-6  cursor-pointer " />
+                                </Link>
+                            );
+                        })
+                    }
+
+                    {contact?.social?.facebook &&
+                        <Link to={contact?.social?.facebook} className="hover:scale-110 duration-300  bg-neutral-700 block  p-2 rounded-md mx-4">
+                            <IconBrandFacebook className=" cursor-pointer " size={24} />
+                        </Link>
+                    }
+                    {contact?.social?.linkedin &&
+                        <Link to={contact?.social?.linkedin} className="hover:scale-110 duration-300  bg-neutral-700 block  p-2 rounded-md mx-4">
+                            <IconBrandLinkedin className=" cursor-pointer " size={24} />
+                        </Link>
+                    }
+                    {contact?.social?.twitter &&
+                        <Link to={contact?.social?.twitter} className="hover:scale-110 duration-300  bg-neutral-700 block  p-2 rounded-md mx-4">
+                            <IconBrandX className=" cursor-pointer " size={24} />
+                        </Link>
+                    }
+                    {contact?.social?.instagram &&
+                        <Link to={contact?.social?.instagram} className="hover:scale-110 duration-300  bg-neutral-700 block  p-2 rounded-md mx-4">
+                            <IconBrandInstagram className=" cursor-pointer " size={24} />
+                        </Link>
+                    }
+                    {contact?.social?.googleLink &&
+                        <Link to={contact?.social?.googleLink} className="hover:scale-110 duration-300  bg-neutral-700 block  p-2 rounded-md mx-4">
+                            <IconBrandGoogleFilled className=" cursor-pointer " size={24} />
+                        </Link>
+                    }
+
+                    {contact?.social?.otherSocialList?.length >= 0 &&
+                        contact?.social?.otherSocialList?.map((item: any, index: number) => {
+                            return (
+                                <Link key={index} to={item.link} className="hover:scale-110 duration-300  bg-neutral-700 block  p-2 rounded-md mx-4">
+                                    <img src={item?.img?.url} alt={item?.img?.link} className="w-6 h-6  cursor-pointer " />
+                                </Link>
+                            );
+                        })
+                    }
+
+                    {contact?.social?.facebook &&
+                        <Link to={contact?.social?.facebook} className="hover:scale-110 duration-300  bg-neutral-700 block  p-2 rounded-md mx-4">
+                            <IconBrandFacebook className=" cursor-pointer " size={24} />
+                        </Link>
+                    }
+                    {contact?.social?.linkedin &&
+                        <Link to={contact?.social?.linkedin} className="hover:scale-110 duration-300  bg-neutral-700 block  p-2 rounded-md mx-4">
+                            <IconBrandLinkedin className=" cursor-pointer " size={24} />
+                        </Link>
+                    }
+                    {contact?.social?.twitter &&
+                        <Link to={contact?.social?.twitter} className="hover:scale-110 duration-300  bg-neutral-700 block  p-2 rounded-md mx-4">
+                            <IconBrandX className=" cursor-pointer " size={24} />
+                        </Link>
+                    }
+                    {contact?.social?.instagram &&
+                        <Link to={contact?.social?.instagram} className="hover:scale-110 duration-300  bg-neutral-700 block  p-2 rounded-md mx-4">
+                            <IconBrandInstagram className=" cursor-pointer " size={24} />
+                        </Link>
+                    }
+                    {contact?.social?.googleLink &&
+                        <Link to={contact?.social?.googleLink} className="hover:scale-110 duration-300  bg-neutral-700 block  p-2 rounded-md mx-4">
+                            <IconBrandGoogleFilled className=" cursor-pointer " size={24} />
+                        </Link>
+                    }
+
+                    {contact?.social?.otherSocialList?.length >= 0 &&
+                        contact?.social?.otherSocialList?.map((item: any, index: number) => {
+                            return (
+                                <Link key={index} to={item.link} className="hover:scale-110 duration-300  bg-neutral-700 block  p-2 rounded-md mx-4">
+                                    <img src={item?.img?.url} alt={item?.img?.link} className="w-6 h-6  cursor-pointer " />
+                                </Link>
+                            );
+                        })
+                    }
+
+                    {contact?.social?.facebook &&
+                        <Link to={contact?.social?.facebook} className="hover:scale-110 duration-300  bg-neutral-700 block  p-2 rounded-md mx-4">
+                            <IconBrandFacebook className=" cursor-pointer " size={24} />
+                        </Link>
+                    }
+                    {contact?.social?.linkedin &&
+                        <Link to={contact?.social?.linkedin} className="hover:scale-110 duration-300  bg-neutral-700 block  p-2 rounded-md mx-4">
+                            <IconBrandLinkedin className=" cursor-pointer " size={24} />
+                        </Link>
+                    }
+                    {contact?.social?.twitter &&
+                        <Link to={contact?.social?.twitter} className="hover:scale-110 duration-300  bg-neutral-700 block  p-2 rounded-md mx-4">
+                            <IconBrandX className=" cursor-pointer " size={24} />
+                        </Link>
+                    }
+                    {contact?.social?.instagram &&
+                        <Link to={contact?.social?.instagram} className="hover:scale-110 duration-300  bg-neutral-700 block  p-2 rounded-md mx-4">
+                            <IconBrandInstagram className=" cursor-pointer " size={24} />
+                        </Link>
+                    }
+                    {contact?.social?.googleLink &&
+                        <Link to={contact?.social?.googleLink} className="hover:scale-110 duration-300  bg-neutral-700 block  p-2 rounded-md mx-4">
+                            <IconBrandGoogleFilled className=" cursor-pointer " size={24} />
+                        </Link>
+                    }
+
+                    {contact?.social?.otherSocialList?.length >= 0 &&
+                        contact?.social?.otherSocialList?.map((item: any, index: number) => {
+                            return (
+                                <Link key={index} to={item.link} className="hover:scale-110 duration-300  bg-neutral-700 block  p-2 rounded-md mx-4">
+                                    <img src={item?.img?.url} alt={item?.img?.link} className="w-6 h-6  cursor-pointer " />
+                                </Link>
+                            );
+                        })
+                    }
                 </Marquee>
 
             </div>
@@ -190,26 +286,33 @@ const Contact: React.FC = () => {
                 </div>
 
                 {/* Phone Numbers */}
-                <div className="bg-[#101828] shadow-md p-5 rounded-lg flex items-center gap-4 border-l-6 border-red-500">
-                    <div className="bg-red-100 p-3 rounded-full">
-                        <IconPhone className="text-red-500" size={28} />
+                <div className="bg-[#101828] shadow-md p-5 py-4 rounded-lg flex items-center gap-4 border-l-6 border-yellow-500">
+
+                    <div className="bg-red-100 p-2 rounded-full">
+                        <IconPhone className="text-red-500" size={24} />
                     </div>
                     <div>
-                        <p className="text-gray-100">+91 9717017366</p>
-                        <p className="text-gray-100">+91 9717017366</p>
+                        {contact?.phoneList?.map((item: any, index: number) => {
+                            return (
+                                <p key={index} className="text-gray-100">{item?.phone}</p>
+                            );
+                        })}
                     </div>
                 </div>
 
 
 
                 {/* Emails */}
-                <div className="bg-[#101828] shadow-md p-5 rounded-lg flex items-center gap-4 border-l-6 border-yellow-500">
-                    <div className="bg-yellow-100 p-3 rounded-full">
-                        <IconMail className="text-yellow-500" size={28} />
+                <div className="bg-[#101828] shadow-md p-5 py-4 rounded-lg flex items-center gap-4 border-l-6 border-yellow-500">
+                    <div className="bg-yellow-100 p-2 rounded-full">
+                        <IconMail className="text-yellow-500" size={24} />
                     </div>
                     <div>
-                        <p className="text-gray-100">connect@vion.co.in</p>
-                        <p className="text-gray-100">connect@vion.co.in</p>
+                        {contact?.emailList?.map((item: any, index: number) => {
+                            return (
+                                <p key={index} className="text-gray-100">{item?.email}</p>
+                            );
+                        })}
                     </div>
                 </div>
             </div>

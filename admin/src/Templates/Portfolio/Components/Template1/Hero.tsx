@@ -1,32 +1,30 @@
-import React, { useEffect } from 'react'
 import heropattern from '../../../../assets/herospattern.png'
 import { IconBrandWhatsapp } from '@tabler/icons-react';
 
 
-const Hero = () => {
+const Hero = ({ portfolio }) => {
     const handleWhatsAppChat = () => {
         const url = `https://api.whatsapp.com/send?phone=${encodeURIComponent(916207234759)}`;
         window.open(url, '_blank');
-    };
-
+    }
 
     return (
         <div className="relative bg-transparent pt-16 min-h-[94vh]  flex flex-col items-center justify-center max-w-[75rem] px-4 mx-auto md:flex-row sm:px-6 ">
             <div className="flex items-center py-5 md:w-1/2  md:pt-10 md:pr-10">
                 <section className=" md:text-left flex flex-col md:items-start items-center justify-center text-center bg-gradient-to-r  px-6">
                     <h1 className="text-2xl sm:text-3xl  font-semibold text-gray-900">
-                        Hi, I'm <br /> <span className="text-[#F43F5E] text-4xl sm:text-5xl font-bold md:text-5xl">Nazish Javed Khan</span>
+                        Hi, I'm <br /> <span className="text-[#F43F5E] text-4xl sm:text-5xl font-bold md:text-5xl">{portfolio?.fullName}</span>
                     </h1>
-                    <p className='mt-4 font-semibold text-lg text-gray-800'>Founder - The Threads Villa</p>
+                    <p className='mt-4 font-semibold text-lg text-gray-800'>{portfolio?.tagline}</p>
                     <p className=" text-md text-gray-700 max-w-2xl">
-                        At The Threads Villa, we are passionate creators of exquisite hand-embroidered paintings. Founded by Nazish Javed Khan, our venture brings together a team of highly skilled artisans dedicated to producing intricate, handmade pieces that elevate any interior space.
+                        {portfolio?.shortDescription}
                     </p>
                     <div className="mt-6 flex gap-4">
                         <a href="#contact" className="bg-[#F43F5E] text-white px-6 py-2 rounded-md shadow-md hover:bg-[#f52044] transition">
                             About me
                         </a>
                         <div className="border flex items-center gap-3 cursor-pointer border-[#F43F5E] text-[#F43F5E] px-6 py-2 rounded-md hover:bg-[#f52044] hover:text-white transition" onClick={handleWhatsAppChat}>
-                            <IconBrandWhatsapp /> let talk
+                            <IconBrandWhatsapp /> let&apos;s talk
                         </div>
                     </div>
                 </section>
@@ -39,8 +37,8 @@ const Hero = () => {
                     alt="Pattern Image"
                 />
                 {<div className='relative bottom-0 z-1 flex items-end justify-center w-full '>
-                    <img src={"https://portfoliopics.s3.tebi.io/d0224212-6f6b-464a-811e-bf516536a2f4.png"}
-                        className="relative object-cover w-auto bottom-0 h-auto"
+                    <img src={portfolio?.image?.url}
+                        className="relative object-cover w-auto bottom-0 h-auto max-h-[26rem]"
                         alt="Overlay Image"
                     />
                 </div>}
