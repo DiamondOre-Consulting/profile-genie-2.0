@@ -59,6 +59,9 @@ const portfolioContactSchema = new Schema({
             type: String
         }
     },
+    contactCSV: {
+        type: String
+    },
     social: {
         facebook: {
             type: String

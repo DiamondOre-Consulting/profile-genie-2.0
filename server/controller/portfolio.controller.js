@@ -98,9 +98,7 @@ const updatePortfolio = asyncHandler(async (req, res) => {
     if (portfolio.userName !== userName) {
         console.log(portfolio.userName, userName)
         const uniquePortfolio = await Portfolio.findOne({ userName })
-        console.log("object")
         if (!uniquePortfolio && portfolio._id.toString() !== id) {
-            console.log(2)
             throw new AppError("Username already exists!", 400)
         }
     }
@@ -294,7 +292,10 @@ const getAllPortfolio = asyncHandler(async (req, res) => {
             }
         },
         {
-            $unwind: "$contactData"
+            "$unwind": {
+                "path": "$contactData",
+                "preserveNullAndEmptyArrays": true
+            }
         },
         {
             $project: {
@@ -667,7 +668,7 @@ const updatePortfolioDetail = asyncHandler(async (req, res) => {
 
 const createPortfolioContact = asyncHandler(async (req, res) => {
     const contactData = JSON.parse(req.body.data)
-    const { whatsappNo, mapLink, address, emailList, brochureLink, phoneList, social, testimonial } = contactData
+    const { whatsappNo, mapLink, address, contactCSV, emailList, brochureLink, phoneList, social, testimonial } = contactData
     const { id } = req.params
 
     const portfolioContact = await PortfolioContact.create({
@@ -679,6 +680,7 @@ const createPortfolioContact = asyncHandler(async (req, res) => {
         address: address,
         whatsappNo: whatsappNo,
         brochureLink: brochureLink,
+        contactCSV: contactCSV,
         social: {
             facebook: social.facebook,
             instagram: social.instagram,
@@ -740,7 +742,7 @@ const createPortfolioContact = asyncHandler(async (req, res) => {
 
 const updatePortfolioContact = asyncHandler(async (req, res) => {
     const contactData = JSON.parse(req.body.data)
-    const { whatsappNo, mapLink, address, emailList, brochureLink, phoneList, social, testimonial } = contactData
+    const { whatsappNo, mapLink, address, contactCSV, emailList, brochureLink, phoneList, social, testimonial } = contactData
     const { id } = req.params
     console.log(contactData)
     const portfolioContact = await PortfolioContact.findOneAndUpdate(
@@ -754,6 +756,7 @@ const updatePortfolioContact = asyncHandler(async (req, res) => {
                 address: address,
                 whatsappNo: whatsappNo,
                 brochureLink: brochureLink,
+                contactCSV: contactCSV,
                 'social.googleLink': social.googleLink,
                 'social.facebook': social.facebook,
                 'social.instagram': social.instagram,
