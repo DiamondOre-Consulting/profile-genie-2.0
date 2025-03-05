@@ -104,6 +104,7 @@ export const addContactDetailSchema = z.object({
         )
     }),
     mapLink: z.string().optional(),
+    contactCSV: z.string().optional(),
     emailList: z.array(z.object({
         email: z.string().optional()
     })).optional(),
@@ -173,4 +174,5 @@ export interface apiRes {
     message?: string,
     data: portfolioResponse
 }
+
 

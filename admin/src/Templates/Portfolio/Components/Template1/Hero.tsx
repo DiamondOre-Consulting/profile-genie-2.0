@@ -1,8 +1,9 @@
+import { profileDetail } from '@/validations/PortfolioValidation';
 import heropattern from '../../../../assets/herospattern.png'
 import { IconBrandWhatsapp } from '@tabler/icons-react';
 
 
-const Hero = ({ portfolio }) => {
+const Hero = ({ portfolio }: { portfolio: profileDetail }) => {
     const handleWhatsAppChat = () => {
         const url = `https://api.whatsapp.com/send?phone=${encodeURIComponent(916207234759)}`;
         window.open(url, '_blank');
@@ -19,13 +20,8 @@ const Hero = ({ portfolio }) => {
                     <p className=" text-md text-gray-700 max-w-2xl">
                         {portfolio?.shortDescription}
                     </p>
-                    <div className="mt-6 flex gap-4">
-                        <a href="#contact" className="bg-[#F43F5E] text-white px-6 py-2 rounded-md shadow-md hover:bg-[#f52044] transition">
-                            About me
-                        </a>
-                        <div className="border flex items-center gap-3 cursor-pointer border-[#F43F5E] text-[#F43F5E] px-6 py-2 rounded-md hover:bg-[#f52044] hover:text-white transition" onClick={handleWhatsAppChat}>
-                            <IconBrandWhatsapp /> let&apos;s talk
-                        </div>
+                    <div className="border flex mt-3 items-center gap-3 cursor-pointer bg-[#F43F5E] min-w-[15rem]  px-6 py-2 rounded-md hover:bg-[#f52044] text-white transition" onClick={handleWhatsAppChat}>
+                        <IconBrandWhatsapp /> let&apos;s talk on whatsapp
                     </div>
                 </section>
 

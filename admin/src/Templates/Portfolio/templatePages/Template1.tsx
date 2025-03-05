@@ -8,117 +8,34 @@ import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useGetSinglePortfolioQuery } from '@/Redux/API/PortfolioApi'
 import { Product } from '../Components/Template1/Product'
-
-const products = [
-    {
-        title: "Moonbeam",
-        link: "https://gomoonbeam.com",
-        thumbnail:
-            "https://aceternity.com/images/products/thumbnails/new/moonbeam.png",
-    },
-    {
-        title: "Cursor",
-        link: "https://cursor.so",
-        thumbnail:
-            "https://aceternity.com/images/products/thumbnails/new/cursor.png",
-    },
-    {
-        title: "Rogue",
-        link: "https://userogue.com",
-        thumbnail:
-            "https://aceternity.com/images/products/thumbnails/new/rogue.png",
-    },
-
-    {
-        title: "Editorially",
-        link: "https://editorially.org",
-        thumbnail:
-            "https://aceternity.com/images/products/thumbnails/new/editorially.png",
-    },
-    {
-        title: "Editrix AI",
-        link: "https://editrix.ai",
-        thumbnail:
-            "https://aceternity.com/images/products/thumbnails/new/editrix.png",
-    },
-    {
-        title: "Pixel Perfect",
-        link: "https://app.pixelperfect.quest",
-        thumbnail:
-            "https://aceternity.com/images/products/thumbnails/new/pixelperfect.png",
-    },
-
-    {
-        title: "Algochurn",
-        link: "https://algochurn.com",
-        thumbnail:
-            "https://aceternity.com/images/products/thumbnails/new/algochurn.png",
-    },
-    {
-        title: "Aceternity UI",
-        link: "https://ui.aceternity.com",
-        thumbnail:
-            "https://aceternity.com/images/products/thumbnails/new/aceternityui.png",
-    },
-    {
-        title: "Tailwind Master Kit",
-        link: "https://tailwindmasterkit.com",
-        thumbnail:
-            "https://aceternity.com/images/products/thumbnails/new/tailwindmasterkit.png",
-    },
-    {
-        title: "SmartBridge",
-        link: "https://smartbridgetech.com",
-        thumbnail:
-            "https://aceternity.com/images/products/thumbnails/new/smartbridge.png",
-    },
-    {
-        title: "Renderwork Studio",
-        link: "https://renderwork.studio",
-        thumbnail:
-            "https://aceternity.com/images/products/thumbnails/new/renderwork.png",
-    },
-
-    {
-        title: "Creme Digital",
-        link: "https://cremedigital.com",
-        thumbnail:
-            "https://aceternity.com/images/products/thumbnails/new/cremedigital.png",
-    },
-    {
-        title: "Golden Bells Academy",
-        link: "https://goldenbellsacademy.com",
-        thumbnail:
-            "https://aceternity.com/images/products/thumbnails/new/goldenbellsacademy.png",
-    },
-    {
-        title: "Invoker Labs",
-        link: "https://invoker.lol",
-        thumbnail:
-            "https://aceternity.com/images/products/thumbnails/new/invoker.png",
-    },
-    {
-        title: "E Free Invoice",
-        link: "https://efreeinvoice.com",
-        thumbnail:
-            "https://aceternity.com/images/products/thumbnails/new/efreeinvoice.png",
-    },
-];
+import { portfolioResponse } from '@/validations/PortfolioValidation'
+import loading from "../../../assets/loading.webm"
 
 const Template1 = () => {
     const { username } = useParams()
 
-    const [profileData, setProfileData] = useState()
+    const [profileData, setProfileData] = useState<portfolioResponse>()
 
-    const { data, isLoading } = useGetSinglePortfolioQuery({ username })
+    const { data, isFetching, isLoading, error } = useGetSinglePortfolioQuery({ username })
 
     useEffect(() => {
-        if (!isLoading) setProfileData(data?.data)
-    }, [isLoading, data])
+        if (!isFetching && !isLoading) setProfileData(data?.data)
+    }, [isFetching, data, isLoading])
 
     useEffect(() => {
         window.scrollTo(0, 0)
     }, [])
+
+    if (!profileData && !isFetching && !isLoading) {
+        if (error) {
+
+            return (
+                <div>
+                    <h1>No portfolio found</h1>
+                </div>
+            )
+        }
+    }
 
     return (
         <div className='relative'>
@@ -132,15 +49,19 @@ const Template1 = () => {
       radial-gradient(at 0% 100%, hsla(336, 97%, 86%, 0.57) 0px, transparent 50%)`
             }} className="   h-screen w-screen fixed top-0 left-0">
             </div>
-            {/* <CanvasCursor /> */}
-            <Template1Layout>
-                <Hero portfolio={profileData} />
-                <About about={profileData?.about} brands={profileData?.otherDetails?.brands} />
-                <Service services={profileData?.otherDetails?.services} />
-                <Product products={profileData?.otherDetails?.products} />
-                <Contact contact={profileData?.contactData} />
-                <Testimonial />
-            </Template1Layout>
+            {(!profileData) ? <div className='h-screen w-screen flex items-center justify-center relative z-100'><video src={loading} playsInline autoPlay loop muted></video></div> :
+                (!profileData?.isActive || !profileData?.isPaid) ? <div className='relative z-100'>Not active</div> :
+                    <Template1Layout>
+                        <Hero portfolio={profileData} />
+                        <div id='about'>
+                            <About about={profileData?.about} brands={profileData?.otherDetails?.brands} />
+                        </div>
+                        {profileData?.otherDetails?.services && <Service services={profileData?.otherDetails?.services} />}
+                        {profileData?.otherDetails?.products && <Product products={profileData?.otherDetails?.products} />}
+                        <Contact contact={profileData?.contactData} />
+                        {profileData?.contactData?.testimonial && <Testimonial testimonials={profileData?.contactData?.testimonial} />}
+                    </Template1Layout>
+            }
         </div>
     )
 }

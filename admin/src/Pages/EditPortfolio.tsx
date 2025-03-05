@@ -1,7 +1,4 @@
-import AddContactDetails from "@/components/Forms/AddPortfolio/AddContactDetails";
-import AddMetaDetails from "@/components/Forms/AddPortfolio/AddMetaDetails";
-import AddOthersDetail from "@/components/Forms/AddPortfolio/AddOthersDetail";
-import AddProfileDetail from "@/components/Forms/AddPortfolio/AddProfileDetail";
+
 import EditContactDetails from "@/components/Forms/EditPortfolio/EditContactDetails";
 import EditMetaDetails from "@/components/Forms/EditPortfolio/EditMetaDetails";
 import EditOthersDetail from "@/components/Forms/EditPortfolio/EditOthersDetail";
@@ -16,10 +13,13 @@ import {
 } from "@/components/ui/stepper";
 import { HomeLayout } from "@/Layout/HomeLayout";
 import { useGetSinglePortfolioQuery } from "@/Redux/API/PortfolioApi";
-import { apiRes } from "@/validations/PortfolioValidation";
+import { addContactDetailSchema, addMetaDetailsSchema, addOthersDetailSchema, apiRes } from "@/validations/PortfolioValidation";
 
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { z } from "zod";
+
+
 
 const steps = [
     {
@@ -89,32 +89,26 @@ export default function EditPortfolio() {
                 {currentStep === 1 &&
                     <EditProfileDetail setId={setPortfolioId} portfolioDetail={portfolioData} setCurrentStep={setCurrentStep} stepsLength={steps.length} currentStep={currentStep} />}
                 {currentStep === 2 &&
-                    portfolioData?.data?.otherDetails && (
-                        <EditOthersDetail
-                            othersDetail={portfolioData.data.otherDetails}
-                            portfolioId={portfolioId}
-                            setCurrentStep={setCurrentStep}
-                            stepsLength={steps.length}
-                            currentStep={currentStep}
-                        />
-                    )
+                    <EditOthersDetail
+                        othersDetail={portfolioData?.data?.otherDetails as z.infer<typeof addOthersDetailSchema>}
+                        portfolioId={portfolioId}
+                        setCurrentStep={setCurrentStep}
+                        stepsLength={steps.length}
+                        currentStep={currentStep}
+                    />
                 }
                 {currentStep === 3 &&
-                    portfolioData?.data?.contactData && (
-                        <EditContactDetails
-                            contactDetails={portfolioData?.data?.contactData}
-                            portfolioId={portfolioId}
-                            setCurrentStep={setCurrentStep}
-                            stepsLength={steps.length}
-                            currentStep={currentStep}
-                        />
-                    )
+                    <EditContactDetails
+                        contactDetails={portfolioData?.data?.contactData as z.infer<typeof addContactDetailSchema>}
+                        portfolioId={portfolioId}
+                        setCurrentStep={setCurrentStep}
+                        stepsLength={steps.length}
+                        currentStep={currentStep}
+                    />
                 }
                 {currentStep === 4 &&
-                    portfolioData?.data?.metaDetails && (
-                        <EditMetaDetails metaDetails={portfolioData?.data?.metaDetails} portfolioId={portfolioId} setCurrentStep={setCurrentStep} stepsLength={steps.length} currentStep={currentStep} />
-                    )}
-
+                    <EditMetaDetails metaDetails={portfolioData?.data?.metaDetails as z.infer<typeof addMetaDetailsSchema>} portfolioId={portfolioId} setCurrentStep={setCurrentStep} stepsLength={steps.length} currentStep={currentStep} />
+                }
                 <p className="bg-[#E11D48] w-full bottom-0 p-1 pr-4 left-0 absolute text-xs text-end text-white" role="region" aria-live="polite">
                     <span className="">
                         Powered by <span className="font-semibold">@profilegenie</span>

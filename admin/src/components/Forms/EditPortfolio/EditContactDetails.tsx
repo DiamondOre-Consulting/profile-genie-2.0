@@ -1,7 +1,7 @@
 import { addContactDetailSchema } from '@/validations/PortfolioValidation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import React, { useEffect, useId, useState } from 'react'
-import { useFieldArray, useForm } from 'react-hook-form'
+import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import {
     Accordion,
@@ -17,7 +17,8 @@ import { v4 as uuidv4 } from 'uuid'
 import { Textarea } from '@/components/ui/textarea'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { RiStarFill } from '@remixicon/react'
-import { useAddContactDetailsMutation, useUpdateContactDetailsMutation } from '@/Redux/API/PortfolioApi'
+import { useUpdateContactDetailsMutation } from '@/Redux/API/PortfolioApi'
+import PhoneInput from 'react-phone-input-2'
 
 
 
@@ -409,7 +410,40 @@ const EditContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfoli
                                     <Label htmlFor={`services.${ind}.serviceName`} className="text-neutral-300 ">
                                         Phone Number <span className="text-[#ff3f69]">*</span>
                                     </Label>
-                                    <Input {...register(`phoneList.${ind}.phone`, { valueAsNumber: true })} placeholder="Enter service name..." type="number" className={`${errors.phoneList?.[ind]?.phone && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                                    <Controller
+                                        name={`phoneList.${ind}.phone`}
+                                        control={control}
+                                        rules={{ required: "Phone number is required" }}
+                                        render={({ field }) => (
+                                            <PhoneInput
+                                                {...field}
+                                                country="in"
+                                                placeholder="Enter phone number"
+                                                containerStyle={{
+                                                    backgroundColor: "#171717",
+                                                    color: "#ffffff"
+                                                }}
+                                                buttonStyle={{
+                                                    backgroundColor: "#2D2D2D",
+                                                    color: "#000000",
+                                                    border: "none"
+                                                }}
+                                                inputStyle={{
+                                                    width: "100%",
+                                                    border: "1px solid #01010100",
+                                                    fontSize: "12px",
+                                                    paddingTop: "8px",
+                                                    paddingBottom: "8px",
+                                                    height: "34px",
+                                                    borderRadius: "4px",
+                                                    backgroundColor: "#171717",
+                                                    color: "#ffffff"
+                                                }}
+                                                value={field?.value?.toString() || ""}
+                                                onChange={(phone) => field.onChange(Number(phone))}
+                                            />
+                                        )}
+                                    />
                                     {errors.phoneList?.[ind]?.phone && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.phoneList?.[ind]?.phone.message}</p>}
                                 </div>
                                 <div className='flex gap-2 justify-evenly mt-3'>
@@ -501,9 +535,49 @@ const EditContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfoli
                         </div>
                         <div>
                             <Label className="text-neutral-300 ">
+                                Contact CSV <span className="text-[#ff3f69]">*</span>
+                            </Label>
+                            <Input {...register("contactCSV")} placeholder="Enter contact CSV..." type="text" className={`${errors?.contactCSV && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                            {errors?.contactCSV && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors?.contactCSV.message}</p>}
+                        </div>
+                        <div>
+                            <Label className="text-neutral-300 ">
                                 Whatsapp No <span className="text-[#ff3f69]">*</span>
                             </Label>
-                            <Input {...register("whatsappNo", { valueAsNumber: true })} placeholder="Enter service tagline..." type="number" className={`${errors?.whatsappNo && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                            <Controller
+                                name="whatsappNo"
+                                control={control}
+                                rules={{ required: "Phone number is required" }}
+                                render={({ field }) => (
+                                    <PhoneInput
+                                        {...field}
+                                        country="in"
+                                        placeholder="Enter phone number"
+                                        containerStyle={{
+                                            backgroundColor: "#171717",
+                                            color: "#ffffff"
+                                        }}
+                                        buttonStyle={{
+                                            backgroundColor: "#2D2D2D",
+                                            color: "#000000",
+                                            border: "none",
+                                        }}
+                                        inputStyle={{
+                                            width: "100%",
+                                            border: "1px solid #01010100",
+                                            fontSize: "12px",
+                                            paddingTop: "8px",
+                                            paddingBottom: "8px",
+                                            height: "34px",
+                                            borderRadius: "4px",
+                                            backgroundColor: "#171717",
+                                            color: "#ffffff"
+                                        }}
+                                        value={field?.value?.toString() || ""}
+                                        onChange={(phone) => field.onChange(Number(phone))}
+                                    />
+                                )}
+                            />
                             {errors?.whatsappNo && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors?.whatsappNo?.message}</p>}
                         </div>
                     </div>

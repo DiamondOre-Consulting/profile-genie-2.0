@@ -4,12 +4,14 @@ import { Label } from '@/components/ui/label'
 import { addProfileDetailSchema, profileDetail } from '@/validations/PortfolioValidation'
 import { IconCamera, IconRosetteDiscountCheckFilled, IconSquareRoundedArrowLeftFilled, IconSquareRoundedArrowRightFilled, IconWhirl } from '@tabler/icons-react'
 import React, { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, useController, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Switch } from '@/components/ui/switch'
 import { useAddPortfolioMutation } from '@/Redux/API/PortfolioApi'
 import { toast } from 'sonner'
 import { Textarea } from '@/components/ui/textarea'
+import PhoneInput from 'react-phone-input-2'
+
 
 
 interface apiRes {
@@ -22,7 +24,7 @@ const AddProfileDetail = ({ setCurrentStep, currentStep, stepsLength, setId }: {
 
     const [addPortfolio] = useAddPortfolioMutation()
 
-    const { register, handleSubmit, setValue, trigger, watch, getValues, formState: { errors, isSubmitting } } = useForm<profileDetail>({
+    const { register, handleSubmit, control, setValue, trigger, watch, getValues, formState: { errors, isSubmitting } } = useForm<profileDetail>({
         resolver: zodResolver(addProfileDetailSchema)
     })
 
@@ -119,7 +121,41 @@ const AddProfileDetail = ({ setCurrentStep, currentStep, stepsLength, setId }: {
                     <Label htmlFor={"phoneNumber"} className="text-neutral-300 ">
                         Phone Number <span className="text-[#ff3f69]">*</span>
                     </Label>
-                    <Input {...register("phoneNumber", { valueAsNumber: true })} placeholder="Enter phone number..." type="number" className={`${errors.phoneNumber && "border-[#E11D48] "} py-[0.45rem]  text-neutral-200`} />
+                    <Controller
+                        name="phoneNumber"
+                        control={control}
+                        rules={{ required: "Phone number is required" }}
+                        render={({ field }) => (
+                            <PhoneInput
+                                {...field}
+                                country="in"
+                                placeholder="Enter phone number"
+                                containerStyle={{
+                                    backgroundColor: "#171717",
+                                    color: "#ffffff"
+                                }}
+                                buttonStyle={{
+                                    backgroundColor: "#2D2D2D",
+                                    color: "#000000",
+                                    border: "none",
+                                }}
+                                inputStyle={{
+                                    width: "100%",
+                                    border: "1px solid #01010100",
+                                    fontSize: "12px",
+                                    paddingTop: "8px",
+                                    paddingBottom: "8px",
+                                    height: "34px",
+                                    borderRadius: "4px",
+                                    backgroundColor: "#171717",
+                                    color: "#ffffff"
+                                }}
+                                value={field?.value?.toString() || ""}
+                                onChange={(phone) => field.onChange(Number(phone))}
+                            />
+                        )}
+                    />
+
                     {errors.phoneNumber && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.phoneNumber.message}</p>}
                 </div>
 

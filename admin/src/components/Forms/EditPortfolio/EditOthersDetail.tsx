@@ -36,20 +36,20 @@ const EditOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioI
         defaultValues: {
             ...othersDetail,
             products: {
-                ...othersDetail.products,
-                productList: othersDetail.products.productList && (othersDetail.products.productList.length > 1) ? othersDetail.products.productList : [{ uniqueId: "", title: "", detail: "", image: { publicId: "", url: "" } }]
+                ...othersDetail?.products,
+                productList: othersDetail?.products?.productList && (othersDetail?.products?.productList.length > 1) ? othersDetail?.products?.productList : [{ uniqueId: "", title: "", detail: "", image: { publicId: "", url: "" } }]
             },
             services: {
-                ...othersDetail.services,
-                serviceList: othersDetail.services.serviceList && (othersDetail.services.serviceList.length > 1) ? othersDetail.services.serviceList : [{ uniqueId: "", title: "", detail: "", image: { publicId: "", url: "" } }]
+                ...othersDetail?.services,
+                serviceList: othersDetail?.services?.serviceList && (othersDetail?.services?.serviceList.length > 1) ? othersDetail?.services?.serviceList : [{ uniqueId: "", title: "", detail: "", image: { publicId: "", url: "" } }]
             },
             brands: {
-                ...othersDetail.brands,
-                brandList: othersDetail.brands.brandList && (othersDetail.brands.brandList.length > 1) ? othersDetail.brands.brandList : [{ uniqueId: "", brandName: "", image: { publicId: "", url: "" } }]
+                ...othersDetail?.brands,
+                brandList: othersDetail?.brands?.brandList && (othersDetail?.brands?.brandList.length > 1) ? othersDetail?.brands?.brandList : [{ uniqueId: "", brandName: "", image: { publicId: "", url: "" } }]
             },
             bulkLink: {
-                ...othersDetail.bulkLink,
-                bulkLinkList: othersDetail.bulkLink.bulkLinkList && (othersDetail.bulkLink.bulkLinkList.length > 1) ? othersDetail.bulkLink.bulkLinkList : [{ linkName: "", link: "" }]
+                ...othersDetail?.bulkLink,
+                bulkLinkList: othersDetail?.bulkLink?.bulkLinkList && (othersDetail?.bulkLink?.bulkLinkList.length > 1) ? othersDetail?.bulkLink?.bulkLinkList : [{ linkName: "", link: "" }]
             }
         }
     })

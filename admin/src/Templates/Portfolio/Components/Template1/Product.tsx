@@ -40,12 +40,12 @@ export const Product = ({
     springConfig
   );
   const rotateZ = useSpring(
-    useTransform(scrollYProgress, [0, 0.3], [20, 0]),
+    useTransform(scrollYProgress, [0, 0.3], (products?.productList?.length && (products?.productList?.length) >= 5 ? [20, 0] : [10, 0])),
     springConfig
   );
 
   const translateY = useSpring(
-    useTransform(scrollYProgress, [0, 0.4], [-1100, 0]),
+    useTransform(scrollYProgress, [0, 0.4], (products?.productList?.length && (products?.productList?.length) >= 5 ? [-1100, 0] : [-800, 0])),
     springConfig
   );
 
