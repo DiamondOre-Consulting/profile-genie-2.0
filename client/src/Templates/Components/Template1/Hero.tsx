@@ -1,4 +1,4 @@
-import heropattern from '../../../../assets/herospattern.png'
+import heropattern from '../../../assets/herospattern.png'
 import { IconBrandWhatsapp } from '@tabler/icons-react';
 import { portfolioResponse } from '@/validations/PortfolioValidation';
 

@@ -8,8 +8,8 @@ import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useGetSinglePortfolioQuery } from '@/Redux/API/PortfolioApi'
 import { Product } from '../Components/Template1/Product'
-import { portfolioResponse } from '@/validations/PortfolioValidation'
-import loading from "../../../assets/loading.webm"
+import { portfolioResponse } from '../../validations/PortfolioValidation'
+import loading from "../../assets/loading.webm"
 
 const Template1 = () => {
     const { username } = useParams()
