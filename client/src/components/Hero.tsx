@@ -63,7 +63,7 @@ const fadeUpVariants = {
 const Hero = () => {
     return (
         <div className=' mx-auto text-white pt-50 pb-42 w-[97.5%] h-full relative overflow-hidden'>
-            <div className=' p-1 mx-auto  w-full max-w-[30rem] px-2 lg:max-w-[50rem] text-center'>
+            <div className=' p-1 mx-auto  w-full  px-2 md:max-w-[50rem] text-center'>
                 <motion.div
                     custom={1}
                     variants={fadeUpVariants}
@@ -71,7 +71,7 @@ const Hero = () => {
                     animate="visible"
                 >
                     <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold mb-6 md:mb-8 tracking-tight">
-                        <span className="bg-clip-text inline-block mb-2 lg:mb-3 text-transparent bg-gradient-to-b from-white to-white/70">
+                        <span className="bg-clip-text inline-block pb-2 lg:pb-3 text-transparent bg-gradient-to-b from-white to-white/70">
                             Ditch the Paper
                         </span>
                         <br />

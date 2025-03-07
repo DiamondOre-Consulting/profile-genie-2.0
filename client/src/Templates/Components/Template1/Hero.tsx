@@ -12,7 +12,7 @@ const Hero = ({ portfolio }: { portfolio: portfolioResponse }) => {
     }
 
     return (
-        <div className="relative bg-transparent pt-16 min-h-[94vh]  flex flex-col items-center justify-center max-w-[75rem] px-4 mx-auto md:flex-row sm:px-6 ">
+        <div className={`relative bg-transparent pt-16 ${portfolio?.userName && "min-h-[94vh]"} flex flex-col items-center justify-center max-w-[75rem] px-4 mx-auto md:flex-row sm:px-6`}>
             <div className="flex items-center py-5 md:w-1/2  md:pt-10 md:pr-10">
                 <section className=" md:text-left flex flex-col md:items-start items-center justify-center text-center bg-gradient-to-r  px-6">
                     <h1 className="text-2xl sm:text-3xl  font-semibold text-gray-900">

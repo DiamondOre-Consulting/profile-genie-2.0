@@ -153,12 +153,21 @@ export const addMetaDetailsSchema = z.object({
     canonical: z.string().min(3, 'Canonical is required')
 })
 
+export const addPreviewSchema = z.object({
+    fullName: z.string().min(1, 'Full Name is required'),
+    tagline: z.string().min(1, 'Tagline is required'),
+    shortDescription: z.string().min(150, 'Short Description is required (MIN 200 Characters)').max(200, 'Short Description must be less than 400 characters'),
+})
+
+
 export type loginValidation = z.infer<typeof loginValidationSchema>
 export type profileDetail = z.infer<typeof addProfileDetailSchema>
 export type metaDetails = z.infer<typeof addMetaDetailsSchema>
 export type contactDetails = z.infer<typeof addContactDetailSchema>
 export type otherDetails = z.infer<typeof addOthersDetailSchema>
 export type productLists = z.infer<typeof productListSchema>
+export type previewDetail = z.infer<typeof addPreviewSchema>
+
 
 export interface portfolioResponse extends profileDetail {
     _id: string,
@@ -168,6 +177,15 @@ export interface portfolioResponse extends profileDetail {
     contactData: contactDetails,
     otherDetails: otherDetails
 }
+
+export const addPortfolioSchema = addProfileDetailSchema.extend({
+    metaDetails: addMetaDetailsSchema,
+    contactData: addContactDetailSchema,
+    otherDetails: addOthersDetailSchema
+});
+
+export type portfolioSchema = z.infer<typeof addPortfolioSchema>
+
 
 export interface apiRes {
     success: boolean
