@@ -7,6 +7,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import { Button } from "@/components/ui/button";
 import { BoltIcon, CircleUserRoundIcon, Layers2Icon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import Search from "@/components/search";
+import Filter from "@/components/Filter";
 
 const backdropVariants = {
     hidden: { opacity: 0 },
@@ -22,6 +24,8 @@ const modalVariants = {
 const AllPortfolio = () => {
     const navigate = useNavigate()
     const { data } = useGetAllPortfolioQuery({})
+    const [debouncedSearchValue, setDebouncedSearchValue] = useState('')
+    console.log(debouncedSearchValue)
     const [deleteModalActive, setDeleteModalActive] = useState(false)
     const [recycleId, setRecycleId] = useState('')
     const [updateActiveStatus, { isLoading: activeLoading }] = useUpdateActiveStatusMutation()
@@ -45,6 +49,11 @@ const AllPortfolio = () => {
         <HomeLayout>
             <div>
                 All portfolio
+            </div>
+
+            <div className="px-6 my-2 flex items-center justify-center gap-1">
+                <Search setDebouncedSearchValue={setDebouncedSearchValue} />
+                <Filter />
             </div>
 
             <AnimatePresence>
