@@ -27,7 +27,7 @@ export const addProfileDetailSchema = z.object({
     email: z.string().email('Invalid email'),
     userName: z.string().min(1, 'Username is required'),
     tagline: z.string().min(1, 'Tagline is required'),
-    isPaid: z.boolean().default(false),
+    paidDate: z.date(),
     isActive: z.boolean().default(false),
     shortDescription: z.string().min(150, 'Short Description is required (MIN 200 Characters)').max(200, 'Short Description must be less than 400 characters'),
     image: z.object({
@@ -104,18 +104,18 @@ export const addContactDetailSchema = z.object({
         )
     }),
     mapLink: z.string().optional(),
-    contactCSV: z.string().optional(),
+    contactCSV: z.string().min(1, 'Contact CSV is required'),
     emailList: z.array(z.object({
-        email: z.string().optional()
+        email: z.string().min(1, 'Email is required')
     })).optional(),
     phoneList: z.array(z.object({
-        phone: z.number().optional()
-    })).optional(),
-    whatsappNo: z.number().optional(),
+        phone: z.number().min(1, 'Phone Number is required')
+    })),
+    whatsappNo: z.number().min(1, "WhatsApp Number is required"),
     brochureLink: z.object({
-        tagline: z.string().optional(),
-        link: z.string().optional()
-    }).optional(),
+        tagline: z.string().min(1, 'Tagline is required'),
+        link: z.string().min(1, 'Link is required')
+    }),
     address: z.array(
         z.object({
             title: z.string().optional(),

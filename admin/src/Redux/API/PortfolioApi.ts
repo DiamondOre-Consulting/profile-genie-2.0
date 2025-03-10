@@ -11,8 +11,8 @@ export const portfolioApi = createApi({
     tagTypes: ['PORTFOLIO'],
     endpoints: (builder) => ({
         getAllPortfolio: builder.query({
-            query: () => ({
-                url: `/portfolio`,
+            query: ({ search, filter }) => ({
+                url: `/portfolio?search=${search}&filter=${filter}`,
                 method: "GET",
                 data: {},
             }),

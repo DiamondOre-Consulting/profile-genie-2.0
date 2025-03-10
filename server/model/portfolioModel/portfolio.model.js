@@ -97,6 +97,7 @@ const portfolioSchema = new Schema({
     timestamps: true
 })
 
+portfolioSchema.index({ phoneNumber: "text", userName: "text", fullName: "text", email: "text" })
 
 const Portfolio = model("Portfolio", portfolioSchema)
 

@@ -45,7 +45,7 @@ export default function Search({
       <div className="relative">
         <Input
           id={id}
-          className="peer ps-9 border-neutral-700 rounded-md w-full bg-neutral-950 h-10 text-white pe-9"
+          className="peer ps-9 border-neutral-700 rounded-md w-full bg-[#0F1626] h-10 text-white pe-9"
           placeholder="Search..."
           type="search"
           value={searchValue}

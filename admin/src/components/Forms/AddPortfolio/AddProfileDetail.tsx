@@ -4,15 +4,17 @@ import { Label } from '@/components/ui/label'
 import { addProfileDetailSchema, profileDetail } from '@/validations/PortfolioValidation'
 import { IconCamera, IconRosetteDiscountCheckFilled, IconSquareRoundedArrowLeftFilled, IconSquareRoundedArrowRightFilled, IconWhirl } from '@tabler/icons-react'
 import React, { useState } from 'react'
-import { Controller, useController, useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Switch } from '@/components/ui/switch'
 import { useAddPortfolioMutation } from '@/Redux/API/PortfolioApi'
 import { toast } from 'sonner'
 import { Textarea } from '@/components/ui/textarea'
 import PhoneInput from 'react-phone-input-2'
-
-
+import { Calendar } from "@/components/ui/calendar-rac";
+import { DateInput } from "@/components/ui/datefield-rac";
+import { CalendarIcon } from "lucide-react";
+import { Button, DatePicker, Dialog, Group, Popover } from "react-aria-components";
 
 interface apiRes {
     success: boolean
@@ -84,7 +86,33 @@ const AddProfileDetail = ({ setCurrentStep, currentStep, stepsLength, setId }: {
                         </div>
                     </div>
                 </div>
-                <div onClick={() => setValue("isPaid", !getValues("isPaid"))} className="relative flex w-full items-start gap-2 rounded-lg border border-red-500 p-3 shadow-sm shadow-black/5 has-[[data-state=checked]]:border-green-600 ">
+                <DatePicker aria-label='Date picker' onChange={(date) => {
+                    if (date) {
+                        const formattedDate = new Date(date.year, date.month - 1, date.day);
+                        setValue("paidDate", formattedDate);
+                    }
+                }}>
+
+                    <Label className="text-neutral-300">Date picker</Label>
+                    <div className="flex border border-zinc-700 rounded-md">
+                        <Group className="w-full">
+                            <DateInput aria-label="Date picker" className="pe-9" />
+                        </Group>
+                        <Button className="  z-10 -ms-9 -me-px flex w-9 items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none data-focus-visible:ring-[3px] bg-[#171717] text-zinc-400/80 hover:text-zinc-50 data-focus-visible:border-zinc-300 data-focus-visible:ring-zinc-300/50">
+                            <CalendarIcon size={16} />
+                        </Button>
+                    </div>
+                    <Popover
+                        className=" data-entering:animate-in data-exiting:animate-out data-[entering]:fade-in-0 data-[exiting]:fade-out-0 data-[entering]:zoom-in-95 data-[exiting]:zoom-out-95 data-[placement=bottom]:slide-in-from-top-2 data-[placement=left]:slide-in-from-right-2 data-[placement=right]:slide-in-from-left-2 data-[placement=top]:slide-in-from-bottom-2 z-50 rounded-lg border  shadow-lg outline-hidden bg-zinc-950 text-zinc-50 border-zinc-800"
+                        offset={4}
+                    >
+                        <Dialog className="max-h-[inherit] overflow-auto p-2">
+                            <Calendar />
+                        </Dialog>
+                    </Popover>
+
+                </DatePicker>
+                {/* <div onClick={() => setValue("isPaid", !getValues("isPaid"))} className="relative flex w-full items-start gap-2 rounded-lg border border-red-500 p-3 shadow-sm shadow-black/5 has-[[data-state=checked]]:border-green-600 ">
                     <Switch
 
                         className="order-1 h-4 w-6 after:absolute after:inset-0 [&_span]:size-3 [&_span]:data-[state=checked]:translate-x-2 rtl:[&_span]:data-[state=checked]:-translate-x-2"
@@ -101,7 +129,7 @@ const AddProfileDetail = ({ setCurrentStep, currentStep, stepsLength, setId }: {
                             </p>
                         </div>
                     </div>
-                </div>
+                </div> */}
                 <div className="space-y-1">
                     <Label htmlFor={"fullName"} className="text-neutral-300 ">
                         Your Name <span className="text-[#ff3f69]">*</span>

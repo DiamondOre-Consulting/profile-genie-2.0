@@ -10,7 +10,7 @@ import cloudinary from "cloudinary"
 const createPortfolio = asyncHandler(async (req, res) => {
     console.log(2)
     const { formData } = req.body
-    const { fullName, userName, phoneNumber, email, tagline, about, shortDescription, isActive, isPaid } = JSON.parse(formData)
+    const { fullName, userName, phoneNumber, email, tagline, about, shortDescription, isActive, paidDate } = JSON.parse(formData)
 
     const uniquePortfolio = await Portfolio.findOne({ userName })
 
@@ -19,6 +19,8 @@ const createPortfolio = asyncHandler(async (req, res) => {
     }
 
     console.log(1)
+    const today = new Date()
+    const oneYearBefore = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate())
 
     const portfolio = new Portfolio({
         fullName,
@@ -26,10 +28,11 @@ const createPortfolio = asyncHandler(async (req, res) => {
         tagline,
         phoneNumber,
         email,
-        isPaid,
+        isPaid: paidDate ? true : false,
         isActive,
         shortDescription,
-        paidDate: isPaid ? new Date() : null,
+        paidDate: paidDate.split("T")[0],
+        isPaid: paidDate < oneYearBefore ? false : true,
         about,
         backgroundImage: {
             publicId: "",
@@ -85,9 +88,8 @@ const createPortfolio = asyncHandler(async (req, res) => {
 const updatePortfolio = asyncHandler(async (req, res) => {
 
     const { formData } = req.body
-    const { fullName, userName, phoneNumber, email, tagline, about, isActive, isPaid, shortDescription } = JSON.parse(formData)
+    const { fullName, userName, phoneNumber, email, tagline, about, isActive, paidDate, shortDescription } = JSON.parse(formData)
     const { id } = req.params
-
     const portfolio = await Portfolio.findById(id)
 
     if (!portfolio) {
@@ -103,7 +105,6 @@ const updatePortfolio = asyncHandler(async (req, res) => {
         }
     }
 
-    console.log(isActive)
 
     portfolio.fullName = await fullName
     portfolio.userName = await userName
@@ -112,7 +113,11 @@ const updatePortfolio = asyncHandler(async (req, res) => {
     portfolio.email = await email
     portfolio.about = await about
     portfolio.isActive = await isActive
-    portfolio.isPaid = await isPaid
+    portfolio.paidDate = await paidDate.split("T")[0]
+    const today = new Date()
+    const oneYearBefore = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate())
+
+    portfolio.isPaid = portfolio.paidDate < oneYearBefore ? false : true
     portfolio.shortDescription = await shortDescription
 
     let uploadedFiles = []
@@ -216,6 +221,10 @@ const updateStatusActive = asyncHandler(async (req, res) => {
         throw new AppError("Portfolio not found!", 404)
     }
 
+    if (!portfolio.isPaid) {
+        throw new AppError("Portfolio is not paid!", 400)
+    }
+
     portfolio.isActive = !portfolio.isActive
 
     await portfolio.save()
@@ -238,7 +247,7 @@ const updateStatusPaid = asyncHandler(async (req, res) => {
 
     portfolio.isPaid = !portfolio.isPaid
     portfolio.isActive = portfolio.isPaid ? true : false
-    portfolio.paidDate = portfolio.isPaid ? new Date() : portfolio.paidDate
+    portfolio.paidDate = portfolio.isPaid ? new Date().toISOString().split("T")[0] + "T00:00:00.000Z" : portfolio.paidDate
 
     await portfolio.save()
 
@@ -277,25 +286,35 @@ const getSinglePortfolio = asyncHandler(async (req, res) => {
 })
 
 const getAllPortfolio = asyncHandler(async (req, res) => {
-    const portfolios = await Portfolio.aggregate([
+
+    const { search, filter } = req.query
+    console.log(filter)
+    const pipeline = [
         {
             $match: {
-                isRecycled: false
-            }
+                isRecycled: false,
+                ...(search && {
+                    $or: [
+                        { userName: { $regex: search, $options: "i" } },
+                        { fullName: { $regex: search, $options: "i" } },
+                    ],
+                }),
+                ...(filter && ({ isActive: (filter === "active" || (filter === "inactive" && filter === "active")) } || { isPaid: filter === "unpaid" && false })),
+            },
         },
         {
             $lookup: {
                 from: "portfoliocontacts",
                 localField: "contactData",
                 foreignField: "_id",
-                as: "contactData"
-            }
+                as: "contactData",
+            },
         },
         {
-            "$unwind": {
-                "path": "$contactData",
-                "preserveNullAndEmptyArrays": true
-            }
+            $unwind: {
+                path: "$contactData",
+                preserveNullAndEmptyArrays: true,
+            },
         },
         {
             $project: {
@@ -307,14 +326,18 @@ const getAllPortfolio = asyncHandler(async (req, res) => {
                 paidDate: 1,
                 isActive: 1,
                 isPaid: 1,
+                email: 1,
+                phoneNumber: 1,
                 facebook: "$contactData.social.facebook",
                 instagram: "$contactData.social.instagram",
                 whatsappNo: "$contactData.whatsappNo",
-                email: 1,
-                phoneNumber: 1,
-            }
-        }
-    ])
+            },
+        },
+    ];
+
+    const portfolios = await Portfolio.aggregate(pipeline);
+
+
 
     res.status(200).json({
         success: true,

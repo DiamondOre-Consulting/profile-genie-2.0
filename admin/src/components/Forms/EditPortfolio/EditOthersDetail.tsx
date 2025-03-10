@@ -268,55 +268,56 @@ const EditOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioI
                         <Input {...register("brands.tagline")} placeholder="Enter tagline..." type="text" className={`${errors.brands?.tagline && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
                         {errors.brands?.tagline && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.brands?.tagline.message}</p>}
                     </div>
-                    <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2'>
-                        {brandsFields?.map((_, ind) => {
-                            return <div className='space-y-2  p-2 my-3 rounded bg-[#ff17a21b] border border-rose-800' key={ind}>
-                                <div>
-                                    <Label htmlFor={`brands.brandList${ind}.brandName`} className="text-neutral-300 ">
-                                        Brand name <span className="text-[#ff3f69]">*</span>
-                                    </Label>
-                                    <Input {...register(`brands.brandList.${ind}.brandName`)} placeholder="Enter brand name..." type="text" className={`${errors.brands?.brandList?.[ind]?.brandName && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                                    {errors.brands?.brandList?.[ind]?.brandName && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.brands?.brandList?.[ind]?.brandName.message}</p>}
-                                </div>
-                                <div className='flex  justify-evenly'>
-                                    <div className="h-24  w-24 relative group border border-dashed border-[#E11D48] rounded overflow-hidden">
-
-                                        <input
-                                            type="file"
-                                            onChange={(e) => handleBrandsFileChange(e, ind)}
-                                            name='imageImage'
-                                            className="absolute z-10 inset-0 w-full h-full opacity-0 cursor-pointer"
-                                        />
-                                        {getValues(`brands.brandList.${ind}.image.url`) ? (
-                                            <img
-                                                src={getValues(`brands.brandList.${ind}.image.url`)}
-                                                alt="Preview"
-                                                className="w-full h-full object-contain"
-                                            />
-                                        ) : (
-                                            <div className="w-full h-full flex items-center justify-center bg-neutral-950">
-                                                <p className="text-gray-400 text-center">Select image</p>
-                                            </div>
-                                        )}
-                                        <div className="absolute inset-0  bg-black/80 hidden group-hover:flex items-center justify-center transition-all duration-300">
-                                            <IconCamera className="text-white text-5xl" />
-                                        </div>
-                                        <label htmlFor="image" className="cursor-pointer absolute inset-0"></label>
+                    {getValues("brands.tagline") &&
+                        <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2'>
+                            {brandsFields?.map((_, ind) => {
+                                return <div className='space-y-2  p-2 my-3 rounded bg-[#ff17a21b] border border-rose-800' key={ind}>
+                                    <div>
+                                        <Label htmlFor={`brands.brandList${ind}.brandName`} className="text-neutral-300 ">
+                                            Brand name <span className="text-[#ff3f69]">*</span>
+                                        </Label>
+                                        <Input {...register(`brands.brandList.${ind}.brandName`)} placeholder="Enter brand name..." type="text" className={`${errors.brands?.brandList?.[ind]?.brandName && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                                        {errors.brands?.brandList?.[ind]?.brandName && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.brands?.brandList?.[ind]?.brandName.message}</p>}
                                     </div>
+                                    <div className='flex  justify-evenly'>
+                                        <div className="h-24  w-24 relative group border border-dashed border-[#E11D48] rounded overflow-hidden">
 
-                                    {
-                                        brandsFields.length && (
-                                            <button type='button' onClick={() => removeBrand(ind)} className='flex size-24 gap-2 items-center justify-center bg-[#E11D48] text-white p-1 px-2 rounded'><IconX className='size-4' /> {brandsFields.length !== 1 ? "Remove" : "Clear"}</button>
-                                        )
-                                    }
+                                            <input
+                                                type="file"
+                                                onChange={(e) => handleBrandsFileChange(e, ind)}
+                                                name='imageImage'
+                                                className="absolute z-10 inset-0 w-full h-full opacity-0 cursor-pointer"
+                                            />
+                                            {getValues(`brands.brandList.${ind}.image.url`) ? (
+                                                <img
+                                                    src={getValues(`brands.brandList.${ind}.image.url`)}
+                                                    alt="Preview"
+                                                    className="w-full h-full object-contain"
+                                                />
+                                            ) : (
+                                                <div className="w-full h-full flex items-center justify-center bg-neutral-950">
+                                                    <p className="text-gray-400 text-center">Select image</p>
+                                                </div>
+                                            )}
+                                            <div className="absolute inset-0  bg-black/80 hidden group-hover:flex items-center justify-center transition-all duration-300">
+                                                <IconCamera className="text-white text-5xl" />
+                                            </div>
+                                            <label htmlFor="image" className="cursor-pointer absolute inset-0"></label>
+                                        </div>
+
+                                        {
+                                            brandsFields.length && (
+                                                <button type='button' onClick={() => removeBrand(ind)} className='flex size-24 gap-2 items-center justify-center bg-[#E11D48] text-white p-1 px-2 rounded'><IconX className='size-4' /> {brandsFields.length !== 1 ? "Remove" : "Clear"}</button>
+                                            )
+                                        }
+                                    </div>
                                 </div>
-                            </div>
-                        })}
+                            })}
 
-                        <button type='button' className='bg-[#E11D48] flex items-center justify-center cursor-pointer gap-2 my-3 p-2 px-4 rounded text-white' onClick={() => brandsAppend({ uniqueId: "", brandName: "", image: { publicId: "", url: "" } })}>
-                            <IconPlus className='size-4.5' /> Add more
-                        </button>
-                    </div>
+                            <button type='button' className='bg-[#E11D48] flex items-center justify-center cursor-pointer gap-2 my-3 p-2 px-4 rounded text-white' onClick={() => brandsAppend({ uniqueId: "", brandName: "", image: { publicId: "", url: "" } })}>
+                                <IconPlus className='size-4.5' /> Add more
+                            </button>
+                        </div>}
                 </div>,
         },
         {

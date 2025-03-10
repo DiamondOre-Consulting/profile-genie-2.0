@@ -1,7 +1,7 @@
 import { HomeLayout } from "@/Layout/HomeLayout"
 import { useGetAllPortfolioQuery, useRecyclePortfolioMutation, useUpdateActiveStatusMutation, useUpdatePaidStatusMutation } from "@/Redux/API/PortfolioApi"
 import { IconArrowsExchange, IconBrandWhatsapp, IconClock, IconEdit, IconEye, IconLink, IconMail, IconPhone, IconTrash, IconX } from "@tabler/icons-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
@@ -23,8 +23,10 @@ const modalVariants = {
 
 const AllPortfolio = () => {
     const navigate = useNavigate()
-    const { data } = useGetAllPortfolioQuery({})
     const [debouncedSearchValue, setDebouncedSearchValue] = useState('')
+    const [filterValue, setFilterValue] = useState('')
+    const { data, refetch } = useGetAllPortfolioQuery({ search: debouncedSearchValue, filter: filterValue })
+    console.log(filterValue)
     console.log(debouncedSearchValue)
     const [deleteModalActive, setDeleteModalActive] = useState(false)
     const [recycleId, setRecycleId] = useState('')
@@ -36,6 +38,14 @@ const AllPortfolio = () => {
         const res = await recyclePortfolio({ id }).unwrap()
         console.log(res)
     }
+
+    const getPortfolio = async () => {
+        await refetch()
+    }
+
+    useEffect(() => {
+        getPortfolio()
+    }, [debouncedSearchValue, filterValue])
 
     const handleUpdateStatus = async (id: string, type: string) => {
         if (type === "isActive") {
@@ -53,7 +63,7 @@ const AllPortfolio = () => {
 
             <div className="px-6 my-2 flex items-center justify-center gap-1">
                 <Search setDebouncedSearchValue={setDebouncedSearchValue} />
-                <Filter />
+                <Filter setFilterValue={setFilterValue} filterValue={filterValue} />
             </div>
 
             <AnimatePresence>

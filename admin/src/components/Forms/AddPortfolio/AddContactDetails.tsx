@@ -163,66 +163,68 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                 <div>
                     <div>
                         <Label htmlFor={"testimonial.tagline"} className="text-neutral-300 ">
-                            Testimonial Tagline <span className="text-[#ff3f69]">*</span>
+                            Testimonial Tagline
                         </Label>
                         <Input {...register("testimonial.tagline")} placeholder="Enter tagline..." type="text" className={`${errors.testimonial?.tagline && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
                         {errors.testimonial?.tagline && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.testimonial.tagline.message}</p>}
                     </div>
-                    <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2'>
-                        {testimonialFields?.map((_, ind) => {
-                            return <div className='space-y-2  p-2 my-3 rounded bg-[#ff17a21b] border border-rose-800' key={ind}>
-                                <div>
-                                    <Label htmlFor={`testimonial.${ind}.name`} className="text-neutral-300 ">
-                                        Reviewer name <span className="text-[#ff3f69]">*</span>
-                                    </Label>
-                                    <Input {...register(`testimonial.testimonialList.${ind}.name`)} placeholder="Enter brand name..." type="text" className={`${errors.testimonial?.testimonialList?.[ind]?.name && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                                    {errors.testimonial?.testimonialList?.[ind]?.name && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.testimonial.testimonialList?.[ind]?.name.message}</p>}
-                                </div>
+                    {watch("testimonial.tagline") &&
+                        <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2'>
+                            {testimonialFields?.map((_, ind) => {
+                                return <div className='space-y-2  p-2 my-3 rounded bg-[#ff17a21b] border border-rose-800' key={ind}>
+                                    <div>
+                                        <Label htmlFor={`testimonial.${ind}.name`} className="text-neutral-300 ">
+                                            Reviewer name
+                                        </Label>
+                                        <Input {...register(`testimonial.testimonialList.${ind}.name`)} placeholder="Enter brand name..." type="text" className={`${errors.testimonial?.testimonialList?.[ind]?.name && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                                        {errors.testimonial?.testimonialList?.[ind]?.name && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.testimonial.testimonialList?.[ind]?.name.message}</p>}
+                                    </div>
 
-                                <div>
-                                    <Label htmlFor={`testimonial.${ind}.detail`} className="text-neutral-300 ">
-                                        Review description <span className="text-[#ff3f69]">*</span>
-                                    </Label>
-                                    <Textarea {...register(`testimonial.testimonialList.${ind}.detail`)} placeholder="Enter review detail..." className={`${errors.testimonial?.testimonialList?.[ind]?.detail && "border-[#E11D48] "} py-[0.45rem] h-[5rem] text-neutral-200`} />
-                                    {errors.testimonial?.testimonialList?.[ind]?.detail && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.testimonial?.testimonialList?.[ind]?.detail.message}</p>}
+                                    <div>
+                                        <Label htmlFor={`testimonial.${ind}.detail`} className="text-neutral-300 ">
+                                            Review description
+                                        </Label>
+                                        <Textarea {...register(`testimonial.testimonialList.${ind}.detail`)} placeholder="Enter review detail..." className={`${errors.testimonial?.testimonialList?.[ind]?.detail && "border-[#E11D48] "} py-[0.45rem] h-[5rem] text-neutral-200`} />
+                                        {errors.testimonial?.testimonialList?.[ind]?.detail && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.testimonial?.testimonialList?.[ind]?.detail.message}</p>}
+                                    </div>
+                                    <div className='flex items-center justify-between'>
+                                        <fieldset className="space-y-1">
+                                            <legend className="text-foreground text-sm leading-none font-medium">
+                                                Rate your experience
+                                            </legend>
+                                            <RadioGroup className="inline-flex gap-0" >
+                                                {[1, 2, 3, 4, 5].map((value) => (
+                                                    <label
+                                                        key={value}
+                                                        className="group outline-ring/30 dark:outline-ring/40 relative cursor-pointer rounded-lg p-0.5 has-focus-visible:outline-2"
+                                                    >
+                                                        <RadioGroupItem id={`${id}-${value}`} value={value} onClick={() => setValue(`testimonial.testimonialList.${ind}.star`, value)} className="sr-only" />
+                                                        <RiStarFill
+                                                            size={24}
+                                                            className={`transition-all ${(getValues(`testimonial.testimonialList.${ind}.star`) || getValues(`testimonial.testimonialList.${ind}.star`)) >= value ? "text-amber-500" : "text-input"
+                                                                } group-hover:scale-110`}
+                                                        />
+                                                        <span className="sr-only">
+                                                            {value} star{(watch(`testimonial.testimonialList.${ind}.star`)) === 1 ? "" : "s"}
+                                                        </span>
+                                                    </label>
+                                                ))}
+                                            </RadioGroup>
+                                        </fieldset>
+                                        {
+                                            testimonialFields.length && (
+                                                <button type='button' onClick={() => removeTestimonial(ind)} className='flex size-8 gap-2 items-center justify-center bg-[#E11D48] text-white p-1 px-2 rounded'><IconX className='size-4' /> {testimonialFields.length !== 1 ? "" : ""}</button>
+                                            )
+                                        }
+                                    </div>
                                 </div>
-                                <div className='flex items-center justify-between'>
-                                    <fieldset className="space-y-1">
-                                        <legend className="text-foreground text-sm leading-none font-medium">
-                                            Rate your experience
-                                        </legend>
-                                        <RadioGroup className="inline-flex gap-0" >
-                                            {[1, 2, 3, 4, 5].map((value) => (
-                                                <label
-                                                    key={value}
-                                                    className="group outline-ring/30 dark:outline-ring/40 relative cursor-pointer rounded-lg p-0.5 has-focus-visible:outline-2"
-                                                >
-                                                    <RadioGroupItem id={`${id}-${value}`} value={value} onClick={() => setValue(`testimonial.testimonialList.${ind}.star`, value)} className="sr-only" />
-                                                    <RiStarFill
-                                                        size={24}
-                                                        className={`transition-all ${(getValues(`testimonial.testimonialList.${ind}.star`) || getValues(`testimonial.testimonialList.${ind}.star`)) >= value ? "text-amber-500" : "text-input"
-                                                            } group-hover:scale-110`}
-                                                    />
-                                                    <span className="sr-only">
-                                                        {value} star{(watch(`testimonial.testimonialList.${ind}.star`)) === 1 ? "" : "s"}
-                                                    </span>
-                                                </label>
-                                            ))}
-                                        </RadioGroup>
-                                    </fieldset>
-                                    {
-                                        testimonialFields.length && (
-                                            <button type='button' onClick={() => removeTestimonial(ind)} className='flex size-8 gap-2 items-center justify-center bg-[#E11D48] text-white p-1 px-2 rounded'><IconX className='size-4' /> {testimonialFields.length !== 1 ? "" : ""}</button>
-                                        )
-                                    }
-                                </div>
-                            </div>
-                        })}
+                            })}
 
-                        <button type='button' className='bg-[#E11D48] flex items-center justify-center cursor-pointer gap-2 my-3 p-2 px-4 rounded text-white' onClick={() => testimonialAppend({ uniqueId: "", name: "", detail: "", star: 0 })}>
-                            <IconPlus className='size-4.5' /> Add more
-                        </button>
-                    </div>
+                            <button type='button' className='bg-[#E11D48] flex items-center justify-center cursor-pointer gap-2 my-3 p-2 px-4 rounded text-white' onClick={() => testimonialAppend({ uniqueId: "", name: "", detail: "", star: 0 })}>
+                                <IconPlus className='size-4.5' /> Add more
+                            </button>
+                        </div>
+                    }
                 </div>,
         },
         {
@@ -234,42 +236,42 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2'>
                         <div>
                             <Label htmlFor={"social.facebook"} className="text-neutral-300 ">
-                                Facebook <span className="text-[#ff3f69]">*</span>
+                                Facebook
                             </Label>
                             <Input {...register("social.facebook")} placeholder="Enter bulk link tagline..." type="text" className={`${errors.social?.facebook && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
                             {errors.social?.facebook && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.social?.facebook.message}</p>}
                         </div>
                         <div>
                             <Label htmlFor={"social.instagram"} className="text-neutral-300 ">
-                                Instagram <span className="text-[#ff3f69]">*</span>
+                                Instagram
                             </Label>
                             <Input {...register("social.instagram")} placeholder="Enter bulk link tagline..." type="text" className={`${errors.social?.instagram && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
                             {errors.social?.instagram && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.social?.instagram.message}</p>}
                         </div>
                         <div>
                             <Label htmlFor={"social.linkedin"} className="text-neutral-300 ">
-                                Linkedin <span className="text-[#ff3f69]">*</span>
+                                Linkedin
                             </Label>
                             <Input {...register("social.linkedin")} placeholder="Enter bulk link tagline..." type="text" className={`${errors.social?.linkedin && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
                             {errors.social?.linkedin && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.social?.linkedin.message}</p>}
                         </div>
                         <div>
                             <Label htmlFor={"social.twitter"} className="text-neutral-300 ">
-                                Twitter <span className="text-[#ff3f69]">*</span>
+                                X - (Twitter)
                             </Label>
                             <Input {...register("social.twitter")} placeholder="Enter bulk link tagline..." type="text" className={`${errors.social?.twitter && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
                             {errors.social?.twitter && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.social?.twitter.message}</p>}
                         </div>
                         <div>
                             <Label htmlFor={"social.youtube"} className="text-neutral-300 ">
-                                Youtube <span className="text-[#ff3f69]">*</span>
+                                Youtube
                             </Label>
                             <Input {...register("social.youtube")} placeholder="Enter bulk link tagline..." type="text" className={`${errors.social?.youtube && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
                             {errors.social?.youtube && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.social?.youtube.message}</p>}
                         </div>
                         <div>
                             <Label htmlFor={"social.googleLink"} className="text-neutral-300 ">
-                                Google Link <span className="text-[#ff3f69]">*</span>
+                                Google Link
                             </Label>
                             <Input {...register("social.googleLink")} placeholder="Enter bulk link tagline..." type="text" className={`${errors.social?.googleLink && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
                             {errors.social?.googleLink && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.social?.googleLink.message}</p>}
@@ -306,7 +308,7 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                                     </div>
                                     <div className='w-full'>
                                         <Label htmlFor={`social.otherSocialList.${ind}.link`} className="text-neutral-300 ">
-                                            Link  <span className="text-[#ff3f69]">*</span>
+                                            Link
                                         </Label>
                                         <Input {...register(`social.otherSocialList.${ind}.link`)} placeholder="Enter brand name..." type="text" className={`${errors.social?.otherSocialList?.[ind]?.link && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
                                         {errors.social?.otherSocialList?.[ind]?.link && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.social?.otherSocialList?.[ind]?.link.message}</p>}
@@ -467,14 +469,14 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                             return <div className='space-y-2  p-2 my-3 rounded bg-[#ff17a21b] border border-rose-800' key={ind}>
                                 <div>
                                     <Label htmlFor={`address.${ind}.title`} className="text-neutral-300 ">
-                                        Address type <span className="text-[#ff3f69]">*</span>
+                                        Address type
                                     </Label>
                                     <Input {...register(`address.${ind}.title`)} placeholder="Enter service name..." type="text" className={`${errors.address?.[ind]?.title && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
                                     {errors.address?.[ind]?.title && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.address?.[ind]?.title.message}</p>}
                                 </div>
                                 <div>
                                     <Label htmlFor={`address.${ind}.detail`} className="text-neutral-300 ">
-                                        Full address <span className="text-[#ff3f69]">*</span>
+                                        Full address
                                     </Label>
                                     <Input {...register(`address.${ind}.detail`)} placeholder="Enter service name..." type="text" className={`${errors.address?.[ind]?.detail && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
                                     {errors.address?.[ind]?.detail && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.address?.[ind]?.detail.message}</p>}
