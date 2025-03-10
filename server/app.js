@@ -7,6 +7,9 @@ import errorMiddleware from "./middleware/error.middleware.js";
 import portfolioRouter from "./routes/portfolio.routes.js";
 import authRouter from "./routes/auth.routes.js";
 import session from "express-session";
+import { portfolioCrone } from "./croneJobs/portfolioCrone.js";
+
+
 config()
 
 const app = express()
@@ -21,6 +24,8 @@ app.use(cors({
     origin: ["http://localhost:5173", "http://localhost:5174", "http://localhost:5175"],
     credentials: true
 }))
+
+portfolioCrone()
 
 app.use(session({
     secret: 'your-secret',
