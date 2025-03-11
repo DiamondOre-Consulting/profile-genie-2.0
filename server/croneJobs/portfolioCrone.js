@@ -7,8 +7,6 @@ export const portfolioCrone = () => {
     cron.schedule("* * * * *", async () => {
         try {
             console.log("Cron job triggered every minute");
-
-            // Your logic here
         } catch (error) {
             console.error("❌ Error in cron job:", error);
         }
@@ -31,7 +29,7 @@ export const portfolioCrone = () => {
         }
     });
 
-    cron.schedule("* * * * *", async () => {
+    cron.schedule("5 * * * *", async () => {
         try {
             console.log("object")
             const today = new Date();

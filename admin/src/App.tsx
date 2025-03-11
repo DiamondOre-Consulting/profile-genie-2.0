@@ -4,6 +4,7 @@ import PageNotFound from "./Pages/PageNotFound"
 import DashboardLoading from "./components/DashboardLoading"
 import ProtectedRoute from "./components/Auth/ProtectedRoute"
 import Template1 from "./Templates/Portfolio/templatePages/Template1"
+import SelectTemplate from "./Pages/SelectTemplate"
 
 const Dashboard = lazy(() => import("./Pages/Dashboard"))
 const AddPortfolio = lazy(() => import("./Pages/AddPortfolio"))
@@ -20,10 +21,11 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<Dashboard />} />
-          <Route path="/add-portfolio" element={<AddPortfolio />} />
+          <Route path="/add-portfolio/:template" element={<AddPortfolio />} />
           <Route path="/all-portfolio" element={<AllPortfolio />} />
           <Route path="/edit-portfolio/:username" element={<EditPortfolio />} />
           <Route path="/recycle-bin" element={<RecycledPortfolio />} />
+          <Route path="/select-template" element={<SelectTemplate />} />
           <Route path="/portfolio/preview/template1/:username" element={<Template1 />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>

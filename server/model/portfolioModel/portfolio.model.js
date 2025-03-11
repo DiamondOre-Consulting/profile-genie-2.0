@@ -81,6 +81,11 @@ const portfolioSchema = new Schema({
     paidDate: {
         type: Date
     },
+    template: {
+        type: String,
+        required: true,
+        default: "template1"
+    },
     otherDetails: {
         type: Schema.Types.ObjectId,
         ref: "PortfolioDetail"

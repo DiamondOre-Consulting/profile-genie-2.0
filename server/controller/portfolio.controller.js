@@ -9,7 +9,7 @@ import cloudinary from "cloudinary"
 
 const createPortfolio = asyncHandler(async (req, res) => {
     console.log(2)
-    const { formData } = req.body
+    const { formData, template } = req.body
     const { fullName, userName, phoneNumber, email, tagline, about, shortDescription, isActive, paidDate } = JSON.parse(formData)
 
     const uniquePortfolio = await Portfolio.findOne({ userName })
@@ -18,7 +18,10 @@ const createPortfolio = asyncHandler(async (req, res) => {
         throw new AppError("Username already exists!", 400)
     }
 
-    console.log(1)
+    if (!template) {
+        throw new AppError("Template not found!", 400)
+    }
+
     const today = new Date()
     const oneYearBefore = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate())
 
@@ -26,6 +29,7 @@ const createPortfolio = asyncHandler(async (req, res) => {
         fullName,
         userName,
         tagline,
+        template,
         phoneNumber,
         email,
         isPaid: paidDate ? true : false,

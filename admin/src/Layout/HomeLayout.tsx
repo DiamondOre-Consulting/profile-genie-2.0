@@ -17,7 +17,7 @@ import { useDispatch } from "react-redux";
 const tabs = [
     { link: "/", label: "Dashboard", icon: IconLayoutDashboardFilled },
     { link: "/all-portfolio", label: "All Portfolio", icon: IconFileCvFilled },
-    { link: "/add-portfolio", label: "Add Portfolio", icon: IconFingerprint },
+    { link: "/select-template", label: "Add Portfolio", icon: IconFingerprint },
     { link: "/recycle-bin", label: "Recycle Bin", icon: IconTrash },
     { link: "/all-catalogue", label: "All Catalogue", icon: IconKey },
     { link: "/add-catalogue", label: "Add Catalogue", icon: IconDatabaseImport },

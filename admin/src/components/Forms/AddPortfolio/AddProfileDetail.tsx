@@ -22,7 +22,7 @@ interface apiRes {
     data: { _id: string, profileDetail: profileDetail }
 }
 
-const AddProfileDetail = ({ setCurrentStep, currentStep, stepsLength, setId }: { setCurrentStep: React.Dispatch<React.SetStateAction<number>>, currentStep: number, stepsLength: number, setId: React.Dispatch<React.SetStateAction<string>> }) => {
+const AddProfileDetail = ({ setCurrentStep, template, currentStep, stepsLength, setId }: { setCurrentStep: React.Dispatch<React.SetStateAction<number>>, template: string, currentStep: number, stepsLength: number, setId: React.Dispatch<React.SetStateAction<string>> }) => {
 
     const [addPortfolio] = useAddPortfolioMutation()
 
@@ -52,6 +52,7 @@ const AddProfileDetail = ({ setCurrentStep, currentStep, stepsLength, setId }: {
             const formData = new FormData()
             formData.append("formData", JSON.stringify(data))
             files.forEach((file) => formData.append("files", file))
+            formData.append("template", template)
 
             const res = await addPortfolio({ formData }) as { data: apiRes }
             console.log(res)

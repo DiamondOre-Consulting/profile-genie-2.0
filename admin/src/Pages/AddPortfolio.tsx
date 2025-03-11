@@ -13,6 +13,7 @@ import {
 import { HomeLayout } from "@/Layout/HomeLayout";
 
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 
 const steps = [
   {
@@ -38,7 +39,10 @@ const steps = [
 export default function AddPortfolio() {
   const [currentStep, setCurrentStep] = useState(1)
   const [portfolioId, setPortfolioId] = useState('')
-  console.log(portfolioId)
+  const { template } = useParams()
+
+
+
   return (
     <HomeLayout>
       <div className="space-y-8 overflow-hidden relative max-w-[50rem] mx-auto bg-[#010101] pb-0 border border-[#3c3c3c] p-4 sm:p-6 lg:p-8 py-8 rounded">
@@ -60,7 +64,7 @@ export default function AddPortfolio() {
 
         </Stepper>
         {currentStep === 1 &&
-          <AddProfileDetail setId={setPortfolioId} setCurrentStep={setCurrentStep} stepsLength={steps.length} currentStep={currentStep} />}
+          <AddProfileDetail template={template} setId={setPortfolioId} setCurrentStep={setCurrentStep} stepsLength={steps.length} currentStep={currentStep} />}
         {currentStep === 2 &&
           <AddOthersDetail portfolioId={portfolioId} setCurrentStep={setCurrentStep} stepsLength={steps.length} currentStep={currentStep} />}
         {currentStep === 3 &&
