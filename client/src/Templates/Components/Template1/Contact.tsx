@@ -1,3 +1,5 @@
+import { ButtonColorful } from "@/components/ui/button-colorful";
+import { cn } from "@/lib/utils";
 import { portfolioResponse } from "@/validations/PortfolioValidation";
 import {
     IconMapPin,
@@ -9,7 +11,8 @@ import {
     IconDeviceFloppy,
     IconBrandFacebook,
     IconBrandX,
-    IconBrandGoogleFilled
+    IconBrandGoogleFilled,
+    IconLink
 } from "@tabler/icons-react";
 import { useState } from "react";
 import Marquee from "react-fast-marquee";
@@ -19,7 +22,7 @@ import 'react-phone-input-2/lib/style.css'
 import { Link } from "react-router-dom"
 
 
-const Contact = ({ contact, fullName }: { contact: portfolioResponse['contactData'], fullName: string }) => {
+const Contact = ({ contact, bulkLinks, fullName }: { contact: portfolioResponse['contactData'], bulkLinks: portfolioResponse['otherDetails']['bulkLink'], fullName: string }) => {
 
     const [whatsappNo, setWhatsAppNo] = useState('');
     const url = encodeURIComponent(window.location.href);
@@ -46,9 +49,33 @@ const Contact = ({ contact, fullName }: { contact: portfolioResponse['contactDat
     };
 
 
-    console.log(contact)
+    console.log(bulkLinks)
     return (
         <div className="bg-transparent relative z-20 py-10 px-2 sm:px-6 md:px-16">
+
+            <div className="grid grid-cols-3 gap-4">
+                {(bulkLinks?.bulkLinkList?.length > 0) &&
+                    bulkLinks?.bulkLinkList?.map((link, index) => (
+                        <Link key={index}
+                            target="_blank"
+                            to={link?.link || ""}
+                            className={cn(
+                                "relative  inline-block px-4 py-2 rounded-md overflow-hidden",
+                                "shadow-md shadow-[#FF2056]/50 ",
+                                "transition-all hover:-translate-y-0.5 cursor-pointer duration-200 bg-[#101828]",
+                                "group",
+                            )}
+                        >
+
+
+                            <div className="relative flex items-center justify-center gap-2">
+                                <span className="text-white pr-4">{link?.linkName}</span>
+                                <IconLink className="w-5 absolute top-0 -right-2 text-[#FF2056] " />
+                            </div>
+                        </Link>
+                    ))
+                }
+            </div>
 
             <div className="flex flex-col items-center bg-gradient-to-b from-[#101828] to-black shadow-md rounded-lg mt-8 p-1.5 ">
 
@@ -171,8 +198,8 @@ const Contact = ({ contact, fullName }: { contact: portfolioResponse['contactDat
             <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Address */}
                 <div className="bg-[#101828] shadow-md p-5 rounded-lg flex items-center gap-4 border-l-6 border-blue-500">
-                    <div className="bg-blue-100 p-3 rounded-full">
-                        <IconMapPin className="text-blue-500" size={28} />
+                    <div className="bg-blue-100 p-2 rounded-full">
+                        <IconMapPin className="text-blue-500" size={24} />
                     </div>
                     <div>
                         <h4 className="font-semibold text-lg text-white">Head Office</h4>
@@ -181,8 +208,8 @@ const Contact = ({ contact, fullName }: { contact: portfolioResponse['contactDat
                 </div>
 
                 <div className="bg-[#101828] shadow-md p-5 rounded-lg flex items-center gap-4 border-l-6 border-green-500">
-                    <div className="bg-green-100 p-3 rounded-full">
-                        <IconMapPin className="text-green-500" size={28} />
+                    <div className="bg-green-100 p-2 rounded-full">
+                        <IconMapPin className="text-green-500" size={24} />
                     </div>
                     <div>
                         <h4 className="font-semibold text-lg text-white">Branch Office</h4>

@@ -4,8 +4,8 @@ import { portfolioResponse } from '@/validations/PortfolioValidation'
 
 const Service = ({ services }: { services: portfolioResponse['otherDetails']['services'] }) => {
     return (
-        <div className="w-full py-20 relative z-10 ">
-            <div className="container mx-auto w-fit max-w-[75rem]">
+        <div className="w-full py-6 relative z-10 ">
+            <div className=" mx-auto  w-[96vw] max-w-[75rem]">
                 <div className="flex flex-col gap-10">
                     <div className="flex flex-col items-center">
                         <Badge>Services</Badge>

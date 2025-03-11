@@ -544,6 +544,7 @@ const updatePortfolioDetail = asyncHandler(async (req, res) => {
             $set: {
                 'brands.tagline': brands.tagline,
                 'bulkLink.tagline': bulkLink.tagline,
+                'bulkLink.bulkLinkList': bulkLink.bulkLinkList,
                 'services.tagline': services.tagline,
                 'products.tagline': products.tagline
             }

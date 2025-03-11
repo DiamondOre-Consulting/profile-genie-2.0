@@ -4,12 +4,13 @@ import Testimonial from '../Components/Template1/Testimonial'
 import Template1Layout from '../Components/Template1/Layout/Template1Layout'
 import Service from '../Components/Template1/Service'
 import Contact from '../Components/Template1/Contact'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useGetSinglePortfolioQuery } from '@/Redux/API/PortfolioApi'
 import { Product } from '../Components/Template1/Product'
 import { portfolioResponse } from '../../validations/PortfolioValidation'
 import loading from "../../assets/loading.webm"
+import { IconAlertTriangle } from '@tabler/icons-react'
 
 const Template1 = () => {
     const { username } = useParams()
@@ -42,9 +43,9 @@ const Template1 = () => {
 
     if (!profileData && !isFetching && !isLoading) {
         if (error) {
-
+            console.log("hello")
             return (
-                <div>
+                <div className='relative z-100'>
                     <h1>No portfolio found</h1>
                 </div>
             )
@@ -104,9 +105,30 @@ const Template1 = () => {
             }} className="   h-screen w-screen fixed top-0 left-0">
             </div>
             {(!profileData) ? <div className='h-screen w-screen flex items-center justify-center relative z-100'><video src={loading} playsInline autoPlay loop muted></video></div> :
-                (!profileData?.isActive || !profileData?.isPaid) ? <div className='relative z-100'>Not active</div> :
+                (!profileData?.isActive || !profileData?.isPaid) ? <div className="flex flex-col relative z-100 items-center justify-center min-h-screen bg-transparent text-white px-6">
+                    <div className="text-center max-w-[32rem] w-[96vw]">
+                        <IconAlertTriangle className="size-16 text-red-600 mx-auto mb-4" />
+                        <h1 className="text-4xl font-bold text-red-500">Profile Not Active</h1>
+                        <p className="mt-3 text-gray-900">
+                            It looks like the profile you are trying to access is currently inactive. Please try again later or contact the profile owner for more information.
+                        </p>
+                        <div className="mt-6 flex justify-center gap-4">
+                            <Link
+                                to="/"
+                                className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-md transition"
+                            >
+                                Go Home
+                            </Link>
+                            <Link
+                                to="/contact"
+                                className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-md transition"
+                            >
+                                Contact Support
+                            </Link>
+                        </div>
+                    </div>
+                </div> :
                     <Template1Layout>
-
                         <div id='home'>
                             <Hero portfolio={profileData} />
                         </div>
@@ -120,7 +142,7 @@ const Template1 = () => {
                             {profileData?.otherDetails?.products && <Product products={profileData?.otherDetails?.products} />}
                         </div>
                         <div id='contact'>
-                            <Contact contact={profileData?.contactData} fullName={profileData?.fullName} />
+                            <Contact contact={profileData?.contactData} bulkLinks={profileData?.otherDetails?.bulkLink} fullName={profileData?.fullName} />
                         </div>
                         {profileData?.contactData?.testimonial && <Testimonial testimonials={profileData?.contactData?.testimonial} />}
                     </Template1Layout>

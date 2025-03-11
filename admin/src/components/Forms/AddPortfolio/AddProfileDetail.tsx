@@ -11,10 +11,16 @@ import { useAddPortfolioMutation } from '@/Redux/API/PortfolioApi'
 import { toast } from 'sonner'
 import { Textarea } from '@/components/ui/textarea'
 import PhoneInput from 'react-phone-input-2'
-import { Calendar } from "@/components/ui/calendar-rac";
-import { DateInput } from "@/components/ui/datefield-rac";
-import { CalendarIcon } from "lucide-react";
-import { Button, DatePicker, Dialog, Group, Popover } from "react-aria-components";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover"
+import { format } from 'date-fns'
+import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
+import { CalendarIcon } from 'lucide-react'
+import { Calendar } from '@/components/ui/calendar'
 
 interface apiRes {
     success: boolean
@@ -65,6 +71,7 @@ const AddProfileDetail = ({ setCurrentStep, template, currentStep, stepsLength, 
         }
     }
 
+    const [open, setOpen] = useState(false)
 
     return (
         <form className='' onSubmit={handleSubmit(onSubmit)} noValidate >
@@ -87,50 +94,40 @@ const AddProfileDetail = ({ setCurrentStep, template, currentStep, stepsLength, 
                         </div>
                     </div>
                 </div>
-                <DatePicker aria-label='Date picker' onChange={(date) => {
-                    if (date) {
-                        const formattedDate = new Date(date.year, date.month - 1, date.day);
-                        setValue("paidDate", formattedDate);
-                    }
-                }}>
-
-                    <Label className="text-neutral-300">Date picker</Label>
-                    <div className="flex border border-zinc-700 rounded-md">
-                        <Group className="w-full">
-                            <DateInput aria-label="Date picker" className="pe-9" />
-                        </Group>
-                        <Button className="  z-10 -ms-9 -me-px flex w-9 items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none data-focus-visible:ring-[3px] bg-[#171717] text-zinc-400/80 hover:text-zinc-50 data-focus-visible:border-zinc-300 data-focus-visible:ring-zinc-300/50">
-                            <CalendarIcon size={16} />
-                        </Button>
-                    </div>
-                    <Popover
-                        className=" data-entering:animate-in data-exiting:animate-out data-[entering]:fade-in-0 data-[exiting]:fade-out-0 data-[entering]:zoom-in-95 data-[exiting]:zoom-out-95 data-[placement=bottom]:slide-in-from-top-2 data-[placement=left]:slide-in-from-right-2 data-[placement=right]:slide-in-from-left-2 data-[placement=top]:slide-in-from-bottom-2 z-50 rounded-lg border  shadow-lg outline-hidden bg-zinc-950 text-zinc-50 border-zinc-800"
-                        offset={4}
-                    >
-                        <Dialog className="max-h-[inherit] overflow-auto p-2">
-                            <Calendar />
-                        </Dialog>
+                <div className="space-y-1">
+                    <Label htmlFor={"paidDate"} className="text-neutral-300 ">
+                        Paid Date <span className="text-[#ff3f69]">*</span>
+                    </Label>
+                    <Popover open={open} onOpenChange={setOpen}>
+                        <PopoverTrigger asChild>
+                            <Button
+                                variant="outline"
+                                className={cn(
+                                    "w-full justify-start text-left bg-transparent border-[#333333] text-white font-normal",
+                                    !watch("paidDate") && "text-white"
+                                )}
+                                onClick={() => setOpen(!open)}
+                            >
+                                <CalendarIcon className="mr-2 h-4 w-4" />
+                                {watch("paidDate") ? format(watch("paidDate"), "PPP") : "Pick a date"}
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent align='start' className="w-auto p-0">
+                            <Calendar
+                                mode="single"
+                                onSelect={(date) => {
+                                    if (date) {
+                                        setValue("paidDate", date);
+                                    }
+                                    setOpen(false)
+                                }}
+                                initialFocus
+                            />
+                        </PopoverContent>
                     </Popover>
+                    {errors.paidDate && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.paidDate.message}</p>}
 
-                </DatePicker>
-                {/* <div onClick={() => setValue("isPaid", !getValues("isPaid"))} className="relative flex w-full items-start gap-2 rounded-lg border border-red-500 p-3 shadow-sm shadow-black/5 has-[[data-state=checked]]:border-green-600 ">
-                    <Switch
-
-                        className="order-1 h-4 w-6 after:absolute after:inset-0 [&_span]:size-3 [&_span]:data-[state=checked]:translate-x-2 rtl:[&_span]:data-[state=checked]:-translate-x-2"
-                    />
-                    <div className="flex grow items-center gap-3">
-                        <img className='w-8 h-8' src="https://img.icons8.com/color/48/paid.png" alt="paid" />
-                        <div className="grid grow gap-1">
-                            <Label className='text-white'>
-                                Paid
-
-                            </Label>
-                            <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                                {watch("isPaid") ? `Start Date - ${new Date().toDateString()}` : "Click to make profile paid!"}
-                            </p>
-                        </div>
-                    </div>
-                </div> */}
+                </div>
                 <div className="space-y-1">
                     <Label htmlFor={"fullName"} className="text-neutral-300 ">
                         Your Name <span className="text-[#ff3f69]">*</span>

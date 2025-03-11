@@ -63,7 +63,7 @@ export const addOthersDetailSchema = z.object({
                     url: z.string().optional()
                 }).optional()
             })
-        ).optional()
+        )
     }),
     bulkLink: z.object({
         tagline: z.string().optional(),
@@ -72,7 +72,7 @@ export const addOthersDetailSchema = z.object({
                 linkName: z.string().optional(),
                 link: z.string().optional()
             })
-        ).optional()
+        )
     }),
     services: z.object({
         tagline: z.string().optional(),

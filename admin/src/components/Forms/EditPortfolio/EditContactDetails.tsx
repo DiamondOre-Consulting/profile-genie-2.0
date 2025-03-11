@@ -404,30 +404,36 @@ const EditContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfoli
                         </button>
                     </div>
                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2'>
-                        {phoneFields?.map((_, ind) => {
-                            return <div className='space-y-2  p-2 my-3 rounded bg-[#ff17a21b] border border-rose-800' key={ind}>
+
+
+                        {phoneFields.map((field, ind) => (
+                            <div className='space-y-2 p-2 my-3 rounded bg-[#ff17a21b] border border-rose-800' key={field.id}>
                                 <div>
-                                    <Label htmlFor={`services.${ind}.serviceName`} className="text-neutral-300 ">
+                                    <Label htmlFor={`phoneList.${ind}.phone`} className="text-neutral-300">
                                         Phone Number <span className="text-[#ff3f69]">*</span>
                                     </Label>
                                     <Controller
                                         name={`phoneList.${ind}.phone`}
                                         control={control}
-                                        rules={{ required: "Phone number is required" }}
-                                        render={({ field }) => (
+                                        rules={{
+                                            required: "Phone number is required",
+                                            validate: (value) => (!isNaN(value) && value > 0) || "Invalid phone number"
+                                        }}
+                                        render={({ field: { onChange, value, ref } }) => (
                                             <PhoneInput
-                                                {...field}
                                                 country="in"
                                                 placeholder="Enter phone number"
-                                                containerStyle={{
-                                                    backgroundColor: "#171717",
-                                                    color: "#ffffff"
+                                                inputProps={{
+                                                    name: `phoneList.${ind}.phone`,
+                                                    required: true,
+                                                    ref: (elm: HTMLElement | null) => {
+                                                        if (ref) {
+                                                            ref(elm instanceof HTMLElement ? elm : null);
+                                                        }
+                                                    }
                                                 }}
-                                                buttonStyle={{
-                                                    backgroundColor: "#2D2D2D",
-                                                    color: "#000000",
-                                                    border: "none"
-                                                }}
+                                                containerStyle={{ backgroundColor: "#171717", color: "#ffffff" }}
+                                                buttonStyle={{ backgroundColor: "#2D2D2D", color: "#000000", border: "none" }}
                                                 inputStyle={{
                                                     width: "100%",
                                                     border: "1px solid #01010100",
@@ -439,39 +445,50 @@ const EditContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfoli
                                                     backgroundColor: "#171717",
                                                     color: "#ffffff"
                                                 }}
-                                                value={field?.value?.toString() || ""}
-                                                onChange={(phone) => field.onChange(Number(phone))}
+                                                value={value ? value.toString() : ""}
+                                                onChange={(phone) => onChange(phone ? Number(phone) : 0)}
                                             />
                                         )}
                                     />
-                                    {errors.phoneList?.[ind]?.phone && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.phoneList?.[ind]?.phone.message}</p>}
+                                    {errors.phoneList?.[ind]?.phone && (
+                                        <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">
+                                            {errors.phoneList[ind].phone.message}
+                                        </p>
+                                    )}
                                 </div>
-                                <div className='flex gap-2 justify-evenly mt-3'>
 
+                                <div className='flex gap-2 justify-evenly mt-3'>
                                     <div className='size-9 px-5 border border-[#E11D48] flex items-center justify-center rounded bg-[#010101]'>
                                         {ind + 1}
                                     </div>
-                                    {
-                                        phoneFields.length && (
-                                            <button type='button'
-                                                onClick={() => {
-                                                    if (phoneFields.length === 1) {
-                                                        setValue(`phoneList.${ind}`, { phone: 0 });
-                                                    } else {
-                                                        phoneRemove(ind);
-                                                    }
-                                                }}
-                                                className='flex w-full gap-2 items-center justify-center bg-[#E11D48] text-white px-2 rounded'><IconX className='size-4' /> {phoneFields.length !== 1 ? "Remove" : "Clear"}
-                                            </button>
-                                        )
-                                    }
+
+                                    {phoneFields.length > 0 && (
+                                        <button
+                                            type='button'
+                                            onClick={() => {
+                                                if (phoneFields.length === 1) {
+                                                    setValue(`phoneList.${ind}.phone`, 0); // Clear by setting to 0
+                                                } else {
+                                                    phoneRemove(ind);
+                                                }
+                                            }}
+                                            className='flex w-full gap-2 items-center justify-center bg-[#E11D48] text-white px-2 rounded'
+                                        >
+                                            <IconX className='size-4' /> {phoneFields.length !== 1 ? "Remove" : "Clear"}
+                                        </button>
+                                    )}
                                 </div>
                             </div>
-                        })}
+                        ))}
 
-                        <button type='button' className='bg-[#E11D48] flex items-center justify-center cursor-pointer gap-2 my-3 p-2 px-4 rounded text-white' onClick={() => phoneAppend({ phone: 0 })}>
+                        <button
+                            type='button'
+                            className='bg-[#E11D48] flex items-center justify-center cursor-pointer gap-2 my-3 p-2 px-4 rounded text-white'
+                            onClick={() => phoneAppend({ phone: 0 })} // Ensure the phone is initialized as a number
+                        >
                             <IconPlus className='size-4.5' /> Add more
                         </button>
+
                     </div>
                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2'>
                         {addressFields?.map((_, ind) => {

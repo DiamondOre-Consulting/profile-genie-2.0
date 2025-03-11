@@ -12,7 +12,6 @@ export const portfolioCrone = () => {
         }
     });
 
-
     cron.schedule("12 18 * * *", async () => {
         try {
             const oneYearAgo = new Date();
