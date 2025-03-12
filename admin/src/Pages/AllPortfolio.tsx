@@ -313,13 +313,13 @@ const AllPortfolio = () => {
                                             </div>
                                             <div className="flex items-center justify-between w-full gap-1">
                                                 <span className="text-sm font-semibold text-white">
-                                                    {new Intl.DateTimeFormat('en-US', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(item?.paidDate.split("T")[0]))}
+                                                    {new Intl.DateTimeFormat('en-US', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(item?.paidDate))}
                                                 </span>
 
                                                 <IconArrowsExchange />
 
                                                 <span className="text-sm font-semibold text-white">
-                                                    {new Intl.DateTimeFormat('en-US', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(new Date(item?.paidDate.split("T")[0]).setFullYear(new Date(item?.paidDate.split("T")[0]).getFullYear() + 1)))}
+                                                    {new Intl.DateTimeFormat('en-US', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(new Date(item?.paidDate).setFullYear(new Date(item?.paidDate).getFullYear() + 1)))}
                                                 </span>
                                             </div>
                                         </div>

@@ -40,16 +40,16 @@ const EditContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfoli
         defaultValues: {
             ...contactDetails,
             social: {
-                ...contactDetails.social,
-                otherSocialList: contactDetails.social.otherSocialList && (contactDetails.social.otherSocialList.length > 1) ? contactDetails.social.otherSocialList : [{ uniqueId: "", link: "", img: { publicId: "", url: "" } }]
+                ...contactDetails?.social,
+                otherSocialList: contactDetails?.social?.otherSocialList && (contactDetails?.social?.otherSocialList?.length > 1) ? contactDetails.social.otherSocialList : [{ uniqueId: "", link: "", img: { publicId: "", url: "" } }]
             },
             testimonial: {
-                ...contactDetails.testimonial,
-                testimonialList: contactDetails.testimonial.testimonialList && (contactDetails.testimonial.testimonialList.length > 1) ? contactDetails.testimonial.testimonialList : [{ uniqueId: "", star: 0, detail: "", name: "" }]
+                ...contactDetails?.testimonial,
+                testimonialList: contactDetails?.testimonial?.testimonialList && (contactDetails?.testimonial?.testimonialList?.length > 1) ? contactDetails.testimonial.testimonialList : [{ uniqueId: "", star: 0, detail: "", name: "" }]
             },
-            emailList: contactDetails.emailList && (contactDetails.emailList.length > 1) ? contactDetails.emailList : [{ email: "" }],
-            phoneList: contactDetails.phoneList && (contactDetails.phoneList.length > 1) ? contactDetails.phoneList : [{ phone: 0 }],
-            address: contactDetails.address && (contactDetails.address.length > 1) ? contactDetails.address : [{ title: "", detail: "" }]
+            emailList: contactDetails?.emailList && (contactDetails?.emailList?.length > 1) ? contactDetails?.emailList : [{ email: "" }],
+            phoneList: contactDetails?.phoneList && (contactDetails?.phoneList?.length > 1) ? contactDetails?.phoneList : [{ phone: 0 }],
+            address: contactDetails?.address && (contactDetails?.address?.length > 1) ? contactDetails?.address : [{ title: "", detail: "" }]
         }
     })
 

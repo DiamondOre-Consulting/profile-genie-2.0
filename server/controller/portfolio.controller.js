@@ -37,7 +37,7 @@ const createPortfolio = asyncHandler(async (req, res) => {
         isPaid: paidDate ? true : false,
         isActive,
         shortDescription,
-        paidDate: paidDate.split("T")[0],
+        paidDate: paidDate,
         isPaid: paidDate < oneYearBefore ? false : true,
         about,
         backgroundImage: {
@@ -119,7 +119,7 @@ const updatePortfolio = asyncHandler(async (req, res) => {
     portfolio.email = await email
     portfolio.about = await about
     portfolio.isActive = await isActive
-    portfolio.paidDate = await paidDate.split("T")[0]
+    portfolio.paidDate = await paidDate
     const today = new Date()
     const oneYearBefore = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate())
 

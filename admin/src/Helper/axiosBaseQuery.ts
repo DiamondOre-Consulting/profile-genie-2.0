@@ -11,7 +11,7 @@ const axiosBaseQuery = async <T extends { url: string; method: string; data: any
         if (response?.data?.message) {
             toast.success(response?.data?.message);
         }
-        return { data: response.data };
+        return { data: response?.data };
     } catch (error: any) {
         toast.error(error.response.data.message)
         return {

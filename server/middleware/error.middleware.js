@@ -12,11 +12,10 @@ const errorMiddleware = (err, req, res, next) => {
 
     const response = {
         ...error,
+        success: false,
         message: error.message,
         ...(process.env.NODE_ENV === "development" && { stack: error.stack })
     }
-
-    console.log(error)
 
     return res.status(error.statusCode).json(response)
 }

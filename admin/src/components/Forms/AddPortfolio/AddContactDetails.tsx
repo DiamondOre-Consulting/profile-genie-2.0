@@ -401,24 +401,29 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                                     <Label htmlFor={`services.${ind}.serviceName`} className="text-neutral-300 ">
                                         Phone Number <span className="text-[#ff3f69]">*</span>
                                     </Label>
+
                                     <Controller
                                         name={`phoneList.${ind}.phone`}
                                         control={control}
-                                        rules={{ required: "Phone number is required" }}
-                                        render={({ field }) => (
+                                        rules={{
+                                            required: "Phone number is required",
+                                            validate: (value) => (!isNaN(value) && value > 0) || "Invalid phone number"
+                                        }}
+                                        render={({ field: { onChange, value, ref } }) => (
                                             <PhoneInput
-                                                {...field}
                                                 country="in"
                                                 placeholder="Enter phone number"
-                                                containerStyle={{
-                                                    backgroundColor: "#171717",
-                                                    color: "#ffffff"
+                                                inputProps={{
+                                                    name: `phoneList.${ind}.phone`,
+                                                    required: true,
+                                                    ref: (elm: HTMLElement | null) => {
+                                                        if (ref) {
+                                                            ref(elm instanceof HTMLElement ? elm : null);
+                                                        }
+                                                    }
                                                 }}
-                                                buttonStyle={{
-                                                    backgroundColor: "#2D2D2D",
-                                                    color: "#000000",
-                                                    border: "none"
-                                                }}
+                                                containerStyle={{ backgroundColor: "#171717", color: "#ffffff" }}
+                                                buttonStyle={{ backgroundColor: "#2D2D2D", color: "#000000", border: "none" }}
                                                 inputStyle={{
                                                     width: "100%",
                                                     border: "1px solid #01010100",
@@ -430,8 +435,8 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                                                     backgroundColor: "#171717",
                                                     color: "#ffffff"
                                                 }}
-                                                value={field?.value?.toString() || ""}
-                                                onChange={(phone) => field.onChange(Number(phone))}
+                                                value={value ? value.toString() : ""}
+                                                onChange={(phone) => onChange(phone ? Number(phone) : 0)}
                                             />
                                         )}
                                     />

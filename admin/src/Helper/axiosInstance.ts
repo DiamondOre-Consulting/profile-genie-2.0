@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { toast } from 'sonner'
 
 const BASE_URL = "http://localhost:8000/api/v1"
 
@@ -31,16 +32,9 @@ axiosInstance.interceptors.response.use(
                 console.error("Error refreshing token:", refreshError);
                 return Promise.reject(refreshError);
             }
+        } else {
+            toast.error(error.response.data.message)
         }
-
-        // // Queue failed requests while refreshing
-        // return new Promise((resolve) => {
-        //     refreshSubscribers.push((newAccessToken) => {
-        //         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-        //         resolve(axios(originalRequest));
-        //     });
-        // });
-
     }
 );
 
