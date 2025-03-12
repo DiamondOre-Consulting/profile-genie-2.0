@@ -64,7 +64,7 @@ const AllPortfolio = () => {
                 All portfolio
             </div>
 
-            <div className="px-6 my-2 flex items-center justify-center gap-1">
+            <div className=" my-2 flex items-center justify-center gap-1">
                 <Search setDebouncedSearchValue={setDebouncedSearchValue} />
                 <Filter setFilterValue={setFilterValue} />
             </div>
@@ -180,7 +180,7 @@ const AllPortfolio = () => {
                         </div>
                     </div> :
                     data?.data.map((item: any) => (
-                        <AnimatePresence>
+                        <AnimatePresence key={item?._id}>
                             <motion.div
                                 layout
                                 initial={{ opacity: 0, scale: 0.95, y: 50 }}
@@ -232,11 +232,7 @@ const AllPortfolio = () => {
                                                     <p className="text-white text-sm">{item?.tagline}</p>
                                                 </div>
 
-                                                <div className="h-1 w-32 overflow-hidden rounded-full bg-gray-800">
-                                                    <div
-                                                        className="h-full w-2/3 rounded-full bg-gradient-to-r from-green-700 to-green-400 transition-all duration-300 group-hover:w-full"
-                                                    ></div>
-                                                </div>
+
                                             </div>
                                         </div>
 

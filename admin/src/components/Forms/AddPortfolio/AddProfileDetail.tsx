@@ -117,7 +117,7 @@ const AddProfileDetail = ({ setCurrentStep, template, currentStep, stepsLength, 
                                 mode="single"
                                 onSelect={(date) => {
                                     if (date) {
-                                        setValue("paidDate", date);
+                                        setValue("paidDate", date.toDateString());
                                     }
                                     setOpen(false)
                                 }}

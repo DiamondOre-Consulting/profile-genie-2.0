@@ -84,6 +84,7 @@ const EditProfileDetail = ({ setCurrentStep, currentStep, stepsLength, portfolio
         }
     }
 
+    console.log(typeof new Date(watch("paidDate")))
 
     const [open, setOpen] = useState(false);
 
@@ -124,7 +125,7 @@ const EditProfileDetail = ({ setCurrentStep, currentStep, stepsLength, portfolio
                                 onClick={() => setOpen(!open)}
                             >
                                 <CalendarIcon className="mr-2 h-4 w-4" />
-                                {watch("paidDate") ? format(watch("paidDate"), "PPP") : "Pick a date"}
+                                {watch("paidDate") ? format(new Date(watch("paidDate")), "PPP") : "Pick a date"}
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent align='start' className="w-auto p-0">
@@ -132,7 +133,7 @@ const EditProfileDetail = ({ setCurrentStep, currentStep, stepsLength, portfolio
                                 mode="single"
                                 onSelect={(date) => {
                                     if (date) {
-                                        setValue("paidDate", date);
+                                        setValue("paidDate", date.toDateString());
                                     }
                                     setOpen(false)
                                 }}

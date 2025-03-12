@@ -8,7 +8,6 @@ import {
   StepperItem,
   StepperSeparator,
   StepperTitle,
-  StepperTrigger,
 } from "@/components/ui/stepper";
 import { HomeLayout } from "@/Layout/HomeLayout";
 
@@ -49,12 +48,12 @@ export default function AddPortfolio() {
         <Stepper onValueChange={setCurrentStep} value={currentStep} >
           {steps.map(({ step, title }) => (
             <StepperItem key={step} step={step} className="relative flex-1 !flex-col">
-              <StepperTrigger className="flex-col gap-1 text-white">
+              <div className="flex-col gap-1 text-white inline-flex items-center  disabled:pointer-events-none disabled:opacity-50">
                 <StepperIndicator />
-                <div className=" px-2">
+                <div className="px-2">
                   <StepperTitle>{title}</StepperTitle>
                 </div>
-              </StepperTrigger>
+              </div>
               {step < steps.length && (
                 <StepperSeparator className="absolute inset-x-0 left-[calc(50%+0.75rem+0.125rem)] top-3 -order-1 m-0 -translate-y-1/2 group-data-[orientation=horizontal]/stepper:w-[calc(100%-1.5rem-0.25rem)] group-data-[orientation=horizontal]/stepper:flex-none" />
               )}
@@ -64,13 +63,13 @@ export default function AddPortfolio() {
 
         </Stepper>
         {currentStep === 1 &&
-          <AddProfileDetail template={template} setId={setPortfolioId} setCurrentStep={setCurrentStep} stepsLength={steps.length} currentStep={currentStep} />}
+          <AddProfileDetail template={template ?? ""} setId={setPortfolioId} setCurrentStep={setCurrentStep} stepsLength={steps?.length} currentStep={currentStep} />}
         {currentStep === 2 &&
-          <AddOthersDetail portfolioId={portfolioId} setCurrentStep={setCurrentStep} stepsLength={steps.length} currentStep={currentStep} />}
+          <AddOthersDetail portfolioId={portfolioId} setCurrentStep={setCurrentStep} stepsLength={steps?.length} currentStep={currentStep} />}
         {currentStep === 3 &&
-          <AddContactDetails portfolioId={portfolioId} setCurrentStep={setCurrentStep} stepsLength={steps.length} currentStep={currentStep} />}
+          <AddContactDetails portfolioId={portfolioId} setCurrentStep={setCurrentStep} stepsLength={steps?.length} currentStep={currentStep} />}
         {currentStep === 4 &&
-          <AddMetaDetails portfolioId={portfolioId} setCurrentStep={setCurrentStep} stepsLength={steps.length} currentStep={currentStep} />}
+          <AddMetaDetails portfolioId={portfolioId} setCurrentStep={setCurrentStep} stepsLength={steps?.length} currentStep={currentStep} />}
 
         <p className="bg-[#E11D48] w-full bottom-0 p-1 pr-4 left-0 absolute text-xs text-end text-white" role="region" aria-live="polite">
           <span className="">

@@ -76,6 +76,7 @@ export default function TextEditor({
                 value={value}
                 className="px-1"
                 tabIndex={1}
+                //@ts-ignore
                 config={config}
                 onBlur={(newContent) => handleBlur(newContent)} // ✅ Updates react-hook-form on blur
             />

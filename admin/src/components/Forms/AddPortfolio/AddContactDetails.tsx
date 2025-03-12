@@ -603,8 +603,7 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
             <div className="flex mt-6 justify-between space-x-4">
                 <button
                     className={`bg-[#1c1c1c] border border-[#565656]   text-white flex items-center gap-3 py-1.5 text-sm px-4 rounded ${currentStep === 1 ? "blur-[1px] cursor-not-allowed" : "cursor-pointer"}`}
-                    onClick={() => setCurrentStep((prev) => prev - 1)}
-                    disabled={currentStep === 1}
+                    disabled={true}
                 >
 
                     <IconSquareRoundedArrowLeftFilled />

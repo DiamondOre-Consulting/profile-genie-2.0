@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { toast } from 'sonner'
@@ -18,13 +18,12 @@ const Login = () => {
         resolver: zodResolver(loginValidationSchema)
     })
 
-    const handleLogin = async (data: string) => {
+    const handleLogin = async (data: loginValidation) => {
         try {
             const formData = new FormData()
-            const loginData = JSON.parse(data)
-            formData.append('email', loginData.email)
-            formData.append('password', loginData.password)
-            console.log(loginData)
+            formData.append('email', data.email)
+            formData.append('password', data.password)
+            console.log(data)
             const res = await dispatch(login(formData) as any)
             if (res?.payload?.success) {
 
@@ -33,7 +32,6 @@ const Login = () => {
         } catch (err) {
             console.log(err)
         }
-
     }
 
     const handleGoogleLogin = async () => {

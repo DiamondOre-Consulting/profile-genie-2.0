@@ -6,6 +6,8 @@ import { asyncHandler } from "../utils/asyncHandler.js"
 import AppError from "../utils/error.utils.js"
 import { multipleFileUpload } from "../utils/fileUpload.utils.js"
 import cloudinary from "cloudinary"
+import sendMail from "../utils/mail.utils.js"
+import { getActiveMail, getConfirmPaidMail, getInactiveMail } from "../utils/cronMessages.js"
 
 const createPortfolio = asyncHandler(async (req, res) => {
     console.log(2)
@@ -233,6 +235,15 @@ const updateStatusActive = asyncHandler(async (req, res) => {
 
     await portfolio.save()
 
+    const { subject, message } = getInactiveMail(portfolio?.fullName, portfolio?.userName)
+    const { subject: activeSubject, message: activeMessage } = getActiveMail(portfolio?.fullName, portfolio?.userName)
+
+    if (portfolio.isActive) {
+        await sendMail(portfolio?.email, activeSubject, activeMessage)
+    } else {
+        await sendMail(portfolio?.email, subject, message)
+    }
+
     res.status(200).json({
         success: true,
         data: portfolio,
@@ -249,16 +260,20 @@ const updateStatusPaid = asyncHandler(async (req, res) => {
         throw new AppError("Portfolio not found!", 404)
     }
 
-    portfolio.isPaid = !portfolio.isPaid
+    portfolio.isPaid = true
     portfolio.isActive = portfolio.isPaid ? true : false
     portfolio.paidDate = portfolio.isPaid ? new Date().toISOString().split("T")[0] + "T00:00:00.000Z" : portfolio.paidDate
 
     await portfolio.save()
 
+    const { confirmMailSubject, confirmMailMessage } = getConfirmPaidMail(portfolio.fullName, portfolio?.userName)
+
+    await sendMail(portfolio?.email, confirmMailSubject, confirmMailMessage)
+
     res.status(200).json({
         success: true,
         data: portfolio,
-        message: "Portfolio status updated successfully"
+        message: "Portfolio marked as paid"
     })
 })
 
