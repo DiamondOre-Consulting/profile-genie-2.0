@@ -36,7 +36,9 @@ export function HomeLayout({ children }: { children: ReactNode }) {
     };
 
     const handleLogout = async () => {
-        const res = await dispatch(logout()) as { payload: { success: boolean } }
+
+        const res = await dispatch(logout() as any)
+
 
         if (res?.payload?.success) navigate('/login')
     }

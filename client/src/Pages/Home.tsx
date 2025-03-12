@@ -1,3 +1,4 @@
+import { FeaturesSectionDemo } from '@/components/Features'
 import Hero from '@/components/Hero'
 import Preview from '@/components/Preview'
 import HomeLayout from '@/Layout/HomeLayout'
@@ -8,6 +9,7 @@ const Home = () => {
         <HomeLayout>
             <Hero />
             <Preview />
+            <FeaturesSectionDemo />
         </HomeLayout>
     )
 }

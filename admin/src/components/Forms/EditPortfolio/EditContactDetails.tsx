@@ -207,7 +207,7 @@ const EditContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfoli
                                                     key={value}
                                                     className="group outline-ring/30 dark:outline-ring/40 relative cursor-pointer rounded-lg p-0.5 has-focus-visible:outline-2"
                                                 >
-                                                    <RadioGroupItem id={`${id}-${value}`} value={value} onClick={() => setValue(`testimonial.testimonialList.${ind}.star`, value)} className="sr-only" />
+                                                    <RadioGroupItem id={`${id}-${value}`} value={value.toString()} onClick={() => setValue(`testimonial.testimonialList.${ind}.star`, value)} className="sr-only" />
                                                     <RiStarFill
                                                         size={24}
                                                         className={`transition-all ${(getValues(`testimonial.testimonialList.${ind}.star`) || getValues(`testimonial.testimonialList.${ind}.star`)) >= value ? "text-amber-500" : "text-input"

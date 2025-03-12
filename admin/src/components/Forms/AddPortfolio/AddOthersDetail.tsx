@@ -16,7 +16,6 @@ import { IconCamera, IconPlus, IconSquareRoundedArrowLeftFilled, IconSquareRound
 import { v4 as uuidv4 } from 'uuid'
 import { Textarea } from '@/components/ui/textarea'
 import { useAddOtherDetailsMutation } from '@/Redux/API/PortfolioApi'
-import { watch } from 'fs'
 
 
 type othersProfileDetail = z.infer<typeof addOthersDetailSchema>

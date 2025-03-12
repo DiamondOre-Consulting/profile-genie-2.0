@@ -1,4 +1,3 @@
-import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -24,7 +23,7 @@ function StatusDot({ className }: { className?: string }) {
   );
 }
 
-export default function Filter({ setFilterValue, filterValue }: { setFilterValue: (value: string) => void, filterValue: string }) {
+export default function Filter({ setFilterValue }: { setFilterValue: (value: string) => void }) {
   const id = useId();
   return (
     <div className="*:not-first:mt-2">

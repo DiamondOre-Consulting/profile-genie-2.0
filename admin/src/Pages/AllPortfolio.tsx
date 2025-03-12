@@ -1,6 +1,6 @@
 import { HomeLayout } from "@/Layout/HomeLayout"
 import { useGetAllPortfolioQuery, useRecyclePortfolioMutation, useUpdateActiveStatusMutation, useUpdatePaidStatusMutation } from "@/Redux/API/PortfolioApi"
-import { IconArrowsExchange, IconBrandWhatsapp, IconClock, IconEdit, IconEye, IconLink, IconMail, IconPhone, IconTrash, IconX } from "@tabler/icons-react"
+import { IconArrowsExchange, IconBrandWhatsapp, IconClock, IconEdit, IconEye, IconFidgetSpinner, IconLink, IconMail, IconPhone, IconTrash, IconWhirl, IconX } from "@tabler/icons-react"
 import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -25,18 +25,19 @@ const AllPortfolio = () => {
     const navigate = useNavigate()
     const [debouncedSearchValue, setDebouncedSearchValue] = useState('')
     const [filterValue, setFilterValue] = useState('')
-    const { data, refetch } = useGetAllPortfolioQuery({ search: debouncedSearchValue, filter: filterValue })
-    console.log(filterValue)
-    console.log(debouncedSearchValue)
+    const { data, isLoading, refetch } = useGetAllPortfolioQuery({ search: debouncedSearchValue, filter: filterValue })
     const [deleteModalActive, setDeleteModalActive] = useState(false)
     const [recycleId, setRecycleId] = useState('')
     const [updateActiveStatus, { isLoading: activeLoading }] = useUpdateActiveStatusMutation()
     const [updatePaidStatus, { isLoading: paidLoading }] = useUpdatePaidStatusMutation()
-    const [recyclePortfolio, { isLoading }] = useRecyclePortfolioMutation()
+    const [recyclePortfolio, { isLoading: recycleLoading }] = useRecyclePortfolioMutation()
 
     const handleRecycle = async (id: string) => {
         const res = await recyclePortfolio({ id }).unwrap()
-        console.log(res)
+        if (res?.success) {
+            setDeleteModalActive(false)
+            setRecycleId('')
+        }
     }
 
     const getPortfolio = async () => {
@@ -55,6 +56,8 @@ const AllPortfolio = () => {
         }
     }
 
+
+
     return (
         <HomeLayout>
             <div>
@@ -63,7 +66,7 @@ const AllPortfolio = () => {
 
             <div className="px-6 my-2 flex items-center justify-center gap-1">
                 <Search setDebouncedSearchValue={setDebouncedSearchValue} />
-                <Filter setFilterValue={setFilterValue} filterValue={filterValue} />
+                <Filter setFilterValue={setFilterValue} />
             </div>
 
             <AnimatePresence>
@@ -100,17 +103,21 @@ const AllPortfolio = () => {
                             </ul>
                             <div className="mt-6 flex justify-end gap-4">
                                 <button
+                                    disabled={recycleLoading}
                                     onClick={() => setDeleteModalActive(false)}
                                     className="text-gray-300 hover:text-white px-4 py-1.5 rounded bg-neutral-900 transition"
                                 >
                                     Cancel
                                 </button>
                                 <button
+                                    disabled={recycleLoading}
                                     onClick={() => handleRecycle(recycleId)}
-                                    className="bg-[#dc0030] flex items-center gap-2 cursor-pointer hover:bg-[#dc0030e1] text-white px-3 py-1.5 rounded transition"
+                                    className="bg-[#dc0030] flex items-center gap-2 cursor-pointer hover:bg-[#dc0030e1] text-white w-[6.3rem] px-3 py-1.5 rounded transition"
                                 >
-                                    <IconTrash />
-                                    Delete
+                                    {recycleLoading ? <IconWhirl className="animate-spin" /> : <>
+                                        <IconTrash />
+                                        <span>Delete</span>
+                                    </>}
                                 </button>
                             </div>
                         </motion.div>
@@ -119,7 +126,59 @@ const AllPortfolio = () => {
             </AnimatePresence>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mx-auto">
-                {
+                {isLoading ?
+                    <div className="group relative max-w-[40rem] mx-auto w-full animate-pulse">
+                        <div className="absolute rounded-xl bg-gradient-to-r from-[#E11D48] via-[#E11D48] to-orange-500 opacity-10 blur-sm"></div>
+                        <div className="relative rounded-xl w-full border border-white/20 bg-gradient-to-b from-gray-900 via-gray-950 to-black p-3 shadow-md">
+                            <div className="relative flex items-center justify-between gap-6">
+                                <div className="flex items-center gap-4">
+                                    <div className="relative flex h-12 w-12 items-center justify-center">
+                                        <div className="absolute inset-0 rounded-full border border-rose-500/20 border-t-rose-500"></div>
+                                        <div className="h-12 w-12 rounded-full bg-gray-700"></div>
+                                    </div>
+
+                                    <div className="flex flex-col gap-1">
+                                        <div className="h-4 w-32 bg-gray-700 rounded"></div>
+                                        <div className="h-3 w-20 bg-gray-700 rounded"></div>
+                                    </div>
+                                </div>
+
+                                <div className="flex gap-2">
+                                    <div className="h-2 w-2 rounded-full bg-gray-700"></div>
+                                    <div className="h-2 w-2 rounded-full bg-gray-700"></div>
+                                    <div className="h-2 w-2 rounded-full bg-gray-700"></div>
+                                </div>
+                            </div>
+
+                            {/* Contact Details */}
+                            <div className="flex flex-col gap-2 ml-1 mt-4">
+                                <div className="flex sm:flex-row flex-col md:flex-col gap-2 justify-between">
+                                    <div className="flex gap-2">
+                                        <div className="h-8 w-8 bg-gray-700 rounded"></div>
+                                        <div className="h-4 w-28 bg-gray-700 rounded"></div>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <div className="h-8 w-8 bg-gray-700 rounded"></div>
+                                        <div className="h-4 w-28 bg-gray-700 rounded"></div>
+                                    </div>
+                                </div>
+
+                                {/* Date Range */}
+                                <div className="flex items-center justify-between w-full gap-1">
+                                    <div className="h-4 w-20 bg-gray-700 rounded"></div>
+                                    <div className="h-4 w-6 bg-gray-700 rounded"></div>
+                                    <div className="h-4 w-20 bg-gray-700 rounded"></div>
+                                </div>
+                            </div>
+
+                            {/* Action Buttons */}
+                            <div className="flex items-center justify-evenly gap-4 mt-4">
+                                {Array(5).fill(0).map((_, i) => (
+                                    <div key={i} className="relative flex size-10 items-center justify-center bg-gray-700 rounded-full"></div>
+                                ))}
+                            </div>
+                        </div>
+                    </div> :
                     data?.data.map((item: any) => (
                         <AnimatePresence>
                             <motion.div
@@ -197,7 +256,7 @@ const AllPortfolio = () => {
                                                 <DropdownMenu>
                                                     <DropdownMenuTrigger asChild>
                                                         <Button size="icon" className="bg-[#010205] " aria-label="Open account menu">
-                                                            <CircleUserRoundIcon size={16} aria-hidden="true" />
+                                                            {(activeLoading || paidLoading) ? <IconFidgetSpinner className="animate-spin" /> : <CircleUserRoundIcon size={16} aria-hidden="true" />}
                                                         </Button>
                                                     </DropdownMenuTrigger>
                                                     <DropdownMenuContent className="max-w-38">
@@ -216,11 +275,11 @@ const AllPortfolio = () => {
                                                                 <BoltIcon size={16} className="opacity-60" aria-hidden="true" />
                                                                 <span>Mark as {item?.isActive ? "Inactive" : "Active"}</span>
                                                             </DropdownMenuItem>
-                                                            <DropdownMenuItem onClick={() => handleUpdateStatus(item?._id, "isPaid")} className="hover:bg-neutral-950 cursor-pointer">
+                                                            {!item.isPaid && <DropdownMenuItem onClick={() => handleUpdateStatus(item?._id, "isPaid")} className="hover:bg-neutral-950 cursor-pointer">
 
                                                                 <Layers2Icon size={16} className="opacity-60" aria-hidden="true" />
-                                                                <span>Mark as {item?.isPaid ? "Unpaid" : "Paid"}</span>
-                                                            </DropdownMenuItem>
+                                                                <span>Mark as Paid</span>
+                                                            </DropdownMenuItem>}
 
                                                         </DropdownMenuGroup>
                                                     </DropdownMenuContent>

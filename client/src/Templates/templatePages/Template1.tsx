@@ -105,7 +105,7 @@ const Template1 = () => {
             }} className="   h-screen w-screen fixed top-0 left-0">
             </div>
             {(!profileData) ? <div className='h-screen w-screen flex items-center justify-center relative z-100'><video src={loading} playsInline autoPlay loop muted></video></div> :
-                (!profileData?.isActive || !profileData?.isPaid) ? <div className="flex flex-col relative z-100 items-center justify-center min-h-screen bg-transparent text-white px-6">
+                (!profileData.isActive || !profileData.isPaid) ? <div className="flex flex-col relative z-100 items-center justify-center min-h-screen bg-transparent text-white px-6">
                     <div className="text-center max-w-[32rem] w-[96vw]">
                         <IconAlertTriangle className="size-16 text-red-600 mx-auto mb-4" />
                         <h1 className="text-4xl font-bold text-red-500">Profile Not Active</h1>

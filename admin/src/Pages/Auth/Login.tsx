@@ -9,7 +9,6 @@ import { IconBrandGoogle } from '@tabler/icons-react'
 import { login } from '@/Redux/Slice/AuthSlice'
 import { AtSignIcon, EyeIcon, EyeOffIcon, Lock } from 'lucide-react'
 import { Input } from '@/components/ui/input'
-import { axiosInstance } from '@/Helper/axiosInstance'
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false)
