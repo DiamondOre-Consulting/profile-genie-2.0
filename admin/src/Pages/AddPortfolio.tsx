@@ -69,7 +69,7 @@ export default function AddPortfolio() {
         {currentStep === 3 &&
           <AddContactDetails portfolioId={portfolioId} setCurrentStep={setCurrentStep} stepsLength={steps?.length} currentStep={currentStep} />}
         {currentStep === 4 &&
-          <AddMetaDetails portfolioId={portfolioId} setCurrentStep={setCurrentStep} stepsLength={steps?.length} currentStep={currentStep} />}
+          <AddMetaDetails portfolioId={portfolioId} stepsLength={steps?.length} currentStep={currentStep} />}
 
         <p className="bg-[#E11D48] w-full bottom-0 p-1 pr-4 left-0 absolute text-xs text-end text-white" role="region" aria-live="polite">
           <span className="">
