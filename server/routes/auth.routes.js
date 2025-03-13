@@ -30,7 +30,7 @@ router.get('/google',
 
 router.get('/google/callback',
     passport.authenticate('google',
-        { failureRedirect: 'http://localhost:5174/login?error=Email is not registered!' }), handleSocialLogin,
+        { failureRedirect: 'https://test.webakash1806.com/login?error=Email is not registered!' }), handleSocialLogin,
 )
 
 
