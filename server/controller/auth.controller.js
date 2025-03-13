@@ -7,13 +7,13 @@ import jwt from 'jsonwebtoken'
 const accessTokenOptions = {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "Lax"
+    sameSite: "None"
 };
 
 const refreshTokenOptions = {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "Lax"
+    sameSite: "None"
 };
 
 const generateAuthTokens = async (userId) => {
@@ -130,7 +130,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
         console.log(Date.now() + 1 * 60 * 1000)
         const { resetPasswordExpiry } = user
         const expiryTime = encodeURIComponent(resetPasswordExpiry)
-        const link = `http://localhost:5174/reset-password/${resetToken}/${email}/${expiryTime}`
+        const link = `https://test.webakash1806.com/reset-password/${resetToken}/${email}/${expiryTime}`
 
         await sendMail(email, "Reset Password", link)
     }

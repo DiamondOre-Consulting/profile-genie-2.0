@@ -13,11 +13,7 @@ export function FeaturesSectionDemo() {
             description: "Instantly saves contact card with image and social media links on one scan.",
             icon: <IconShare />,
         },
-        {
-            title: "Customization",
-            description: "Dynamic updates, multimedia, and links.",
-            icon: <IconAdjustments />,
-        },
+
         {
             title: "Eco-Friendliness",
             description: "100% digital, sustainable & eco-friendly.",
@@ -48,18 +44,20 @@ export function FeaturesSectionDemo() {
             description: "Clickable links, videos, social profiles & portfolio.",
             icon: <IconClick />,
         },
-        {
-            title: "Analytics & Insights",
-            description: "Tracks visits, clicks, and engagements.",
-            icon: <IconChartBar />,
-        },
+
     ];
 
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  relative z-10 py-10 max-w-7xl mx-auto">
-            {features.map((feature, index) => (
-                <Feature key={feature.title} {...feature} index={index} />
-            ))}
+        <div className="flex items-center justify-center flex-col py-20">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6  tracking-tight bg-clip-text inline-block leading-tight text-transparent bg-gradient-to-b from-white to-white/70">
+                Why Choose Us?
+            </h1>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  relative z-10  max-w-7xl mx-auto">
+
+                {features.map((feature, index) => (
+                    <Feature key={feature.title} {...feature} index={index} />
+                ))}
+            </div>
         </div>
     );
 }
@@ -78,15 +76,14 @@ const Feature = ({
     return (
         <div
             className={cn(
-                "flex flex-col lg:border-r  py-10 relative group/feature border-neutral-800",
-                (index === 0 || index === 4) && "lg:border-l border-neutral-800",
-                index < 4 && "lg:border-b border-neutral-800"
+                "flex flex-col border py-10 bg-[#010102] relative group/feature border-neutral-800",
+
             )}
         >
-            {index < 4 && (
+            {index < 2 && (
                 <div className="opacity-0 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-t from-[#6738e7]/80 via-[#4826A7]/20  to-transparent pointer-events-none" />
             )}
-            {index >= 4 && (
+            {index >= 2 && (
                 <div className="opacity-0 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-b from-[#6738e7]/80 via-[#4826A7]/20  to-transparent pointer-events-none" />
             )}
             <div className="mb-4 relative z-10 px-10 text-neutral-400">
