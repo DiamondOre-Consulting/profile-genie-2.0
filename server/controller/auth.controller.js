@@ -5,12 +5,14 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import jwt from 'jsonwebtoken'
 
 const accessTokenOptions = {
-    httpsOnly: true,
+    httpOnly: true,
+    path: "/",
     secure: process.env.NODE_ENV === "production" ? true : false,
     sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax"
 };
 const refreshTokenOptions = {
-    httpsOnly: true,
+    httpOnly: true,
+    path: "/",
     secure: process.env.NODE_ENV === "production" ? true : false,
     sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax"
 };
