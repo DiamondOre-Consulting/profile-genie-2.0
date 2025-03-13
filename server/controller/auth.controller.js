@@ -7,15 +7,15 @@ import jwt from 'jsonwebtoken'
 const accessTokenOptions = {
     httpOnly: true,
     path: "/",
-    secure: false,
-    sameSite: "Lax"
+    secure: process.env.NODE_ENV === "production" ? true : false,
+    sameSite: "None"
 };
 
 const refreshTokenOptions = {
     httpOnly: true,
     path: "/",
     secure: process.env.NODE_ENV === "production" ? true : false,
-    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax"
+    sameSite: None
 };
 
 const generateAuthTokens = async (userId) => {
