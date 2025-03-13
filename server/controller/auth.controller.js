@@ -6,16 +6,16 @@ import jwt from 'jsonwebtoken'
 
 const accessTokenOptions = {
     httpOnly: true,
-    path: "/",
-    secure: process.env.NODE_ENV === "production" ? true : false,
-    sameSite: "None"
+    secure: true,
+    sameSite: "None",
+    domain: "test.webakash1806.com"
 };
 
 const refreshTokenOptions = {
     httpOnly: true,
-    path: "/",
-    secure: process.env.NODE_ENV === "production" ? true : false,
-    sameSite: None
+    secure: true,
+    sameSite: "None",
+    domain: "test.webakash1806.com"
 };
 
 const generateAuthTokens = async (userId) => {
