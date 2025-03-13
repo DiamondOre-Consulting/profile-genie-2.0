@@ -8,14 +8,14 @@ const accessTokenOptions = {
     httpOnly: true,
     secure: true,
     sameSite: "None",
-    domain: "test.webakash1806.com"
+    // domain: "test.webakash1806.com"
 };
 
 const refreshTokenOptions = {
     httpOnly: true,
     secure: true,
     sameSite: "None",
-    domain: "test.webakash1806.com"
+    // domain: "test.webakash1806.com"
 };
 
 const generateAuthTokens = async (userId) => {
