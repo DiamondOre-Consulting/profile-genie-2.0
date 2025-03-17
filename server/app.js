@@ -5,6 +5,7 @@ import cors from 'cors'
 import morgan from "morgan";
 import errorMiddleware from "./middleware/error.middleware.js";
 import portfolioRouter from "./routes/portfolio.routes.js";
+import catalogueRouter from "./routes/catalgoue.routes.js";
 import authRouter from "./routes/auth.routes.js";
 import session from "express-session";
 import { portfolioCrone } from "./croneJobs/portfolioCrone.js";
@@ -46,6 +47,7 @@ app.use('/ping', function (req, res) {
 
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/portfolio', portfolioRouter)
+app.use('/api/v1/catalogue', catalogueRouter)
 
 app.all('*', (req, res) => {
     res.status(404).send('OOPS! 404 Page not found')

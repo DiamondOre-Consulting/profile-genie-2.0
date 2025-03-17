@@ -53,7 +53,7 @@ const userSchema = new Schema({
     },
     role: {
         type: String,
-        enum: ['USER', 'SUBADMIN', 'SUPERADMIN'],
+        enum: ['USER', 'CATALOGUE OWNER', 'SUPERADMIN'],
         default: 'USER'
     }
 }, {
