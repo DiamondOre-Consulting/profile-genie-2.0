@@ -54,23 +54,27 @@ export const Product = ({
     springConfig
   );
 
-  console.log(products?.productList)
+  console.log(products)
 
   return (
     <div ref={ref} style={{ perspective: 1000 }} className="h-full overflow-hidden  relative flex flex-col">
-      <Header />
+      <Header tagline={products?.tagline} />
       <motion.div style={{ marginTop, rotateX, rotateZ, translateY, opacity }} >
         <motion.div>
           <Marquee pauseOnHover loop={0} direction="right" speed={30} >
-            {products?.productList?.slice(0, 5).map((product) => (
-              <ProductCard product={product} key={product.uniqueId} />
+            {Array.from({ length: 5 }).map(() => (
+              products?.productList?.slice(0, 5).map((product) => (
+                <ProductCard product={product} key={product.uniqueId} />
+              ))
             ))}
           </Marquee>
         </motion.div>
         <motion.div>
           <Marquee pauseOnHover loop={0} direction="left" speed={30} className="">
-            {products?.productList?.slice(5, 10).map((product) => (
-              <ProductCard product={product} key={product.title} />
+            {Array.from({ length: 5 }).map(() => (
+              products?.productList?.slice(5, 10).map((product) => (
+                <ProductCard product={product} key={product.title} />
+              ))
             ))}
           </Marquee>
         </motion.div>
@@ -79,15 +83,13 @@ export const Product = ({
   );
 };
 
-export const Header = () => {
+export const Header = ({ tagline }: { tagline: string }) => {
   return (
     <div className="max-w-7xl relative z-10 mx-auto py-20 md:py-40 px-4">
-      <h1 className="text-2xl md:text-7xl font-bold">
-        Products
+      <h1 className="text-2xl sm:text-5xl md:text-7xl font-bold">
+        {tagline}
       </h1>
-      <p className="max-w-2xl text-base md:text-xl mt-8">
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nemo, harum repudiandae! Asperiores, incidunt veritatis reiciendis sint perspiciatis mollitia consequatur dolor velit cupiditate!
-      </p>
+
     </div>
   );
 };

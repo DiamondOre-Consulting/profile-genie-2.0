@@ -1,11 +1,11 @@
-import { Mail, MapPin, Phone } from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Contact = () => {
     return (
         <section className="pt-20">
             <div className="container text-white max-w-[82rem] mx-auto px-4">
-                <div className="mb-14">
+                <div className="mb-10 flex flex-col items-center">
                     <span className="text-sm font-semibold">Reach Us</span>
                     <h1 className="mb-3 mt-1 text-balance text-3xl font-semibold md:text-4xl">
                         Speak with Our Friendly Team

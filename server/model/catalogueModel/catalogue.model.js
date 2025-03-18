@@ -15,6 +15,21 @@ const catalogueSchema = new Schema({
         type: String,
         required: true
     },
+    backgroundColor: {
+        type: String
+    },
+    textColor: {
+        type: String
+    },
+    paidDate: {
+        type: Date
+    },
+    isPaid: {
+        type: Boolean
+    },
+    isActive: {
+        type: Boolean
+    },
     tagline: {
         type: String,
         required: true

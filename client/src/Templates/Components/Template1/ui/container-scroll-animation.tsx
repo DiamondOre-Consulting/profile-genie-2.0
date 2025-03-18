@@ -9,10 +9,10 @@ export const ContainerScroll = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start end", "end start"],
+    offset: ["start end", "center center"],
   });
 
-  const rotate = useTransform(scrollYProgress, [0, 0.8], [40, -35]);
+  const rotate = useTransform(scrollYProgress, [0, 1], [30, 0]);
   const smoothRotate = useSpring(rotate, {
     stiffness: 50,
     damping: 20,

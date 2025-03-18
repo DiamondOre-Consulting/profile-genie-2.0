@@ -1,13 +1,15 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import User from "../model/auth.model.js";
 import CatalogueOwner from "../model/catalogueModel/catalogueOwner.model.js";
+import AppError from "../utils/error.utils.js";
 
 const createCatalogueOwner = asyncHandler(async (req, res) => {
+
     const { fullName, email, password, mapLink, emailList, phoneList, address, whatsappNo, role } = req.body
 
-    if (req?.user?.role !== "admin") {
-        throw new AppError("You are not authorized!", 400)
-    }
+    // if (req?.user?.role !== "SUPERADMIN") {
+    //     throw new AppError("You are not authorized!", 400)
+    // }
 
     const uniqueUser = await User.findOne({ email })
     if (uniqueUser) {
@@ -40,6 +42,10 @@ const createCatalogueOwner = asyncHandler(async (req, res) => {
         CatalogueOwner: createCatalogueOwner,
         message: "Catalogue owner created successfully!"
     })
+
+})
+
+const createCatalogue = asyncHandler(async (req, res) => {
 
 })
 

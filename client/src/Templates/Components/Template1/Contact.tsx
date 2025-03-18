@@ -60,7 +60,7 @@ const Contact = ({ contact, bulkLinks, fullName }: { contact: portfolioResponse[
                             target="_blank"
                             to={link?.link || ""}
                             className={cn(
-                                "relative  inline-block px-4 py-2 rounded-md overflow-hidden",
+                                "relative   px-4 py-2 rounded-md overflow-hidden",
                                 "shadow-md shadow-[#FF2056]/50 ",
                                 "transition-all hover:-translate-y-0.5 cursor-pointer duration-200 bg-[#101828]",
                                 "group",
@@ -85,7 +85,7 @@ const Contact = ({ contact, bulkLinks, fullName }: { contact: portfolioResponse[
                             <iframe
                                 title="Google Maps"
                                 className="w-full h-full rounded-lg rounded-r-none "
-                                src={contact?.mapLink.match(/src="([^"]+)"/)?.[1]}
+                                src={contact?.mapLink}
                                 loading="lazy"
                             >
                             </iframe>
@@ -94,7 +94,7 @@ const Contact = ({ contact, bulkLinks, fullName }: { contact: portfolioResponse[
 
                     <div className="flex flex-col w-full md:min-w-[22rem] md:max-w-[23rem] text-white bg-[#141d2fcb] items-center">
                         <h3 className="py-2 uppercase font-semibold tracking-wide">Share Portfolio</h3>
-                        <div className=" p-4 rounded-t-xl">
+                        <div className=" p-4 rounded-t-xl w-full">
                             <div className="mt-1 flex flex-col w-full text-black  bg-[#00b718] shadow-md p-[2px] rounded-sm md:flex-row items-center relative gap-4  mx-auto">
                                 <div className="bg-[#00b718] shadow-md h-9 w-12 cursor-pointer rounded-sm flex right-0.5 items-center justify-center gap-4 z-10 absolute border-green-500">
                                     <IconBrandWhatsapp className="text-white   " size={24} />
