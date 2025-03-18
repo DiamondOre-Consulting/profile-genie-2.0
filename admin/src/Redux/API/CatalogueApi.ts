@@ -25,9 +25,16 @@ export const catalogueApi = createApi({
                 data: formData,
             }),
             invalidatesTags: (result) => result ? [{ type: "CATALOGUE" as const }] : [],
+        }),
+        getAllCategory: builder.query({
+            query: ({ ownerId }) => ({
+                url: `/catalogue/category/${ownerId}`,
+                method: "GET",
+                data: {}
+            })
         })
     }),
 })
 
-export const { useAddCatalogueOwnerMutation, useCreateCatalogueMutation
+export const { useAddCatalogueOwnerMutation, useCreateCatalogueMutation, useGetAllCategoryQuery
 } = catalogueApi

@@ -4,14 +4,11 @@ import CatalogueOwner from "../model/catalogueModel/catalogueOwner.model.js";
 import AppError from "../utils/error.utils.js";
 import Catalogue from "../model/catalogueModel/catalogue.model.js";
 import { multipleFileUpload } from "../utils/fileUpload.utils.js";
+import mongoose from "mongoose";
 
 const createCatalogueOwner = asyncHandler(async (req, res) => {
 
     const { fullName, email, password, mapLink, emailList, phoneList, address, whatsappNo, role } = req.body
-
-    // if (req?.user?.role !== "SUPERADMIN") {
-    //     throw new AppError("You are not authorized!", 400)
-    // }
 
     const uniqueUser = await User.findOne({ email })
     if (uniqueUser) {
@@ -51,10 +48,18 @@ const createCatalogue = asyncHandler(async (req, res) => {
     const { formData, catalogueOwner } = req.body
     const { name, userName, tagline, description, isActive, category, backgroundColor, textColor, paidDate } = JSON.parse(formData)
 
-    const uniqueCatalogue = await Catalogue.findOne({ userName })
 
-    if (uniqueCatalogue) {
+    const uniqueCatalogue = await Catalogue.findOne({
+        $or: [
+            { userName },
+            { catalogueOwner }
+        ]
+    })
+
+    if (uniqueCatalogue.userName === userName) {
         throw new AppError("Username already exists!", 400)
+    } else if (uniqueCatalogue.catalogueOwner === catalogueOwner) {
+        throw new AppError("Catalogue is already created for this owner!")
     }
 
     const today = new Date()
@@ -116,7 +121,29 @@ const createCatalogue = asyncHandler(async (req, res) => {
     })
 })
 
+const getAllCategories = asyncHandler(async (req, res) => {
+    const { ownerId } = req.params
+
+    const allCategories = await Catalogue.aggregate([
+        {
+            $match: { _id: ownerId }
+        },
+        {
+            $project: {
+                category: 1, _id: 0,
+
+            }
+        }
+    ])
+
+    return res.status(200).json({
+        success: true,
+        allCategories
+    })
+})
+
 export {
     createCatalogueOwner,
-    createCatalogue
+    createCatalogue,
+    getAllCategories
 }

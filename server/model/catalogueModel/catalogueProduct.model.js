@@ -15,7 +15,7 @@ const catalogueProductSchema = new Schema({
         required: true
     },
     moq: {
-        type: Number,
+        type: String,
         required: true
     },
     price: {
@@ -32,6 +32,9 @@ const catalogueProductSchema = new Schema({
         required: true
     },
     image: [{
+        uniqueId: {
+            type: String
+        },
         publicId: {
             type: String,
             default: ""

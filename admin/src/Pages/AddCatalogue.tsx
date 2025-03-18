@@ -65,9 +65,9 @@ export default function AddCatalogue() {
                 {currentStep === 2 &&
                     <AddCatalogueDetail ownerId={ownerId} setCurrentStep={setCurrentStep} stepsLength={steps?.length} currentStep={currentStep} />}
                 {currentStep === 3 &&
-                    <AddCatalogueProducts portfolioId={portfolioId} setCurrentStep={setCurrentStep} stepsLength={steps?.length} currentStep={currentStep} />}
+                    <AddCatalogueProducts ownerId={ownerId} setCurrentStep={setCurrentStep} stepsLength={steps?.length} currentStep={currentStep} />}
                 {currentStep === 4 &&
-                    <AddMetaDetails portfolioId={portfolioId} stepsLength={steps?.length} currentStep={currentStep} />}
+                    <AddMetaDetails ownerId={ownerId} stepsLength={steps?.length} currentStep={currentStep} />}
 
                 <p className="bg-[#E11D48] w-full bottom-0 p-1 pr-4 left-0 absolute text-xs text-end text-white" role="region" aria-live="polite">
                     <span className="">
