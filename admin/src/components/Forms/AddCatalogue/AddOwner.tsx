@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import React, { useId } from 'react'
-import { Controller, useFieldArray, useForm } from 'react-hook-form'
+import { Controller, set, useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { Label } from '@/components/ui/label'
@@ -18,7 +18,7 @@ type catalogueOwnerSchema = z.infer<typeof addCatalogueOwnerSchema>
 interface apiRes {
     success: boolean
     message: string,
-    data: { _id: string, contactDetail: catalogueOwnerSchema }
+    CatalogueOwner: { _id: string, contactDetail: catalogueOwnerSchema }
 }
 
 
@@ -57,6 +57,7 @@ const AddOwner = ({ currentStep, stepsLength, setCurrentStep, setOwnerId }: { cu
         const response = await addCatalogueOwner({ data }) as { data: apiRes }
 
         if (response?.data?.success) {
+            setOwnerId(response?.data?.CatalogueOwner?._id)
             setCurrentStep(currentStep + 1)
         }
     }

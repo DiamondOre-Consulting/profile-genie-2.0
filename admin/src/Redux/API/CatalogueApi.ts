@@ -18,8 +18,16 @@ export const catalogueApi = createApi({
             }),
             invalidatesTags: (result) => result ? [{ type: "CATALOGUE" as const }] : [],
         }),
+        createCatalogue: builder.mutation({
+            query: ({ formData }) => ({
+                url: "/catalogue/create-catalogue",
+                method: "POST",
+                data: formData,
+            }),
+            invalidatesTags: (result) => result ? [{ type: "CATALOGUE" as const }] : [],
+        })
     }),
 })
 
-export const { useAddCatalogueOwnerMutation
+export const { useAddCatalogueOwnerMutation, useCreateCatalogueMutation
 } = catalogueApi

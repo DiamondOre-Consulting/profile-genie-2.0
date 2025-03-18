@@ -1,15 +1,12 @@
-import TextEditor from '../../TextEditor'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { IconCamera, IconRosetteDiscountCheckFilled, IconSquareRoundedArrowLeftFilled, IconSquareRoundedArrowRightFilled, IconWhirl } from '@tabler/icons-react'
-import React, { useState } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import React, { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Switch } from '@/components/ui/switch'
-import { useAddPortfolioMutation } from '@/Redux/API/PortfolioApi'
 import { toast } from 'sonner'
 import { Textarea } from '@/components/ui/textarea'
-import PhoneInput from 'react-phone-input-2'
 import {
     Popover,
     PopoverContent,
@@ -22,10 +19,12 @@ import { CalendarIcon } from 'lucide-react'
 import { Calendar } from '@/components/ui/calendar'
 import { addCatalogueSchema, catalogueDetail } from '@/validations/CatalogueValidation'
 import { HexColorPicker } from "react-colorful"
+import { useCreateCatalogueMutation } from '@/Redux/API/CatalogueApi'
+import { Tag, TagInput } from 'emblor'
 
-const AddCatalogueDetail = ({ setCurrentStep, template, currentStep, stepsLength, setId }: { setCurrentStep: React.Dispatch<React.SetStateAction<number>>, template: string, currentStep: number, stepsLength: number, setId: React.Dispatch<React.SetStateAction<string>> }) => {
+const AddCatalogueDetail = ({ setCurrentStep, ownerId, currentStep, stepsLength, setId }: { setCurrentStep: React.Dispatch<React.SetStateAction<number>>, currentStep: number, ownerId: string, stepsLength: number, setId: React.Dispatch<React.SetStateAction<string>> }) => {
 
-    const [addPortfolio] = useAddPortfolioMutation()
+    const [createCatalogue] = useCreateCatalogueMutation()
 
     const { register, handleSubmit, control, setValue, trigger, watch, getValues, formState: { errors, isSubmitting } } = useForm<catalogueDetail>({
         resolver: zodResolver(addCatalogueSchema)
@@ -47,16 +46,18 @@ const AddCatalogueDetail = ({ setCurrentStep, template, currentStep, stepsLength
         }
     };
 
+    useEffect(() => {
+        setValue("catalogueOwner", ownerId)
+    }, [ownerId])
+
     const onSubmit = async (data: catalogueDetail) => {
         try {
             console.log(JSON.stringify(data))
             const formData = new FormData()
             formData.append("formData", JSON.stringify(data))
             files.forEach((file) => formData.append("files", file))
-            formData.append("template", template)
-            formData.append("catalogueOwner", template)
 
-            const res = await addPortfolio({ formData })
+            const res = await createCatalogue({ formData })
             console.log(res)
             if (res?.data?.success) {
                 setId(res?.data?.data?._id)
@@ -67,13 +68,17 @@ const AddCatalogueDetail = ({ setCurrentStep, template, currentStep, stepsLength
         }
     }
 
+    console.log(watch("category"))
+
     const [open, setOpen] = useState(false)
 
-    const handleColorChange = (event: { target: { value: string } }) => {
-        const newColor = event.target.value;
-        setValue("backgroundColor", newColor);
-    };
+    const [categoryTags, setCategoryTags] = useState<Tag[]>([]);
+    const [activeTagIndex, setActiveTagIndex] = useState<number | null>(null);
+    console.log(categoryTags)
 
+    useEffect(() => {
+        setValue("category", categoryTags)
+    }, [categoryTags]);
 
     return (
         <form className='' onSubmit={handleSubmit(onSubmit)} noValidate >
@@ -197,60 +202,92 @@ const AddCatalogueDetail = ({ setCurrentStep, template, currentStep, stepsLength
             </div>
 
 
-            <div className='flex gap-3 sm:flex-row flex-col my-4 mt-5 items-center justify-center'>
-                <div className='flex items-center gap-3 justify-between'>
-                    <div className="size-30 relative group border border-dashed border-[#E11D48] rounded overflow-hidden">
-                        <h1 className='text-white relative z-10 uppercase text-[0.8rem] bg-[#E11D48] font-semibold text-center py-0.5'>Hero Image</h1>
-                        <input
-                            type="file"
-                            onChange={(e) => handleFileChange("heroImage", e.target.files?.[0])}
-                            name='heroImage'
-                            className="absolute z-10 inset-0 w-full h-full opacity-0 cursor-pointer"
-                        />
-                        {getValues("heroImage.url") ? (
-                            <img
-                                src={getValues("heroImage.url")}
-                                alt="Preview"
-                                className="w-full h-full object-contain"
+
+            <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+                <div className='flex gap-3 sm:flex-row flex-col my-4 mt-5 items-center justify-center'>
+                    <div className='flex items-center gap-3 justify-between'>
+                        <div className="size-30 relative group border border-dashed border-[#E11D48] rounded overflow-hidden">
+                            <h1 className='text-white relative z-10 uppercase text-[0.8rem] bg-[#E11D48] font-semibold text-center py-0.5'>Hero Image</h1>
+                            <input
+                                type="file"
+                                onChange={(e) => handleFileChange("heroImage", e.target.files?.[0])}
+                                name='heroImage'
+                                className="absolute z-10 inset-0 w-full h-full opacity-0 cursor-pointer"
                             />
-                        ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-neutral-950">
-                                <p className="text-gray-400 text-center">Select Image</p>
+                            {getValues("heroImage.url") ? (
+                                <img
+                                    src={getValues("heroImage.url")}
+                                    alt="Preview"
+                                    className="w-full h-full object-contain"
+                                />
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center bg-neutral-950">
+                                    <p className="text-gray-400 text-center">Select Image</p>
+                                </div>
+                            )}
+                            <div className="absolute inset-0  bg-black/80 hidden group-hover:flex items-center justify-center transition-all duration-300">
+                                <IconCamera className="text-white text-5xl" />
                             </div>
-                        )}
-                        <div className="absolute inset-0  bg-black/80 hidden group-hover:flex items-center justify-center transition-all duration-300">
-                            <IconCamera className="text-white text-5xl" />
+                            <label htmlFor="image" className="cursor-pointer absolute inset-0"></label>
                         </div>
-                        <label htmlFor="image" className="cursor-pointer absolute inset-0"></label>
-                    </div>
-                    <div className="size-30 relative group border border-dashed border-[#E11D48] rounded overflow-hidden">
-                        <h1 className='text-white relative z-10 uppercase text-[0.8rem] bg-[#E11D48] font-semibold text-center py-0.5'>Logo</h1>
-                        <input
-                            type="file"
-                            onChange={(e) => handleFileChange("logo", e.target.files?.[0])}
-                            name='logo'
-                            className="absolute z-10 inset-0 w-full h-full opacity-0 cursor-pointer"
-                        />
-                        {getValues("logo.url") ? (
-                            <img
-                                src={getValues("logo.url")}
-                                alt="Preview"
-                                className="w-full h-full object-contain"
+                        <div className="size-30 relative group border border-dashed border-[#E11D48] rounded overflow-hidden">
+                            <h1 className='text-white relative z-10 uppercase text-[0.8rem] bg-[#E11D48] font-semibold text-center py-0.5'>Logo</h1>
+                            <input
+                                type="file"
+                                onChange={(e) => handleFileChange("logo", e.target.files?.[0])}
+                                name='logo'
+                                className="absolute z-10 inset-0 w-full h-full opacity-0 cursor-pointer"
                             />
-                        ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-neutral-950">
-                                <p className="text-gray-400 text-center">Select Logo</p>
+                            {getValues("logo.url") ? (
+                                <img
+                                    src={getValues("logo.url")}
+                                    alt="Preview"
+                                    className="w-full h-full object-contain"
+                                />
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center bg-neutral-950">
+                                    <p className="text-gray-400 text-center">Select Logo</p>
+                                </div>
+                            )}
+                            <div className="absolute inset-0  bg-black/80 hidden group-hover:flex items-center justify-center transition-all duration-300">
+                                <IconCamera className="text-white text-5xl" />
                             </div>
-                        )}
-                        <div className="absolute inset-0  bg-black/80 hidden group-hover:flex items-center justify-center transition-all duration-300">
-                            <IconCamera className="text-white text-5xl" />
+                            <label htmlFor="image" className="cursor-pointer absolute inset-0"></label>
                         </div>
-                        <label htmlFor="image" className="cursor-pointer absolute inset-0"></label>
                     </div>
+
+                </div>
+                <div className="border py-2">
+                    <Label htmlFor="category" className='text-neutral-300'>Enter Category</Label>
+                    <TagInput
+                        id='category'
+                        tags={categoryTags}
+                        setTags={(newTags) => {
+                            setCategoryTags(newTags);
+                        }}
+                        placeholder="Add category"
+
+                        styleClasses={{
+                            tagList: {
+                                container: "gap-1",
+                            },
+                            input:
+                                "rounded-sm transition-[color,box-shadow]  bg-[#171717] outline-none border border-neutral-800 text-white placeholder:text-zinc-400/70 h-8.5 ",
+                            tag: {
+                                body: "relative h-7 text-white  rounded-sm font-medium text-xs ps-2 pe-7 bg-[#171717] border-zinc-800",
+                                closeButton:
+                                    "absolute -inset-y-px -end-px p-0 rounded-s-none rounded-e-md flex size-7 transition-[color,box-shadow] outline-none  focus-visible:ring-[3px]  focus-visible:border-zinc-300 focus-visible:ring-zinc-300/50 text-zinc-400/80 hover:text-zinc-50",
+                            },
+                        }}
+                        activeTagIndex={activeTagIndex}
+                        setActiveTagIndex={setActiveTagIndex}
+                        inlineTags={false}
+                        inputFieldPosition="bottom"
+                    />
+                    {errors.category && <p className="text-red-500">{errors.category.message}</p>}
                 </div>
 
             </div>
-
             <div className="flex mt-6 justify-between space-x-4">
                 <button
                     className={`bg-[#1c1c1c] border border-[#565656]   text-white flex items-center gap-3 py-1.5 text-sm px-4 rounded ${currentStep === 1 ? "blur-[1px] cursor-not-allowed" : "cursor-pointer"}`}

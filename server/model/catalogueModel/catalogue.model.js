@@ -11,6 +11,10 @@ const catalogueSchema = new Schema({
             default: ""
         }
     },
+    userName: {
+        type: String,
+        required: true
+    },
     name: {
         type: String,
         required: true
@@ -48,21 +52,25 @@ const catalogueSchema = new Schema({
             default: ""
         }
     },
+    category: [{
+        id: {
+            type: String
+        },
+        text: {
+            type: String
+        }
+    }],
     product: [{
         type: Schema.Types.ObjectId,
         ref: "CatalogueProduct"
     }],
-    contact: {
-        type: Schema.Types.ObjectId,
-        ref: "CatalogueContact"
-    },
     metaDetails: {
         type: Schema.Types.ObjectId,
         ref: "MetaData"
     },
     catalogueOwner: {
         type: Schema.Types.ObjectId,
-        ref: "PersonalDetail"
+        ref: "CatalogueOwner"
     }
 }, {
     timestamps: true

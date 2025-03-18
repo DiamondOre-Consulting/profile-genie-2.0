@@ -36,6 +36,11 @@ export const addCatalogueSchema = z.object({
     backgroundColor: z.string().min(3, 'Background Color is required').default("FA00FF"),
     textColor: z.string().min(3, 'Text Color is required').default("#2BFF00"),
     paidDate: z.string(),
+    category: z.array(
+        z.object({
+            id: z.string().optional(),
+            text: z.string().optional()
+        })),
     isPaid: z.boolean().default(false).optional(),
     isActive: z.boolean().default(false),
     description: z.string().min(150, 'Description is required (MIN 200 Characters)').max(200, 'Short Description must be less than 400 characters'),

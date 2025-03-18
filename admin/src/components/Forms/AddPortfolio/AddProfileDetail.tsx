@@ -71,7 +71,11 @@ const AddProfileDetail = ({ setCurrentStep, template, currentStep, stepsLength, 
         }
     }
 
-    const [open, setOpen] = useState(false)
+    console.log(watch("shortDescription"))
+
+    console.log(errors.shortDescription)
+
+    const [open, setOpen] = useState(false);
 
     return (
         <form className='' onSubmit={handleSubmit(onSubmit)} noValidate >
@@ -99,18 +103,17 @@ const AddProfileDetail = ({ setCurrentStep, template, currentStep, stepsLength, 
                         Paid Date <span className="text-[#ff3f69]">*</span>
                     </Label>
                     <Popover open={open} onOpenChange={setOpen}>
-                        <PopoverTrigger asChild>
-                            <Button
-                                variant="outline"
+                        <PopoverTrigger asChild >
+                            <button
                                 className={cn(
-                                    "w-full justify-start text-left bg-transparent border-[#333333] text-white font-normal",
+                                    "w-full flex items-center justify-start text-left border px-2 py-1 rounded-sm bg-[#262626e1] border-[#4e4c4c] text-white font-normal",
                                     !watch("paidDate") && "text-white"
                                 )}
                                 onClick={() => setOpen(!open)}
                             >
                                 <CalendarIcon className="mr-2 h-4 w-4" />
                                 {watch("paidDate") ? format(watch("paidDate"), "PPP") : "Pick a date"}
-                            </Button>
+                            </button>
                         </PopoverTrigger>
                         <PopoverContent align='start' className="w-auto p-0">
                             <Calendar
@@ -211,13 +214,13 @@ const AddProfileDetail = ({ setCurrentStep, template, currentStep, stepsLength, 
             <div className='mt-3'>
                 <div className="mt-3">
                     <Label
-                        htmlFor={"about.body"}
+                        htmlFor="shortDescription"
                         className="text-neutral-300 "
                     >
                         Short Description (150-200 Characters) <span className="text-[#ff3f69]">*</span>
                     </Label>
-                    <Textarea {...register("shortDescription")} placeholder="Enter meta keyword..." className={`${errors.shortDescription && "border-[#E11D48] "} py-[0.45rem]  text-neutral-200`} />
-
+                    <Textarea {...register("shortDescription")} placeholder="Enter short description..."
+                        className={`${errors.shortDescription && "border-[#E11D48] "} py-[0.45rem]  text-neutral-200`} />
                     {errors.shortDescription && (
                         <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">
                             {errors.shortDescription.message}

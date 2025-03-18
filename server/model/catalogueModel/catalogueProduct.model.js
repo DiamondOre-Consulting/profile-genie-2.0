@@ -7,8 +7,8 @@ const catalogueProductSchema = new Schema({
         unique: true
     },
     category: {
-        type: Schema.Types.ObjectId,
-        ref: "CatalogueCategory"
+        type: String,
+        required: true
     },
     name: {
         type: String,
