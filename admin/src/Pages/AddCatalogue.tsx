@@ -38,6 +38,7 @@ const steps = [
 export default function AddCatalogue() {
     const [currentStep, setCurrentStep] = useState(1)
     const [ownerId, setOwnerId] = useState('')
+    const [userName, setUserName] = useState('')
 
 
     return (
@@ -63,9 +64,9 @@ export default function AddCatalogue() {
                 {currentStep === 1 &&
                     <AddOwner setOwnerId={setOwnerId} setCurrentStep={setCurrentStep} stepsLength={steps?.length} currentStep={currentStep} />}
                 {currentStep === 2 &&
-                    <AddCatalogueDetail ownerId={ownerId} setCurrentStep={setCurrentStep} stepsLength={steps?.length} currentStep={currentStep} />}
+                    <AddCatalogueDetail setUserName={setUserName} ownerId={ownerId} setCurrentStep={setCurrentStep} stepsLength={steps?.length} currentStep={currentStep} />}
                 {currentStep === 3 &&
-                    <AddCatalogueProducts ownerId={ownerId} setCurrentStep={setCurrentStep} stepsLength={steps?.length} currentStep={currentStep} />}
+                    <AddCatalogueProducts userName={userName} ownerId={ownerId} setCurrentStep={setCurrentStep} stepsLength={steps?.length} currentStep={currentStep} />}
                 {currentStep === 4 &&
                     <AddMetaDetails ownerId={ownerId} stepsLength={steps?.length} currentStep={currentStep} />}
 

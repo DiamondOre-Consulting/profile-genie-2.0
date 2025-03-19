@@ -4,11 +4,18 @@ const catalogueProductSchema = new Schema({
     HSNCode: {
         type: String,
         required: true,
-        unique: true
     },
-    category: {
+    category: [{
+        id: {
+            type: String
+        },
+        text: {
+            type: String
+        }
+    }],
+    owner: {
         type: String,
-        required: true
+        ref: 'CatalogueOwner'
     },
     name: {
         type: String,

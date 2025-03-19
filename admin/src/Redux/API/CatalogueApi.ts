@@ -32,9 +32,29 @@ export const catalogueApi = createApi({
                 method: "GET",
                 data: {}
             })
-        })
-    }),
+        }),
+        addProduct: builder.mutation({
+            query: ({ formData }) => ({
+                url: "/catalogue/add-product",
+                method: "POST",
+                data: formData,
+            }),
+            invalidatesTags: (result) => result ? [{ type: "CATALOGUE" as const }] : [],
+        }),
+        getAllCategoryProducts: builder.query({
+            query: ({ userName }) => ({
+                url: `/catalogue/all-products/${userName}`,
+                method: "GET",
+                data: {}
+            })
+        }),
+    })
 })
 
-export const { useAddCatalogueOwnerMutation, useCreateCatalogueMutation, useGetAllCategoryQuery
+export const {
+    useAddCatalogueOwnerMutation,
+    useGetAllCategoryProductsQuery,
+    useAddProductMutation,
+    useCreateCatalogueMutation,
+    useGetAllCategoryQuery
 } = catalogueApi

@@ -1,77 +1,81 @@
 import { Label } from "@/components/ui/label";
 import MultipleSelector, { Option } from "@/components/ui/multiselect";
-import { useId } from "react";
+import { useId, useState } from "react";
 
 const frameworks: Option[] = [
   {
-    value: "next.js",
+    text: "next.js",
     label: "Next.js",
   },
   {
-    value: "sveltekit",
+    text: "sveltekit",
     label: "SvelteKit",
   },
   {
-    value: "nuxt.js",
+    text: "nuxt.js",
     label: "Nuxt.js",
     disable: true,
   },
   {
-    value: "remix",
+    text: "remix",
     label: "Remix",
   },
   {
-    value: "astro",
+    text: "astro",
     label: "Astro",
   },
   {
-    value: "angular",
+    text: "angular",
     label: "Angular",
   },
   {
-    value: "vue",
+    text: "vue",
     label: "Vue.js",
   },
   {
-    value: "react",
+    text: "react",
     label: "React",
   },
   {
-    value: "ember",
+    text: "ember",
     label: "Ember.js",
   },
   {
-    value: "gatsby",
+    text: "gatsby",
     label: "Gatsby",
   },
   {
-    value: "eleventy",
+    text: "eleventy",
     label: "Eleventy",
     disable: true,
   },
   {
-    value: "solid",
+    text: "solid",
     label: "SolidJS",
   },
   {
-    value: "preact",
+    text: "preact",
     label: "Preact",
   },
   {
-    value: "qwik",
+    text: "qwik",
     label: "Qwik",
   },
   {
-    value: "alpine",
+    text: "alpine",
     label: "Alpine.js",
   },
   {
-    value: "lit",
+    text: "lit",
     label: "Lit",
   },
 ];
 
-export default function Component() {
+
+export default function MultipleCom() {
+
+  const [frameworks, setFrameworks] = useState();
+
   const id = useId();
   return (
     <div className="*:not-first:mt-2">
@@ -80,8 +84,8 @@ export default function Component() {
         commandProps={{
           label: "Select frameworks",
         }}
-        value={frameworks.slice(0, 2)}
-        defaultOptions={frameworks}
+        options={frameworks}
+        value={[{ id: "", text: "" }]}
         placeholder="Select frameworks"
         hideClearAllButton
         hidePlaceholderWhenSelected

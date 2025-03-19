@@ -12,6 +12,7 @@ import { useAddContactDetailsMutation } from '@/Redux/API/PortfolioApi'
 import PhoneInput from 'react-phone-input-2'
 import { addCatalogueOwnerSchema } from '@/validations/CatalogueValidation'
 import { useAddCatalogueOwnerMutation } from '@/Redux/API/CatalogueApi'
+import MultipleCom from '@/components/comp-234'
 
 type catalogueOwnerSchema = z.infer<typeof addCatalogueOwnerSchema>
 

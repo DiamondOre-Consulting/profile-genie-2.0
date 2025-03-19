@@ -22,7 +22,7 @@ import { HexColorPicker } from "react-colorful"
 import { useCreateCatalogueMutation } from '@/Redux/API/CatalogueApi'
 import { Tag, TagInput } from 'emblor'
 
-const AddCatalogueDetail = ({ setCurrentStep, ownerId, currentStep, stepsLength }: { setCurrentStep: React.Dispatch<React.SetStateAction<number>>, currentStep: number, ownerId: string, stepsLength: number }) => {
+const AddCatalogueDetail = ({ setCurrentStep, ownerId, currentStep, stepsLength, setUserName }: { setCurrentStep: React.Dispatch<React.SetStateAction<number>>, currentStep: number, ownerId: string, stepsLength: number, setUserName: React.Dispatch<React.SetStateAction<string>> }) => {
 
     const [createCatalogue] = useCreateCatalogueMutation()
 
@@ -60,7 +60,7 @@ const AddCatalogueDetail = ({ setCurrentStep, ownerId, currentStep, stepsLength 
             const res = await createCatalogue({ formData })
             console.log(res)
             if (res?.data?.success) {
-
+                setUserName(res?.data?.data?.userName)
                 setCurrentStep((prev) => prev + 1)
             }
         } catch (error) {

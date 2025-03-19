@@ -58,6 +58,7 @@ export const addCatalogueSchema = z.object({
 })
 
 export const addProductSchema = z.object({
+    ownerId: z.string().min(1, 'Catalogue Owner is required'),
     name: z.string().min(2, 'Product Name is required'),
     HSNCode: z.string().min(2, 'HSN Code is required'),
     category: categorySchema,

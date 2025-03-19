@@ -9,8 +9,9 @@ import { cn } from "@/lib/utils";
 import { Command, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
 
 export interface Option {
-  value: string;
-  label: string;
+  text: string;
+  label?: string;
+  id?: string;
   disable?: boolean;
   /** fixed option that can't be removed. */
   fixed?: boolean;
@@ -124,14 +125,14 @@ function removePickedOption(groupOption: GroupOption, picked: Option[]) {
   const cloneOption = JSON.parse(JSON.stringify(groupOption)) as GroupOption;
 
   for (const [key, value] of Object.entries(cloneOption)) {
-    cloneOption[key] = value.filter((val) => !picked.find((p) => p.value === val.value));
+    cloneOption[key] = value.filter((val) => !picked.find((p) => p.text === val.text));
   }
   return cloneOption;
 }
 
 function isOptionsExist(groupOption: GroupOption, targetOption: Option[]) {
   for (const [, value] of Object.entries(groupOption)) {
-    if (value.some((option) => targetOption.find((p) => p.value === option.value))) {
+    if (value.some((option) => targetOption.find((p) => p.text === option.text))) {
       return true;
     }
   }
@@ -165,6 +166,7 @@ const MultipleSelector = ({
   defaultOptions: arrayDefaultOptions = [],
   options: arrayOptions,
   delay,
+  setCategory,
   onSearch,
   onSearchSync,
   loadingIndicator,
@@ -187,15 +189,24 @@ const MultipleSelector = ({
   const [open, setOpen] = React.useState(false);
   const [onScrollbar, setOnScrollbar] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
-  const dropdownRef = React.useRef<HTMLDivElement>(null); // Added this
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
+
 
   const [selected, setSelected] = React.useState<Option[]>(value || []);
   const [options, setOptions] = React.useState<GroupOption>(
     transToGroupOption(arrayDefaultOptions, groupBy),
   );
+
+
+  useEffect(() => {
+    setCategory("category", selected)
+  }, [selected])
+
+  console.log(selected)
+
   const [inputValue, setInputValue] = React.useState("");
   const debouncedSearchTerm = useDebounce(inputValue, delay || 500);
-
+  console.log(options)
   const handleClickOutside = (event: MouseEvent | TouchEvent) => {
     if (
       dropdownRef.current &&
@@ -210,7 +221,7 @@ const MultipleSelector = ({
 
   const handleUnselect = React.useCallback(
     (option: Option) => {
-      const newOptions = selected.filter((s) => s.value !== option.value);
+      const newOptions = selected.filter((s) => s.text !== option.text);
       setSelected(newOptions);
       onChange?.(newOptions);
     },
@@ -261,7 +272,6 @@ const MultipleSelector = ({
   }, [value]);
 
   useEffect(() => {
-    /** If `onSearch` is provided, do not trigger options updated. */
     if (!arrayOptions || onSearch) {
       return;
     }
@@ -272,8 +282,6 @@ const MultipleSelector = ({
   }, [arrayDefaultOptions, arrayOptions, groupBy, onSearch, options]);
 
   useEffect(() => {
-    /** sync search */
-
     const doSearchSync = () => {
       const res = onSearchSync?.(debouncedSearchTerm);
       setOptions(transToGroupOption(res || [], groupBy));
@@ -324,8 +332,8 @@ const MultipleSelector = ({
   const CreatableItem = () => {
     if (!creatable) return undefined;
     if (
-      isOptionsExist(options, [{ value: inputValue, label: inputValue }]) ||
-      selected.find((s) => s.value === inputValue)
+      isOptionsExist(options, [{ text: inputValue, label: inputValue }]) ||
+      selected.find((s) => s.text === inputValue)
     ) {
       return undefined;
     }
@@ -344,7 +352,7 @@ const MultipleSelector = ({
             return;
           }
           setInputValue("");
-          const newOptions = [...selected, { value, label: value }];
+          const newOptions = [...selected, { text: value, label: value }];
           setSelected(newOptions);
           onChange?.(newOptions);
         }}
@@ -434,7 +442,7 @@ const MultipleSelector = ({
           {selected.map((option) => {
             return (
               <div
-                key={option.value}
+                key={option.text}
                 className={cn(
                   "animate-fadeIn bg-white text-zinc-900 hover:bg-white relative inline-flex h-7 cursor-default items-center rounded-md border border-zinc-200 ps-2 pe-7 pl-2 text-xs font-medium transition-all disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 data-fixed:pe-2 dark:bg-zinc-950 dark:text-zinc-50 dark:hover:bg-zinc-950 dark:border-zinc-800",
                   badgeClassName,
@@ -442,7 +450,7 @@ const MultipleSelector = ({
                 data-fixed={option.fixed}
                 data-disabled={disabled || undefined}
               >
-                {option.label}
+                {option.text}
                 <button
                   className="text-zinc-500/80 hover:text-zinc-950 focus-visible:border-zinc-950 focus-visible:ring-zinc-950/50 absolute -inset-y-px -end-px flex size-7 items-center justify-center rounded-e-md border border-zinc-200 border-transparent p-0 outline-hidden transition-[color,box-shadow] outline-none focus-visible:ring-[3px] dark:text-zinc-400/80 dark:hover:text-zinc-50 dark:focus-visible:border-zinc-300 dark:focus-visible:ring-zinc-300/50 dark:border-zinc-800"
                   onKeyDown={(e) => {
@@ -503,12 +511,12 @@ const MultipleSelector = ({
               onChange?.(selected.filter((s) => s.fixed));
             }}
             className={cn(
-              "text-zinc-500/80 hover:text-zinc-950 focus-visible:border-zinc-950 focus-visible:ring-zinc-950/50 absolute end-0 top-0 flex size-9 items-center justify-center rounded-md border border-zinc-200 border-transparent transition-[color,box-shadow] outline-none focus-visible:ring-[3px] dark:text-zinc-400/80 dark:hover:text-zinc-50 dark:focus-visible:border-zinc-300 dark:focus-visible:ring-zinc-300/50 dark:border-zinc-800",
+              "text-zinc-500/80 hover:text-zinc-950 focus-visible:border-zinc-950 focus-visible:ring-zinc-950/50 absolute end-0 top-0 flex size-9 items-center justify-center rounded-md border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] dark:text-zinc-400/80 dark:hover:text-zinc-50 dark:focus-visible:border-zinc-300 dark:focus-visible:ring-zinc-300/50 dark:border-zinc-800",
               (hideClearAllButton ||
                 disabled ||
                 selected.length < 1 ||
                 selected.filter((s) => s.fixed).length === selected.length) &&
-                "hidden",
+              "hidden",
             )}
             aria-label="Clear all"
           >
@@ -551,8 +559,8 @@ const MultipleSelector = ({
                         {dropdowns.map((option) => {
                           return (
                             <CommandItem
-                              key={option.value}
-                              value={option.value}
+                              key={option.text}
+                              value={option.text}
                               disabled={option.disable}
                               onMouseDown={(e) => {
                                 e.preventDefault();
@@ -571,10 +579,10 @@ const MultipleSelector = ({
                               className={cn(
                                 "cursor-pointer",
                                 option.disable &&
-                                  "pointer-events-none cursor-not-allowed opacity-50",
+                                "pointer-events-none cursor-not-allowed opacity-50",
                               )}
                             >
-                              {option.label}
+                              {option.text}
                             </CommandItem>
                           );
                         })}
