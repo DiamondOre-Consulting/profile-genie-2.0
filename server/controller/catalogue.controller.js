@@ -224,6 +224,73 @@ const addProduct = asyncHandler(async (req, res) => {
     })
 })
 
+const editProduct = asyncHandler(async (req, res) => {
+    const { formData } = req.body
+    const { id } = req.params
+    const { category, name, HSNCode, price, ownerId, stock, moq, description, image } = JSON.parse(formData)
+
+    const product = await CatalogueProduct.findById(id)
+
+    if (!product) {
+        throw new AppError("Product not found!", 400)
+    }
+
+    product.category = category
+    product.name = name
+    product.HSNCode = HSNCode
+    product.price = price
+    product.stock = stock
+    product.moq = moq
+    product.description = description
+
+    let productImages = []
+
+    if (req?.files) {
+        productImages = await multipleFileUpload(req?.files)
+    }
+
+    image?.forEach(image => {
+        let existingImage = product?.image?.find(b => b.uniqueId === image.uniqueId);
+        if (!existingImage) {
+            const uploadedFile = productImages.find(uf => uf.uniqueId === image.uniqueId);
+            if (uploadedFile) {
+                product.image.push({ ...image, url: uploadedFile.result.secure_url, publicId: uploadedFile.result.public_id });
+            }
+        } else {
+            const uploadedFile = productImages.find(uf => uf.uniqueId === existingImage.uniqueId);
+            if (uploadedFile) {
+                existingImage.uniqueId = image.uniqueId;
+                existingImage.url = uploadedFile.result.secure_url
+                existingImage.publicId = uploadedFile.result.public_id
+            };
+        }
+    });
+
+    await product.save()
+
+    res.status(200).json({
+        success: true,
+        data: product,
+        message: "Product updated successfully"
+    })
+})
+
+const deleteProduct = asyncHandler(async (req, res) => {
+    const { id } = req.params
+
+    const product = await CatalogueProduct.findByIdAndDelete(id)
+
+    if (!product) {
+        throw new AppError("Product not found!", 400)
+    }
+
+    res.status(200).json({
+        success: true,
+        data: product,
+        message: "Product deleted successfully"
+    })
+})
+
 const getCategorisedProducts = asyncHandler(async (req, res) => {
 
     const { userName } = req.params
@@ -257,6 +324,7 @@ const getCategorisedProducts = asyncHandler(async (req, res) => {
                             name: "$$product.name",
                             HSNCode: "$$product.HSNCode",
                             price: "$$product.price",
+                            category: "$$product.category",
                             stock: "$$product.stock",
                             moq: "$$product.moq",
                             description: "$$product.description",
@@ -270,9 +338,80 @@ const getCategorisedProducts = asyncHandler(async (req, res) => {
     ])
 
 
+
+    const productWithoutCategory = await Catalogue.aggregate([
+        { $match: { userName: userName } },
+        { $unwind: { path: "$product", preserveNullAndEmptyArrays: true } },
+        {
+            $lookup: {
+                from: "catalogueproducts",
+                localField: "product",
+                foreignField: "_id",
+                as: "productDetails"
+            }
+        },
+        { $unwind: { path: "$productDetails", preserveNullAndEmptyArrays: true } },
+        {
+            $addFields: {
+                productCategory: {
+                    $cond: {
+                        if: { $isArray: "$productDetails.category" },
+                        then: "$productDetails.category",
+                        else: []
+                    }
+                },
+                filteredCategories: {
+                    $filter: {
+                        input: {
+                            $cond: {
+                                if: { $isArray: "$productDetails.category" },
+                                then: "$productDetails.category",
+                                else: []
+                            }
+                        },
+                        as: "cat",
+                        cond: {
+                            $and: [
+                                { $eq: ["$$cat.id", ""] },
+                                { $eq: ["$$cat.text", ""] }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        {
+            $match: {
+                $expr: {
+                    $eq: [{ $size: { $ifNull: ["$filteredCategories", []] } }, { $size: { $ifNull: ["$productDetails.category", []] } }]
+                }
+            }
+        },
+        { $unset: "filteredCategories" },
+        {
+            $project: {
+                _id: 1,
+                userName: 1,
+                productDetails: 1,
+            }
+        },
+
+    ]);
+
+
+
+    const uncategorisedProducts = [
+        {
+            id: "uncategorised",
+            text: "Uncategorised",
+            products: productWithoutCategory
+        }
+    ]
+
     return res.status(200).json({
         success: true,
-        categorisedProducts
+        categorisedProducts,
+        uncategorisedProducts
     })
 
 })
@@ -282,5 +421,7 @@ export {
     createCatalogue,
     getAllCategories,
     addProduct,
-    getCategorisedProducts
+    getCategorisedProducts,
+    deleteProduct,
+    editProduct
 }

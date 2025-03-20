@@ -1,6 +1,6 @@
 import { Router } from "express"
 import upload from "../middleware/multer.middleware.js"
-import { addProduct, createCatalogue, createCatalogueOwner, getAllCategories, getCategorisedProducts } from "../controller/catalogue.controller.js"
+import { addProduct, createCatalogue, createCatalogueOwner, deleteProduct, editProduct, getAllCategories, getCategorisedProducts } from "../controller/catalogue.controller.js"
 
 
 
@@ -19,6 +19,12 @@ catalogueRouter.route('/create-catalogue')
 catalogueRouter.route('/add-product')
     .post(upload.array("image", 30),
         addProduct)
+
+catalogueRouter.route('/delete-product/:id')
+    .delete(deleteProduct)
+
+catalogueRouter.route('/edit-product/:id')
+    .delete(editProduct)
 
 catalogueRouter.route('/all-products/:userName')
     .get(getCategorisedProducts)

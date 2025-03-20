@@ -48,6 +48,20 @@ export const catalogueApi = createApi({
                 data: {}
             })
         }),
+        deleteProduct: builder.mutation({
+            query: ({ id }) => ({
+                url: `/catalogue/delete-product/${id}`,
+                method: "DELETE",
+                data: {}
+            })
+        }),
+        editProduct: builder.mutation({
+            query: ({ formData, id }) => ({
+                url: `/catalogue/edit-product/${id}`,
+                method: "DELETE",
+                data: formData
+            })
+        })
     })
 })
 
@@ -56,5 +70,6 @@ export const {
     useGetAllCategoryProductsQuery,
     useAddProductMutation,
     useCreateCatalogueMutation,
-    useGetAllCategoryQuery
+    useGetAllCategoryQuery,
+    useDeleteProductMutation
 } = catalogueApi

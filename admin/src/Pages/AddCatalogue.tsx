@@ -43,7 +43,7 @@ export default function AddCatalogue() {
 
     return (
         <HomeLayout>
-            <div className="space-y-8 overflow-hidden relative max-w-[50rem] mx-auto bg-[#010101] pb-0 border border-[#3c3c3c] p-4 sm:p-6 lg:p-8 py-8 rounded">
+            <div className="space-y-8  relative max-w-[50rem] mx-auto bg-[#010101] pb-0 border border-[#3c3c3c] p-4 sm:p-6 lg:p-8 py-8 rounded">
                 <Stepper onValueChange={setCurrentStep} value={currentStep} >
                     {steps.map(({ step, title }) => (
                         <StepperItem key={step} step={step} className="relative flex-1 !flex-col">
