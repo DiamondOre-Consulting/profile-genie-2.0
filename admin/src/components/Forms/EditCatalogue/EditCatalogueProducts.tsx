@@ -30,7 +30,7 @@ const modalVariants = {
 
 
 
-const AddCatalogueProducts = ({ setCurrentStep, userName, ownerId, currentStep, stepsLength, setId }: { setCurrentStep: React.Dispatch<React.SetStateAction<number>>, userName: string, currentStep: number, ownerId: string, stepsLength: number, setId: React.Dispatch<React.SetStateAction<string>> }) => {
+const EditCatalogueProducts = ({ setCurrentStep, userName, ownerId, currentStep, stepsLength, setId }: { setCurrentStep: React.Dispatch<React.SetStateAction<number>>, userName: string, currentStep: number, ownerId: string, stepsLength: number, setId: React.Dispatch<React.SetStateAction<string>> }) => {
 
     const [addProduct] = useAddProductMutation()
     const [editProduct] = useEditProductMutation()
@@ -583,4 +583,4 @@ const AddCatalogueProducts = ({ setCurrentStep, userName, ownerId, currentStep, 
     )
 }
 
-export default AddCatalogueProducts
+export default EditCatalogueProducts

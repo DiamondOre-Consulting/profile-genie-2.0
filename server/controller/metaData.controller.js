@@ -1,3 +1,4 @@
+import Catalogue from "../model/catalogueModel/catalogue.model.js";
 import MetaData from "../model/portfolioModel/metaData.model.js";
 import Portfolio from "../model/portfolioModel/portfolio.model.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
@@ -33,10 +34,18 @@ const createMetaData = asyncHandler(async (req, res) => {
     }
 
     const portfolio = await Portfolio.findById(id)
+    const catalogue = await Catalogue.findOne({ catalogueOwner: id })
 
-    portfolio.metaDetails = metaData._id
+    if (catalogue) {
+        catalogue.metaDetails = metaData._id
+        await catalogue.save()
+    }
 
-    await portfolio.save()
+    if (portfolio) {
+        portfolio.metaDetails = metaData._id
+        await portfolio.save()
+    }
+
 
     res.status(200).json({
         success: true,

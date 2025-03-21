@@ -7,7 +7,7 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Textarea } from '@/components/ui/textarea'
-import { useAddMetaDetailsMutation } from '@/Redux/API/PortfolioApi'
+import { useAddMetaDetailsMutation } from '@/Redux/API/CatalogueApi'
 
 type metaDetails = z.infer<typeof addMetaDetailsSchema>
 
@@ -17,15 +17,13 @@ interface apiRes {
     data: { _id: string, metaDetail: metaDetails }
 }
 
-
-const AddMetaDetails = ({ currentStep, stepsLength, portfolioId }: { currentStep: number, stepsLength: number, portfolioId: string }) => {
+const EditMetaDetails = ({ currentStep, stepsLength, ownerId }: { currentStep: number, stepsLength: number, ownerId: string }) => {
 
     const [addMetaDetails] = useAddMetaDetailsMutation()
 
     const { register, handleSubmit, setValue, getValues, formState: { errors, isSubmitting } } = useForm<metaDetails>({
         resolver: zodResolver(addMetaDetailsSchema)
     })
-
 
     const [files, setFiles] = useState<File | null>(null);
     console.log(files)
@@ -46,7 +44,7 @@ const AddMetaDetails = ({ currentStep, stepsLength, portfolioId }: { currentStep
         formData.append("formData", JSON.stringify(data))
         formData.append("favIcon", files as File)
 
-        const res = await addMetaDetails({ formData, id: portfolioId }).unwrap() as { data: apiRes }
+        const res = await addMetaDetails({ formData, id: ownerId }).unwrap() as { data: apiRes }
 
         if (res?.data?.success) {
             console.log("success")
@@ -149,4 +147,4 @@ const AddMetaDetails = ({ currentStep, stepsLength, portfolioId }: { currentStep
     )
 }
 
-export default AddMetaDetails
+export default EditMetaDetails

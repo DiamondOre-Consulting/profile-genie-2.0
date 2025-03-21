@@ -1,13 +1,17 @@
 import { Router } from "express"
 import upload from "../middleware/multer.middleware.js"
-import { addProduct, createCatalogue, createCatalogueOwner, deleteProduct, editProduct, getAllCategories, getCategorisedProducts } from "../controller/catalogue.controller.js"
-
-
+import { addProduct, createCatalogue, createCatalogueOwner, deleteProduct, editCatalogueOwner, editProduct, getAllCatalogues, getAllCategories, getCategorisedProducts, getSingleCatalogue } from "../controller/catalogue.controller.js"
+import { createMetaData, updateMetaData } from "../controller/metaData.controller.js"
+import { verifyJWT } from "../middleware/auth.middleware.js"
 
 const catalogueRouter = Router()
 
-catalogueRouter.route('/')
+catalogueRouter.route('/owner')
     .post(createCatalogueOwner)
+    .get(getAllCatalogues)
+
+catalogueRouter.route('/owner/:id')
+    .put(verifyJWT, editCatalogueOwner)
 
 catalogueRouter.route("/category/:id")
     .get(getAllCategories)
@@ -24,12 +28,33 @@ catalogueRouter.route('/delete-product/:id')
     .delete(deleteProduct)
 
 catalogueRouter.route('/edit-product/:id')
-    .delete(editProduct)
+    .put(upload.array("image", 30), editProduct)
 
 catalogueRouter.route('/all-products/:userName')
     .get(getCategorisedProducts)
 
 
 
+// catalogueRouter.route('/recycle/:id', verifyJWT)
+//     .put(recyclePortfolio)
+
+// catalogueRouter.route('/restore/:id', verifyJWT)
+//     .put(restorePortfolio)
+
+// catalogueRouter.route('/update-active-status/:id')
+//     .put(verifyJWT, updateStatusActive)
+
+// catalogueRouter.route('/update-paid-status/:id', verifyJWT)
+//     .put(updateStatusPaid)
+
+catalogueRouter.route('/single/:userName')
+    .get(getSingleCatalogue)
+
+catalogueRouter.route('/contact/:id', verifyJWT)
+    .get(getAllCatalogues)
+
+catalogueRouter.route('/meta/:id', verifyJWT)
+    .post(upload.single("favIcon"), createMetaData)
+    .put(upload.single("favIcon"), updateMetaData)
 
 export default catalogueRouter

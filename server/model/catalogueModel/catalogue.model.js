@@ -42,6 +42,10 @@ const catalogueSchema = new Schema({
         type: String,
         required: true
     },
+    isRecycled: {
+        type: Boolean,
+        default: false
+    },
     heroImage: {
         url: {
             type: String,

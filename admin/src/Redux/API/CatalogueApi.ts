@@ -12,11 +12,18 @@ export const catalogueApi = createApi({
     endpoints: (builder) => ({
         addCatalogueOwner: builder.mutation({
             query: ({ data }) => ({
-                url: "/catalogue",
+                url: "/catalogue/owner",
                 method: "POST",
                 data: data,
             }),
             invalidatesTags: (result) => result ? [{ type: "CATALOGUE" as const }] : [],
+        }),
+        editCatalogueOwner: builder.mutation({
+            query: ({ formData, ownerId }) => ({
+                url: `/catalogue/owner/${ownerId}`,
+                method: "PUT",
+                data: formData
+            })
         }),
         createCatalogue: builder.mutation({
             query: ({ formData }) => ({
@@ -58,8 +65,36 @@ export const catalogueApi = createApi({
         editProduct: builder.mutation({
             query: ({ formData, id }) => ({
                 url: `/catalogue/edit-product/${id}`,
-                method: "DELETE",
+                method: "PUT",
                 data: formData
+            })
+        }),
+        addMetaDetails: builder.mutation({
+            query: ({ formData, id }) => ({
+                url: `/catalogue/meta/${id}`,
+                method: "POST",
+                data: formData
+            })
+        }),
+        updateMetaDetails: builder.mutation({
+            query: ({ formData, id }) => ({
+                url: `/portfolio/meta/${id}`,
+                method: "PUT",
+                data: formData,
+            }),
+        }),
+        getSingleCatalogue: builder.query({
+            query: ({ username }) => ({
+                url: `/catalogue/single/${username}`,
+                method: "GET",
+                data: {}
+            })
+        }),
+        getAllCatalogues: builder.query({
+            query: ({ search, filter }) => ({
+                url: `/catalogue?search=${search}&filter=${filter}`,
+                method: "GET",
+                data: {}
             })
         })
     })
@@ -71,5 +106,11 @@ export const {
     useAddProductMutation,
     useCreateCatalogueMutation,
     useGetAllCategoryQuery,
-    useDeleteProductMutation
+    useDeleteProductMutation,
+    useEditProductMutation,
+    useAddMetaDetailsMutation,
+    useUpdateMetaDetailsMutation,
+    useGetAllCataloguesQuery,
+    useGetSingleCatalogueQuery,
+    useEditCatalogueOwnerMutation
 } = catalogueApi
