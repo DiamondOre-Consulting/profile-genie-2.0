@@ -1,7 +1,7 @@
 import { Router } from "express"
 import upload from "../middleware/multer.middleware.js"
-import { addProduct, createCatalogue, createCatalogueOwner, deleteProduct, editCatalogueOwner, editProduct, getAllCatalogues, getAllCategories, getCategorisedProducts, getSingleCatalogue } from "../controller/catalogue.controller.js"
-import { createMetaData, updateMetaData } from "../controller/metaData.controller.js"
+import { addProduct, createCatalogue, createCatalogueOwner, deleteProduct, editCatalogue, editCatalogueOwner, editProduct, getAllCatalogues, getAllCategories, getCategorisedProducts, getSingleCatalogue } from "../controller/catalogue.controller.js"
+import { createMetaData, updatedCatalogueMetaData, updateMetaData } from "../controller/metaData.controller.js"
 import { verifyJWT } from "../middleware/auth.middleware.js"
 
 const catalogueRouter = Router()
@@ -20,6 +20,10 @@ catalogueRouter.route('/create-catalogue')
     .post(upload.array("files", 2),
         createCatalogue)
 
+catalogueRouter.route('/edit-catalogue/:id')
+    .put(upload.array("files", 2),
+        editCatalogue)
+
 catalogueRouter.route('/add-product')
     .post(upload.array("image", 30),
         addProduct)
@@ -32,8 +36,6 @@ catalogueRouter.route('/edit-product/:id')
 
 catalogueRouter.route('/all-products/:userName')
     .get(getCategorisedProducts)
-
-
 
 // catalogueRouter.route('/recycle/:id', verifyJWT)
 //     .put(recyclePortfolio)
@@ -55,6 +57,6 @@ catalogueRouter.route('/contact/:id', verifyJWT)
 
 catalogueRouter.route('/meta/:id', verifyJWT)
     .post(upload.single("favIcon"), createMetaData)
-    .put(upload.single("favIcon"), updateMetaData)
+    .put(upload.single("favIcon"), updatedCatalogueMetaData)
 
 export default catalogueRouter

@@ -96,8 +96,6 @@ const createCatalogue = asyncHandler(async (req, res) => {
         ]
     })
 
-    console.log(uniqueCatalogue)
-
     if (uniqueCatalogue) {
         if (uniqueCatalogue.userName === userName) {
             throw new AppError("Username already exists!", 400)
@@ -146,7 +144,6 @@ const createCatalogue = asyncHandler(async (req, res) => {
 
 
     uploadedFiles.forEach(file => {
-        console.log(file)
         if (file.uniqueId === "heroImage") {
             catalogue.heroImage.url = file.result.secure_url;
             catalogue.heroImage.publicId = file.result.public_id;
@@ -164,6 +161,65 @@ const createCatalogue = asyncHandler(async (req, res) => {
         message: "Portfolio created successfully"
     })
 })
+
+const editCatalogue = asyncHandler(async (req, res) => {
+    const { formData } = req.body
+    const { id } = req.params
+    const { name, catalogueOwner, userName, tagline, description, isActive, category, backgroundColor, textColor, paidDate } = JSON.parse(formData)
+
+    const catalogue = await Catalogue.findById(id)
+
+    if (!catalogue) {
+        throw new AppError("Catalogue not found!", 400)
+    }
+
+    const uniqueCatalogue = await Catalogue.findOne({ userName })
+    if (uniqueCatalogue) {
+        if (uniqueCatalogue.userName === userName && uniqueCatalogue._id.toString() !== id) {
+            throw new AppError("Username already exists!", 400)
+        }
+    }
+
+    catalogue.name = name
+    catalogue.userName = userName
+    catalogue.tagline = tagline
+    catalogue.description = description
+    catalogue.isActive = isActive
+    catalogue.category = category
+    catalogue.backgroundColor = backgroundColor
+    catalogue.textColor = textColor
+    catalogue.paidDate = paidDate
+    const today = new Date()
+    const oneYearBefore = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate())
+
+    catalogue.isPaid = paidDate < oneYearBefore ? false : true
+
+    let uploadedFiles = []
+
+    if (req?.files) {
+        uploadedFiles = await multipleFileUpload(req?.files);
+    }
+
+
+    uploadedFiles.forEach(file => {
+        if (file.uniqueId === "heroImage") {
+            catalogue.heroImage.url = file.result.secure_url;
+            catalogue.heroImage.publicId = file.result.public_id;
+        } else if (file.uniqueId === "logo") {
+            catalogue.logo.url = file.result.secure_url;
+            catalogue.logo.publicId = file.result.public_id;
+        }
+    });
+
+    const updatedCatalogue = await catalogue.save()
+
+    return res.status(200).json({
+        success: true,
+        Catalogue: updatedCatalogue,
+        message: "Catalogue updated successfully!"
+    })
+})
+
 
 const getAllCategories = asyncHandler(async (req, res) => {
     const { id } = req.params
@@ -546,7 +602,9 @@ const getSingleCatalogue = asyncHandler(async (req, res) => {
                 path: "authAccount",
             },
         })
-        .populate("metaDetails");
+        .populate({
+            path: "metaDetails",
+        })
 
     console.log(catalogue);
 
@@ -683,5 +741,6 @@ export {
     editProduct,
     getSingleCatalogue,
     getAllCatalogues,
-    editCatalogueOwner
+    editCatalogueOwner,
+    editCatalogue
 }

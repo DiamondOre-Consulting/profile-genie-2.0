@@ -1,6 +1,8 @@
 
 import EditCatalogueDetail from "@/components/Forms/EditCatalogue/EditCatalogueDetail";
+import EditCatalogueProducts from "@/components/Forms/EditCatalogue/EditCatalogueProducts";
 import EditOwner from "@/components/Forms/EditCatalogue/EditOwner";
+import EditMetaDetails from "@/components/Forms/EditPortfolio/EditMetaDetails";
 import {
     Stepper,
     StepperIndicator,
@@ -94,16 +96,18 @@ export default function EditCatalogue() {
                     />
                 }
                 {currentStep === 3 &&
-                    <EditContactDetails
-                        contactDetails={catalogueData?.data?.contactData as z.infer<typeof addContactDetailSchema>}
-                        catalogueId={catalogueId}
+                    <EditCatalogueProducts
+                        categorisedProduct={catalogueData?.categorisedProducts}
+                        uncategorisedProduct={catalogueData?.uncategorisedProducts}
+                        ownerId={catalogueData?.data?.catalogueOwner?._id}
+                        userName={catalogueData?.data?.userName}
                         setCurrentStep={setCurrentStep}
                         stepsLength={steps.length}
                         currentStep={currentStep}
                     />
                 }
                 {currentStep === 4 &&
-                    <EditMetaDetails metaDetails={catalogueData?.data?.metaDetails as z.infer<typeof addMetaDetailsSchema>} catalogueId={catalogueId} setCurrentStep={setCurrentStep} stepsLength={steps.length} currentStep={currentStep} />
+                    <EditMetaDetails metaDetails={catalogueData?.data?.metaDetails as z.infer<typeof addMetaDetailsSchema>} catalogueId={catalogueData?.data?._id} setCurrentStep={setCurrentStep} stepsLength={steps.length} currentStep={currentStep} />
                 }
                 <p className="bg-[#E11D48] w-full bottom-0 p-1 pr-4 left-0 absolute text-xs text-end text-white" role="region" aria-live="polite">
                     <span className="">
