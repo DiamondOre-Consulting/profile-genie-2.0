@@ -17,9 +17,9 @@ import { useDispatch } from "react-redux";
 const tabs = [
     { link: "/", label: "Dashboard", icon: IconLayoutDashboardFilled },
     { link: "/catalogue/profile", label: "Profile", icon: IconFileCvFilled },
-    { link: "/products", label: "Products", icon: IconFingerprint },
-    { link: "/meta-data", label: "Meta Data", icon: IconTrash },
-    { link: "/all-catalogue", label: "All Catalogue", icon: IconKey },
+    { link: "/catalogue/detail", label: "Catalogue Detail", icon: IconKey },
+    { link: "/catalogue/products", label: "Products", icon: IconFingerprint },
+    { link: "/catalogue/meta-data", label: "Meta Data", icon: IconTrash },
     // { link: "/add-catalogue", label: "Add Catalogue", icon: IconDatabaseImport },
     { link: "/other-settings", label: "Other Settings", icon: IconSettings },
 ];
@@ -108,7 +108,7 @@ export function HomeLayout({ children }: { children: ReactNode }) {
                         </div>
                     </div>
                 </nav>
-                <div className={`  p-2 relative overflow-y-scroll z-50 h-full w-full transition-all bg-[#ffffff] duration-300`}>
+                <div className={`  p-2 relative overflow-y-scroll z-50 h-full w-full transition-all bg-[#f7f7f7] duration-300`}>
                     {children}
                 </div>
             </div>

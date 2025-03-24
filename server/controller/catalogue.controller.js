@@ -47,13 +47,30 @@ const createCatalogueOwner = asyncHandler(async (req, res) => {
 
 const editCatalogueOwner = asyncHandler(async (req, res) => {
     const { id } = req.params
-    const { mapLink, emailList, phoneList, address, whatsappNo } = req.body
+    const { mapLink, fullName, email, emailList, phoneList, address, whatsappNo } = req.body
 
     const catalogueOwner = await CatalogueOwner.findById(id)
 
     if (!catalogueOwner) {
         throw new AppError("Catalogue owner not found!", 404)
     }
+
+    const user = await User.findById(catalogueOwner.authAccount)
+
+    if (!user) {
+        throw new AppError("User not found!", 404)
+    }
+
+    const uniqueUser = await User.findOne({ email })
+    if (uniqueUser) {
+        if (uniqueUser._id.toString() !== user._id.toString()) {
+            throw new AppError("Registered email already exists", 400)
+        }
+    }
+
+    user.email = email
+    user.fullName = fullName
+    await user.save({ validateBeforeSave: false })
 
     const updatedCatalogueOwner = await CatalogueOwner.findOneAndUpdate(
         { _id: id },

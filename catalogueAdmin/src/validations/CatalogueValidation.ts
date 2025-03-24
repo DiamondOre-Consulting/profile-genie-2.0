@@ -15,8 +15,8 @@ export const addCatalogueOwnerSchema = z.object({
     email: z.string().email('Please enter a valid email!'),
     mapLink: z.string().optional(),
     emailList: z.array(z.object({
-        email: z.string().min(1, 'Email is required')
-    })).optional(),
+        email: z.string()
+    })).min(1, 'Email is required'),
     phoneList: z.array(z.object({
         phone: z.number().min(1, 'Phone Number is required')
     })),

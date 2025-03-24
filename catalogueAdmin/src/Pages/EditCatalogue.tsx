@@ -70,7 +70,7 @@ export default function EditCatalogue() {
 
             <Route path="/profile" element={<EditOwner catalogueOwner={catalogueData?.data?.catalogueOwner} catalogueId={catalogueId} setCurrentStep={setCurrentStep} stepsLength={steps.length} currentStep={currentStep} />} />
 
-            <Route path="/catalogue-detail"
+            <Route path="/detail"
                 element={<EditCatalogueDetail
                     catalogueDetail={catalogueData?.data}
                     setCurrentStep={setCurrentStep}

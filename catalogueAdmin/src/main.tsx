@@ -1,6 +1,7 @@
 import { createRoot } from 'react-dom/client'
 import './App.css'
 import './styles/template1.css'
+import "react-phone-input-2/lib/style.css";
 
 import App from './App.tsx'
 import { BrowserRouter } from 'react-router-dom'

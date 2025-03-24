@@ -43,7 +43,7 @@ const EditOwner = ({ currentStep, stepsLength, setCurrentStep, catalogueOwner }:
     }, [catalogueOwner, reset])
 
 
-    const { fields: emailFields, append: emailAppend, remove: emailRemove } = useFieldArray({
+    const { fields: emailFields, append: emailAppend } = useFieldArray({
         control,
         name: 'emailList'
     });
@@ -54,7 +54,7 @@ const EditOwner = ({ currentStep, stepsLength, setCurrentStep, catalogueOwner }:
         }
     }, [emailFields, emailAppend, catalogueOwner]);
 
-    const { fields: phoneFields, append: phoneAppend, remove: phoneRemove } = useFieldArray({
+    const { fields: phoneFields, append: phoneAppend } = useFieldArray({
         control,
         name: 'phoneList'
     })
@@ -65,10 +65,17 @@ const EditOwner = ({ currentStep, stepsLength, setCurrentStep, catalogueOwner }:
         }
     }, [phoneFields, phoneAppend, catalogueOwner]);
 
-    const { fields: addressFields, append: addressAppend, remove: addressRemove } = useFieldArray({
+    const { fields: addressFields, append: addressAppend } = useFieldArray({
         control,
         name: 'address'
     })
+
+    useEffect(() => {
+        if (addressFields.length === 1) {
+            addressAppend({ title: "", detail: "" });
+        }
+    }, [addressFields, addressAppend, catalogueOwner]);
+
 
     const onSubmit = async (data: catalogueOwnerSchema) => {
 
@@ -160,150 +167,126 @@ const EditOwner = ({ currentStep, stepsLength, setCurrentStep, catalogueOwner }:
                         <Input {...register("mapLink")} placeholder="Enter service tagline..." type="text" className={`${errors.mapLink && "border-[#E11D48] "} py-[0.45rem] `} />
                         {errors.mapLink && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.mapLink.message}</p>}
                     </div>
-                    <div className='space-y-2 my-1'>
-                        <Label htmlFor={`emailList`} className="text-neutral-700 font-semibold ">
-                            Email <span className="text-[#ff3f69]">*</span>
+                    <div className='space-y-2  p-2 my-3 rounded bg-[#7f092307] border border-rose-900/10' >
+                        <Label htmlFor={`phoneList`} className="text-neutral-700 font-semibold ">
+                            Phone Number <span className="text-[#ff3f69]">*</span>
                         </Label>
-                        {emailFields?.map((_, ind) => {
-                            return <div className='   rounded' key={ind}>
+                        <div className='flex items-center flex-col sm:flex-row justify-center gap-2'>
 
-                                <Input {...register(`emailList.${ind}.email`)} placeholder="Enter contact email..." type="text" className={`${errors.emailList?.[ind]?.email && "border-[#E11D48] "} py-[0.45rem] `} />
-                                {errors.emailList?.[ind]?.email && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.emailList?.[ind]?.email.message}</p>}
+                            {emailFields?.map((_, ind) => {
+                                return <div className=' w-full  rounded' key={ind}>
 
-                            </div>
-                        })}
+                                    <Input {...register(`emailList.${ind}.email`)} placeholder="Enter contact email..." type="text" className={`${errors.emailList?.[ind]?.email && "border-[#E11D48] "} py-[0.45rem] bg-white`} />
+                                    {errors.emailList?.[ind]?.email && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.emailList?.[ind]?.email.message}</p>}
 
+                                </div>
+                            })}
+                        </div>
                     </div>
 
-                    {phoneFields?.map((_, ind) => {
-                        return <div className='space-y-2  p-2 my-3 rounded bg-[#ff17a21b] border border-rose-800' key={ind}>
-                            <div>
-                                <Label htmlFor={`services.${ind}.serviceName`} className="text-neutral-700 font-semibold ">
-                                    Phone Number <span className="text-[#ff3f69]">*</span>
-                                </Label>
 
-                                <Controller
-                                    name={`phoneList.${ind}.phone`}
-                                    control={control}
-                                    rules={{
-                                        required: "Phone number is required",
-                                        validate: (value) => (!isNaN(value) && value > 0) || "Invalid phone number"
-                                    }}
-                                    render={({ field: { onChange, value, ref } }) => (
-                                        <PhoneInput
-                                            country="in"
-                                            placeholder="Enter phone number"
-                                            inputProps={{
-                                                name: `phoneList.${ind}.phone`,
-                                                required: true,
-                                                ref: (elm: HTMLElement | null) => {
-                                                    if (ref) {
-                                                        ref(elm instanceof HTMLElement ? elm : null);
+                    <div className='space-y-2  p-2 my-3 rounded bg-[#7f092307] border border-rose-900/10' >
+                        <Label htmlFor={`phoneList`} className="text-neutral-700 font-semibold ">
+                            Phone Number <span className="text-[#ff3f69]">*</span>
+                        </Label>
+                        <div className='flex items-center flex-col sm:flex-row justify-center gap-2'>
+
+                            {phoneFields?.map((_, ind) => {
+                                return <div key={ind} className='w-full'>
+
+                                    <Controller
+                                        name={`phoneList.${ind}.phone`}
+                                        control={control}
+                                        rules={{
+                                            required: "Phone number is required",
+                                            validate: (value) => (!isNaN(value) && value > 0) || "Invalid phone number"
+                                        }}
+                                        render={({ field: { onChange, value, ref } }) => (
+                                            <PhoneInput
+                                                country="in"
+                                                placeholder="Enter phone number"
+                                                inputProps={{
+                                                    name: `phoneList.${ind}.phone`,
+                                                    required: true,
+                                                    ref: (elm: HTMLElement | null) => {
+                                                        if (ref) {
+                                                            ref(elm instanceof HTMLElement ? elm : null);
+                                                        }
                                                     }
-                                                }
-                                            }}
-                                            containerStyle={{
-                                                backgroundColor: "#99A1AF",
-                                                color: "#ffffff",
-                                                borderRadius: "4.5px",
-                                                border: "1px solid #D4D4D8"
-                                            }}
-                                            buttonStyle={{
-                                                backgroundColor: "#FFDCE3",
-                                                color: "#000000",
-                                                border: "none",
-                                            }}
-                                            inputStyle={{
-                                                width: "100%",
-                                                border: "1px solid #F5F5F5",
-                                                fontSize: "12px",
-                                                paddingTop: "8px",
-                                                paddingBottom: "8px",
-                                                height: "34px",
-                                                borderRadius: "4px",
-                                                backgroundColor: "#F5F5F5",
-                                                color: "#000"
-                                            }}
-                                            value={value ? value.toString() : ""}
-                                            onChange={(phone) => onChange(phone ? Number(phone) : 0)}
-                                        />
-                                    )}
-                                />
-                                {errors.phoneList?.[ind]?.phone && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.phoneList?.[ind]?.phone.message}</p>}
-                            </div>
+                                                }}
+                                                containerStyle={{
+                                                    backgroundColor: "#99A1AF",
+                                                    color: "#ffffff",
+                                                    borderRadius: "4.5px",
+                                                    border: "1px solid #D4D4D8"
+                                                }}
+                                                buttonStyle={{
+                                                    backgroundColor: "#FFDCE3",
+                                                    color: "#000000",
+                                                    border: "none",
+                                                }}
+                                                inputStyle={{
+                                                    width: "100%",
+                                                    border: "1px solid #F5F5F5",
+                                                    fontSize: "12px",
+                                                    paddingTop: "8px",
+                                                    paddingBottom: "8px",
+                                                    height: "34px",
+                                                    borderRadius: "4px",
+                                                    backgroundColor: "#ffffff",
+                                                    color: "#000"
+                                                }}
+                                                value={value ? value.toString() : ""}
+                                                onChange={(phone) => onChange(phone ? Number(phone) : 0)}
+                                            />
+                                        )}
+                                    />
+                                    {errors.phoneList?.[ind]?.phone && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.phoneList?.[ind]?.phone.message}</p>}
+                                </div>
 
+                            })}
                         </div>
-                    })}
+                    </div>
 
 
                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2'>
                         {addressFields?.map((_, ind) => {
-                            return <div className='space-y-2  p-2 my-3 rounded bg-[#ff17a21b] border border-rose-800' key={ind}>
+                            return <div className='space-y-2  p-2 my-3 rounded bg-[#7f092307] border border-rose-900/10' key={ind}>
                                 <div>
                                     <Label htmlFor={`address.${ind}.title`} className="text-neutral-700 font-semibold ">
                                         Address type
                                     </Label>
-                                    <Input {...register(`address.${ind}.title`)} placeholder="Enter service name..." type="text" className={`${errors.address?.[ind]?.title && "border-[#E11D48] "} py-[0.45rem] `} />
+                                    <Input {...register(`address.${ind}.title`)} placeholder="Enter service name..." type="text" className={`${errors.address?.[ind]?.title && "border-[#E11D48] "} py-[0.45rem] bg-white`} />
                                     {errors.address?.[ind]?.title && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.address?.[ind]?.title.message}</p>}
                                 </div>
                                 <div>
                                     <Label htmlFor={`address.${ind}.detail`} className="text-neutral-700 font-semibold ">
                                         Full address
                                     </Label>
-                                    <Input {...register(`address.${ind}.detail`)} placeholder="Enter service name..." type="text" className={`${errors.address?.[ind]?.detail && "border-[#E11D48] "} py-[0.45rem] `} />
+                                    <Input {...register(`address.${ind}.detail`)} placeholder="Enter service name..." type="text" className={`${errors.address?.[ind]?.detail && "border-[#E11D48] "} py-[0.45rem] bg-white `} />
                                     {errors.address?.[ind]?.detail && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.address?.[ind]?.detail.message}</p>}
                                 </div>
-                                <div className='flex gap-2 justify-evenly mt-3'>
 
-                                    <div className='size-9 px-5 border border-[#E11D48] flex items-center justify-center rounded bg-[#010101]'>
-                                        {ind + 1}
-                                    </div>
-                                    {
-                                        addressFields.length && (
-                                            <button type='button'
-                                                onClick={() => {
-                                                    if (addressFields.length === 1) {
-                                                        setValue(`address.${ind}`, { title: "", detail: "" });
-                                                    } else {
-                                                        addressRemove(ind);
-                                                    }
-                                                }}
-                                                className='flex w-full gap-2 items-center justify-center bg-[#E11D48] text-white px-2 rounded'><IconX className='size-4' /> {addressFields.length !== 1 ? "Remove" : "Clear"}
-                                            </button>
-                                        )
-                                    }
-                                </div>
                             </div>
                         })}
 
-                        <button type='button' className='bg-[#E11D48] flex items-center justify-center cursor-pointer gap-2 my-3 p-2 px-4 rounded text-white' onClick={() => addressAppend({ title: "", detail: "" })}>
-                            <IconPlus className='size-4.5' /> Add more
-                        </button>
+
                     </div>
 
                 </div>
-                <div className="flex mt-6 justify-between space-x-4">
-                    <button
-                        className={`bg-[#1c1c1c] border border-[#565656]   text-white flex items-center gap-3 py-1.5 text-sm px-4 rounded ${currentStep === 1 ? "blur-[1px] cursor-not-allowed" : "cursor-pointer"}`}
-                        disabled={true}
-                    >
 
-                        <IconSquareRoundedArrowLeftFilled />
-                        Prev
-                    </button>
-                    <button
-                        type='submit'
-                        className="bg-[#E11D48] cursor-pointer text-white flex items-center gap-3 py-1.5 text-sm px-4 rounded"
-                        disabled={isSubmitting || currentStep > stepsLength}
-                    >
-                        Next   {
-                            isSubmitting ? (
-                                <IconWhirl className="animate-spin" />
-                            ) :
-                                <IconSquareRoundedArrowRightFilled />
-                        }
-                    </button>
-                </div>
+                <button
+                    type='submit'
+                    className="bg-[#E11D48] cursor-pointer text-white flex items-center gap-3 w-full justify-center py-1.5 text-sm px-4 rounded"
+                    disabled={isSubmitting}
+                >
+                    Update Profile   {
+                        isSubmitting ? (
+                            <IconWhirl className="animate-spin" />
+                        ) :
+                            <IconSquareRoundedArrowRightFilled />
+                    }
+                </button>
             </form>
         </HomeLayout>
     )
