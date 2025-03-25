@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Switch } from '@/components/ui/switch'
 import { toast } from 'sonner'
 import { Textarea } from '@/components/ui/textarea'
-import { addProductSchema, productDetail } from '@/validations/CatalogueValidation'
+import { addProductSchema, productDetail, productResponse, uncategorisedProductResponse } from '@/validations/CatalogueValidation'
 import { useGetAllCategoryQuery, useAddProductMutation, useGetAllCategoryProductsQuery, useDeleteProductMutation, useEditProductMutation } from '@/Redux/API/CatalogueApi'
 import { v4 as uuidv4 } from 'uuid'
 import { SelectNative } from '@/components/ui/select-native'
@@ -29,7 +29,7 @@ const modalVariants = {
 
 
 
-const EditCatalogueProducts = ({ setCurrentStep, userName, ownerId, currentStep, stepsLength, setId }: { setCurrentStep: React.Dispatch<React.SetStateAction<number>>, userName: string | undefined, currentStep: number, ownerId: string, stepsLength: number, setId: React.Dispatch<React.SetStateAction<string>> }) => {
+const EditCatalogueProducts = ({ userName, ownerId }: { userName: string | undefined, currentStep: number, ownerId: string }) => {
 
     const [addProduct] = useAddProductMutation()
     const [editProduct] = useEditProductMutation()
@@ -394,7 +394,7 @@ const EditCatalogueProducts = ({ setCurrentStep, userName, ownerId, currentStep,
                     )}
                 </AnimatePresence>
                 <div className='flex flex-col max-w-[70rem] mx-auto gap-4 min-h-[50rem]'>
-                    {allProduct?.categorisedProducts?.map((product) => {
+                    {allProduct?.categorisedProducts?.map((product: productResponse) => {
                         return <div key={product?.id} className='text-white  w-full border relative border-[#000]  shadow-[0px_0px_15px_#AAAAAA] rounded-md'>
 
                             <div className="space-y-1 bg-[#000000] p-2 rounded-t-md">
@@ -405,7 +405,7 @@ const EditCatalogueProducts = ({ setCurrentStep, userName, ownerId, currentStep,
                                 {errors.category && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.category.message}</p>}
                             </div>
                             <div className='p-2 bg-[#F9FAFB] rounded-b-md'>
-                                {(product?.products.length >= 1) ? product?.products?.map((product) => {
+                                {(product?.products?.length >= 1) ? product?.products?.map((product: productDetail) => {
                                     return <article className="rounded-lg relative text-white border mt-2 border-gray-300 bg-[#F9FAFB]">
                                         <div className="flex items-start gap-3">
                                             <a href="#" className="block shrink-0">
@@ -474,7 +474,7 @@ const EditCatalogueProducts = ({ setCurrentStep, userName, ownerId, currentStep,
                             </div>
                         </div>
                     })}
-                    {allProduct?.uncategorisedProducts?.map((product) => {
+                    {allProduct?.uncategorisedProducts?.map((product: uncategorisedProductResponse) => {
                         return <div key={product?.id} className='text-white  w-full border relative border-[#000] rounded-md'>
 
                             <div className="space-y-1 bg-[#000000] p-2 rounded-t-md">

@@ -1,7 +1,7 @@
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { IconCamera, IconRosetteDiscountCheckFilled, IconSquareRoundedArrowLeftFilled, IconSquareRoundedArrowRightFilled, IconWhirl } from '@tabler/icons-react'
-import React, { useEffect, useState } from 'react'
+import { IconCamera, IconRosetteDiscountCheckFilled, IconSquareRoundedArrowRightFilled, IconWhirl } from '@tabler/icons-react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Switch } from '@/components/ui/switch'
@@ -23,19 +23,23 @@ import { useEditCatalogueMutation } from '@/Redux/API/CatalogueApi'
 import { Tag, TagInput } from 'emblor'
 import { HomeLayout } from '@/Layout/HomeLayout'
 
-const EditCatalogueDetail = ({ setCurrentStep, currentStep, stepsLength, catalogueDetail }: { setCurrentStep: React.Dispatch<React.SetStateAction<number>>, currentStep: number, ownerId: string, stepsLength: number, setUserName: React.Dispatch<React.SetStateAction<string>> }) => {
+const EditCatalogueDetail = ({ catalogueDetail }: { catalogueDetail: catalogueDetail }) => {
 
     const [editCatalogue] = useEditCatalogueMutation()
 
-    const { register, handleSubmit, control, setValue, reset, watch, getValues, formState: { errors, isSubmitting } } = useForm<catalogueDetail>({
+    const { register, handleSubmit, setValue, reset, watch, getValues, formState: { errors, isSubmitting } } = useForm<catalogueDetail>({
         resolver: zodResolver(addCatalogueSchema)
     })
+
+    console.log(catalogueDetail)
 
     console.log(errors)
     console.log(catalogueDetail)
     useEffect(() => {
         reset(catalogueDetail)
-        setValue("catalogueOwner", catalogueDetail?.catalogueOwner?._id)
+        if (catalogueDetail?.catalogueOwner?._id) {
+            setValue("catalogueOwner", catalogueDetail?.catalogueOwner?._id as catalogueDetail["catalogueOwner"])
+        }
     }, [reset, catalogueDetail])
 
     const [files, setFiles] = useState<File[]>([]);
@@ -62,11 +66,8 @@ const EditCatalogueDetail = ({ setCurrentStep, currentStep, stepsLength, catalog
             formData.append("formData", JSON.stringify(data))
             files.forEach((file) => formData.append("files", file))
 
-            const res = await editCatalogue({ formData, id: catalogueDetail?._id })
-            console.log(res)
-            if (res?.data?.success) {
-                setCurrentStep((prev) => prev + 1)
-            }
+            await editCatalogue({ formData, id: catalogueDetail?._id })
+            console.log("hello")
         } catch (error) {
             toast.error("Error submitting form")
         }
@@ -76,15 +77,26 @@ const EditCatalogueDetail = ({ setCurrentStep, currentStep, stepsLength, catalog
 
     const [open, setOpen] = useState(false)
 
-    const [categoryTags, setCategoryTags] = useState([]);
+    const [categoryTags, setCategoryTags] = useState<Tag[]>([]);
     const [activeTagIndex, setActiveTagIndex] = useState<number | null>(null);
     console.log(categoryTags)
 
     useEffect(() => {
         if (watch("category")) {
-            setCategoryTags(watch("category"))
+            const categoryTags = watch("category").map((category) => ({
+                id: category.id ?? "",
+                text: category.text ?? "",
+            }));
+            setCategoryTags(categoryTags);
         }
+
+        if (catalogueDetail?.paidDate) {
+            // setValue("paidDate", catalogueDetail?.paidDate);
+        }
+
     }, [catalogueDetail]);
+
+    console.log(errors)
 
     useEffect(() => {
         setValue("category", categoryTags)
@@ -98,19 +110,20 @@ const EditCatalogueDetail = ({ setCurrentStep, currentStep, stepsLength, catalog
             </div>
             <form className='flex  rounded-md mx-auto my-6  flex-col gap-4 p-4 max-w-[70rem] w-full' onSubmit={handleSubmit(onSubmit)} noValidate>
                 <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2'>
-                    <div onClick={() => setValue("isActive", !getValues("isActive"))} className="relative flex w-full items-start gap-2 rounded-lg border border-red-500 p-3 shadow-sm shadow-black/5 has-[[data-state=checked]]:border-green-600 ">
+                    <div className="relative flex w-full items-start gap-2 rounded-lg border-2 border-red-500 p-3 shadow-sm shadow-black/5 has-[[data-state=checked]]:border-green-600 ">
                         <Switch
+                            defaultChecked={!!getValues("isActive")}
+                            checked={!!getValues("isActive")}
+
                             className="order-1 h-4 w-6 after:absolute after:inset-0 [&_span]:size-3 [&_span]:data-[state=checked]:translate-x-2 rtl:[&_span]:data-[state=checked]:-translate-x-2"
                         />
                         <div className="flex grow items-center gap-2">
                             <IconRosetteDiscountCheckFilled className='w-8 h-8 text-green-500' />
                             <div className="grid grow gap-1">
-                                <Label className='text-neutral-900'>
-
+                                <Label className='text-black font-semibold' htmlFor="isActive">
                                     Active
-
                                 </Label>
-                                <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                                <p className="text-xs text-zinc-600  font-semibold">
                                     {watch("isActive") ? "Link is active!" : "Click to activate link!"}
                                 </p>
                             </div>
@@ -120,7 +133,7 @@ const EditCatalogueDetail = ({ setCurrentStep, currentStep, stepsLength, catalog
                         <Label htmlFor={"paidDate"} className="text-neutral-700 font-semibold ">
                             Paid Date <span className="text-[#ff3f69]">*</span>
                         </Label>
-                        <Popover open={open} onOpenChange={setOpen}>
+                        <Popover>
                             <PopoverTrigger asChild>
                                 <Button
                                     variant="outline"
@@ -128,24 +141,12 @@ const EditCatalogueDetail = ({ setCurrentStep, currentStep, stepsLength, catalog
                                         "w-full justify-start text-left bg-transparent border-gray-300 text-neutral-900 font-normal",
                                         !watch("paidDate") && "text-neutral-900"
                                     )}
-                                    onClick={() => setOpen(!open)}
                                 >
                                     <CalendarIcon className="mr-2 h-4 w-4" />
                                     {watch("paidDate") ? format(watch("paidDate"), "PPP") : "Pick a date"}
                                 </Button>
                             </PopoverTrigger>
-                            <PopoverContent align='start' className="w-auto p-0">
-                                <Calendar
-                                    mode="single"
-                                    onSelect={(date) => {
-                                        if (date) {
-                                            setValue("paidDate", date.toDateString());
-                                        }
-                                        setOpen(false)
-                                    }}
-                                    initialFocus
-                                />
-                            </PopoverContent>
+
                         </Popover>
                         {errors.paidDate && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.paidDate.message}</p>}
 
@@ -278,7 +279,7 @@ const EditCatalogueDetail = ({ setCurrentStep, currentStep, stepsLength, catalog
                             id='category'
                             tags={categoryTags}
                             setTags={(newTags) => {
-                                setCategoryTags(newTags);
+                                setCategoryTags(newTags as Tag[]);
                             }}
                             placeholder="Add category"
 
@@ -307,7 +308,7 @@ const EditCatalogueDetail = ({ setCurrentStep, currentStep, stepsLength, catalog
                 <button
                     type='submit'
                     className="bg-[#E11D48] w-full justify-center cursor-pointer text-neutral-100 flex items-center gap-3 py-1.5 text-sm px-4 rounded"
-                    disabled={isSubmitting || currentStep > stepsLength}
+                    disabled={isSubmitting}
                 >
                     Update   {
                         isSubmitting ? (

@@ -8,6 +8,7 @@ export const loginValidationSchema = z.object({
 })
 
 export const addCatalogueOwnerSchema = z.object({
+    _id: z.string().optional(),
     catalogue: z.string().optional(),
     fullName: z.string().min(3, 'Full Name is required'),
     role: z.string().default('CATALOGUE OWNER').optional(),
@@ -29,6 +30,7 @@ export const addCatalogueOwnerSchema = z.object({
     ).optional(),
 })
 
+
 export const categorySchema = z.array(
     z.object({
         id: z.string().optional(),
@@ -36,6 +38,7 @@ export const categorySchema = z.array(
     }))
 
 export const addCatalogueSchema = z.object({
+    _id: z.string().optional(),
     name: z.string().min(2, 'Full Name is required'),
     tagline: z.string().min(6, 'Tagline is required'),
     userName: z.string().min(2, 'User name is required'),
@@ -54,14 +57,20 @@ export const addCatalogueSchema = z.object({
         publicId: z.string().optional(),
         url: z.string().min(1, 'Logo is required')
     }),
-    catalogueOwner: z.string().min(1, 'Catalogue Owner is required'),
+    catalogueOwner: z.object({
+        _id: z.string().optional(),
+    }),
 })
 
 export const addProductSchema = z.object({
+    id: z.string().optional(),
     ownerId: z.string().min(1, 'Catalogue Owner is required'),
     name: z.string().min(2, 'Product Name is required'),
     HSNCode: z.string().min(2, 'HSN Code is required'),
-    category: categorySchema,
+    category: z.object({
+        id: z.string().optional(),
+        text: z.string().optional()
+    }),
     price: z.number(),
     image: z.array(z.object({
         uniqueId: z.string(),
@@ -71,6 +80,22 @@ export const addProductSchema = z.object({
     stock: z.boolean().default(false),
     moq: z.string().min(2, 'MOQ is required'),
     description: z.string().min(150, 'Description is required (MIN 200 Characters)').max(200, 'Short Description must be less than 400 characters'),
+})
+
+export const productResponseSchema = z.object({
+    text: z.string(),
+    _id: z.string(),
+    products: z.array(addProductSchema),
+
+})
+
+export const uncategorisedProduct = z.object({
+    text: z.string(),
+    products: z.array(addProductSchema),
+    product: z.object({
+        productDetails: z.array(addProductSchema)
+    }).optional(),
+    id: z.string()
 })
 
 export const addMetaDetailsSchema = z.object({
@@ -84,9 +109,13 @@ export const addMetaDetailsSchema = z.object({
     canonical: z.string().min(3, 'Canonical is required')
 })
 
+
+
 export type metaDetails = z.infer<typeof addMetaDetailsSchema>
 export type catalogueDetail = z.infer<typeof addCatalogueSchema>
 export type productDetail = z.infer<typeof addProductSchema>
+export type productResponse = z.infer<typeof productResponseSchema>
+export type uncategorisedProductResponse = z.infer<typeof uncategorisedProduct>
 
 export interface catalogueResponse {
     _id: string,

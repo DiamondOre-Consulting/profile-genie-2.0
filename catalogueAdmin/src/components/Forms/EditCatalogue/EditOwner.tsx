@@ -99,15 +99,14 @@ const EditOwner = ({ currentStep, stepsLength, setCurrentStep, catalogueOwner }:
                             <Label htmlFor={`fullName`} className="text-neutral-700 font-semibold ">
                                 Full Name <span className="text-[#ff3f69]">*</span>
                             </Label>
-                            <Input {...register(`fullName`)} placeholder="Enter owner full name..." type="text" className={`${errors.fullName && "border-[#E11D48] "} py-[0.45rem] `} />
-                            {errors.fullName && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.fullName.message}</p>}
+                            <Input {...register(`fullName`)} placeholder="Enter owner full name..." readOnly type="text" className={`${errors.fullName && "border-[#E11D48] "} py-[0.45rem] cursor-not-allowed select-none`} />
+                            {errors.fullName && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold ">{errors.fullName.message}</p>}
                         </div>
                         <div>
                             <Label htmlFor={`email`} className="text-neutral-700 font-semibold ">
                                 Register email <span className="text-[#ff3f69]">*</span>
                             </Label>
-                            <Input {...register(`email`)} placeholder="Enter register email..." type="text" className={`${errors.email && "border-[#E11D48] "} py-[0.45rem] `} />
-                            {errors.email && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.email.message}</p>}
+                            <Input value={getValues("email")} readOnly placeholder="Enter register email..." type="text" className={`${errors.email && "border-[#E11D48] "} py-[0.45rem] cursor-not-allowed select-none`} />
                         </div>
                         <div>
                             <Label htmlFor={`password`} className="text-neutral-700 font-semibold ">
