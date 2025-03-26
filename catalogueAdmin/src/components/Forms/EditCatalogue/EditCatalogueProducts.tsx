@@ -95,7 +95,7 @@ const EditCatalogueProducts = ({ userName, ownerId }: { userName: string | undef
         control,
         name: 'image'
     })
-
+    console.log(errors)
     const removeImage = (ind: number) => {
         setFiles((prevFiles: File[] | null) => {
             const newFiles = [...(prevFiles || [])];
@@ -161,7 +161,7 @@ const EditCatalogueProducts = ({ userName, ownerId }: { userName: string | undef
         }
     }
 
-    console.log(isSubmitting)
+    console.log(getValues("stock"))
     return (
         <HomeLayout>
             <h1 className='text-2xl font-semibold mb-3 text-center text-neutral-700'>Products</h1>
@@ -199,6 +199,7 @@ const EditCatalogueProducts = ({ userName, ownerId }: { userName: string | undef
                                 </div>
                                 <div onClick={() => setValue("stock", !getValues("stock"))} className="relative flex w-full items-center p-3 gap-2 rounded-lg border border-red-500  shadow-sm shadow-black/5 has-[[data-state=checked]]:border-green-600 ">
                                     <Switch
+                                        defaultChecked={watch("stock")}
                                         className="order-1 h-4 w-6 after:absolute after:inset-0 [&_span]:size-3 [&_span]:data-[state=checked]:translate-x-2 rtl:[&_span]:data-[state=checked]:-translate-x-2"
                                     />
                                     <div className="flex grow items-center gap-2">

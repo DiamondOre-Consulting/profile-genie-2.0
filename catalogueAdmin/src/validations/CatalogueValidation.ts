@@ -67,10 +67,10 @@ export const addProductSchema = z.object({
     ownerId: z.string().min(1, 'Catalogue Owner is required'),
     name: z.string().min(2, 'Product Name is required'),
     HSNCode: z.string().min(2, 'HSN Code is required'),
-    category: z.object({
+    category: z.array(z.object({
         id: z.string().optional(),
         text: z.string().optional()
-    }),
+    })),
     price: z.number(),
     image: z.array(z.object({
         uniqueId: z.string(),
