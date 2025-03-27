@@ -1,4 +1,4 @@
-import { IconArrowLeft, IconArrowRight, IconHeart, IconMinus, IconPlus, IconShoppingBag, IconStar } from "@tabler/icons-react";
+import { IconArrowLeft, IconArrowRight, IconHeart, IconMinus, IconPlus, IconShoppingBag, IconShoppingCart, IconStar } from "@tabler/icons-react";
 import React, { useEffect, useRef, useState } from "react";
 
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -6,85 +6,10 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Navigation, Autoplay } from "swiper/modules";
-
-const products = [
-    {
-        img: "https://cdn.easyfrontend.com/pictures/products/couch3.png",
-        title: "Modern Lounge Chair with Ottoman Classic Designer Chair",
-        price: "864.00",
-        rating: "4.6",
-    },
-    {
-        img: "https://cdn.easyfrontend.com/pictures/products/bag3.png",
-        title: "Luxury Tassel Small Messenger Bag For Women Lingge Embroidery",
-        price: "390.00",
-        rating: "4.6",
-    },
-    {
-        img: "https://cdn.easyfrontend.com/pictures/ecommerce/headphone.png",
-        title: "New Classic Copper Alloy Smooth Metal Hoop Earrings For Woman",
-        price: "245.00",
-        rating: "4.5",
-    },
-    {
-        img: "https://cdn.easyfrontend.com/pictures/products/sbag1.png",
-        title: "Luxury Tassel Small Messenger Bag For Women Lingge Embroidery",
-        price: "145.00",
-        rating: "4.6",
-    },
-    {
-        img: "https://cdn.easyfrontend.com/pictures/products/tshirt2.png",
-        title: "Spring Autumn Kids Thin Sweater Boys Girls Clothes Cute Dinosaur",
-        price: "2120.00",
-        rating: "4.6",
-    },
-    {
-        img: "https://cdn.easyfrontend.com/pictures/products/watch2.png",
-        title: "Spring Autumn Kids Thin Sweater Boys Girls Clothes Cute Dinosaur",
-        price: "2540.00",
-        rating: "4.6",
-    },
-    {
-        img: "https://cdn.easyfrontend.com/pictures/products/shoe1.png",
-        title: "LAOCHRA White Shoes For Men Sneakers Leather Korean Style",
-        price: "1050.00",
-        rating: "4.6",
-    },
-    {
-        img: "https://cdn.easyfrontend.com/pictures/products/sofa2.png",
-        title: "Modern Lounge Chair with Ottoman Classic Designer Chair",
-        price: "350.00",
-        rating: "4.5",
-    },
-    {
-        img: "https://cdn.easyfrontend.com/pictures/products/lamp4.png",
-        title: "Touch Rechargeable Bud Table Lamps LED Creative Mushroom",
-        price: "250.00",
-        rating: "4.6",
-    },
-    {
-        img: "https://cdn.easyfrontend.com/pictures/products/chair2.png",
-        title: "Side Chair Back Chair Fabric Upholstered Seat Chairs",
-        price: "846.00",
-        rating: "4.6",
-    },
-    {
-        img: "https://cdn.easyfrontend.com/pictures/products/perfume1.png",
-        title: "Men's Perfumes Sauvage Eau De Parfum Perfumes",
-        price: "825.00",
-        rating: "4.5",
-    },
-    {
-        img: "https://cdn.easyfrontend.com/pictures/products/glass2.png",
-        title: "ZUEE Retro Small Rectangle Sunglasses Women Vintage",
-        price: "135.00",
-        rating: "4.6",
-    },
-];
+import { AnimatePresence, motion } from "framer-motion";
 
 const ProductItem = ({ product, cart, setCart }) => {
-    const [quantity, setQuantity] = useState([{ id: (product?._id || product.id), quantity: 0 }]);
-    console.log(quantity)
+    const [quantity, setQuantity] = useState([{ id: '', quantity: 0 }]);
     const updateCartInLocalStorage = (newCart) => {
         localStorage.setItem("cart", JSON.stringify(newCart));
     };
@@ -93,36 +18,30 @@ const ProductItem = ({ product, cart, setCart }) => {
         const cartItem = cart.find((item) => (item._id || item.id) === (product?._id || product?.id));
         setQuantity(
             cartItem
-                ? [{ id: (product?._id || product.id), quantity: cartItem.quantity }]
-                : [{ id: (product?._id || product.id), quantity: 0 }]
+                ? [{ id: (product._id || product.id), quantity: cartItem.quantity }]
+                : [{ id: (product._id || product.id), quantity: 0 }]
         );
     }, [product?._id, product?.id, cart]);
 
 
-    const addToCart = (newQuantity, id) => {
-        console.log("dhdh")
+    const addToCart = (newQuantity: number, id: string) => {
         const existingItem = cart.find((item) => (item._id || item.id) === id);
-
-        console.log(existingItem)
 
         if (existingItem) {
             const updatedCart = cart.map((item) =>
-                item._id === product?._id ? { ...item, quantity: newQuantity } : item
+                (item._id || item?.id) === (product?._id || product?.id) ? { ...item, quantity: newQuantity } : item
             );
-            console.log("esis", updatedCart)
             setCart(updatedCart);
             updateCartInLocalStorage(updatedCart);
         } else {
             const updatedCart = [...cart, { ...product, quantity: newQuantity }];
-            console.log("non", updatedCart)
-
             setCart(updatedCart);
             updateCartInLocalStorage(updatedCart);
         }
     };
 
 
-    const removeFromCart = (id) => {
+    const removeFromCart = (id: string) => {
         const updatedCart = cart.filter((item) => (item._id || item.id) !== id);
         setQuantity((prevQuantity) =>
             prevQuantity.map((item) =>
@@ -133,7 +52,8 @@ const ProductItem = ({ product, cart, setCart }) => {
         updateCartInLocalStorage(updatedCart);
     };
 
-    const increaseQuantity = (id) => {
+    const increaseQuantity = (id: string) => {
+        console.log(id)
         setQuantity((prevQuantity) =>
             prevQuantity.map((item) =>
                 item.id === id ? { ...item, quantity: item.quantity + 1 } : item
@@ -141,12 +61,13 @@ const ProductItem = ({ product, cart, setCart }) => {
         );
 
         const updatedItem = quantity.find((item) => item.id === id);
+        console.log(updatedItem)
         if (updatedItem) {
             addToCart(updatedItem.quantity + 1, id);
         }
     };
 
-    const decreaseQuantity = (id) => {
+    const decreaseQuantity = (id: string) => {
         setQuantity((prevQuantity) =>
             prevQuantity.map((item) =>
                 item.id === id && item.quantity > 0 ? { ...item, quantity: item.quantity - 1 } : item
@@ -164,28 +85,21 @@ const ProductItem = ({ product, cart, setCart }) => {
 
     const prevRef = useRef(null);
     const nextRef = useRef(null);
-    console.log(product)
     return (
-        <div className={`p-2 ${product.stock ? "opacity-100" : "opacity-70 grayscale pointer-events-none"} shadow-lg rounded-xl  bg-white border border-gray-300 relative overflow-hidden`}>
+        <div className={`p-1 select-none ${product.stock ? "opacity-100" : "opacity-80 grayscale pointer-events-none"} shadow-md rounded-xl max-w-[22rem] mx-auto bg-white border border-gray-200 relative overflow-hidden`}>
 
             {!product?.stock && <div className="absolute left-1/2 top-38 transform -translate-x-1/2 bg-black/90 text-white py-1 px-2 text-sm z-40 w-[150%] tracking-wide text-[1.3rem] uppercase -rotate-30"><p>Out Of Stock</p></div>}
-            <div className=" bg-emerald-50 rounded-xl relative h-full">
+            <div className=" shadow-md bg-emerald-50 rounded-xl relative h-full">
 
-                <div className="h-[250px] bg-emerald-50 rounded-xl flex justify-center items-center w-full">
+                <div className="h-[200px] bg-emerald-50 rounded-xl flex justify-center items-center w-full">
                     <Swiper
                         loop={true}
                         autoplay={{
                             delay: 3000,
                             disableOnInteraction: false,
                         }}
-                        navigation={{
-                            prevEl: prevRef.current,
-                            nextEl: nextRef.current,
-                        }}
-                        onBeforeInit={(swiper) => {
-                            swiper.params.navigation.prevEl = prevRef.current;
-                            swiper.params.navigation.nextEl = nextRef.current;
-                        }}
+
+
                         modules={[Navigation, Autoplay]}
                         className="w-full h-full"
                     >
@@ -200,62 +114,50 @@ const ProductItem = ({ product, cart, setCart }) => {
                         ))}
                     </Swiper>
 
-                    <div className="absolute flex items-center gap-2 right-6 top-2">
-                        <div
-                            ref={prevRef}
-                            className="z-10 shadow-md flex items-center justify-center w-8 h-8 text-black bg-white rounded-full cursor-pointer custom-prev"
-                        >
-                            <IconArrowLeft />
-                        </div>
-                        <div
-                            ref={nextRef}
-                            className="z-10 flex shadow-md items-center justify-center w-8 h-8 text-black bg-white rounded-full cursor-pointer custom-next"
-                        >
-                            <IconArrowRight />
-                        </div>
-                    </div>
+
                 </div>
 
-                <div className="p-4 lg:p-6 text-start">
+                <div className="p-3 text-start">
                     <a href="#!">
-                        <h5 className="text-base font-medium line-clamp-2">{product.name}</h5>
+                        <h5 className="text-[1.2rem] font-medium line-clamp-1">{product.name}</h5>
                     </a>
-                    <div className="flex justify-between items-center my-3">
-                        <h5 className="text-blue-600 text-base font-medium leading-none">
-                            &#x20B9; {product.price}
-                        </h5>
-                        {product?.stock && <div className="text-xs font-semibold bg-green-100 border border-green-600 text-green-600 py-0.3 px-2 rounded-full">In Stock</div>}
-                    </div>
-                    <div className="flex justify-between items-center">
+                    <p className="line-clamp-3 text-sm leading-[20px]">{product?.description}</p>
+                    <div className="flex mt-4 w-full gap-4 items-center ">
+                        <div className="flex items-start flex-col min-w-[30%]">
+                            <h5 className="text-blue-600 font-semibold leading-none text-[1.1rem]">
+                                &#x20B9; {product.price.toLocaleString('en-IN')}
+                            </h5>
+                            {product?.stock && <div className="text-[0.6rem] font-semibold bg-green-100 border border-green-600 text-green-600  px-2 mt-1 w-fit rounded-full">In Stock</div>}
+                        </div>
+                        <div className="flex gap-2 w-full items-center">
 
-                        <div
-                            className="flex items-center justify-start gap-4 mt-6"
-                            data-aos-offset="10"
-                        >
-                            <div className="min-w-[11rem] actions" data-aos-offset="10">
+                            <motion.div
+                                className={`text-sm  w-full h-[2.4rem]  flex items-center justify-between animate transform duration-300 text-white bg-blue-600 border border-blue-600 rounded-md py-[0.54rem] font-semibold`}
+                            >
                                 {(quantity.find((item) => item.id === (product.id || product._id))?.quantity ?? 0) < 1
                                     ? (
-                                        <button
+                                        <motion.button
+                                            className="text-center cursor-pointer h-[2.4rem] w-full"
                                             onClick={() => increaseQuantity(product.id || product._id)}
-                                            className="w-full px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700"
+
                                         >
                                             Add to Cart
-                                        </button>
+                                        </motion.button>
                                     ) : (
-                                        <div className="flex items-center justify-between font-semibold text-white bg-blue-700 rounded-md">
+                                        <div className="flex w-full items-center justify-between font-semibold text-white bg-blue-600  h-[2.4rem] rounded-md py-[0.54rem]">
                                             <div
                                                 onClick={() => {
                                                     const qty = quantity.find((item) => item.id === (product.id || product._id))?.quantity ?? 0;
                                                     return qty === 1 ? removeFromCart(product.id || product._id) : decreaseQuantity(product.id || product._id);
                                                 }}
-                                                className="p-3 px-5 cursor-pointer"
+                                                className=" pr-4 pl-3  h-[2.6rem] flex items-center justify-center cursor-pointer"
                                             >
                                                 <IconMinus />
                                             </div>
-                                            <span className="text-[1.2rem]">{quantity.find((item) => item.id === (product.id || product._id))?.quantity || 0}</span>
+                                            <span className="">{quantity.find((item) => item.id === (product.id || product._id))?.quantity || 0}</span>
                                             <div
                                                 onClick={() => increaseQuantity(product.id || product._id)}
-                                                className="p-3 px-5 cursor-pointer"
+                                                className=" pl-4  h-[2.6rem] flex items-center justify-center pr-3 cursor-pointer"
                                             >
                                                 <IconPlus />
                                             </div>
@@ -263,14 +165,12 @@ const ProductItem = ({ product, cart, setCart }) => {
                                     )
                                 }
 
-                            </div>
+                            </motion.div>
+
+
                         </div>
-                        <a href="#!">
-                            <h5 className="hover:text-blue-600">
-                                <IconShoppingBag />
-                            </h5>
-                        </a>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -283,7 +183,7 @@ const Product = ({ categorisedProducts, uncategorisedProducts, cart, setCart }) 
     console.log(uncategorisedProducts);
 
     return (
-        <section className="ezy__epgrid5 light py-14 md:py-24 bg-white dark:bg-[#0b1727] text-zinc-900  relative overflow-hidden z-10">
+        <section className="ezy__epgrid5 relative light py-14 md:py-24 bg-white dark:bg-[#0b1727] text-zinc-900   overflow-hidden ">
             {uncategorisedProducts && <div className="container lg:max-w-[80rem] xl:max-w-[90rem] px-4 mx-auto">
                 <h2 className="text-2xl font-bold leading-none md:text-[40px] text-center">
                     Our Products
@@ -304,7 +204,7 @@ const Product = ({ categorisedProducts, uncategorisedProducts, cart, setCart }) 
             {categorisedProducts && categorisedProducts.map((category, i) => (
                 <>
                     {category?.products?.length >= 1 &&
-                        <div className="container lg:max-w-[80rem] xl:max-w-[90rem] px-4 mx-auto">
+                        <div key={i} className="container lg:max-w-[80rem] xl:max-w-[90rem] px-4 mx-auto">
                             <h2 className="text-2xl font-bold leading-none md:text-[40px] text-center">
                                 {category?.text}
                             </h2>
