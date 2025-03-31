@@ -1,17 +1,20 @@
-import { IconArrowLeft, IconArrowRight, IconHeart, IconMinus, IconPlus, IconShoppingBag, IconShoppingCart, IconStar } from "@tabler/icons-react";
-import React, { useEffect, useRef, useState } from "react";
-
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import Marquee from "react-fast-marquee";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Navigation, Autoplay } from "swiper/modules";
 import { AnimatePresence, motion } from "framer-motion";
-import AnimateNumber from "./AnimateNumber";
+import AnimateNumber from "../components/AnimateNumber";
 import { useNavigate } from "react-router-dom";
+import { IconPlus, IconMinus } from "@tabler/icons-react";
 import { SparklesText } from "@/components/ui/sparkles-text";
 
 const ProductItem = ({ product, cart, setCart }) => {
+    const { userName } = useParams()
+
     const [quantity, setQuantity] = useState([{ id: '', quantity: 0 }]);
     const navigate = useNavigate()
 
@@ -88,10 +91,14 @@ const ProductItem = ({ product, cart, setCart }) => {
     };
 
 
-    const prevRef = useRef(null);
-    const nextRef = useRef(null);
+
     return (
-        <div onClick={() => navigate(`./product/${(product?._id || product?.id)}`)} className={`p-1 select-none ${product.stock ? "opacity-100" : "opacity-80 grayscale pointer-events-none"} shadow-md rounded-xl max-w-[22rem] mx-auto bg-white border border-gray-200 relative overflow-hidden`}>
+        <div onClick={(e) => {
+            e.stopPropagation()
+            navigate(`/catalogue/1/${userName}/product/${(product?._id || product?.id)}`)
+        }
+        }
+            className={`p-1 mx-6 select-none ${product.stock ? "opacity-100" : "opacity-80 grayscale pointer-events-none"} shadow-md rounded-xl max-w-[22rem] mx-auto bg-white border border-gray-200 relative overflow-hidden`}>
 
             {!product?.stock && <div className="absolute left-1/2 top-38 transform -translate-x-1/2 bg-black/90 text-white py-1 px-2 text-sm z-40 w-[150%] tracking-wide text-[1.3rem] uppercase -rotate-30"><p>Out Of Stock</p></div>}
             <div className=" shadow-md bg-emerald-50 rounded-xl relative h-full">
@@ -103,8 +110,6 @@ const ProductItem = ({ product, cart, setCart }) => {
                             delay: 3000,
                             disableOnInteraction: false,
                         }}
-
-
                         modules={[Navigation, Autoplay]}
                         className="w-full h-full"
                     >
@@ -143,31 +148,39 @@ const ProductItem = ({ product, cart, setCart }) => {
                                     ? (
                                         <motion.button
                                             className="text-center cursor-pointer h-[2.4rem] w-full"
-                                            onClick={() => increaseQuantity(product.id || product._id)}
-
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                increaseQuantity(product.id || product._id)
+                                            }
+                                            }
                                         >
                                             Add to Cart
                                         </motion.button>
                                     ) : (
                                         <div className="flex w-full items-center justify-between font-semibold text-white bg-blue-600  h-[2.4rem] rounded-md py-[0.54rem]">
                                             <div
-                                                onClick={() => {
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
                                                     const qty = quantity.find((item) => item.id === (product.id || product._id))?.quantity ?? 0;
                                                     return qty === 1 ? removeFromCart(product.id || product._id) : decreaseQuantity(product.id || product._id);
                                                 }}
-                                                className=" pr-4 pl-3  h-[2.6rem] flex items-center justify-center cursor-pointer"
+                                                className=" pr-4 pl-3  h-[2.4rem] flex items-center justify-center cursor-pointer"
                                             >
                                                 <IconMinus />
                                             </div>
-                                            <div className="h-[2.6rem]  flex  items-center justify-center">
+                                            <div className="h-[2.4rem]  flex  items-center justify-center">
                                                 <AnimateNumber
                                                     value={quantity.find((item) => item.id === (product.id || product._id))?.quantity || 0}
                                                 />
                                             </div>
 
                                             <div
-                                                onClick={() => increaseQuantity(product.id || product._id)}
-                                                className=" pl-4  h-[2.6rem] flex items-center justify-center pr-3 cursor-pointer"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    increaseQuantity(product.id || product._id)
+                                                }
+                                                }
+                                                className=" pl-4  h-[2.4rem] flex items-center justify-center pr-3 cursor-pointer"
                                             >
                                                 <IconPlus />
                                             </div>
@@ -187,55 +200,28 @@ const ProductItem = ({ product, cart, setCart }) => {
     );
 };
 
+const ExploreProduct = ({ cart, setCart, exploreProduct }) => {
 
-const Product = ({ categorisedProducts, uncategorisedProducts, cart, setCart }) => {
 
-    console.log(uncategorisedProducts);
 
     return (
-        <section className="ezy__epgrid5 relative light py-14 md:py-24 bg-white dark:bg-[#0b1727] text-zinc-900   overflow-hidden ">
-            {uncategorisedProducts && <div className="container py-10 lg:max-w-[80rem] xl:max-w-[90rem] px-4 mx-auto">
-                <h2 className="text-center my-6 md:mb-10">
-                    <SparklesText text="Our Products" />
-                </h2>
-                <div className="grid grid-cols-12 gap-3 text-center mt-">
-                    {uncategorisedProducts[0]?.products.map((product, i) => (
-                        <>
-                            {product?.productDetails && <div
-                                className="col-span-12 sm:col-span-6 lg:col-span-4 xl:col-span-3 px-2 my-4"
-                                key={i}
-                            >
-                                <ProductItem product={product?.productDetails} cart={cart} setCart={setCart} />
-                            </div>}
-                        </>
-                    ))}
+        <div className=" py-10 overflow-hidden">
+            <h1 className=" mx-auto mb-2 text-4xl text-center mf font-semibold" data-aos="fade-left">
+                <SparklesText text="Explore Products" />
+
+            </h1>
+            <div className="w-20 h-1 mx-auto mb-10 bg-dark md:w-60" data-aos="fade-left"></div>
+            <Marquee className="overflow-hidden h-fit" pauseOnHover={true}>
+                <div className="flex mx-3 gap-6 overflow-hidden" data-aos="fade-up">
+                    {[...exploreProduct?.flatMap((item: ExploreProductItem) => item?.products ?? [])].concat([...exploreProduct?.flatMap((item: ExploreProductItem) => item?.products ?? [])]).map((product, index) => {
+                        return (
+                            <ProductItem product={product} cart={cart} setCart={setCart} />
+                        );
+                    })}
                 </div>
-            </div>}
-            {categorisedProducts && categorisedProducts.map((category, i) => (
-                <>
-                    {category?.products?.length >= 1 &&
-                        <div key={i} className="container py-10 lg:max-w-[80rem] xl:max-w-[90rem] px-4 mx-auto">
-                            <h2 className="text-center my-6 md:mb-10">
-                                <SparklesText text={category?.text} />
-                            </h2>
-                            <div className="grid grid-cols-12 gap-3 text-center mt-">
-                                {category?.products.map((product, i) => (
-                                    <>
-                                        <div
-                                            className="col-span-12 sm:col-span-6 lg:col-span-4 xl:col-span-3 px-2 my-4"
-                                            key={i}
-                                        >
-                                            <ProductItem product={product} cart={cart} setCart={setCart} />
-                                        </div>
-                                    </>
-                                ))}
-                            </div>
-                        </div>
-                    }
-                </>
-            ))}
-        </section>
+            </Marquee>
+        </div>
     );
 };
 
-export default Product;
+export default ExploreProduct;

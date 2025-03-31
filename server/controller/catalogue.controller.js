@@ -213,6 +213,8 @@ const editCatalogue = asyncHandler(async (req, res) => {
 
     let uploadedFiles = []
 
+    console.log(req.files)
+
     if (req?.files) {
         uploadedFiles = await multipleFileUpload(req?.files);
     }
@@ -526,6 +528,22 @@ const getCategorisedProducts = asyncHandler(async (req, res) => {
 
 })
 
+const getSingleProduct = asyncHandler(async (req, res) => {
+    const { id } = req.params
+    const product = await CatalogueProduct.findById(id)
+
+    if (!product) {
+        throw new AppError("Product not found!", 400)
+    }
+
+    console.log(product)
+
+    return res.status(200).json({
+        success: true,
+        data: product
+    })
+})
+
 const getAllCatalogues = asyncHandler(async (req, res) => {
 
     const { search, filter } = req.query
@@ -622,9 +640,6 @@ const getSingleCatalogue = asyncHandler(async (req, res) => {
         .populate({
             path: "metaDetails",
         })
-
-    console.log(catalogue);
-
 
 
     if (!catalogue) {
@@ -759,5 +774,6 @@ export {
     getSingleCatalogue,
     getAllCatalogues,
     editCatalogueOwner,
-    editCatalogue
+    editCatalogue,
+    getSingleProduct
 }

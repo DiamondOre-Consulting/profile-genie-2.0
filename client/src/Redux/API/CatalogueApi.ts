@@ -14,10 +14,19 @@ export const catalogueApi = createApi({
             }),
             providesTags: (result) => result ? [{ type: "CATALOGUE" as const }] : [],
         }),
+        getSingleProduct: builder.query({
+            query: ({ productId }) => ({
+                url: `/catalogue/single-product/${productId}`,
+                method: "GET",
+                data: {}
+            }),
+            providesTags: (result) => result ? [{ type: "CATALOGUE" as const }] : [],
+        }),
 
     }),
 })
 
 export const {
     useGetSingleCatalogueQuery,
+    useGetSingleProductQuery
 } = catalogueApi

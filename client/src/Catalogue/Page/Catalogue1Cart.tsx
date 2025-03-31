@@ -1,5 +1,6 @@
 import { IconMinus, IconPlus, IconTrash } from "@tabler/icons-react";
 import React, { Fragment, useState } from "react";
+import AnimateNumber from "../components/AnimateNumber";
 
 const productList = [
     {
@@ -124,7 +125,7 @@ const ProductItem = ({ product, index, setCart, cart }) => {
             </div>
 
             <div className="flex">
-                {/* product details */}
+
                 <div>
                     <div className="text-base md:text-lg hover:text-blue-600 mb-4">
                         <h2 className="text-[1.2rem] font-semibold">{product?.name}</h2>
@@ -149,7 +150,11 @@ const ProductItem = ({ product, index, setCart, cart }) => {
                                 >
                                     <IconMinus />
                                 </div>
-                                <span className="">{product?.quantity}</span>
+                                <div className="h-[2.6rem]  flex  items-center justify-center">
+                                    <AnimateNumber
+                                        value={product?.quantity}
+                                    />
+                                </div>
                                 <div
                                     onClick={() => increaseQuantity(product.id || product._id)}
                                     className=" pl-4  h-[2.6rem] flex items-center justify-center pr-3 cursor-pointer"
@@ -160,7 +165,7 @@ const ProductItem = ({ product, index, setCart, cart }) => {
                         </div>
                     </div>
                 </div>
-                {/* delete button  */}
+
 
             </div>
         </div>

@@ -48,7 +48,7 @@ export const addCatalogueSchema = z.object({
     category: categorySchema,
     isPaid: z.boolean().default(false).optional(),
     isActive: z.boolean().default(false),
-    description: z.string().min(150, 'Description is required (MIN 200 Characters)').max(200, 'Short Description must be less than 400 characters'),
+    description: z.string().min(250, 'Description is required (MIN 250 Characters)').max(350, 'Short Description must be less than 350 characters'),
     heroImage: z.object({
         publicId: z.string().optional(),
         url: z.string().optional()
@@ -57,9 +57,7 @@ export const addCatalogueSchema = z.object({
         publicId: z.string().optional(),
         url: z.string().min(1, 'Logo is required')
     }),
-    catalogueOwner: z.object({
-        _id: z.string().optional(),
-    }),
+    catalogueOwner: z.string().optional(),
 })
 
 export const addProductSchema = z.object({

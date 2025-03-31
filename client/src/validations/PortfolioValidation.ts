@@ -193,4 +193,3 @@ export interface apiRes {
     data: portfolioResponse
 }
 
-

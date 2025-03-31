@@ -1,6 +1,6 @@
 import { Router } from "express"
 import upload from "../middleware/multer.middleware.js"
-import { addProduct, createCatalogue, createCatalogueOwner, deleteProduct, editCatalogue, editCatalogueOwner, editProduct, getAllCatalogues, getAllCategories, getCategorisedProducts, getSingleCatalogue } from "../controller/catalogue.controller.js"
+import { addProduct, createCatalogue, createCatalogueOwner, deleteProduct, editCatalogue, editCatalogueOwner, editProduct, getAllCatalogues, getAllCategories, getCategorisedProducts, getSingleCatalogue, getSingleProduct } from "../controller/catalogue.controller.js"
 import { createMetaData, updatedCatalogueMetaData, updateMetaData } from "../controller/metaData.controller.js"
 import { verifyJWT } from "../middleware/auth.middleware.js"
 
@@ -30,6 +30,9 @@ catalogueRouter.route('/add-product')
 
 catalogueRouter.route('/delete-product/:id')
     .delete(deleteProduct)
+
+catalogueRouter.route('/single-product/:id')
+    .get(getSingleProduct)
 
 catalogueRouter.route('/edit-product/:id')
     .put(upload.array("image", 30), editProduct)
