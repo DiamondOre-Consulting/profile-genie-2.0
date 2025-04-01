@@ -6,7 +6,7 @@ import { IconMinus, IconPlus, IconShare } from "@tabler/icons-react";
 import ExploreProduct from "./ExploreProduct";
 import AnimateNumber from "../components/AnimateNumber";
 
-const ProductDetail = ({ cart, setCart, productData }) => {
+const ProductDetail = ({ cart, setCart, productData, bgColor }) => {
     const { productId } = useParams();
     const { data, isLoading, refetch } = useGetSingleProductQuery({ productId })
     const [product, setProduct] = useState()
@@ -117,7 +117,7 @@ const ProductDetail = ({ cart, setCart, productData }) => {
 
         console.log(images);
         return (
-            <div className="flex flex-col bg-gray-200 p-2 rounded-md sm:flex-row-reverse items-center gap-4">
+            <div style={{ backgroundColor: lightenColor(bgColor, 0.95) }} className="flex flex-col  p-2 rounded-md sm:flex-row-reverse items-center gap-4">
                 <div className="flex w-full space-x-2 top-10">
 
                     <div
@@ -145,7 +145,7 @@ const ProductDetail = ({ cart, setCart, productData }) => {
 
                 </div>
                 <div className="flex gap-4 top-10 sm:flex-col">
-                    {product?.image.map((image, index) => (
+                    {product?.image?.length > 1 && product?.image.map((image, index) => (
                         <button
                             key={index}
                             onClick={() => {
@@ -153,8 +153,8 @@ const ProductDetail = ({ cart, setCart, productData }) => {
                                 setVideoActive(false);
                             }}
                             className={`w-20 h-20  ${selectedImage === index
-                                ? " border-blue-500"
-                                : " border-gray-600"
+                                ? " border-blue-400"
+                                : " border-gray-500"
                                 } border-2 rounded`}
                         >
                             <img
@@ -189,7 +189,29 @@ const ProductDetail = ({ cart, setCart, productData }) => {
         );
     };
 
+    const lightenColor = (color, percent) => {
+        const num = parseInt(color?.slice(1), 16),
+            amt = Math.round(2.55 * percent * 100),
+            r = (num >> 16) + amt,
+            g = ((num >> 8) & 0x00ff) + amt,
+            b = (num & 0x0000ff) + amt;
 
+        return `rgb(${Math.min(255, r)}, ${Math.min(255, g)}, ${Math.min(255, b)})`;
+    };
+
+    const slightlyModifyColor = (color, shift = 10) => {
+
+        const num = parseInt(color.slice(1), 16)
+        let r = (num >> 16) & 255,
+            g = (num >> 8) & 255,
+            b = num & 255;
+
+        r = (r + shift) % 256;
+        g = (g + shift) % 256;
+        b = (b + shift) % 256;
+
+        return `rgb(${r}, ${g}, ${b})`;
+    };
 
     return (
         <div className="overflow-hidden bg-white overflow-x-hidden">
@@ -202,17 +224,20 @@ const ProductDetail = ({ cart, setCart, productData }) => {
                     </div>
 
                     <div className=" lg:w-[90%]">
-                        <div className="mb-6 lg:mb-12">
-                            <h1 className="text-2xl leading-none md:text-4xl font-medium mb-4">
+                        <div className="mb-6 ">
+                            <h1 style={{ color: lightenColor(bgColor, -0.3) }} className="text-2xl leading-none md:text-4xl font-medium mb-4">
                                 {product.name}
                             </h1>
 
                             <p className="opacity-70 lg:mr-16 xl:mr-20 my-4">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates eligendi quam veniam libero eius asperiores iusto cupiditate suscipit quidem rerum nobis non corporis ea sit ipsum repudiandae ex labore nostrum consequatur, illo velit nam odio animi! Enim est, earum saepe quae eum quod praesentium labore aliquam voluptates esse illo cum nesciunt, qui libero fugit eligendi suscipit laborum quis ad voluptatem, perferendis dolor ni
+                                {product.description}
                             </p>
-                            <h3 className="text-2xl text-blue-600 font-medium">
-                                Rs. {product.price}
-                            </h3>
+                            <div className="flex items-center gap-4">
+                                <h3 style={{ color: lightenColor(bgColor, -0.35) }} className="text-2xl text-blue-600 font-medium">
+                                    Rs. {product.price}
+                                </h3>
+                                <p className="mt-1">{product?.stock ? <span className="flex items-center gap-1 w-fit rounded-full border text-xs px-2 bg-green-100 border-green-700 text-green-700 font-semibold"><span className="bg-green-700 inline-block size-1 rounded-full animate-ping"></span> In Stock</span> : <span className="flex items-center gap-1 w-fit rounded-full border text-xs px-2 bg-red-100 border-red-700 text-red-700 font-semibold"><span className="bg-red-700 inline-block size-1 rounded-full animate-ping"></span> Out of Stock</span>}</p>
+                            </div>
                         </div>
 
 
@@ -222,8 +247,8 @@ const ProductDetail = ({ cart, setCart, productData }) => {
                         >
                             <div className="flex gap-2 w-full items-center">
 
-                                <motion.div
-                                    className={`text-sm  w-full h-[2.5rem]  flex items-center justify-between animate transform duration-300 text-white bg-blue-600 border border-blue-600 rounded-md py-[0.54rem] font-semibold`}
+                                <motion.div style={{ backgroundColor: lightenColor(bgColor, -0.3) }}
+                                    className={`text-sm  w-full h-[2.5rem]  flex items-center justify-between animate transform duration-300 text-white  rounded-md py-[0.54rem] font-semibold`}
                                 >
                                     {(product?.quantity ?? 0) < 1
                                         ? (
@@ -235,7 +260,10 @@ const ProductDetail = ({ cart, setCart, productData }) => {
                                                 Add to Cart
                                             </motion.button>
                                         ) : (
-                                            <div className="flex w-full items-center justify-between font-semibold text-white bg-blue-600  h-[2.4rem] rounded-md py-[0.54rem]">
+                                            <div style={{
+                                                backgroundColor: lightenColor(bgColor, -0.3),
+                                                color: lightenColor(bgColor, 0.95),
+                                            }} className="flex w-full items-center justify-between font-semibold    h-[2.4rem] rounded-md py-[0.54rem]">
                                                 <div
                                                     onClick={() => {
                                                         product.quantity === 1 ? removeFromCart() : decreaseQuantity();
@@ -265,6 +293,7 @@ const ProductDetail = ({ cart, setCart, productData }) => {
 
                             </div>
                             <div
+                                style={{ backgroundColor: slightlyModifyColor(bgColor, 100) }}
                                 data-aos-offset="10"
                                 onClick={() => buyButton()}
                                 className="w-full px-4 py-2 text-center text-white rounded bg-dark cursor-pointer bg-red-500 hover:bg-[#1d8883]"
@@ -272,8 +301,6 @@ const ProductDetail = ({ cart, setCart, productData }) => {
                                 Quote me
                             </div>
                         </div>
-
-
                     </div>
                 </div>
             </div>
@@ -288,7 +315,7 @@ const ProductDetail = ({ cart, setCart, productData }) => {
             </div> */}
 
             <div className="mb-10">
-                <ExploreProduct cart={cart} setCart={setCart} exploreProduct={productData?.categorisedProducts?.filter(category => category.products.length > 0)} />
+                <ExploreProduct bgColor={bgColor} cart={cart} setCart={setCart} exploreProduct={productData?.categorisedProducts?.filter(category => category.products.length > 0)} />
             </div>
         </div>
     );

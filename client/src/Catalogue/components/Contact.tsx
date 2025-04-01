@@ -15,7 +15,7 @@ import 'react-phone-input-2/lib/style.css'
 import { Link } from "react-router-dom"
 
 
-const Contact = ({ contact }: { contact: portfolioResponse['contactData'], bulkLinks: portfolioResponse['otherDetails']['bulkLink'], fullName: string }) => {
+const Contact = ({ contact, bgColor }: { contact: portfolioResponse['contactData'], bulkLinks: portfolioResponse['otherDetails']['bulkLink'], fullName: string }) => {
     console.log(contact)
     const [whatsappNo, setWhatsAppNo] = useState('');
     const url = encodeURIComponent(window.location.href);
@@ -41,18 +41,28 @@ const Contact = ({ contact }: { contact: portfolioResponse['contactData'], bulkL
         window.open(twitterUrl, "_blank");
     };
 
+    const lightenColor = (color, percent) => {
+        const num = parseInt(color?.slice(1), 16),
+            amt = Math.round(2.55 * percent * 100),
+            r = (num >> 16) + amt,
+            g = ((num >> 8) & 0x00ff) + amt,
+            b = (num & 0x0000ff) + amt;
+
+        return `rgb(${Math.min(255, r)}, ${Math.min(255, g)}, ${Math.min(255, b)})`;
+    };
+
 
     return (
         <div className=" bg-white p-2 sm:p-6 md:p-16">
-            <div className="flex flex-col items-center bg-gradient-to-b from-[#101828] to-black shadow-md rounded-lg mt-8 p-1.5 ">
-                <div className="flex items-center flex-col sm:flex-row w-full  mx-auto">
+            <div style={{ backgroundColor: lightenColor(bgColor, 0.85) }} className="flex flex-col items-center  shadow-md rounded-lg mt-8 p-1.5 ">
+                <div className="flex shadow-md items-center flex-col sm:flex-row w-full  mx-auto">
                     <div className="w-full h-70">
                         {(contact?.mapLink) &&
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d28054.49214055431!2d77.08672!3d28.4852224!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1743401160150!5m2!1sen!2sin" loading="lazy" className="w-full h-full"></iframe>
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d28054.49214055431!2d77.08672!3d28.4852224!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1743401160150!5m2!1sen!2sin" loading="lazy" className="w-full h-full sm:rounded-tr-none sm:rounded-l-md rounded-t-md "></iframe>
                         }
                     </div>
 
-                    <div className="flex flex-col w-full md:min-w-[22rem] md:max-w-[23rem] text-white bg-[#141d2fcb] items-center">
+                    <div className="flex flex-col w-full md:min-w-[22rem] h-70 rounded-b-md sm:rounded-r-md md:max-w-[23rem] sm:rounded-bl-none   text-white bg-[#070a0f] items-center">
                         <h3 className="py-2 uppercase font-semibold tracking-wide">Share Catalogue</h3>
                         <div className=" p-4 rounded-t-xl w-full">
                             <div className="mt-1 flex flex-col w-full text-black  bg-[#00b718] shadow-md p-[2px] rounded-sm md:flex-row items-center relative gap-4  mx-auto">

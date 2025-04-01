@@ -9,14 +9,12 @@ import { toast } from 'sonner'
 import { Textarea } from '@/components/ui/textarea'
 import {
     Popover,
-    PopoverContent,
-    PopoverTrigger,
+    PopoverTrigger
 } from "@/components/ui/popover"
 import { format } from 'date-fns'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { CalendarIcon } from 'lucide-react'
-import { Calendar } from '@/components/ui/calendar'
 import { addCatalogueSchema, catalogueDetail } from '@/validations/CatalogueValidation'
 import { HexColorPicker } from "react-colorful"
 import { useEditCatalogueMutation } from '@/Redux/API/CatalogueApi'
@@ -31,10 +29,6 @@ const EditCatalogueDetail = ({ catalogueDetail }: { catalogueDetail: catalogueDe
         resolver: zodResolver(addCatalogueSchema)
     })
 
-    console.log(catalogueDetail)
-
-    console.log(errors)
-    console.log(catalogueDetail)
     useEffect(() => {
         reset(catalogueDetail)
         if (catalogueDetail?.catalogueOwner?._id) {

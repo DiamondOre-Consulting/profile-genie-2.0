@@ -24,8 +24,8 @@ const Catalogue1Dashboard = () => {
             <Catalogue1Layout cart={cart} data={data}>
                 <Routes>
                     <Route path="/" element={<Catalogue1 cart={cart} setCart={setCart} data={data} />} />
-                    <Route path='/cart' element={<Catalogue1Cart cart={cart} setCart={setCart} data={data} />} />
-                    <Route path='/product/:productId' element={<ProductDetail cart={cart} setCart={setCart} productData={data} />} />
+                    <Route path='/cart' element={<Catalogue1Cart cart={cart} setCart={setCart} data={data} bgColor={data?.data?.backgroundColor} />} />
+                    <Route path='/product/:productId' element={<ProductDetail cart={cart} setCart={setCart} productData={data} bgColor={data?.data?.backgroundColor} />} />
                 </Routes>
             </Catalogue1Layout>
         </>

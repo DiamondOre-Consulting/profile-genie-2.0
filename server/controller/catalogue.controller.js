@@ -6,6 +6,7 @@ import Catalogue from "../model/catalogueModel/catalogue.model.js";
 import { multipleFileUpload } from "../utils/fileUpload.utils.js";
 import mongoose from "mongoose";
 import CatalogueProduct from "../model/catalogueModel/catalogueProduct.model.js";
+import cloudinary from "cloudinary";
 
 const createCatalogueOwner = asyncHandler(async (req, res) => {
 
@@ -376,6 +377,15 @@ const editProduct = asyncHandler(async (req, res) => {
                 existingImage.publicId = uploadedFile.result.public_id
             };
         }
+    });
+
+    product.image = product?.image?.filter(productData => {
+        console.log(productData)
+        const isExistingData = image.some(data => data.uniqueId === productData.uniqueId);
+        if (!isExistingData && productData.publicId) {
+            cloudinary.v2.uploader.destroy(productData.publicId);
+        }
+        return isExistingData;
     });
 
     await product.save()

@@ -77,7 +77,7 @@ export const addProductSchema = z.object({
     })),
     stock: z.boolean().default(false),
     moq: z.string().min(2, 'MOQ is required'),
-    description: z.string().min(150, 'Description is required (MIN 200 Characters)').max(200, 'Short Description must be less than 400 characters'),
+    description: z.string().min(400, 'Description is required (MIN 200 Characters)').max(450, 'Short Description must be less than 400 characters'),
 })
 
 export const productResponseSchema = z.object({
@@ -107,6 +107,13 @@ export const addMetaDetailsSchema = z.object({
     canonical: z.string().min(3, 'Canonical is required')
 })
 
+export const quoteFormSchema = z.object({
+    fullName: z.string().min(1, 'Full Name is required'),
+    email: z.string().email('Please enter a valid email!'),
+    phone: z.number().min(1, 'Phone Number is required'),
+    message: z.string().min(10, 'Message is required (MIN 10 Characters)').max(250, 'Message must be less than 250 characters'),
+})
+
 
 
 export type metaDetails = z.infer<typeof addMetaDetailsSchema>
@@ -114,6 +121,7 @@ export type catalogueDetail = z.infer<typeof addCatalogueSchema>
 export type productDetail = z.infer<typeof addProductSchema>
 export type productResponse = z.infer<typeof productResponseSchema>
 export type uncategorisedProductResponse = z.infer<typeof uncategorisedProduct>
+export type quoteFormResponse = z.infer<typeof quoteFormSchema>
 
 export interface catalogueResponse {
     _id: string,

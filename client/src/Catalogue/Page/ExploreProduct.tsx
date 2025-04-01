@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { IconPlus, IconMinus } from "@tabler/icons-react";
 import { SparklesText } from "@/components/ui/sparkles-text";
 
-const ProductItem = ({ product, cart, setCart }) => {
+const ProductItem = ({ product, cart, setCart, bgColor }) => {
     const { userName } = useParams()
 
     const [quantity, setQuantity] = useState([{ id: '', quantity: 0 }]);
@@ -90,7 +90,15 @@ const ProductItem = ({ product, cart, setCart }) => {
         }
     };
 
+    const lightenColor = (color, percent) => {
+        const num = parseInt(color?.slice(1), 16),
+            amt = Math.round(2.55 * percent * 100),
+            r = (num >> 16) + amt,
+            g = ((num >> 8) & 0x00ff) + amt,
+            b = (num & 0x0000ff) + amt;
 
+        return `rgb(${Math.min(255, r)}, ${Math.min(255, g)}, ${Math.min(255, b)})`;
+    };
 
     return (
         <div onClick={(e) => {
@@ -98,12 +106,12 @@ const ProductItem = ({ product, cart, setCart }) => {
             navigate(`/catalogue/1/${userName}/product/${(product?._id || product?.id)}`)
         }
         }
-            className={`p-1 mx-6 select-none ${product.stock ? "opacity-100" : "opacity-80 grayscale pointer-events-none"} shadow-md rounded-xl max-w-[22rem] mx-auto bg-white border border-gray-200 relative overflow-hidden`}>
+            className={`p-1 mx-6 mb-3 select-none ${product.stock ? "opacity-100" : "opacity-80 grayscale pointer-events-none"} shadow-md rounded-xl max-w-[22rem] mx-auto bg-white border border-gray-200 relative overflow-hidden`}>
 
             {!product?.stock && <div className="absolute left-1/2 top-38 transform -translate-x-1/2 bg-black/90 text-white py-1 px-2 text-sm z-40 w-[150%] tracking-wide text-[1.3rem] uppercase -rotate-30"><p>Out Of Stock</p></div>}
-            <div className=" shadow-md bg-emerald-50 rounded-xl relative h-full">
+            <div style={{ backgroundColor: lightenColor(bgColor, 0.95) }} className=" shadow-md  rounded-xl relative h-full">
 
-                <div className="h-[200px] bg-emerald-50 rounded-xl flex justify-center items-center w-full">
+                <div style={{ backgroundColor: lightenColor(bgColor, 0.95) }} className="h-[200px]  rounded-xl flex justify-center items-center w-full">
                     <Swiper
                         loop={true}
                         autoplay={{
@@ -129,20 +137,20 @@ const ProductItem = ({ product, cart, setCart }) => {
 
                 <div className="p-3 text-start">
                     <a href="#!">
-                        <h5 className="text-[1.2rem] font-medium line-clamp-1">{product.name}</h5>
+                        <h5 style={{ color: lightenColor(bgColor, -0.3) }} className="text-[1.2rem] font-medium line-clamp-1">{product.name}</h5>
                     </a>
                     <p className="line-clamp-3 text-sm leading-[20px]">{product?.description}</p>
                     <div className="flex mt-4 w-full gap-4 items-center ">
                         <div className="flex items-start flex-col min-w-[30%]">
-                            <h5 className="text-blue-600 font-semibold leading-none text-[1.1rem]">
+                            <h5 style={{ color: lightenColor(bgColor, -0.3) }} className=" font-semibold leading-none text-[1.1rem]">
                                 &#x20B9; {product.price.toLocaleString('en-IN')}
                             </h5>
                             {product?.stock && <div className="text-[0.6rem] font-semibold bg-green-100 border border-green-600 text-green-600  px-2 mt-1 w-fit rounded-full">In Stock</div>}
                         </div>
                         <div className="flex gap-2 w-full items-center">
 
-                            <motion.div
-                                className={`text-sm  w-full h-[2.4rem]  flex items-center justify-between animate transform duration-300 text-white bg-blue-600 border border-blue-600 rounded-md py-[0.54rem] font-semibold`}
+                            <motion.div style={{ backgroundColor: lightenColor(bgColor, -0.3) }}
+                                className={`text-sm  w-full h-[2.4rem]  flex items-center justify-between animate transform duration-300 text-white  rounded-md py-[0.54rem] font-semibold`}
                             >
                                 {(quantity.find((item) => item.id === (product.id || product._id))?.quantity ?? 0) < 1
                                     ? (
@@ -157,7 +165,10 @@ const ProductItem = ({ product, cart, setCart }) => {
                                             Add to Cart
                                         </motion.button>
                                     ) : (
-                                        <div className="flex w-full items-center justify-between font-semibold text-white bg-blue-600  h-[2.4rem] rounded-md py-[0.54rem]">
+                                        <div style={{
+                                            backgroundColor: lightenColor(bgColor, -0.3),
+                                            color: lightenColor(bgColor, 0.95),
+                                        }} className="flex w-full items-center justify-between font-semibold h-[2.4rem] rounded-md py-[0.54rem]">
                                             <div
                                                 onClick={(e) => {
                                                     e.stopPropagation();
@@ -200,14 +211,14 @@ const ProductItem = ({ product, cart, setCart }) => {
     );
 };
 
-const ExploreProduct = ({ cart, setCart, exploreProduct }) => {
+const ExploreProduct = ({ cart, setCart, exploreProduct, bgColor }) => {
 
 
 
     return (
         <div className=" py-10 overflow-hidden">
-            <h1 className=" mx-auto mb-2 text-4xl text-center mf font-semibold" data-aos="fade-left">
-                <SparklesText text="Explore Products" />
+            <h1 className=" mx-auto  text-4xl text-center mf font-semibold" data-aos="fade-left">
+                <SparklesText text="You may also like" />
 
             </h1>
             <div className="w-20 h-1 mx-auto mb-10 bg-dark md:w-60" data-aos="fade-left"></div>
@@ -215,7 +226,7 @@ const ExploreProduct = ({ cart, setCart, exploreProduct }) => {
                 <div className="flex mx-3 gap-6 overflow-hidden" data-aos="fade-up">
                     {[...exploreProduct?.flatMap((item: ExploreProductItem) => item?.products ?? [])].concat([...exploreProduct?.flatMap((item: ExploreProductItem) => item?.products ?? [])]).map((product, index) => {
                         return (
-                            <ProductItem product={product} cart={cart} setCart={setCart} />
+                            <ProductItem bgColor={bgColor} product={product} cart={cart} setCart={setCart} />
                         );
                     })}
                 </div>

@@ -1,73 +1,45 @@
 import { IconMinus, IconPlus, IconTrash } from "@tabler/icons-react";
 import React, { Fragment, useState } from "react";
 import AnimateNumber from "../components/AnimateNumber";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { quoteFormResponse, quoteFormSchema } from "@/validations/PortfolioValidation";
 
-const productList = [
-    {
-        img: "https://cdn.easyfrontend.com/pictures/portfolio/portfolio14.jpg",
-        title:
-            "ABUK Home Appliance Surge Protector Voltage Brownout Plug Outlet Power Strip Surge Protector With Pass Button",
-        price: "158",
-        qty: 2,
-    },
-    {
-        img: "https://cdn.easyfrontend.com/pictures/portfolio/portfolio20.jpg",
-        title:
-            "Forsining 3d Logo Design Hollow Engraving Black Gold Case Leather Skeleton Mechanical Watches Men Luxury Brand Heren Horloge",
-        price: "7,390",
-        qty: 2,
-    },
-    {
-        img: "https://cdn.easyfrontend.com/pictures/portfolio/portfolio19.jpg",
-        title:
-            "Factory Brand Wholesale 5# Zinc Accessories Custom Hook Slider Metal #5 For Clothing garment jacket",
-        price: "21,452",
-        qty: 2,
-    },
-    {
-        img: "https://cdn.easyfrontend.com/pictures/portfolio/portfolio15.jpg",
-        title:
-            "Factory Direct Sales Stainless Steel Heat Resistant Custom Compression Spring Manufacturer Spring Steel",
-        price: "17,652",
-        qty: 2,
-    },
-];
+const lightenColor = (color, percent) => {
+    const num = parseInt(color?.slice(1), 16),
+        amt = Math.round(2.55 * percent * 100),
+        r = (num >> 16) + amt,
+        g = ((num >> 8) & 0x00ff) + amt,
+        b = (num & 0x0000ff) + amt;
 
-const SideBar = () => (
-    <div className="bg-blue-50 dark:bg-slate-800 rounded-xl flex flex-col gap-6 p-4 md:p-6">
-        <div className="">
-            <h6 className="font-medium mb-6 opacity-75">Order Summary</h6>
+    return `rgb(${Math.min(255, r)}, ${Math.min(255, g)}, ${Math.min(255, b)})`;
+};
 
-            <div className="flex justify-between items-center">
-                <span>Sub total</span>
-                <span className="font-bold">$2099</span>
+
+
+const SideBar = () => {
+
+    const { register, handleSubmit, setValue, reset, watch, getValues, formState: { errors, isSubmitting } } = useForm<quoteFormResponse>({
+        resolver: zodResolver(quoteFormSchema)
+    })
+
+    return (
+        <form>
+            <div className="space-y-1">
+                <Label htmlFor={"fullName"} className="text-neutral-700 font-semibold ">
+                    Name <span className="text-[#ff3f69]">*</span>
+                </Label>
+                <Input {...register("fullName")} placeholder="Enter full name..." type="text" className={`${errors.fullName && "border-[#E11D48] "} py-[0.45rem]  `} />
+                {errors.fullName && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.fullName.message}</p>}
             </div>
-            <hr className="my-4 dark:border-slate-700" />
-            <div className="flex justify-between items-center">
-                <span>Shipping Fee</span>
-                <span className="font-bold">$99</span>
-            </div>
-            <hr className="my-4 dark:border-slate-700" />
-            <div className="flex justify-between items-center">
-                <span>Tax</span>
-                <span className="font-bold">$168</span>
-            </div>
-            <hr className="my-4 dark:border-slate-700" />
-            <div className="flex justify-between items-center">
-                <span className="fs-5 font-bold">Total</span>
-                <span className="font-bold">$2238</span>
-            </div>
-        </div>
-        <div className="">
-            <button className="w-full bg-blue-600 rounded-md text-white hover:bg-opacity-90 py-2.5">
-                BUY (13)
-            </button>
-        </div>
-    </div>
-);
+        </form>
+    )
+}
 
 
-const ProductItem = ({ product, index, setCart, cart }) => {
+const ProductItem = ({ product, index, setCart, cart, bgColor }) => {
 
     const updateCartInLocalStorage = (newCart) => {
         localStorage.setItem("cart", JSON.stringify(newCart));
@@ -112,14 +84,17 @@ const ProductItem = ({ product, index, setCart, cart }) => {
             removeFromCart(id);
         }
     };
+
+
+
     return (
         <div className="flex flex-row items-start p-2 md:p-6 mb-4">
-            <div className="w-full lg:max-w-[140px] rounded-xl mr-4 md:mr-6 mb-4 lg:mb-0">
+            <div className="w-full lg:max-w-[140px] sm:max-w-[80px] max-w-[60px] md:max-w-[100px] rounded-xl mr-4 md:mr-6 mb-4 lg:mb-0">
                 <a href="#!">
                     <img
                         src={product?.image[0]?.url}
                         alt={product?.name}
-                        className="max-w-full h-auto rounded-xl mx-auto"
+                        className="max-w-full h-auto rounded-lg mx-auto"
                     />
                 </a>
             </div>
@@ -127,12 +102,12 @@ const ProductItem = ({ product, index, setCart, cart }) => {
             <div className="flex">
 
                 <div>
-                    <div className="text-base md:text-lg hover:text-blue-600 mb-4">
+                    <div className="text-base md:text-lg  mb-4">
                         <h2 className="text-[1.2rem] font-semibold">{product?.name}</h2>
                         <p className="leading-5 line-clamp-3">{product?.description}</p>
                     </div>
                     <div>
-                        <h3 className="text-xl font-bold text-blue-600">Rs. {product?.price.toLocaleString("en-IN")}</h3>
+                        <h3 style={{ color: lightenColor(bgColor, -0.3) }} className="text-xl font-bold text-blue-600">Rs. {product?.price.toLocaleString("en-IN")}</h3>
                         <div className="flex items-center gap-3 mt-4">
                             <div>
                                 <button onClick={() => removeFromCart(product.id || product._id)} className="size-9.5 border cursor-pointer bg-red-100 border-red-600 text-red-600 inline-flex justify-center items-center rounded-md">
@@ -174,7 +149,7 @@ const ProductItem = ({ product, index, setCart, cart }) => {
 
 
 
-const Catalogue1Cart = ({ cart, setCart }) => {
+const Catalogue1Cart = ({ cart, setCart, bgColor }) => {
 
 
 
@@ -183,12 +158,13 @@ const Catalogue1Cart = ({ cart, setCart }) => {
         <section className="ezy__epcart2 light py-14 md:py-24 bg-white dark:bg-[#0b1727] text-zinc-900 dark:text-white  overflow-hidden ">
             <div className="container px-4 mx-auto">
                 <div className="flex flex-col lg:flex-row gap-6">
-                    <div className="bg-blue-50 dark:bg-slate-800 rounded-xl w-full lg:w-2/3">
+                    <div style={{ backgroundColor: lightenColor(bgColor, 0.95) }} className="  rounded-xl shadow-lg border border-gray-200 w-full lg:w-2/3">
                         {cart.map((item, i) => (
                             <Fragment key={i}>
                                 {!!i && <hr className="my-4 dark:border-slate-700" />}
                                 <ProductItem
                                     product={item}
+                                    bgColor={bgColor}
                                     index={i}
                                     setCart={setCart}
                                     cart={cart}

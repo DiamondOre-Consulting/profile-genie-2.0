@@ -184,7 +184,16 @@ export const addPortfolioSchema = addProfileDetailSchema.extend({
     otherDetails: addOthersDetailSchema
 });
 
+export const quoteFormSchema = z.object({
+    fullName: z.string().min(1, 'Full Name is required'),
+    email: z.string().email('Please enter a valid email!'),
+    phone: z.number().min(1, 'Phone Number is required'),
+    message: z.string().min(10, 'Message is required (MIN 10 Characters)').max(250, 'Message must be less than 250 characters'),
+})
+
+
 export type portfolioSchema = z.infer<typeof addPortfolioSchema>
+export type quoteFormResponse = z.infer<typeof quoteFormSchema>
 
 
 export interface apiRes {

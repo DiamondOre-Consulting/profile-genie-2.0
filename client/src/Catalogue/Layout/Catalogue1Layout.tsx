@@ -51,9 +51,22 @@ const Catalogue1Layout = ({ cart, children, data }: { logo?: string, name: strin
         };
     }, []);
 
+    const lightenColor = (color, percent) => {
+        const num = parseInt(color?.slice(1), 16),
+            amt = Math.round(2.55 * percent * 100),
+            r = (num >> 16) + amt,
+            g = ((num >> 8) & 0x00ff) + amt,
+            b = (num & 0x0000ff) + amt;
+
+        return `rgb(${Math.min(255, r)}, ${Math.min(255, g)}, ${Math.min(255, b)})`;
+    };
+
     return (
         <>
-            <header style={{ backgroundColor: `${data?.data?.backgroundColor}1A` }} className="sticky top-0 z-50">
+            <header
+                style={{ backgroundColor: lightenColor(data?.data?.backgroundColor, 0.85) }}
+                className="sticky top-0 z-50"
+            >
                 <div className='flex bg-cream items-center max-w-[80rem] w-full mx-auto justify-between gap-2 px-4 py-2 md:px-0 relative z-10'>
                     <div
                         onClick={scrollToTop}
@@ -148,7 +161,7 @@ const Catalogue1Layout = ({ cart, children, data }: { logo?: string, name: strin
             <div className='' >
                 {children}
             </div>
-            <footer className="bg-gray-200">
+            <footer className='border-t border-gray-300 mt-4 shadow-[10px_0px_10px_#808080]' style={{ backgroundColor: lightenColor(data?.data?.backgroundColor, 0.85) }}>
                 <div className="mx-auto max-w-5xl md:max-w-full  py-4 md:pb-0">
                     <div
                         onClick={scrollToTop}
@@ -165,10 +178,10 @@ const Catalogue1Layout = ({ cart, children, data }: { logo?: string, name: strin
                     </div>
 
                     <ul className="mt-2 flex flex-wrap justify-center gap-2">
-                        <button onClick={scrollToTop} className="flex items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-300/50 focus:outline-none">
+                        <button onClick={scrollToTop} className="flex items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-gray-900 transition hover:bg-gray-300/50 focus:outline-none">
                             Home
                         </button>
-                        <Link to='product' smooth={true} delay={500} duration={500} className='flex items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-300/50 focus:outline-none'>
+                        <Link to='product' smooth={true} delay={500} duration={500} className='flex items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-gray-900 transition hover:bg-gray-300/50 focus:outline-none'>
                             <a
                                 onClick={() => {
                                     goToHome()
@@ -180,21 +193,21 @@ const Catalogue1Layout = ({ cart, children, data }: { logo?: string, name: strin
                             </a>
                         </Link>
 
-                        <Link to='contact' smooth={true} duration={500} className='flex items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-300/50 focus:outline-none'>Contact
+                        <Link to='contact' smooth={true} duration={500} className='flex items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-gray-900 transition hover:bg-gray-300/50 focus:outline-none'>Contact
                         </Link>
 
-                        <NavLink to='./cart' className='flex items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-300/50 focus:outline-none'>Cart
+                        <NavLink to='./cart' className='flex items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-gray-900 transition hover:bg-gray-300/50 focus:outline-none'>Cart
                         </NavLink>
                     </ul>
                     <div className='flex flex-col md:border-t md:flex-row items-center justify-center mt-2 md:justify-between md:px-10 lg:px-16'>
-                        <p className=" text-center text-sm text-gray-700 my-4">Powered by <NavLink className={'text-[#F43F5E] hover:text-[#F43F5E]/90 cursor-pointer font-semibold rounded-full text-sm hover:underline text-center '} to="/">Profile Genie</NavLink></p>
+                        <p className=" text-center text-sm text-gray-900 my-4">Powered by <NavLink className={'text-[#F43F5E] hover:text-[#F43F5E]/90 cursor-pointer font-semibold rounded-full text-sm hover:underline text-center '} to="/">Profile Genie</NavLink></p>
                         <ul className=" flex justify-center gap-6 md:gap-8">
                             <li>
                                 <a
                                     href="#"
                                     rel="noreferrer"
                                     target="_blank"
-                                    className="text-gray-700 transition hover:text-gray-700/75"
+                                    className="text-gray-900 transition hover:text-gray-900/75"
                                 >
                                     <span className="sr-only">Facebook</span>
                                     <svg className="size-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -212,7 +225,7 @@ const Catalogue1Layout = ({ cart, children, data }: { logo?: string, name: strin
                                     href="#"
                                     rel="noreferrer"
                                     target="_blank"
-                                    className="text-gray-700 transition hover:text-gray-700/75"
+                                    className="text-gray-900 transition hover:text-gray-900/75"
                                 >
                                     <span className="sr-only">Instagram</span>
                                     <svg className="size-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -230,7 +243,7 @@ const Catalogue1Layout = ({ cart, children, data }: { logo?: string, name: strin
                                     href="#"
                                     rel="noreferrer"
                                     target="_blank"
-                                    className="text-gray-700 transition hover:text-gray-700/75"
+                                    className="text-gray-900 transition hover:text-gray-900/75"
                                 >
                                     <span className="sr-only">Twitter</span>
                                     <svg className="size-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -246,7 +259,7 @@ const Catalogue1Layout = ({ cart, children, data }: { logo?: string, name: strin
                                     href="#"
                                     rel="noreferrer"
                                     target="_blank"
-                                    className="text-gray-700 transition hover:text-gray-700/75"
+                                    className="text-gray-900 transition hover:text-gray-900/75"
                                 >
                                     <span className="sr-only">GitHub</span>
                                     <svg className="size-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -264,7 +277,7 @@ const Catalogue1Layout = ({ cart, children, data }: { logo?: string, name: strin
                                     href="#"
                                     rel="noreferrer"
                                     target="_blank"
-                                    className="text-gray-700 transition hover:text-gray-700/75"
+                                    className="text-gray-900 transition hover:text-gray-900/75"
                                 >
                                     <span className="sr-only">Dribbble</span>
                                     <svg className="size-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
