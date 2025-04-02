@@ -1,6 +1,6 @@
 import { Router } from "express"
 import upload from "../middleware/multer.middleware.js"
-import { addProduct, createCatalogue, createCatalogueOwner, deleteProduct, editCatalogue, editCatalogueOwner, editProduct, getAllCatalogues, getAllCategories, getCategorisedProducts, getSingleCatalogue, getSingleProduct } from "../controller/catalogue.controller.js"
+import { addProduct, createCatalogue, createCatalogueOwner, deleteProduct, editCatalogue, editCatalogueOwner, editProduct, getAllCatalogues, getAllCategories, getCategorisedProducts, getSingleCatalogue, getSingleProduct, sendQuotation } from "../controller/catalogue.controller.js"
 import { createMetaData, updatedCatalogueMetaData, updateMetaData } from "../controller/metaData.controller.js"
 import { verifyJWT } from "../middleware/auth.middleware.js"
 
@@ -61,5 +61,8 @@ catalogueRouter.route('/contact/:id', verifyJWT)
 catalogueRouter.route('/meta/:id', verifyJWT)
     .post(upload.single("favIcon"), createMetaData)
     .put(upload.single("favIcon"), updatedCatalogueMetaData)
+
+catalogueRouter.route('/quotations/:id')
+    .post(sendQuotation)
 
 export default catalogueRouter

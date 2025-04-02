@@ -22,11 +22,19 @@ export const catalogueApi = createApi({
             }),
             providesTags: (result) => result ? [{ type: "CATALOGUE" as const }] : [],
         }),
+        sendQuotation: builder.mutation({
+            query: ({ data, ownerId }) => ({
+                url: `/catalogue/quotations/${ownerId}`,
+                method: "POST",
+                data: data
+            }),
+        }),
 
     }),
 })
 
 export const {
     useGetSingleCatalogueQuery,
-    useGetSingleProductQuery
+    useGetSingleProductQuery,
+    useSendQuotationMutation
 } = catalogueApi

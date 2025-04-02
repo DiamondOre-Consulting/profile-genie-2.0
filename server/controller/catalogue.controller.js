@@ -7,6 +7,9 @@ import { multipleFileUpload } from "../utils/fileUpload.utils.js";
 import mongoose from "mongoose";
 import CatalogueProduct from "../model/catalogueModel/catalogueProduct.model.js";
 import cloudinary from "cloudinary";
+import { getQuotationMail, sendQuotationRes } from "../utils/cronMessages.js";
+
+import sendMail from "../utils/mail.utils.js";
 
 const createCatalogueOwner = asyncHandler(async (req, res) => {
 
@@ -773,6 +776,37 @@ const getSingleCatalogue = asyncHandler(async (req, res) => {
     })
 })
 
+const sendQuotation = asyncHandler(async (req, res) => {
+    const { id } = req.params
+    const { name, email, phone, message: quotationMessage, products } = req.body
+    console.log(1)
+    const catalogue = await Catalogue.findById(id)
+        .populate({
+            path: "catalogueOwner",
+            populate: {
+                path: "authAccount",
+            },
+        })
+    console.log(catalogue)
+    if (!catalogue) {
+        throw new AppError("OOPS! Something went wrong.", 400)
+    }
+
+    const { subject, message } = getQuotationMail(req.body, products, catalogue?.name, catalogue?.logo?.url)
+
+    await sendMail(catalogue?.catalogueOwner?.authAccount?.email, subject, message)
+
+    const { subject: quotationResSubject, message: quotationResMessage } = sendQuotationRes(req.body, products, catalogue?.name, catalogue?.logo?.url)
+
+    await sendMail(email, quotationResSubject, quotationResMessage, catalogue?.name)
+
+    res.status(200).json({
+        success: true,
+        message: "Quotation sent successfully"
+    })
+
+})
+
 export {
     createCatalogueOwner,
     createCatalogue,
@@ -785,5 +819,6 @@ export {
     getAllCatalogues,
     editCatalogueOwner,
     editCatalogue,
-    getSingleProduct
+    getSingleProduct,
+    sendQuotation
 }

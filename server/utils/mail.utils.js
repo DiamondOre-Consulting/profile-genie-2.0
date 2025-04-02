@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer"
 
 
-const sendMail = async function (email, subject, message) {
+const sendMail = async function (email, subject, message, type) {
     const transporter = nodemailer.createTransport({
         service: "gmail",
         host: 'smtp.gmail.com',
@@ -14,7 +14,7 @@ const sendMail = async function (email, subject, message) {
     });
 
     await transporter.sendMail({
-        from: `Authentication <${process.env.SMTP_FROM_EMAIL}>`,
+        from: `${type ? (type | "Profile Genie") : "Profile Genie"} <${process.env.SMTP_FROM_EMAIL}>`,
         to: email,
         subject: subject,
         html: message

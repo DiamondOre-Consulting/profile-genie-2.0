@@ -19,7 +19,6 @@ passport.use(
                 const emailUser = await User.findOne({ email: profile.emails[0].value })
 
                 if (!emailUser) {
-                    console.log(profile)
                     return done(null, null)
                 }
 
