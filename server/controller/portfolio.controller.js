@@ -99,18 +99,16 @@ const updatePortfolio = asyncHandler(async (req, res) => {
     const portfolio = await Portfolio.findById(id)
 
     if (!portfolio) {
-        console.log(1)
         throw new AppError("Portfolio not found!", 400)
     }
 
     if (portfolio.userName !== userName) {
-        console.log(portfolio.userName, userName)
         const uniquePortfolio = await Portfolio.findOne({ userName })
         if (!uniquePortfolio && portfolio._id.toString() !== id) {
             throw new AppError("Username already exists!", 400)
         }
     }
-
+    console.log(paidDate)
 
     portfolio.fullName = await fullName
     portfolio.userName = await userName
@@ -143,7 +141,6 @@ const updatePortfolio = asyncHandler(async (req, res) => {
             portfolio.logo.publicId = file.result.public_id;
         }
     });
-    console.log(portfolio)
     await portfolio.save()
 
     res.status(200).json({
@@ -366,48 +363,13 @@ const getAllPortfolio = asyncHandler(async (req, res) => {
 
 const getRecycledPortfolio = asyncHandler(async (req, res) => {
 
+    const portfolios = await Portfolio.find({ isRecycled: true })
 
-    const portfolios = await Portfolio.aggregate([
-        {
-            $match: {
-                isRecycled: true
-            }
-        },
-        {
-            $lookup: {
-                from: "portfoliocontacts",
-                localField: "contactData",
-                foreignField: "_id",
-                as: "contactData"
-            }
-        },
-        {
-            $unwind: "$contactData"
-        },
-        {
-            $project: {
-                _id: 1,
-                userName: 1,
-                fullName: 1,
-                image: 1,
-                tagline: 1,
-                paidDate: 1,
-                isActive: 1,
-                isPaid: 1,
-                isRecycled: 1,
-                facebook: "$contactData.social.facebook",
-                instagram: "$contactData.social.instagram",
-                whatsappNo: "$contactData.whatsappNo",
-                email: 1,
-                phoneNumber: 1,
-            }
-        }
-    ])
+    console.log(portfolios)
 
     res.status(200).json({
         success: true,
         data: portfolios,
-        message: "All Portfolios!"
     })
 })
 

@@ -18,9 +18,10 @@ const tabs = [
     { link: "/", label: "Dashboard", icon: IconLayoutDashboardFilled },
     { link: "/all-portfolio", label: "All Portfolio", icon: IconFileCvFilled },
     { link: "/select-template", label: "Add Portfolio", icon: IconFingerprint },
-    { link: "/recycle-bin", label: "Recycle Bin", icon: IconTrash },
+    { link: "/portfolio-recycle-bin", label: "Portfolio Bin", icon: IconTrash },
     { link: "/all-catalogue", label: "All Catalogue", icon: IconKey },
     { link: "/add-catalogue", label: "Add Catalogue", icon: IconDatabaseImport },
+    { link: "/catalogue-recycle-bin", label: "Catalogue Bin", icon: IconTrash },
     { link: "/other-settings", label: "Other Settings", icon: IconSettings },
 ];
 

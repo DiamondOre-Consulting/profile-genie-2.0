@@ -12,7 +12,7 @@ const Catalogue1Layout = ({ cart, children, data }: { logo?: string, name: strin
         if (userName) {
             navigate(`/catalogue/1/${userName}`);
         } else {
-            navigate("/"); // Fallback if userName is missing
+            navigate("/");
         }
         closeMenu();
     };
@@ -63,6 +63,8 @@ const Catalogue1Layout = ({ cart, children, data }: { logo?: string, name: strin
 
     return (
         <>
+
+
             <header
                 style={{ backgroundColor: lightenColor(data?.data?.backgroundColor, 0.85) }}
                 className="sticky top-0 z-50"

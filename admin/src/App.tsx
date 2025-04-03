@@ -8,6 +8,7 @@ import SelectTemplate from "./Pages/SelectTemplate"
 import AddCatalogue from "./Pages/AddCatalogue"
 import AllCatalogue from "./Pages/AllCatalogue"
 import EditCatalogue from "./Pages/EditCatalogue"
+import RecycledCatalogue from "./Pages/RecycledCatalogue"
 
 const Dashboard = lazy(() => import("./Pages/Dashboard"))
 const AddPortfolio = lazy(() => import("./Pages/AddPortfolio"))
@@ -30,7 +31,8 @@ function App() {
           <Route path="/all-catalogue" element={<AllCatalogue />} />
           <Route path="/edit-portfolio/:username" element={<EditPortfolio />} />
           <Route path="/edit-catalogue/:username" element={<EditCatalogue />} />
-          <Route path="/recycle-bin" element={<RecycledPortfolio />} />
+          <Route path="/portfolio-recycle-bin" element={<RecycledPortfolio />} />
+          <Route path="/catalogue-recycle-bin" element={<RecycledCatalogue />} />
           <Route path="/select-template" element={<SelectTemplate />} />
           <Route path="/portfolio/preview/template1/:username" element={<Template1 />} />
           <Route path="*" element={<PageNotFound />} />

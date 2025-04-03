@@ -48,6 +48,14 @@ export const catalogueApi = createApi({
                 data: {}
             })
         }),
+        deleteCatalogue: builder.mutation({
+            query: ({ id }) => ({
+                url: `/catalogue/delete-catalogue/${id}`,
+                method: "DELETE",
+                data: {},
+            }),
+            invalidatesTags: (result) => result ? [{ type: "CATALOGUE" as const }] : [],
+        }),
         addProduct: builder.mutation({
             query: ({ formData }) => ({
                 url: "/catalogue/add-product",
@@ -105,7 +113,47 @@ export const catalogueApi = createApi({
                 data: {}
             }),
             providesTags: (result) => result ? [{ type: "CATALOGUE" as const }] : []
-        })
+        }),
+        restoreCatalogue: builder.mutation({
+            query: ({ id }) => ({
+                url: `/catalogue/restore/${id}`,
+                method: "PUT",
+                data: {}
+            }),
+            invalidatesTags: (result) => result ? [{ type: "CATALOGUE" as const }] : [],
+        }),
+        recycleCatalogue: builder.mutation({
+            query: ({ id }) => ({
+                url: `/catalogue/recycle/${id}`,
+                method: "PUT",
+                data: {}
+            }),
+            invalidatesTags: (result) => result ? [{ type: "CATALOGUE" as const }] : [],
+        }),
+        getRecycledCatalogue: builder.query({
+            query: () => ({
+                url: `/catalogue/recycle/all-catalogue`,
+                method: "GET",
+                data: {}
+            }),
+            providesTags: (result) => result ? [{ type: "CATALOGUE" as const }] : [],
+        }),
+        updateActiveStatus: builder.mutation({
+            query: ({ id }) => ({
+                url: `/catalogue/update-active-status/${id}`,
+                method: "PUT",
+                data: {}
+            }),
+            invalidatesTags: (result) => result ? [{ type: "CATALOGUE" as const }] : [],
+        }),
+        updatePaidStatus: builder.mutation({
+            query: ({ id }) => ({
+                url: `/catalogue/update-paid-status/${id}`,
+                method: "PUT",
+                data: {}
+            }),
+            invalidatesTags: (result) => result ? [{ type: "CATALOGUE" as const }] : [],
+        }),
     })
 })
 
@@ -122,5 +170,12 @@ export const {
     useGetAllCataloguesQuery,
     useGetSingleCatalogueQuery,
     useEditCatalogueOwnerMutation,
-    useEditCatalogueMutation
+    useEditCatalogueMutation,
+    useDeleteCatalogueMutation,
+    useGetRecycledCatalogueQuery,
+    useRestoreCatalogueMutation,
+    useRecycleCatalogueMutation,
+    useUpdateActiveStatusMutation,
+    useUpdatePaidStatusMutation
+
 } = catalogueApi

@@ -7,7 +7,7 @@ import { multipleFileUpload } from "../utils/fileUpload.utils.js";
 import mongoose from "mongoose";
 import CatalogueProduct from "../model/catalogueModel/catalogueProduct.model.js";
 import cloudinary from "cloudinary";
-import { getQuotationMail, sendQuotationRes } from "../utils/cronMessages.js";
+import { getCatalogueActiveMail, getCatalogueInactiveMail, getCataloguePaidMail, getQuotationMail, sendQuotationRes } from "../utils/cronMessages.js";
 
 import sendMail from "../utils/mail.utils.js";
 
@@ -179,7 +179,7 @@ const createCatalogue = asyncHandler(async (req, res) => {
     res.status(200).json({
         success: true,
         data: catalogue,
-        message: "Portfolio created successfully"
+        message: "Catalogue created successfully"
     })
 })
 
@@ -200,7 +200,7 @@ const editCatalogue = asyncHandler(async (req, res) => {
             throw new AppError("Username already exists!", 400)
         }
     }
-
+    console.log(paidDate)
     catalogue.name = name
     catalogue.userName = userName
     catalogue.tagline = tagline
@@ -213,7 +213,7 @@ const editCatalogue = asyncHandler(async (req, res) => {
     const today = new Date()
     const oneYearBefore = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate())
 
-    catalogue.isPaid = paidDate < oneYearBefore ? false : true
+    catalogue.isPaid = catalogue.paidDate < oneYearBefore ? false : true
 
     let uploadedFiles = []
 
@@ -235,14 +235,13 @@ const editCatalogue = asyncHandler(async (req, res) => {
     });
 
     const updatedCatalogue = await catalogue.save()
-
+    console.log(updatedCatalogue)
     return res.status(200).json({
         success: true,
         Catalogue: updatedCatalogue,
         message: "Catalogue updated successfully!"
     })
 })
-
 
 const getAllCategories = asyncHandler(async (req, res) => {
     const { id } = req.params
@@ -337,7 +336,7 @@ const addProduct = asyncHandler(async (req, res) => {
     res.status(200).json({
         success: true,
         data: portfolioDetail,
-        message: "Portfolio detail created successfully"
+        message: "Catalogue detail created successfully"
     })
 })
 
@@ -807,6 +806,218 @@ const sendQuotation = asyncHandler(async (req, res) => {
 
 })
 
+const recycleCatalogue = asyncHandler(async (req, res) => {
+    const { id } = req.params
+
+    const catalogue = await Catalogue.findById(id)
+
+    if (!catalogue) {
+        throw new AppError("Catalogue not found!", 400)
+    }
+
+    catalogue.isRecycled = true
+    catalogue.isActive = false
+
+    await catalogue.save()
+
+    res.status(200).json({
+        success: true,
+        data: catalogue,
+        message: "Catalogue recycled successfully"
+    })
+})
+
+const restoreCatalogue = asyncHandler(async (req, res) => {
+    const { id } = req.params
+
+    const catalogue = await Catalogue.findById(id)
+
+    if (!catalogue) {
+        throw new AppError("Catalogue not found!", 400)
+    }
+
+    catalogue.isRecycled = false
+    catalogue.isActive = true
+
+    await catalogue.save()
+
+    res.status(200).json({
+        success: true,
+        data: catalogue,
+        message: "Catalogue restored successfully"
+    })
+})
+
+const deleteCatalogue = asyncHandler(async (req, res) => {
+
+    const { id } = req.params
+
+    const catalogue = await Catalogue.findById(id)
+
+    if (!catalogue) {
+        throw new AppError("Catalogue not found!", 400)
+    }
+
+    if (catalogue.product) {
+        const productIds = catalogue.product.map(product => product.toString());
+        const catalogueProducts = await CatalogueProduct.find({ _id: { $in: productIds } });
+        catalogueProducts.forEach(product => {
+            product.image.forEach(image => {
+                if (image.publicId) {
+                    cloudinary.v2.uploader.destroy(image.publicId).catch(err => { });
+                }
+            })
+        });
+        await CatalogueProduct.deleteMany({ _id: { $in: productIds } });
+    }
+
+    if (catalogue.catalogueOwner) await CatalogueOwner.findByIdAndDelete(catalogue.catalogueOwner)
+    if (catalogue.metaDetails) await MetaData.findByIdAndDelete(catalogue.metaDetails)
+
+    await Catalogue.findByIdAndDelete(id)
+
+    res.status(200).json({
+        success: true,
+        message: "Catalogue deleted successfully"
+    })
+
+})
+
+const updateStatusActive = asyncHandler(async (req, res) => {
+    const { id } = req.params
+
+    const catalogue = await Catalogue.findById(id).populate({
+        path: "catalogueOwner",
+        populate: {
+            path: "authAccount",
+        },
+    })
+
+    if (!catalogue) {
+        throw new AppError("Catalogue not found!", 400)
+    }
+
+    catalogue.isActive = !catalogue.isActive
+
+    await catalogue.save()
+
+    const { subject, message } = getCatalogueInactiveMail(catalogue?.catalogueOwner?.authAccount?.fullName, catalogue?.userName, catalogue?.name)
+    const { subject: activeSubject, message: activeMessage } = getCatalogueActiveMail(catalogue?.catalogueOwner?.authAccount?.fullName, catalogue?.userName, catalogue?.name)
+
+    if (catalogue.isActive) {
+        await sendMail(catalogue?.catalogueOwner?.authAccount?.email, activeSubject, activeMessage)
+    } else {
+        await sendMail(catalogue?.catalogueOwner?.authAccount?.email, subject, message)
+    }
+
+    res.status(200).json({
+        success: true,
+        data: catalogue,
+        message: "Catalogue status updated successfully"
+    })
+})
+
+const updateStatusPaid = asyncHandler(async (req, res) => {
+    const { id } = req.params
+
+    const catalogue = await Catalogue.findById(id).populate({
+        path: "catalogueOwner",
+        populate: {
+            path: "authAccount",
+        },
+    })
+
+    if (!catalogue) {
+        throw new AppError("Catalogue not found!", 404)
+    }
+
+    catalogue.isPaid = true
+    catalogue.isActive = catalogue.isPaid ? true : false
+    catalogue.paidDate = catalogue.isPaid ? new Date().toISOString().split("T")[0] + "T00:00:00.000Z" : catalogue.paidDate
+
+    await catalogue.save()
+
+    const { confirmMailSubject, confirmMailMessage } = getCataloguePaidMail(catalogue?.catalogueOwner?.authAccount?.fullName, catalogue?.userName, catalogue?.name)
+
+    await sendMail(catalogue?.catalogueOwner?.authAccount?.email, confirmMailSubject, confirmMailMessage)
+
+    res.status(200).json({
+        success: true,
+        data: catalogue,
+        message: "Catalogue marked as paid"
+    })
+})
+
+const getAllRecycledCatalogues = asyncHandler(async (req, res) => {
+
+    const { search, filter } = req.query
+
+
+    const pipeline = [
+        {
+            $lookup: {
+                from: "catalogueowners",
+                localField: "catalogueOwner",
+                foreignField: "_id",
+                as: "ownerDetails",
+            }
+        },
+        {
+            $unwind: {
+                path: "$ownerDetails",
+                preserveNullAndEmptyArrays: true,
+            },
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "ownerDetails.authAccount",
+                foreignField: "_id",
+                as: "ownerDetails.authAccountDetails",
+            }
+        },
+        {
+            $unwind: {
+                path: "$ownerDetails.authAccountDetails",
+                preserveNullAndEmptyArrays: true,
+            },
+        },
+        {
+            $match: {
+                isRecycled: true
+            }
+        },
+        {
+            $project: {
+                _id: 1,
+                name: 1,
+                images: 1,
+                isActive: 1,
+                isPaid: 1,
+                userName: 1,
+                paidDate: 1,
+                logo: 1,
+                "ownerDetails._id": 1,
+                "ownerDetails.phoneList": 1,
+                "ownerDetails.whatsappNo": 1,
+                "ownerDetails.authAccountDetails.fullName": 1,
+                "ownerDetails.authAccountDetails.email": 1
+            },
+        },
+    ];
+
+
+
+    const portfolios = await Catalogue.aggregate(pipeline);
+
+
+
+    res.status(200).json({
+        success: true,
+        data: portfolios,
+    })
+})
+
 export {
     createCatalogueOwner,
     createCatalogue,
@@ -820,5 +1031,11 @@ export {
     editCatalogueOwner,
     editCatalogue,
     getSingleProduct,
-    sendQuotation
+    sendQuotation,
+    recycleCatalogue,
+    restoreCatalogue,
+    deleteCatalogue,
+    updateStatusActive,
+    updateStatusPaid,
+    getAllRecycledCatalogues
 }

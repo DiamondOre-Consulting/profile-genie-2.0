@@ -34,13 +34,14 @@ const RecycledPortfolio = () => {
     // const [filterValue, setFilterValue] = useState('')
     const { data, isLoading } = useGetRecycledPortfolioQuery({})
 
+    console.log(data)
+
     const handleRestore = async (id: string) => {
         const res = await restorePortfolio({ id }).unwrap() as apiRes
         if (res?.success) {
             setRestoreModalActive(false)
             setId('')
         }
-        console.log(res)
     }
 
     const handleDelete = async (id: string) => {

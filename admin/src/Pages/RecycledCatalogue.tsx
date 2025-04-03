@@ -1,19 +1,21 @@
 import { HomeLayout } from "@/Layout/HomeLayout"
-import { IconArrowsExchange, IconBrandWhatsapp, IconClock, IconEdit, IconEye, IconFidgetSpinner, IconLink, IconMail, IconPhone, IconTrash, IconWhirl, IconX } from "@tabler/icons-react"
-import { useEffect, useState } from "react"
+import { IconArrowsExchange, IconBrandWhatsapp, IconClock, IconEdit, IconEye, IconLink, IconMail, IconPhone, IconRestore, IconTrash, IconWhirl, IconX } from "@tabler/icons-react"
+import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { BoltIcon, CircleUserRoundIcon, Layers2Icon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import Search from "@/components/search";
-import Filter from "@/components/Filter";
-import { useGetAllCataloguesQuery, useRecycleCatalogueMutation, useUpdateActiveStatusMutation, useUpdatePaidStatusMutation } from "@/Redux/API/CatalogueApi";
+import { apiRes } from "@/validations/PortfolioValidation";
+import { useDeleteCatalogueMutation, useGetRecycledCatalogueQuery, useRestoreCatalogueMutation } from "@/Redux/API/CatalogueApi";
+
 
 const backdropVariants = {
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { duration: 0.3 } },
 };
+
+
 
 const modalVariants = {
     hidden: { opacity: 0, y: "-50px", scale: 0.8 },
@@ -21,51 +23,46 @@ const modalVariants = {
     exit: { opacity: 0, y: "50px", scale: 0.8, transition: { duration: 0.3 } },
 };
 
-const AllCatalogue = () => {
+const RecycledCatalogue = () => {
     const navigate = useNavigate()
-    const [debouncedSearchValue, setDebouncedSearchValue] = useState('')
-    const [filterValue, setFilterValue] = useState('')
-    const { data, isLoading, refetch } = useGetAllCataloguesQuery({ search: debouncedSearchValue, filter: filterValue })
+    const [restoreModalActive, setRestoreModalActive] = useState(false)
     const [deleteModalActive, setDeleteModalActive] = useState(false)
-    const [recycleId, setRecycleId] = useState('')
-    const [updateActiveStatus, { isLoading: activeLoading }] = useUpdateActiveStatusMutation()
-    const [updatePaidStatus, { isLoading: paidLoading }] = useUpdatePaidStatusMutation()
-    const [recycleCatalogue, { isLoading: recycleLoading }] = useRecycleCatalogueMutation()
+    const [id, setId] = useState('')
+    const [restoreCatalogue, { isLoading: restoreLoading }] = useRestoreCatalogueMutation()
+    const [deleteCatalogue, { isLoading: deleteLoading }] = useDeleteCatalogueMutation()
+    // const [debouncedSearchValue, setDebouncedSearchValue] = useState('')
+    // const [filterValue, setFilterValue] = useState('')
+    const { data, isLoading } = useGetRecycledCatalogueQuery({})
 
-    const handleRecycle = async (id: string) => {
-        const res = await recycleCatalogue({ id }).unwrap()
+    console.log(data)
+
+    const handleRestore = async (id: string) => {
+        const res = await restoreCatalogue({ id }).unwrap() as apiRes
+        if (res?.success) {
+            setRestoreModalActive(false)
+            setId('')
+        }
+        console.log(res)
+    }
+
+    const handleDelete = async (id: string) => {
+        const res = await deleteCatalogue({ id }).unwrap() as apiRes
         if (res?.success) {
             setDeleteModalActive(false)
-            setRecycleId('')
-        }
-    }
-
-    const getPortfolio = async () => {
-        await refetch()
-    }
-
-    useEffect(() => {
-        getPortfolio()
-    }, [debouncedSearchValue, filterValue])
-
-    const handleUpdateStatus = async (id: string, type: string) => {
-        if (type === "isActive") {
-            await updateActiveStatus({ id }).unwrap()
-        } else if (type === "isPaid") {
-            await updatePaidStatus({ id }).unwrap()
+            setId('')
         }
     }
 
     return (
         <HomeLayout>
             <div>
-                All portfolio
+                Recycled catalogue
             </div>
 
-            <div className=" my-2 flex items-center justify-center gap-1">
+            {/* <div className=" my-2 flex items-center justify-center gap-1">
                 <Search setDebouncedSearchValue={setDebouncedSearchValue} />
                 <Filter setFilterValue={setFilterValue} />
-            </div>
+            </div> */}
 
             <AnimatePresence>
                 {deleteModalActive && (
@@ -97,22 +94,21 @@ const AllCatalogue = () => {
                                 Before you delete it permanently, there’s some things you should know:
                             </p>
                             <ul className="text-gray-300 list-disc pl-6">
-                                <li>If you delete a page, it will be moved to the &quot;Recycle bin&quot;.</li>
+                                <li>If you delete a page, it will be deleted permanently and cannot be recovered.</li>
                             </ul>
                             <div className="mt-6 flex justify-end gap-4">
                                 <button
-                                    disabled={recycleLoading}
                                     onClick={() => setDeleteModalActive(false)}
                                     className="text-gray-300 hover:text-white px-4 py-1.5 rounded bg-neutral-900 transition"
                                 >
                                     Cancel
                                 </button>
                                 <button
-                                    disabled={recycleLoading}
-                                    onClick={() => handleRecycle(recycleId)}
+                                    disabled={deleteLoading}
+                                    onClick={() => handleDelete(id)}
                                     className="bg-[#dc0030] flex items-center gap-2 cursor-pointer hover:bg-[#dc0030e1] text-white w-[6.3rem] px-3 py-1.5 rounded transition"
                                 >
-                                    {recycleLoading ? <IconWhirl className="animate-spin" /> : <>
+                                    {deleteLoading ? <IconWhirl className="animate-spin" /> : <>
                                         <IconTrash />
                                         <span>Delete</span>
                                     </>}
@@ -122,7 +118,60 @@ const AllCatalogue = () => {
                     </motion.div>
                 )}
             </AnimatePresence>
-
+            <AnimatePresence>
+                {restoreModalActive && (
+                    <motion.div
+                        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-start pt-30 justify-center"
+                        variants={backdropVariants}
+                        initial="hidden"
+                        animate="visible"
+                        exit="hidden"
+                    >
+                        <motion.div
+                            className="relative w-full max-w-[35rem] rounded-sm  bg-gradient-to-b from-gray-900 via-gray-950 to-black p-4 text-white border border-[#DC0030]/20 shadow-lg"
+                            variants={modalVariants}
+                            initial="hidden"
+                            animate="visible"
+                            exit="exit"
+                        >
+                            <button
+                                className="absolute top-3 right-3 text-gray-400 hover:text-white transition"
+                                onClick={() => setRestoreModalActive(false)}
+                            >
+                                <IconX size={24} />
+                            </button>
+                            <div className="flex items-center gap-3 mb-4">
+                                <IconRestore className="text-[#34D399] text-2xl" />
+                                <h2 className="text-lg font-semibold">You’re about to restore this page</h2>
+                            </div>
+                            <p className="text-gray-100 mb-2">
+                                Before you restore it, there’s some things you should know:
+                            </p>
+                            <ul className="text-gray-300 list-disc pl-6">
+                                <li>The page will be restored to its original state and will be marked as active.</li>
+                            </ul>
+                            <div className="mt-6 flex justify-end gap-4">
+                                <button
+                                    onClick={() => setRestoreModalActive(false)}
+                                    className="text-gray-300 hover:text-white px-4 py-1.5 rounded bg-neutral-900 transition"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    disabled={restoreLoading}
+                                    onClick={() => handleRestore(id)}
+                                    className="bg-[#00a838] flex items-center gap-2 cursor-pointer hover:bg-[#00a838e1] text-white px-3 py-1.5 rounded transition"
+                                >
+                                    {restoreLoading ? <IconWhirl className="animate-spin" /> : <>
+                                        <IconRestore />
+                                        <span>Restore</span>
+                                    </>}
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mx-auto">
                 {isLoading ?
                     <div className="group relative max-w-[40rem] mx-auto w-full animate-pulse">
@@ -148,7 +197,6 @@ const AllCatalogue = () => {
                                 </div>
                             </div>
 
-                            {/* Contact Details */}
                             <div className="flex flex-col gap-2 ml-1 mt-4">
                                 <div className="flex sm:flex-row flex-col md:flex-col gap-2 justify-between">
                                     <div className="flex gap-2">
@@ -161,7 +209,6 @@ const AllCatalogue = () => {
                                     </div>
                                 </div>
 
-                                {/* Date Range */}
                                 <div className="flex items-center justify-between w-full gap-1">
                                     <div className="h-4 w-20 bg-gray-700 rounded"></div>
                                     <div className="h-4 w-6 bg-gray-700 rounded"></div>
@@ -169,7 +216,6 @@ const AllCatalogue = () => {
                                 </div>
                             </div>
 
-                            {/* Action Buttons */}
                             <div className="flex items-center justify-evenly gap-4 mt-4">
                                 {Array(5).fill(0).map((_, i) => (
                                     <div key={i} className="relative flex size-10 items-center justify-center bg-gray-700 rounded-full"></div>
@@ -216,7 +262,7 @@ const AllCatalogue = () => {
                                                 </div>
                                                 <img src={item?.logo?.url} alt="Portfolio profile image" className="h-full w-full rounded-full object-cover" />
                                                 {/* <div className="absolute inset-[3px] rounded-full bg-gray-950"></div>
-                                        <span className="relative text-sm font-bold text-rose-500">L24</span> */}
+                                    <span className="relative text-sm font-bold text-rose-500">L24</span> */}
                                             </div>
 
                                             <div className="flex flex-col gap-1">
@@ -248,11 +294,11 @@ const AllCatalogue = () => {
                                                     ></div>
                                                 </div>
                                                 <DropdownMenu>
-                                                    <DropdownMenuTrigger asChild>
+                                                    {/* <DropdownMenuTrigger asChild>
                                                         <Button size="icon" className="bg-[#010205] " aria-label="Open account menu">
                                                             {(activeLoading || paidLoading) ? <IconFidgetSpinner className="animate-spin" /> : <CircleUserRoundIcon size={16} aria-hidden="true" />}
                                                         </Button>
-                                                    </DropdownMenuTrigger>
+                                                    </DropdownMenuTrigger> */}
                                                     <DropdownMenuContent className="max-w-38">
                                                         <DropdownMenuLabel className="flex items-start gap-3">
 
@@ -324,23 +370,26 @@ const AllCatalogue = () => {
                                     </div>
 
                                     <div className="flex items-center justify-evenly gap-4 mt-4 ">
-                                        <div onClick={() => window.open(`https://wa.me/${Number(item?.ownerDetails?.whatsappNo)}`, '_blank')} className="relative cursor-pointer flex size-10 items-center justify-center group/inner">
+                                        <div onClick={() => window.open(`https://wa.me/${Number(item?.whatsappNo)}`, '_blank')} className="relative cursor-pointer flex size-10 items-center justify-center group/inner">
                                             <div className="absolute inset-0 rounded-full border border-green-500/20 border-t-green-500 transition-transform duration-1000 group-hover/inner:rotate-180">
                                             </div>
                                             <div className="absolute inset-[3px] rounded-full bg-gray-950"></div>
                                             <span className="relative text-sm font-bold text-green-500"><IconBrandWhatsapp /></span>
                                         </div>
 
-                                        <div onClick={() => window.open(``)} className="relative cursor-pointer flex size-10 items-center justify-center group/inner">
+                                        <div onClick={() => {
+                                            setId(item._id)
+                                            setRestoreModalActive(true)
+                                        }} className="relative cursor-pointer flex size-10 items-center justify-center group/inner">
                                             <div
                                                 className="absolute inset-0 rounded-full border border-amber-400/20 border-t-amber-400 transition-transform duration-1000 group-hover/inner:rotate-180"
                                             >
                                             </div>
                                             <div className="absolute inset-[3px] rounded-full bg-gray-950"></div>
-                                            <span className="relative text-sm font-bold text-amber-400"><IconLink /></span>
+                                            <span className="relative text-sm font-bold text-amber-400"><IconRestore /></span>
                                         </div>
                                         <div onClick={() => {
-                                            setRecycleId(item._id)
+                                            setId(item._id)
                                             setDeleteModalActive(true)
                                         }} className="relative cursor-pointer flex size-10 items-center justify-center group/inner">
                                             <div
@@ -350,7 +399,7 @@ const AllCatalogue = () => {
                                             <div className="absolute inset-[3px] rounded-full bg-gray-950"></div>
                                             <span className="relative text-sm font-bold text-[#E11D48]"><IconTrash /></span>
                                         </div>
-                                        <div onClick={() => navigate(`/portfolio/preview/template1/${item?.userName}`)} className="relative cursor-pointer flex size-10 items-center justify-center group/inner">
+                                        <div className="relative cursor-pointer flex size-10 items-center justify-center group/inner">
                                             <div
                                                 className="absolute inset-0 rounded-full border border-amber-400/20 border-t-purple-400 transition-transform duration-1000 group-hover/inner:rotate-180"
                                             >
@@ -360,7 +409,9 @@ const AllCatalogue = () => {
                                         </div>
 
                                         <div onClick={() => navigate(`/edit-catalogue/${item?.userName}`)} className="relative cursor-pointer flex size-10 items-center justify-center group/inner">
-                                            <div className="absolute inset-0 rounded-full border border-amber-400/20 border-t-purple-400 transition-transform duration-1000 group-hover/inner:rotate-180">
+                                            <div
+                                                className="absolute inset-0 rounded-full border border-amber-400/20 border-t-purple-400 transition-transform duration-1000 group-hover/inner:rotate-180"
+                                            >
                                             </div>
                                             <div className="absolute inset-[3px] rounded-full bg-gray-950"></div>
                                             <span className="relative text-sm font-bold text-purple-400"><IconEdit /></span>
@@ -378,4 +429,7 @@ const AllCatalogue = () => {
     )
 }
 
-export default AllCatalogue
+export default RecycledCatalogue
+
+
+

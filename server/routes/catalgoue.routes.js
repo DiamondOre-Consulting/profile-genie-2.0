@@ -1,7 +1,27 @@
 import { Router } from "express"
 import upload from "../middleware/multer.middleware.js"
-import { addProduct, createCatalogue, createCatalogueOwner, deleteProduct, editCatalogue, editCatalogueOwner, editProduct, getAllCatalogues, getAllCategories, getCategorisedProducts, getSingleCatalogue, getSingleProduct, sendQuotation } from "../controller/catalogue.controller.js"
-import { createMetaData, updatedCatalogueMetaData, updateMetaData } from "../controller/metaData.controller.js"
+import {
+    addProduct,
+    createCatalogue,
+    createCatalogueOwner,
+    deleteCatalogue,
+    deleteProduct,
+    editCatalogue,
+    editCatalogueOwner,
+    editProduct,
+    getAllCatalogues,
+    getAllCategories,
+    getAllRecycledCatalogues,
+    getCategorisedProducts,
+    getSingleCatalogue,
+    getSingleProduct,
+    recycleCatalogue,
+    restoreCatalogue,
+    sendQuotation,
+    updateStatusActive,
+    updateStatusPaid
+} from "../controller/catalogue.controller.js"
+import { createMetaData, updatedCatalogueMetaData } from "../controller/metaData.controller.js"
 import { verifyJWT } from "../middleware/auth.middleware.js"
 
 const catalogueRouter = Router()
@@ -9,6 +29,9 @@ const catalogueRouter = Router()
 catalogueRouter.route('/owner')
     .post(createCatalogueOwner)
     .get(getAllCatalogues)
+
+catalogueRouter.route('/recycle/all-catalogue', verifyJWT)
+    .get(getAllRecycledCatalogues)
 
 catalogueRouter.route('/owner/:id')
     .put(verifyJWT, editCatalogueOwner)
@@ -40,17 +63,20 @@ catalogueRouter.route('/edit-product/:id')
 catalogueRouter.route('/all-products/:userName')
     .get(getCategorisedProducts)
 
-// catalogueRouter.route('/recycle/:id', verifyJWT)
-//     .put(recyclePortfolio)
+catalogueRouter.route('/recycle/:id', verifyJWT)
+    .put(recycleCatalogue)
 
-// catalogueRouter.route('/restore/:id', verifyJWT)
-//     .put(restorePortfolio)
+catalogueRouter.route('/restore/:id', verifyJWT)
+    .put(restoreCatalogue)
 
-// catalogueRouter.route('/update-active-status/:id')
-//     .put(verifyJWT, updateStatusActive)
+catalogueRouter.route('/update-active-status/:id')
+    .put(verifyJWT, updateStatusActive)
 
-// catalogueRouter.route('/update-paid-status/:id', verifyJWT)
-//     .put(updateStatusPaid)
+catalogueRouter.route('/update-paid-status/:id', verifyJWT)
+    .put(updateStatusPaid)
+
+catalogueRouter.route('/delete-catalogue/:id', verifyJWT)
+    .delete(deleteCatalogue)
 
 catalogueRouter.route('/single/:userName')
     .get(getSingleCatalogue)

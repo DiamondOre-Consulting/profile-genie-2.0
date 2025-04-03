@@ -8,7 +8,7 @@ import portfolioRouter from "./routes/portfolio.routes.js";
 import catalogueRouter from "./routes/catalgoue.routes.js";
 import authRouter from "./routes/auth.routes.js";
 import session from "express-session";
-import { portfolioCrone } from "./croneJobs/portfolioCrone.js";
+import { catalogueCrone, portfolioCrone } from "./croneJobs/portfolioCrone.js";
 
 
 config()
@@ -27,6 +27,7 @@ app.use(cors({
 }))
 
 portfolioCrone()
+catalogueCrone()
 
 app.use(session({
     secret: 'your-secret',
