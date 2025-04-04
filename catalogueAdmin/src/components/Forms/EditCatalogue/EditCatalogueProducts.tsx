@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Switch } from '@/components/ui/switch'
 import { toast } from 'sonner'
 import { Textarea } from '@/components/ui/textarea'
-import { addProductSchema, productDetail, productResponse, uncategorisedProductResponse } from '@/validations/CatalogueValidation'
+import { addProductSchema, categorisedProductResponse, productDetail, uncategorisedProductResponse, uncategrisedProduct } from '@/validations/CatalogueValidation'
 import { useGetAllCategoryQuery, useAddProductMutation, useGetAllCategoryProductsQuery, useDeleteProductMutation, useEditProductMutation } from '@/Redux/API/CatalogueApi'
 import { v4 as uuidv4 } from 'uuid'
 import { SelectNative } from '@/components/ui/select-native'
@@ -29,7 +29,7 @@ const modalVariants = {
 
 
 
-const EditCatalogueProducts = ({ userName, ownerId }: { userName: string | undefined, currentStep: number, ownerId: string }) => {
+const EditCatalogueProducts = ({ userName, ownerId }: { userName: string | undefined, ownerId: string }) => {
 
     const [addProduct] = useAddProductMutation()
     const [editProduct] = useEditProductMutation()
@@ -395,7 +395,7 @@ const EditCatalogueProducts = ({ userName, ownerId }: { userName: string | undef
                     )}
                 </AnimatePresence>
                 <div className='flex flex-col max-w-[70rem] mx-auto gap-4 min-h-[50rem]'>
-                    {allProduct?.categorisedProducts?.map((product: productResponse) => {
+                    {allProduct?.categorisedProducts?.map((product: categorisedProductResponse) => {
                         return <div key={product?.id} className='text-white  w-full border relative border-[#000]  shadow-[0px_0px_15px_#AAAAAA] rounded-md'>
 
                             <div className="space-y-1 bg-[#000000] p-2 rounded-t-md">
@@ -442,7 +442,7 @@ const EditCatalogueProducts = ({ userName, ownerId }: { userName: string | undef
                                         <div
                                             onClick={() => {
                                                 reset(product)
-                                                setEditId(product?.id)
+                                                setEditId(product?.id ?? "")
                                                 setEditOpen(true)
                                             }}
                                             className="flex absolute w-[5rem] justify-center -top-[0.08rem] -right-[0.08rem] items-center gap-1 rounded-tr-lg rounded-bl-lg bg-yellow-400 px-2 py-1 text-black"
@@ -453,7 +453,7 @@ const EditCatalogueProducts = ({ userName, ownerId }: { userName: string | undef
                                             <span className="text-[10px] font-medium sm:text-xs">Edit!</span>
                                         </div>
                                         <strong onClick={() => {
-                                            setDeleteId(product?.id)
+                                            setDeleteId(product?.id ?? "")
                                             setDeleteModalActive(true)
                                         }}
                                             className="flex absolute w-[5rem] justify-center -bottom-0.5 -right-0.5 items-center gap-1 rounded-br-lg rounded-tl-lg bg-red-500 px-2 py-1 text-black"
@@ -486,7 +486,7 @@ const EditCatalogueProducts = ({ userName, ownerId }: { userName: string | undef
                                 {errors.category && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.category.message}</p>}
                             </div>
                             <div className='p-2 bg-[#F9FAFB] rounded-b-md'>
-                                {(product?.products.length >= 1) ? product?.products?.map((product) => {
+                                {(product?.products.length >= 1) ? product?.products?.map((product: uncategrisedProduct) => {
                                     return <div key={product?.id}>
                                         {product?.productDetails &&
                                             <article className="rounded-lg relative text-white border mt-2 border-gray-300 bg-[#F9FAFB]">
@@ -523,7 +523,7 @@ const EditCatalogueProducts = ({ userName, ownerId }: { userName: string | undef
                                                 </div>
                                                 <div onClick={() => {
                                                     reset(product.productDetails)
-                                                    setEditId(product?.productDetails?._id)
+                                                    setEditId(product?.productDetails?._id ?? "")
                                                     setEditOpen(true)
                                                 }}
 
@@ -534,7 +534,7 @@ const EditCatalogueProducts = ({ userName, ownerId }: { userName: string | undef
                                                     <span className="text-[10px] font-medium sm:text-xs">Edit!</span>
                                                 </div>
                                                 <strong onClick={() => {
-                                                    setDeleteId(product?.productDetails?._id)
+                                                    setDeleteId(product?.productDetails?._id ?? "")
                                                     setDeleteModalActive(true)
                                                 }}
                                                     className="flex absolute w-[5rem] justify-center bottom-0 right-0 items-center gap-1 rounded-br-lg rounded-tl-lg bg-red-500 px-2 py-1 text-black"

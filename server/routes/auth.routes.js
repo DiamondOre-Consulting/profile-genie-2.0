@@ -28,11 +28,36 @@ router.get('/google',
     }
 )
 
-router.get('/google/callback',
-    passport.authenticate('google',
-        { failureRedirect: 'https://test.webakash1806.com/login?error=Email is not registered!' }), handleSocialLogin,
-)
+const handleSocialLoginFailure = (req, res) => {
+    const referer = req.headers.referer || "";
+    const isAdminDomain = referer.includes("master.webakash1806.com");
+    const isCatalogueDomain = referer.includes("catalogue.webakash1806.com");
 
+    let redirectUrl = "https://default.webakash1806.com/login?error=Email is not registered!";
+
+    if (isAdminDomain) {
+        redirectUrl = "https://master.webakash1806.com/login?error=Email is not registered!";
+    } else if (isCatalogueDomain) {
+        redirectUrl = "https://catalogue.webakash1806.com/login?error=Email is not registered!";
+    }
+
+    return res.redirect(redirectUrl);
+};
+
+
+router.get(
+    "/google/callback",
+    (req, res, next) => {
+        passport.authenticate("google", (err, user, info) => {
+            if (err || !user) {
+                return handleSocialLoginFailure(req, res);
+            }
+            req.user = user;
+            next();
+        })(req, res, next);
+    },
+    handleSocialLogin
+);
 
 
 export default router

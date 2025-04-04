@@ -1,6 +1,5 @@
 import { ReactNode, useState } from "react";
 import {
-    IconDatabaseImport,
     IconFileCvFilled,
     IconFingerprint,
     IconKey,

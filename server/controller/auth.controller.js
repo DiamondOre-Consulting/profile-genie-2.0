@@ -32,14 +32,14 @@ const generateAuthTokens = async (userId) => {
 }
 
 const register = asyncHandler(async (req, res) => {
-    const { fullName, email, password } = req.body
+    const { fullName, email, password, role = "SUPERADMIN" } = req.body
 
     const uniqueUser = await User.findOne({ email })
     if (uniqueUser) {
         throw new AppError("User already exists", 400)
     }
 
-    const user = await User.create({ fullName, email, password })
+    const user = await User.create({ fullName, email, password, role })
 
     const { accessToken, refreshToken } = await generateAuthTokens(user._id)
 
@@ -111,11 +111,32 @@ const handleSocialLogin = asyncHandler(async (req, res) => {
 
     const { accessToken, refreshToken } = await generateAuthTokens(req.user._id)
 
+    const referer = req.headers.referer || "";
+    const isAdminDomain = referer.includes("master.webakash1806.com");
+    const isCatalogueDomain = referer.includes("catalogue.webakash1806.com");
+
+    let redirectUrl = "https://default.domain.com/?success=true";
+
+    if (req.user.role === "SUPERADMIN") {
+        if (isAdminDomain) {
+            redirectUrl = process.env.ADMIN_URL;
+        } else if (isCatalogueDomain) {
+            redirectUrl = process.env.CATALOGUE_ADMIN_URL;
+        }
+    } else if (req.user.role === "CATALOGUE_OWNER") {
+        if (isCatalogueDomain) {
+            redirectUrl = process.env.CATALOGUE_ADMIN_URL;
+        } else {
+            redirectUrl = process.env.CATALOGUE_ADMIN_URL;
+        }
+    }
+
+
     res
         .status(200)
         .cookie("refreshToken", refreshToken, refreshTokenOptions)
         .cookie("accessToken", accessToken, accessTokenOptions)
-        .send(`<script>window.location.href="https://test.webakash1806.com/?success=true";</script>`);
+        .send(`<script>window.location.href="${redirectUrl}?success=true";</script>`);
 })
 
 const forgotPassword = asyncHandler(async (req, res) => {

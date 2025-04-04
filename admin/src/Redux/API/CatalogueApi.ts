@@ -4,7 +4,7 @@ import axiosBaseQuery from "../../Helper/axiosBaseQuery"
 export const catalogueApi = createApi({
     reducerPath: "catalogueApi",
     baseQuery: axiosBaseQuery,
-    tagTypes: ['CATALOGUE'],
+    tagTypes: ['CATALOGUE', 'CATALOGUE_PRODUCT'],
     endpoints: (builder) => ({
         addCatalogueOwner: builder.mutation({
             query: ({ data }) => ({
@@ -27,7 +27,8 @@ export const catalogueApi = createApi({
                 url: `/catalogue/edit-catalogue/${id}`,
                 method: "PUT",
                 data: formData
-            })
+            }),
+            invalidatesTags: (result) => result ? [{ type: "CATALOGUE" as const }] : [],
         }),
         createCatalogue: builder.mutation({
             query: ({ formData }) => ({
@@ -42,7 +43,8 @@ export const catalogueApi = createApi({
                 url: `/catalogue/category/${ownerId}`,
                 method: "GET",
                 data: {}
-            })
+            }),
+            providesTags: (result) => result ? [{ type: "CATALOGUE" as const }] : [],
         }),
         deleteCatalogue: builder.mutation({
             query: ({ id }) => ({
@@ -65,28 +67,34 @@ export const catalogueApi = createApi({
                 url: `/catalogue/all-products/${userName}`,
                 method: "GET",
                 data: {}
-            })
+            }),
+            providesTags: (result) => result ? [{ type: "CATALOGUE_PRODUCT" as const }] : [],
+
         }),
         deleteProduct: builder.mutation({
             query: ({ id }) => ({
                 url: `/catalogue/delete-product/${id}`,
                 method: "DELETE",
                 data: {}
-            })
+            }),
+            invalidatesTags: (result) => result ? [{ type: "CATALOGUE_PRODUCT" as const }] : [],
+
         }),
         editProduct: builder.mutation({
             query: ({ formData, id }) => ({
                 url: `/catalogue/edit-product/${id}`,
                 method: "PUT",
                 data: formData
-            })
+            }),
+            invalidatesTags: (result) => result ? [{ type: "CATALOGUE_PRODUCT" as const }] : [],
         }),
         addMetaDetails: builder.mutation({
             query: ({ formData, id }) => ({
                 url: `/catalogue/meta/${id}`,
                 method: "POST",
                 data: formData
-            })
+            }),
+            invalidatesTags: (result) => result ? [{ type: "CATALOGUE" as const }] : [],
         }),
         updateMetaDetails: builder.mutation({
             query: ({ formData, id }) => ({
@@ -94,13 +102,15 @@ export const catalogueApi = createApi({
                 method: "PUT",
                 data: formData,
             }),
+            invalidatesTags: (result) => result ? [{ type: "CATALOGUE" as const }] : [],
         }),
         getSingleCatalogue: builder.query({
             query: ({ username }) => ({
                 url: `/catalogue/single/${username}`,
                 method: "GET",
                 data: {}
-            })
+            }),
+            providesTags: (result) => result ? [{ type: "CATALOGUE" as const }] : []
         }),
         getAllCatalogues: builder.query({
             query: ({ search, filter }) => ({

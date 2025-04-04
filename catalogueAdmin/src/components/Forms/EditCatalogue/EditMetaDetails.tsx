@@ -1,8 +1,8 @@
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { addMetaDetailsSchema } from '@/validations/PortfolioValidation'
-import { IconCamera, IconSquareRoundedArrowLeftFilled, IconSquareRoundedArrowRightFilled, IconWhirl } from '@tabler/icons-react'
-import React, { useEffect, useState } from 'react'
+import { IconCamera, IconSquareRoundedArrowRightFilled, IconWhirl } from '@tabler/icons-react'
+import { useEffect, useState } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -19,7 +19,7 @@ interface apiRes {
 }
 
 
-const EditMetaDetails = ({ setCurrentStep, currentStep, stepsLength, catalogueId, metaDetails }: { setCurrentStep: React.Dispatch<React.SetStateAction<number>>, currentStep: number, stepsLength: number, portfolioId: string, metaDetails: metaDetails, catalogueId: string }) => {
+const EditMetaDetails = ({ catalogueId, metaDetails }: { metaDetails: metaDetails, catalogueId: string }) => {
 
 
     const [updateMetaDetails] = useUpdateMetaDetailsMutation()
@@ -134,7 +134,7 @@ const EditMetaDetails = ({ setCurrentStep, currentStep, stepsLength, catalogueId
                 <button
                     type='submit'
                     className="bg-[#E11D48] w-full justify-center cursor-pointer text-white flex items-center gap-3 py-1.5 text-sm px-4 rounded"
-                    disabled={isSubmitting || currentStep > stepsLength}
+                    disabled={isSubmitting}
                 >
                     Add Portfolio   {
                         isSubmitting ? (

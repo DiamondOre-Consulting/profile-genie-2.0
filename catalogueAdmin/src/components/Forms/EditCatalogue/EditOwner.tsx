@@ -1,29 +1,22 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
-import { IconPlus, IconSquareRoundedArrowLeftFilled, IconSquareRoundedArrowRightFilled, IconWhirl, IconX } from '@tabler/icons-react'
+import { IconSquareRoundedArrowRightFilled, IconWhirl } from '@tabler/icons-react'
 import PhoneInput from 'react-phone-input-2'
-import { addCatalogueOwnerSchema } from '@/validations/CatalogueValidation'
-import { useAddCatalogueOwnerMutation, useEditCatalogueOwnerMutation } from '@/Redux/API/CatalogueApi'
+import { addCatalogueOwnerSchema, catalogueResponse } from '@/validations/CatalogueValidation'
+import { useEditCatalogueOwnerMutation } from '@/Redux/API/CatalogueApi'
 import { HomeLayout } from '@/Layout/HomeLayout'
 
 type catalogueOwnerSchema = z.infer<typeof addCatalogueOwnerSchema>
 
-interface apiRes {
-    success: boolean
-    message: string,
-    CatalogueOwner: { _id: string, contactDetail: catalogueOwnerSchema }
-}
-
-
-const EditOwner = ({ currentStep, stepsLength, setCurrentStep, catalogueOwner }: { currentStep: number, stepsLength: number, setCurrentStep: React.Dispatch<React.SetStateAction<number>> }) => {
+const EditOwner = ({ catalogueOwner }: { catalogueOwner: catalogueResponse["data"]["catalogueOwner"] }) => {
 
     const [editCatalogueOwner] = useEditCatalogueOwnerMutation()
     console.log(catalogueOwner)
-    const { register, handleSubmit, getValues, setValue, reset, control, watch, formState: { errors, isSubmitting } } = useForm<catalogueOwnerSchema>({
+    const { register, handleSubmit, getValues, setValue, reset, control, formState: { errors, isSubmitting } } = useForm<catalogueOwnerSchema>({
         resolver: zodResolver(addCatalogueOwnerSchema),
         defaultValues: {
             ...catalogueOwner,
@@ -78,13 +71,7 @@ const EditOwner = ({ currentStep, stepsLength, setCurrentStep, catalogueOwner }:
 
 
     const onSubmit = async (data: catalogueOwnerSchema) => {
-
-
-        const response = await editCatalogueOwner({ formData: data, ownerId: catalogueOwner?._id }) as { data: apiRes }
-
-        if (response?.data?.success) {
-            setCurrentStep(currentStep + 1)
-        }
+        await editCatalogueOwner({ formData: data, ownerId: catalogueOwner?._id })
     }
 
     console.log(getValues())

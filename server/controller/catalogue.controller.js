@@ -13,14 +13,14 @@ import sendMail from "../utils/mail.utils.js";
 
 const createCatalogueOwner = asyncHandler(async (req, res) => {
 
-    const { fullName, email, password, mapLink, emailList, phoneList, address, whatsappNo, role } = req.body
+    const { fullName, email, password, mapLink, emailList, phoneList, address, whatsappNo } = req.body
 
     const uniqueUser = await User.findOne({ email })
     if (uniqueUser) {
         throw new AppError("User already exists", 400)
     }
 
-    const user = await User.create({ fullName, email, password, role })
+    const user = await User.create({ fullName, email, password, role: "CATALOGUE_OWNER" })
 
     await user.save({ validateBeforeSave: false })
 

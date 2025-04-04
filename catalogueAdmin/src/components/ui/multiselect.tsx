@@ -77,6 +77,7 @@ interface MultipleSelectorProps {
   >;
   /** hide the clear all button. */
   hideClearAllButton?: boolean;
+  setCategory?: (key: string, value: Option[]) => void;
 }
 
 export interface MultipleSelectorRef {
@@ -199,7 +200,7 @@ const MultipleSelector = ({
 
 
   useEffect(() => {
-    setCategory("category", selected)
+    setCategory?.("category", selected)
   }, [selected])
 
   console.log(selected)

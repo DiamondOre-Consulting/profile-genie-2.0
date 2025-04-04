@@ -8,7 +8,6 @@ export const loginValidationSchema = z.object({
 })
 
 export const addCatalogueOwnerSchema = z.object({
-    _id: z.string().optional(),
     catalogue: z.string().optional(),
     fullName: z.string().min(3, 'Full Name is required'),
     role: z.string().default('CATALOGUE OWNER').optional(),
@@ -16,8 +15,8 @@ export const addCatalogueOwnerSchema = z.object({
     email: z.string().email('Please enter a valid email!'),
     mapLink: z.string().optional(),
     emailList: z.array(z.object({
-        email: z.string()
-    })).min(1, 'Email is required'),
+        email: z.string().min(1, 'Email is required')
+    })).optional(),
     phoneList: z.array(z.object({
         phone: z.number().min(1, 'Phone Number is required')
     })),
@@ -30,7 +29,6 @@ export const addCatalogueOwnerSchema = z.object({
     ).optional(),
 })
 
-
 export const categorySchema = z.array(
     z.object({
         id: z.string().optional(),
@@ -38,7 +36,6 @@ export const categorySchema = z.array(
     }))
 
 export const addCatalogueSchema = z.object({
-    _id: z.string().optional(),
     name: z.string().min(2, 'Full Name is required'),
     tagline: z.string().min(6, 'Tagline is required'),
     userName: z.string().min(2, 'User name is required'),
@@ -49,6 +46,7 @@ export const addCatalogueSchema = z.object({
     isPaid: z.boolean().default(false).optional(),
     isActive: z.boolean().default(false),
     description: z.string().min(250, 'Description is required (MIN 250 Characters)').max(350, 'Short Description must be less than 350 characters'),
+
     heroImage: z.object({
         publicId: z.string().optional(),
         url: z.string().optional()
@@ -57,18 +55,16 @@ export const addCatalogueSchema = z.object({
         publicId: z.string().optional(),
         url: z.string().min(1, 'Logo is required')
     }),
-    catalogueOwner: z.string().optional(),
+    catalogueOwner: z.string().min(1, 'Catalogue Owner is required'),
 })
 
 export const addProductSchema = z.object({
     id: z.string().optional(),
+    _id: z.string().optional(),
     ownerId: z.string().min(1, 'Catalogue Owner is required'),
     name: z.string().min(2, 'Product Name is required'),
     HSNCode: z.string().min(2, 'HSN Code is required'),
-    category: z.array(z.object({
-        id: z.string().optional(),
-        text: z.string().optional()
-    })),
+    category: categorySchema,
     price: z.number(),
     image: z.array(z.object({
         uniqueId: z.string(),
@@ -77,24 +73,9 @@ export const addProductSchema = z.object({
     })),
     stock: z.boolean().default(false),
     moq: z.string().min(2, 'MOQ is required'),
-    description: z.string().min(400, 'Description is required (MIN 200 Characters)').max(450, 'Short Description must be less than 400 characters'),
+    description: z.string().min(150, 'Description is required (MIN 200 Characters)').max(200, 'Short Description must be less than 400 characters'),
 })
 
-export const productResponseSchema = z.object({
-    text: z.string(),
-    _id: z.string(),
-    products: z.array(addProductSchema),
-
-})
-
-export const uncategorisedProduct = z.object({
-    text: z.string(),
-    products: z.array(addProductSchema),
-    product: z.object({
-        productDetails: z.array(addProductSchema)
-    }).optional(),
-    id: z.string()
-})
 
 export const addMetaDetailsSchema = z.object({
     favIcon: z.object({
@@ -107,30 +88,91 @@ export const addMetaDetailsSchema = z.object({
     canonical: z.string().min(3, 'Canonical is required')
 })
 
-export const quoteFormSchema = z.object({
-    fullName: z.string().min(1, 'Full Name is required'),
-    email: z.string().email('Please enter a valid email!'),
-    phone: z.number().min(1, 'Phone Number is required'),
-    message: z.string().min(10, 'Message is required (MIN 10 Characters)').max(250, 'Message must be less than 250 characters'),
-})
-
-
-
 export type metaDetails = z.infer<typeof addMetaDetailsSchema>
 export type catalogueDetail = z.infer<typeof addCatalogueSchema>
 export type productDetail = z.infer<typeof addProductSchema>
-export type productResponse = z.infer<typeof productResponseSchema>
-export type uncategorisedProductResponse = z.infer<typeof uncategorisedProduct>
-export type quoteFormResponse = z.infer<typeof quoteFormSchema>
+export type categoryDetail = z.infer<typeof categorySchema>
 
-export interface catalogueResponse {
-    _id: string,
-    createdAt: string,
-    updatedAt: string,
-    metaDetails: metaDetails,
+
+
+export interface uncategrisedProduct {
+    id: string,
+    productDetails: productDetail,
 }
 
-export interface apiRes {
+export interface uncategorisedProductResponse {
+    id: string,
+    text: string,
+    products: [uncategrisedProduct]
+}
+
+
+export interface categorisedProductResponse {
+    id: string,
+    text: string,
+    products: [productDetail]
+}
+
+export interface catalogueResponse {
+    categorisedProducts: categorisedProductResponse[],
+    uncategorisedProducts: uncategorisedProductResponse[],
+    data: {
+        _id: string,
+        name: string,
+        tagline: string,
+        userName: string,
+        backgroundColor: string,
+        textColor: string,
+        paidDate: string,
+        category: categoryDetail,
+        isPaid?: boolean,
+        isActive: boolean,
+        description: string,
+        heroImage?: {
+            publicId?: string,
+            url?: string
+        },
+        logo: {
+            publicId?: string,
+            url: string
+        },
+        catalogueOwner?: {
+            _id: string;
+            catalogue: string;
+            fullName: string;
+            role: string;
+            mapLink: string;
+            emailList?: { email: string; _id: string }[];
+            phoneList: { phone: number; _id: string }[];
+            address?: { title: string; detail: string; _id: string }[];
+            whatsappNo: number;
+            createdAt: string;
+            updatedAt: string;
+            __v: number;
+            authAccount: {
+                avatar: {
+                    publicId: string;
+                    url: string;
+                };
+                _id: string;
+                fullName: string;
+                email: string;
+                googleId: string;
+                loginType: string;
+                isVerified: boolean;
+                role: string;
+                createdAt: string;
+                updatedAt: string;
+                __v: number;
+                refreshToken: string;
+            };
+        },
+        metaDetails: metaDetails,
+        product: string[]
+    }
+}
+
+export interface catalogueApiRes {
     success: boolean
     message?: string,
     data: catalogueResponse

@@ -15,13 +15,13 @@ import { format } from 'date-fns'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { CalendarIcon } from 'lucide-react'
-import { addCatalogueSchema, catalogueDetail } from '@/validations/CatalogueValidation'
+import { addCatalogueSchema, catalogueApiRes, catalogueDetail } from '@/validations/CatalogueValidation'
 import { HexColorPicker } from "react-colorful"
 import { useEditCatalogueMutation } from '@/Redux/API/CatalogueApi'
 import { Tag, TagInput } from 'emblor'
 import { HomeLayout } from '@/Layout/HomeLayout'
 
-const EditCatalogueDetail = ({ catalogueDetail }: { catalogueDetail: catalogueDetail }) => {
+const EditCatalogueDetail = ({ catalogueDetail }: { catalogueDetail: catalogueApiRes["data"]["data"] }) => {
 
     const [editCatalogue] = useEditCatalogueMutation()
 
@@ -30,10 +30,11 @@ const EditCatalogueDetail = ({ catalogueDetail }: { catalogueDetail: catalogueDe
     })
 
     useEffect(() => {
-        reset(catalogueDetail)
-        if (catalogueDetail?.catalogueOwner?._id) {
-            setValue("catalogueOwner", catalogueDetail?.catalogueOwner?._id as catalogueDetail["catalogueOwner"])
-        }
+        reset({
+            ...catalogueDetail,
+            catalogueOwner: catalogueDetail?.catalogueOwner?._id ?? "",
+        });
+        setValue("catalogueOwner", catalogueDetail?.catalogueOwner?._id ?? "")
     }, [reset, catalogueDetail])
 
     const [files, setFiles] = useState<File[]>([]);
@@ -69,8 +70,6 @@ const EditCatalogueDetail = ({ catalogueDetail }: { catalogueDetail: catalogueDe
 
     console.log(watch("category"))
 
-    const [open, setOpen] = useState(false)
-
     const [categoryTags, setCategoryTags] = useState<Tag[]>([]);
     const [activeTagIndex, setActiveTagIndex] = useState<number | null>(null);
     console.log(categoryTags)
@@ -85,7 +84,6 @@ const EditCatalogueDetail = ({ catalogueDetail }: { catalogueDetail: catalogueDe
         }
 
         if (catalogueDetail?.paidDate) {
-            // setValue("paidDate", catalogueDetail?.paidDate);
         }
 
     }, [catalogueDetail]);
