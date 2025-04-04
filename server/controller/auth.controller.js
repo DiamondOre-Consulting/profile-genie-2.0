@@ -114,10 +114,11 @@ const handleSocialLogin = asyncHandler(async (req, res) => {
     const referer = req.headers.referer || "";
     const isAdminDomain = referer.includes("master.webakash1806.com");
     const isCatalogueDomain = referer.includes("catalogue.webakash1806.com");
-
-    let redirectUrl = "https://default.domain.com/?success=true";
+    console.log(referer, isAdminDomain, isCatalogueDomain)
+    let redirectUrl = "https://profilegenie.in";
 
     if (req.user.role === "SUPERADMIN") {
+
         if (isAdminDomain) {
             redirectUrl = process.env.ADMIN_URL;
         } else if (isCatalogueDomain) {
