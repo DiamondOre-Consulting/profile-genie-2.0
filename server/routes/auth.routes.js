@@ -35,7 +35,10 @@ const handleSocialLoginFailure = (req, res) => {
 
     let redirectUrl = "https://default.webakash1806.com/login?error=Email is not registered!";
 
+    console.log(isAdminDomain, isCatalogueDomain, referer)
+
     if (isAdminDomain) {
+        console.log(1)
         redirectUrl = "https://master.webakash1806.com/login?error=Email is not registered!";
     } else if (isCatalogueDomain) {
         redirectUrl = "https://catalogue.webakash1806.com/login?error=Email is not registered!";
