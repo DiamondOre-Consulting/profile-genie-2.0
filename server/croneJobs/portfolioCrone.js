@@ -66,13 +66,13 @@ export const portfolioCrone = () => {
 }
 
 export const catalogueCrone = () => {
-    cron.schedule("* * * * *", async () => {
-        try {
-            console.log("Cron job triggered every minute");
-        } catch (error) {
-            console.error("❌ Error in cron job:", error);
-        }
-    });
+    // cron.schedule("* * * * *", async () => {
+    //     try {
+    //         console.log("Cron job triggered every minute");
+    //     } catch (error) {
+    //         console.error("❌ Error in cron job:", error);
+    //     }
+    // });
 
     cron.schedule("12 18 * * *", async () => {
         try {
@@ -90,7 +90,7 @@ export const catalogueCrone = () => {
         }
     });
 
-    cron.schedule("* * * * *", async () => {
+    cron.schedule("12 18 * * *", async () => {
         try {
             const today = new Date();
 

@@ -3,13 +3,15 @@ import { Route, Routes } from "react-router-dom"
 import PageNotFound from "./Pages/PageNotFound"
 import DashboardLoading from "./components/DashboardLoading"
 import ProtectedRoute from "./components/Auth/ProtectedRoute"
-import Template1 from "./Templates/Portfolio/templatePages/Template1"
-import SelectTemplate from "./Pages/SelectTemplate"
-import AddCatalogue from "./Pages/AddCatalogue"
-import AllCatalogue from "./Pages/AllCatalogue"
-import EditCatalogue from "./Pages/EditCatalogue"
-import RecycledCatalogue from "./Pages/RecycledCatalogue"
 
+
+const SelectTemplate = lazy(() => import("./Pages/SelectTemplate"))
+const AddCatalogue = lazy(() => import("./Pages/AddCatalogue"))
+const AllCatalogue = lazy(() => import("./Pages/AllCatalogue"))
+const EditCatalogue = lazy(() => import("./Pages/EditCatalogue"))
+const RecycledCatalogue = lazy(() => import("./Pages/RecycledCatalogue"))
+
+const Template1 = lazy(() => import("./Templates/Portfolio/templatePages/Template1"))
 const Dashboard = lazy(() => import("./Pages/Dashboard"))
 const AddPortfolio = lazy(() => import("./Pages/AddPortfolio"))
 const AllPortfolio = lazy(() => import("./Pages/AllPortfolio"))

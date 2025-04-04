@@ -115,7 +115,7 @@ const handleSocialLogin = asyncHandler(async (req, res) => {
         .status(200)
         .cookie("refreshToken", refreshToken, refreshTokenOptions)
         .cookie("accessToken", accessToken, accessTokenOptions)
-        .send(`<script>window.location.href="http://localhost:5174/?success=true";</script>`);
+        .send(`<script>window.location.href="https://test.webakash1806.com/?success=true";</script>`);
 })
 
 const forgotPassword = asyncHandler(async (req, res) => {
