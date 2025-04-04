@@ -645,7 +645,7 @@ const getSingleCatalogue = asyncHandler(async (req, res) => {
     const catalogue = await Catalogue.findOne({
         $or: [
             { userName },
-            { catalogueOwner: req.user._id }
+            { catalogueOwner: userName }
         ]
     }).populate({
         path: "catalogueOwner",
