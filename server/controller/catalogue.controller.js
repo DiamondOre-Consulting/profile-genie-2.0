@@ -641,7 +641,7 @@ const getAllCatalogues = asyncHandler(async (req, res) => {
 
 const getSingleCatalogue = asyncHandler(async (req, res) => {
     const { userName } = req.params
-
+    console.log(userName)
     const catalogue = await Catalogue.findOne({
         $or: [
             { userName },
@@ -656,6 +656,7 @@ const getSingleCatalogue = asyncHandler(async (req, res) => {
         path: "metaDetails",
     })
 
+    console.log(catalogue)
 
     if (!catalogue) {
         throw new AppError("Catalogue not found!", 400)
