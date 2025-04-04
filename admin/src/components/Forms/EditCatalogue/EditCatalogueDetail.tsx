@@ -17,24 +17,27 @@ import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { CalendarIcon } from 'lucide-react'
 import { Calendar } from '@/components/ui/calendar'
-import { addCatalogueSchema, catalogueDetail } from '@/validations/CatalogueValidation'
+import { addCatalogueSchema, catalogueApiRes, catalogueDetail } from '@/validations/CatalogueValidation'
 import { HexColorPicker } from "react-colorful"
 import { useEditCatalogueMutation } from '@/Redux/API/CatalogueApi'
 import { Tag, TagInput } from 'emblor'
 
-const EditCatalogueDetail = ({ setCurrentStep, currentStep, stepsLength, catalogueDetail }: { setCurrentStep: React.Dispatch<React.SetStateAction<number>>, currentStep: number, ownerId: string, stepsLength: number, setUserName: React.Dispatch<React.SetStateAction<string>> }) => {
+const EditCatalogueDetail = ({ setCurrentStep, currentStep, stepsLength, catalogueDetail }: { setCurrentStep: React.Dispatch<React.SetStateAction<number>>, currentStep: number, stepsLength: number, catalogueDetail: catalogueApiRes["data"]["data"] }) => {
 
     const [editCatalogue] = useEditCatalogueMutation()
 
-    const { register, handleSubmit, control, setValue, reset, watch, getValues, formState: { errors, isSubmitting } } = useForm<catalogueDetail>({
+    const { register, handleSubmit, setValue, reset, watch, getValues, formState: { errors, isSubmitting } } = useForm<catalogueDetail>({
         resolver: zodResolver(addCatalogueSchema)
     })
 
     console.log(errors)
     console.log(catalogueDetail)
     useEffect(() => {
-        reset(catalogueDetail)
-        setValue("catalogueOwner", catalogueDetail?.catalogueOwner?._id)
+        reset({
+            ...catalogueDetail,
+            catalogueOwner: catalogueDetail?.catalogueOwner?._id ?? "",
+        });
+        setValue("catalogueOwner", catalogueDetail?.catalogueOwner?._id ?? "")
     }, [reset, catalogueDetail])
 
     const [files, setFiles] = useState<File[]>([]);
@@ -75,13 +78,17 @@ const EditCatalogueDetail = ({ setCurrentStep, currentStep, stepsLength, catalog
 
     const [open, setOpen] = useState(false)
 
-    const [categoryTags, setCategoryTags] = useState([]);
+    const [categoryTags, setCategoryTags] = useState<Tag[]>([]);
     const [activeTagIndex, setActiveTagIndex] = useState<number | null>(null);
     console.log(categoryTags)
 
     useEffect(() => {
         if (watch("category")) {
-            setCategoryTags(watch("category"))
+            const categoryTags: Tag[] = watch("category").map((tag) => ({
+                id: tag.id ?? "",
+                text: tag.text ?? "",
+            }));
+            setCategoryTags(categoryTags);
         }
     }, [catalogueDetail]);
 

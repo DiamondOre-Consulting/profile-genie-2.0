@@ -59,6 +59,8 @@ export const addCatalogueSchema = z.object({
 })
 
 export const addProductSchema = z.object({
+    id: z.string().optional(),
+    _id: z.string().optional(),
     ownerId: z.string().min(1, 'Catalogue Owner is required'),
     name: z.string().min(2, 'Product Name is required'),
     HSNCode: z.string().min(2, 'HSN Code is required'),
@@ -74,6 +76,7 @@ export const addProductSchema = z.object({
     description: z.string().min(150, 'Description is required (MIN 200 Characters)').max(200, 'Short Description must be less than 400 characters'),
 })
 
+
 export const addMetaDetailsSchema = z.object({
     favIcon: z.object({
         url: z.string().min(1, 'Image is required'),
@@ -88,15 +91,88 @@ export const addMetaDetailsSchema = z.object({
 export type metaDetails = z.infer<typeof addMetaDetailsSchema>
 export type catalogueDetail = z.infer<typeof addCatalogueSchema>
 export type productDetail = z.infer<typeof addProductSchema>
+export type categoryDetail = z.infer<typeof categorySchema>
 
-export interface catalogueResponse {
-    _id: string,
-    createdAt: string,
-    updatedAt: string,
-    metaDetails: metaDetails,
+
+
+export interface uncategrisedProduct {
+    id: string,
+    productDetails: productDetail,
 }
 
-export interface apiRes {
+export interface uncategorisedProductResponse {
+    id: string,
+    text: string,
+    products: [uncategrisedProduct]
+}
+
+
+export interface categorisedProductResponse {
+    id: string,
+    text: string,
+    products: [productDetail]
+}
+
+export interface catalogueResponse {
+    categorisedProducts: categorisedProductResponse[],
+    uncategorisedProducts: uncategorisedProductResponse[],
+    data: {
+        _id: string,
+        name: string,
+        tagline: string,
+        userName: string,
+        backgroundColor: string,
+        textColor: string,
+        paidDate: string,
+        category: categoryDetail,
+        isPaid?: boolean,
+        isActive: boolean,
+        description: string,
+        heroImage?: {
+            publicId?: string,
+            url?: string
+        },
+        logo: {
+            publicId?: string,
+            url: string
+        },
+        catalogueOwner?: {
+            _id: string;
+            catalogue: string;
+            fullName: string;
+            role: string;
+            mapLink: string;
+            emailList?: { email: string; _id: string }[];
+            phoneList: { phone: number; _id: string }[];
+            address?: { title: string; detail: string; _id: string }[];
+            whatsappNo: number;
+            createdAt: string;
+            updatedAt: string;
+            __v: number;
+            authAccount: {
+                avatar: {
+                    publicId: string;
+                    url: string;
+                };
+                _id: string;
+                fullName: string;
+                email: string;
+                googleId: string;
+                loginType: string;
+                isVerified: boolean;
+                role: string;
+                createdAt: string;
+                updatedAt: string;
+                __v: number;
+                refreshToken: string;
+            };
+        },
+        metaDetails: metaDetails,
+        product: string[]
+    }
+}
+
+export interface catalogueApiRes {
     success: boolean
     message?: string,
     data: catalogueResponse

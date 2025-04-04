@@ -26,7 +26,7 @@ const AddCatalogueDetail = ({ setCurrentStep, ownerId, currentStep, stepsLength,
 
     const [createCatalogue] = useCreateCatalogueMutation()
 
-    const { register, handleSubmit, control, setValue, trigger, watch, getValues, formState: { errors, isSubmitting } } = useForm<catalogueDetail>({
+    const { register, handleSubmit, setValue, watch, getValues, formState: { errors, isSubmitting } } = useForm<catalogueDetail>({
         resolver: zodResolver(addCatalogueSchema)
     })
 

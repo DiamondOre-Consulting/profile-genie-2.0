@@ -66,7 +66,7 @@ export default function AddCatalogue() {
                 {currentStep === 2 &&
                     <AddCatalogueDetail setUserName={setUserName} ownerId={ownerId} setCurrentStep={setCurrentStep} stepsLength={steps?.length} currentStep={currentStep} />}
                 {currentStep === 3 &&
-                    <AddCatalogueProducts userName={userName} ownerId={ownerId} setCurrentStep={setCurrentStep} stepsLength={steps?.length} currentStep={currentStep} />}
+                    <AddCatalogueProducts userName={userName} ownerId={ownerId} setCurrentStep={setCurrentStep} currentStep={currentStep} />}
                 {currentStep === 4 &&
                     <AddMetaDetails ownerId={ownerId} stepsLength={steps?.length} currentStep={currentStep} />}
 

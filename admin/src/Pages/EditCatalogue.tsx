@@ -13,7 +13,8 @@ import {
 } from "@/components/ui/stepper";
 import { HomeLayout } from "@/Layout/HomeLayout";
 import { useGetSingleCatalogueQuery } from "@/Redux/API/CatalogueApi";
-import { addContactDetailSchema, addMetaDetailsSchema, addOthersDetailSchema, apiRes } from "@/validations/PortfolioValidation";
+import { catalogueResponse } from "@/validations/CatalogueValidation";
+import { addMetaDetailsSchema } from "@/validations/PortfolioValidation";
 
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -44,7 +45,7 @@ const steps = [
 export default function EditCatalogue() {
     const [currentStep, setCurrentStep] = useState(1)
     const [catalogueId, setCatalogueId] = useState('')
-    const [catalogueData, setCatalogueData] = useState<apiRes>()
+    const [catalogueData, setCatalogueData] = useState<catalogueResponse>()
     const navigate = useNavigate()
     const { username } = useParams()
     console.log(username)
@@ -64,7 +65,7 @@ export default function EditCatalogue() {
         }
     }, [isLoading, data, navigate])
 
-    console.log(data)
+    console.log(catalogueData)
     return (
         <HomeLayout>
             <div className="space-y-8 overflow-hidden relative max-w-[50rem] mx-auto bg-[#010101] pb-0 border border-[#3c3c3c] p-4 sm:p-6 lg:p-8 py-8 rounded">
@@ -86,8 +87,8 @@ export default function EditCatalogue() {
 
                 </Stepper>
                 {currentStep === 1 &&
-                    <EditOwner catalogueOwner={catalogueData?.data?.catalogueOwner} catalogueId={catalogueId} setCurrentStep={setCurrentStep} stepsLength={steps.length} currentStep={currentStep} />}
-                {currentStep === 2 &&
+                    <EditOwner catalogueOwner={catalogueData?.data?.catalogueOwner} setCurrentStep={setCurrentStep} stepsLength={steps.length} currentStep={currentStep} />}
+                {(currentStep === 2 && catalogueData?.data) &&
                     <EditCatalogueDetail
                         catalogueDetail={catalogueData?.data}
                         setCurrentStep={setCurrentStep}
@@ -97,17 +98,15 @@ export default function EditCatalogue() {
                 }
                 {currentStep === 3 &&
                     <EditCatalogueProducts
-                        categorisedProduct={catalogueData?.categorisedProducts}
-                        uncategorisedProduct={catalogueData?.uncategorisedProducts}
-                        ownerId={catalogueData?.data?.catalogueOwner?._id}
+
+                        ownerId={catalogueData?.data?.catalogueOwner?._id ?? ""}
                         userName={catalogueData?.data?.userName}
                         setCurrentStep={setCurrentStep}
-                        stepsLength={steps.length}
                         currentStep={currentStep}
                     />
                 }
                 {currentStep === 4 &&
-                    <EditMetaDetails metaDetails={catalogueData?.data?.metaDetails as z.infer<typeof addMetaDetailsSchema>} catalogueId={catalogueData?.data?._id} setCurrentStep={setCurrentStep} stepsLength={steps.length} currentStep={currentStep} />
+                    <EditMetaDetails metaDetails={catalogueData?.data?.metaDetails as z.infer<typeof addMetaDetailsSchema>} catalogueId={catalogueData?.data?._id ?? ""} setCurrentStep={setCurrentStep} stepsLength={steps.length} currentStep={currentStep} />
                 }
                 <p className="bg-[#E11D48] w-full bottom-0 p-1 pr-4 left-0 absolute text-xs text-end text-white" role="region" aria-live="polite">
                     <span className="">

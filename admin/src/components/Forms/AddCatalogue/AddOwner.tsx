@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import React, { useId } from 'react'
-import { Controller, set, useFieldArray, useForm } from 'react-hook-form'
+import React from 'react'
+import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { Label } from '@/components/ui/label'
@@ -8,11 +8,9 @@ import { Input } from '@/components/ui/input'
 import { IconPlus, IconSquareRoundedArrowLeftFilled, IconSquareRoundedArrowRightFilled, IconWhirl, IconX } from '@tabler/icons-react'
 
 
-import { useAddContactDetailsMutation } from '@/Redux/API/PortfolioApi'
 import PhoneInput from 'react-phone-input-2'
 import { addCatalogueOwnerSchema } from '@/validations/CatalogueValidation'
 import { useAddCatalogueOwnerMutation } from '@/Redux/API/CatalogueApi'
-import MultipleCom from '@/components/comp-234'
 
 type catalogueOwnerSchema = z.infer<typeof addCatalogueOwnerSchema>
 
@@ -27,7 +25,7 @@ const AddOwner = ({ currentStep, stepsLength, setCurrentStep, setOwnerId }: { cu
 
     const [addCatalogueOwner] = useAddCatalogueOwnerMutation()
 
-    const { register, handleSubmit, getValues, setValue, control, watch, formState: { errors, isSubmitting } } = useForm<catalogueOwnerSchema>({
+    const { register, handleSubmit, setValue, control, formState: { errors, isSubmitting } } = useForm<catalogueOwnerSchema>({
         resolver: zodResolver(addCatalogueOwnerSchema),
         defaultValues: {
             address: [{ title: "", detail: "" }],

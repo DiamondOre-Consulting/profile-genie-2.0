@@ -1,10 +1,7 @@
 import { HomeLayout } from "@/Layout/HomeLayout"
-import { IconArrowsExchange, IconBrandWhatsapp, IconClock, IconEdit, IconEye, IconLink, IconMail, IconPhone, IconRestore, IconTrash, IconWhirl, IconX } from "@tabler/icons-react"
+import { IconArrowsExchange, IconBrandWhatsapp, IconClock, IconEdit, IconEye, IconMail, IconPhone, IconRestore, IconTrash, IconWhirl, IconX } from "@tabler/icons-react"
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { BoltIcon, CircleUserRoundIcon, Layers2Icon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { apiRes } from "@/validations/PortfolioValidation";
 import { useDeleteCatalogueMutation, useGetRecycledCatalogueQuery, useRestoreCatalogueMutation } from "@/Redux/API/CatalogueApi";
@@ -30,8 +27,6 @@ const RecycledCatalogue = () => {
     const [id, setId] = useState('')
     const [restoreCatalogue, { isLoading: restoreLoading }] = useRestoreCatalogueMutation()
     const [deleteCatalogue, { isLoading: deleteLoading }] = useDeleteCatalogueMutation()
-    // const [debouncedSearchValue, setDebouncedSearchValue] = useState('')
-    // const [filterValue, setFilterValue] = useState('')
     const { data, isLoading } = useGetRecycledCatalogueQuery({})
 
     console.log(data)
@@ -293,37 +288,7 @@ const RecycledCatalogue = () => {
                                                         className={`h-2 w-2 rounded-full  transition-all duration-300 ${!(item?.isActive) ? "bg-green-500/20" : "bg-green-500"}`}
                                                     ></div>
                                                 </div>
-                                                <DropdownMenu>
-                                                    {/* <DropdownMenuTrigger asChild>
-                                                        <Button size="icon" className="bg-[#010205] " aria-label="Open account menu">
-                                                            {(activeLoading || paidLoading) ? <IconFidgetSpinner className="animate-spin" /> : <CircleUserRoundIcon size={16} aria-hidden="true" />}
-                                                        </Button>
-                                                    </DropdownMenuTrigger> */}
-                                                    <DropdownMenuContent className="max-w-38">
-                                                        <DropdownMenuLabel className="flex items-start gap-3">
 
-                                                            <div className="flex min-w-0 flex-col">
-                                                                <span className=" truncate text-sm font-medium text-zinc-50">Update Status</span>
-                                                                <span className="text-zinc-500 truncate text-xs font-normal dark:text-zinc-400">
-                                                                    @{item?.userName}
-                                                                </span>
-                                                            </div>
-                                                        </DropdownMenuLabel>
-                                                        <DropdownMenuSeparator />
-                                                        <DropdownMenuGroup>
-                                                            <DropdownMenuItem onClick={() => handleUpdateStatus(item?._id, "isActive")} className="hover:bg-neutral-950 cursor-pointer">
-                                                                <BoltIcon size={16} className="opacity-60" aria-hidden="true" />
-                                                                <span>Mark as {item?.isActive ? "Inactive" : "Active"}</span>
-                                                            </DropdownMenuItem>
-                                                            {!item.isPaid && <DropdownMenuItem onClick={() => handleUpdateStatus(item?._id, "isPaid")} className="hover:bg-neutral-950 cursor-pointer">
-
-                                                                <Layers2Icon size={16} className="opacity-60" aria-hidden="true" />
-                                                                <span>Mark as Paid</span>
-                                                            </DropdownMenuItem>}
-
-                                                        </DropdownMenuGroup>
-                                                    </DropdownMenuContent>
-                                                </DropdownMenu>
                                             </div>
                                         </div>
                                     </div>

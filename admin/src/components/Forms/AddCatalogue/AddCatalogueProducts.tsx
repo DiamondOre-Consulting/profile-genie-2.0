@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Switch } from '@/components/ui/switch'
 import { toast } from 'sonner'
 import { Textarea } from '@/components/ui/textarea'
-import { addProductSchema, productDetail } from '@/validations/CatalogueValidation'
+import { addProductSchema, categorisedProductResponse, productDetail, uncategorisedProductResponse, uncategrisedProduct } from '@/validations/CatalogueValidation'
 import { useGetAllCategoryQuery, useAddProductMutation, useGetAllCategoryProductsQuery, useDeleteProductMutation, useEditProductMutation } from '@/Redux/API/CatalogueApi'
 import { v4 as uuidv4 } from 'uuid'
 import { SelectNative } from '@/components/ui/select-native'
@@ -30,7 +30,7 @@ const modalVariants = {
 
 
 
-const AddCatalogueProducts = ({ setCurrentStep, userName, ownerId, currentStep, stepsLength, setId }: { setCurrentStep: React.Dispatch<React.SetStateAction<number>>, userName: string, currentStep: number, ownerId: string, stepsLength: number, setId: React.Dispatch<React.SetStateAction<string>> }) => {
+const AddCatalogueProducts = ({ setCurrentStep, userName, ownerId, currentStep }: { setCurrentStep: React.Dispatch<React.SetStateAction<number>>, userName: string, currentStep: number, ownerId: string }) => {
 
     const [addProduct] = useAddProductMutation()
     const [editProduct] = useEditProductMutation()
@@ -52,7 +52,7 @@ const AddCatalogueProducts = ({ setCurrentStep, userName, ownerId, currentStep, 
 
     useEffect(() => {
         setValue("ownerId", ownerId)
-    }, [ownerId, editOpen, addOpen])
+    }, [ownerId, editOpen, addOpen, setValue])
 
     const [files, setFiles] = useState<File[]>([]);
     console.log(getValues("image"))
@@ -392,11 +392,10 @@ const AddCatalogueProducts = ({ setCurrentStep, userName, ownerId, currentStep, 
                 )}
             </AnimatePresence>
             <div className='flex flex-col gap-2 min-h-[50rem]'>
-                {allProduct?.categorisedProducts?.map((product) => {
+                {allProduct?.categorisedProducts?.map((product: categorisedProductResponse) => {
                     return <div key={product?.id} className='text-white  w-full p-2 border relative border-[#E11D48] rounded-md'>
                         <div onClick={() => {
                             reset({ category: [{ id: product?.id, text: product?.text }] })
-                            // setValue("category", [{ id: product?.id, text: product?.text }])
                             setAddOpen(true)
                         }} className='absolute top-0 right-0 rounded-bl-md bg-[#E11D48] text-white px-2 py-1 text-sm'>+ Add Product</div>
                         <div className="space-y-1">
@@ -406,7 +405,7 @@ const AddCatalogueProducts = ({ setCurrentStep, userName, ownerId, currentStep, 
                             <Input value={product?.text} placeholder="Enter category..." type="text" className={`${errors.category && "border-[#E11D48] "} py-[0.45rem]  text-neutral-200`} />
                             {errors.category && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.category.message}</p>}
                         </div>
-                        {product?.products?.map((product) => {
+                        {product?.products?.map((product: productDetail) => {
                             return <article className="rounded-lg relative text-white border-2 mt-2 border-gray-800 bg-[#010101]">
                                 <div className="flex items-start gap-3">
                                     <a href="#" className="block shrink-0">
@@ -437,7 +436,7 @@ const AddCatalogueProducts = ({ setCurrentStep, userName, ownerId, currentStep, 
                                 <div
                                     onClick={() => {
                                         reset(product)
-                                        setEditId(product?.id)
+                                        setEditId(product?.id ?? '')
                                         setEditOpen(true)
                                     }}
                                     className="flex absolute w-[5.2rem]  -top-0.5 -right-0.5 items-center gap-1 rounded-tr-lg rounded-bl-lg bg-yellow-500 px-3 py-1.5 text-white"
@@ -460,7 +459,7 @@ const AddCatalogueProducts = ({ setCurrentStep, userName, ownerId, currentStep, 
                                     <span className="text-[10px] font-medium sm:text-xs">Edit!</span>
                                 </div>
                                 <strong onClick={() => {
-                                    setDeleteId(product?.id)
+                                    setDeleteId(product?.id ?? '')
                                     setDeleteModalActive(true)
                                 }}
                                     className=" absolute -right-0.5 -bottom-0.5 cursor-pointer  inline-flex items-center gap-1 rounded-ss-lg rounded-ee-lg bg-red-600 px-3 py-1.5 text-white"
@@ -473,7 +472,7 @@ const AddCatalogueProducts = ({ setCurrentStep, userName, ownerId, currentStep, 
                         })}
                     </div>
                 })}
-                {allProduct?.uncategorisedProducts?.map((product) => {
+                {allProduct?.uncategorisedProducts?.map((product: uncategorisedProductResponse) => {
                     return <div key={product?.id} className='text-white  w-full p-2 border relative border-[#E11D48] rounded-md'>
                         <div onClick={() => {
                             setValue("category", [{ id: "", text: "" }])
@@ -486,7 +485,7 @@ const AddCatalogueProducts = ({ setCurrentStep, userName, ownerId, currentStep, 
                             <Input value={product?.text} placeholder="Enter category..." type="text" className={`${errors.category && "border-[#E11D48] "} py-[0.45rem]  text-neutral-200`} />
                             {errors.category && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.category.message}</p>}
                         </div>
-                        {product?.products?.map((product) => {
+                        {product?.products?.map((product: uncategrisedProduct) => {
                             return <div key={product?.id}>
                                 {product?.productDetails &&
                                     <article className="rounded-lg relative text-white border-2 mt-2 border-gray-800 bg-[#010101]">
@@ -517,7 +516,7 @@ const AddCatalogueProducts = ({ setCurrentStep, userName, ownerId, currentStep, 
                                         </div>
                                         <div onClick={() => {
                                             reset(product.productDetails)
-                                            setEditId(product?.productDetails?._id)
+                                            setEditId(product?.productDetails?._id ?? "")
                                             setEditOpen(true)
                                         }}
                                             className="flex absolute w-[5.2rem]  -top-0.5 -right-0.5 items-center gap-1 rounded-tr-lg rounded-bl-lg bg-yellow-500 px-3 py-1.5 text-white"
@@ -540,7 +539,7 @@ const AddCatalogueProducts = ({ setCurrentStep, userName, ownerId, currentStep, 
                                             <span className="text-[10px] font-medium sm:text-xs">Edit!</span>
                                         </div>
                                         <strong onClick={() => {
-                                            setDeleteId(product?.productDetails?._id)
+                                            setDeleteId(product?.productDetails?._id ?? "")
                                             setDeleteModalActive(true)
                                         }}
                                             className=" absolute cursor-pointer -right-0.5 -bottom-0.5  inline-flex items-center gap-1 rounded-ss-lg rounded-ee-lg bg-red-600 px-3 py-1.5 text-white"

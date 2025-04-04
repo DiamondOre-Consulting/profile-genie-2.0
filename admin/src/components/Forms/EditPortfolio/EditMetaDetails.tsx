@@ -18,7 +18,7 @@ interface apiRes {
 }
 
 
-const EditMetaDetails = ({ setCurrentStep, currentStep, stepsLength, catalogueId, metaDetails }: { setCurrentStep: React.Dispatch<React.SetStateAction<number>>, currentStep: number, stepsLength: number, portfolioId: string, metaDetails: metaDetails, catalogueId: string }) => {
+const EditMetaDetails = ({ setCurrentStep, currentStep, stepsLength, catalogueId, metaDetails }: { setCurrentStep: React.Dispatch<React.SetStateAction<number>>, currentStep: number, stepsLength: number, metaDetails: metaDetails, catalogueId: string }) => {
 
 
     const [updateMetaDetails] = useUpdateMetaDetailsMutation()

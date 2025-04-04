@@ -6,8 +6,8 @@ import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { IconPlus, IconSquareRoundedArrowLeftFilled, IconSquareRoundedArrowRightFilled, IconWhirl, IconX } from '@tabler/icons-react'
 import PhoneInput from 'react-phone-input-2'
-import { addCatalogueOwnerSchema } from '@/validations/CatalogueValidation'
-import { useAddCatalogueOwnerMutation, useEditCatalogueOwnerMutation } from '@/Redux/API/CatalogueApi'
+import { addCatalogueOwnerSchema, catalogueResponse } from '@/validations/CatalogueValidation'
+import { useEditCatalogueOwnerMutation } from '@/Redux/API/CatalogueApi'
 
 type catalogueOwnerSchema = z.infer<typeof addCatalogueOwnerSchema>
 
@@ -18,11 +18,11 @@ interface apiRes {
 }
 
 
-const EditOwner = ({ currentStep, stepsLength, setCurrentStep, catalogueOwner }: { currentStep: number, stepsLength: number, setCurrentStep: React.Dispatch<React.SetStateAction<number>> }) => {
+const EditOwner = ({ currentStep, stepsLength, setCurrentStep, catalogueOwner }: { currentStep: number, stepsLength: number, setCurrentStep: React.Dispatch<React.SetStateAction<number>>, catalogueOwner: catalogueResponse["data"]["catalogueOwner"] }) => {
 
     const [editCatalogueOwner] = useEditCatalogueOwnerMutation()
     console.log(catalogueOwner)
-    const { register, handleSubmit, getValues, setValue, reset, control, watch, formState: { errors, isSubmitting } } = useForm<catalogueOwnerSchema>({
+    const { register, handleSubmit, getValues, setValue, reset, control, formState: { errors, isSubmitting } } = useForm<catalogueOwnerSchema>({
         resolver: zodResolver(addCatalogueOwnerSchema),
         defaultValues: {
             ...catalogueOwner,
