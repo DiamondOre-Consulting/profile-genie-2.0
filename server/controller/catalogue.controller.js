@@ -642,16 +642,19 @@ const getAllCatalogues = asyncHandler(async (req, res) => {
 const getSingleCatalogue = asyncHandler(async (req, res) => {
     const { userName } = req.params
 
-    const catalogue = await Catalogue.findOne({ userName })
-        .populate({
-            path: "catalogueOwner",
-            populate: {
-                path: "authAccount",
-            },
-        })
-        .populate({
-            path: "metaDetails",
-        })
+    const catalogue = await Catalogue.findOne({
+        $or: [
+            { userName },
+            { catalogueOwner: req.user._id }
+        ]
+    }).populate({
+        path: "catalogueOwner",
+        populate: {
+            path: "authAccount",
+        },
+    }).populate({
+        path: "metaDetails",
+    })
 
 
     if (!catalogue) {

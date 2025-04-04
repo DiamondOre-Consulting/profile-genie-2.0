@@ -88,8 +88,8 @@ export const catalogueApi = createApi({
             }),
         }),
         getSingleCatalogue: builder.query({
-            query: ({ username }) => ({
-                url: `/catalogue/single/${username}`,
+            query: ({ authId }) => ({
+                url: `/catalogue/single/${authId}`,
                 method: "GET",
                 data: {}
             })

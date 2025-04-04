@@ -9,19 +9,18 @@ import { catalogueResponse } from "@/validations/CatalogueValidation";
 import { addMetaDetailsSchema } from "@/validations/PortfolioValidation";
 
 import { useEffect, useState } from "react";
-import { Route, Routes, useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { z } from "zod";
 
 
 export default function EditCatalogue() {
-    const [catalogueId, setCatalogueId] = useState('')
+    // const [catalogueId, setCatalogueId] = useState('')
     const [catalogueData, setCatalogueData] = useState<catalogueResponse>()
     const navigate = useNavigate()
-    const { username } = useParams()
-    console.log(username)
-    const { data, isLoading } = useGetSingleCatalogueQuery({ username: "test" })
-    console.log(catalogueId)
-    console.log(isLoading)
+    const { _id } = useSelector((state: any) => state.auth.user)
+    const { data, isLoading } = useGetSingleCatalogueQuery({ authId: _id })
+
     useEffect(() => {
         if (!isLoading && !data) {
             navigate('/all-catalogue')
@@ -31,7 +30,6 @@ export default function EditCatalogue() {
 
         if (data) {
             setCatalogueData(data)
-            setCatalogueId(data?.data._id)
         }
     }, [isLoading, data, navigate])
 
