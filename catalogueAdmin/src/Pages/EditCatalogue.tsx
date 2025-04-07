@@ -5,8 +5,7 @@ import EditMetaDetails from "@/components/Forms/EditCatalogue/EditMetaDetails";
 import EditOwner from "@/components/Forms/EditCatalogue/EditOwner";
 
 import { useGetSingleCatalogueQuery } from "@/Redux/API/CatalogueApi";
-import { catalogueResponse } from "@/validations/CatalogueValidation";
-import { addMetaDetailsSchema } from "@/validations/PortfolioValidation";
+import { addMetaDetailsSchema, catalogueResponse } from "@/validations/CatalogueValidation";
 
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
