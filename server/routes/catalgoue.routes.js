@@ -8,6 +8,7 @@ import {
     deleteProduct,
     editCatalogue,
     editCatalogueOwner,
+    editCategory,
     editProduct,
     getAllCatalogues,
     getAllCategories,
@@ -90,5 +91,8 @@ catalogueRouter.route('/meta/:id', verifyJWT)
 
 catalogueRouter.route('/quotations/:id')
     .post(sendQuotation)
+
+catalogueRouter.route('/category/:userName')
+    .put(editCategory)
 
 export default catalogueRouter

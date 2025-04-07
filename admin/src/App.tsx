@@ -3,6 +3,8 @@ import { Route, Routes } from "react-router-dom"
 import PageNotFound from "./Pages/PageNotFound"
 import DashboardLoading from "./components/DashboardLoading"
 import ProtectedRoute from "./components/Auth/ProtectedRoute"
+import ForgotPassword from "./Pages/Auth/ForgotPassword"
+import ResetPassword from "./Pages/Auth/ResetPassword"
 
 
 const SelectTemplate = lazy(() => import("./Pages/SelectTemplate"))
@@ -25,6 +27,8 @@ function App() {
     <Suspense fallback={<DashboardLoading />}>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path='/reset-password/:token/:email/:expiry' element={<ResetPassword />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/add-portfolio/:template" element={<AddPortfolio />} />

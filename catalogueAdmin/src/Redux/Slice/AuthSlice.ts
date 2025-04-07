@@ -15,7 +15,7 @@ const initialState = {
     isLoggedIn: localStorage.getItem("isLoggedIn") === "true" ? true : false,
 }
 
-export const login = createAsyncThunk("auth/signin", async (data: FormData) => {
+export const login = createAsyncThunk("auth/signin", async (data: { email: string, password: string }) => {
     try {
         const res = await axiosInstance.post("auth/login", data)
         return res?.data
@@ -41,6 +41,25 @@ export const logout = createAsyncThunk("auth/signout", async () => {
         return toast.error(err.response.data.message)
     }
 })
+
+export const forgotPassword = createAsyncThunk("auth/forgot-password", async (data: { email: string }) => {
+    try {
+        const res = await axiosInstance.post("auth/forgot-password", data)
+        return res?.data
+    } catch (err: any) {
+        return toast.error(err.response.data.message)
+    }
+})
+
+export const resetPassword = createAsyncThunk("auth/reset-password", async ({ token, newPassword }: { token: string, newPassword: { password: string, confirmPassword: string, email: string } }) => {
+    try {
+        const res = await axiosInstance.post(`auth/reset-password/${token}`, newPassword)
+        return res?.data
+    } catch (err: any) {
+        return toast.error(err.response.data.message)
+    }
+})
+
 
 export const profile = createAsyncThunk("auth/profile", async () => {
     try {

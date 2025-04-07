@@ -18,7 +18,8 @@ export default function EditCatalogue() {
     // const [catalogueId, setCatalogueId] = useState('')
     const [catalogueData, setCatalogueData] = useState<catalogueResponse>()
     const navigate = useNavigate()
-    const { _id } = useSelector((state: any) => state.auth.user)
+    const _id = useSelector((state: any) => state?.auth?.user?._id)
+
     const { data, isLoading } = useGetSingleCatalogueQuery({ authId: _id })
 
     useEffect(() => {

@@ -350,6 +350,8 @@ const editProduct = asyncHandler(async (req, res) => {
         throw new AppError("Product not found!", 400)
     }
 
+    console.log(category)
+
     product.category = category
     product.name = name
     product.HSNCode = HSNCode
@@ -389,6 +391,10 @@ const editProduct = asyncHandler(async (req, res) => {
         }
         return isExistingData;
     });
+
+    // const catalogueDetail = await Catalogue.findOne({ catalogueOwner: ownerId })
+
+    // catalogueDetail.product.push(product._id)
 
     await product.save()
 
@@ -642,17 +648,16 @@ const getAllCatalogues = asyncHandler(async (req, res) => {
 const getSingleCatalogue = asyncHandler(async (req, res) => {
     const { userName } = req.params
 
-    const catalogueOwner = await CatalogueOwner.findOne({
-        $or: [
-            { userName: userName },
-            { authAccount: userName }
-        ]
-    })
+    let catalogueOwner;
+    if (mongoose.Types.ObjectId.isValid(userName)) {
+        catalogueOwner = await CatalogueOwner.findOne({ authAccount: userName });
+    }
 
-    console.log(userName)
+    console.log(catalogueOwner)
     const catalogue = await Catalogue.findOne({
         $or: [
-            { userName: catalogueOwner?.userName }
+            { userName: userName },
+            { catalogueOwner: catalogueOwner?._id }
         ]
     }).populate({
         path: "catalogueOwner",
@@ -1029,6 +1034,67 @@ const getAllRecycledCatalogues = asyncHandler(async (req, res) => {
     })
 })
 
+const editCategory = asyncHandler(async (req, res) => {
+    const { userName } = req.params
+    const category = req.body
+
+    const catalogue = await Catalogue.findOne({ userName })
+
+    if (!catalogue) {
+        throw new AppError("Catalogue not found!", 400)
+    }
+
+    console.log(req.body)
+
+    const selectedCategory = catalogue.category.find(cat => cat.id === category.id)
+    if (!selectedCategory) {
+        throw new AppError("Category not found!", 400)
+    }
+
+    const uniqueCategory = catalogue.category.find(cat => cat.text === category.name)
+    if (uniqueCategory) {
+        throw new AppError("Category already exists!", 400)
+    }
+
+    console.log("ssvsd", catalogue)
+
+    catalogue.product = await Promise.all(catalogue.product.map(async (productId) => {
+
+        const product = await CatalogueProduct.findById(productId)
+        console.log(product)
+        if (product?.category) {
+            const categoryIndex = product.category.findIndex(cat => cat.id === category.id)
+            console.log(categoryIndex)
+            if (categoryIndex > -1) {
+                console.log(product.category[categoryIndex])
+                if (!product.category[categoryIndex].text) {
+                    console.log(132)
+                    product.category[categoryIndex] = { text: category.name, ...product.category[categoryIndex] }
+                    console.log("wecewc", product.category)
+                    await product.save()
+                } else {
+                    product.category[categoryIndex].text = category.name
+                    await product.save()
+                }
+            }
+        }
+
+        return productId
+    }))
+
+    console.log(2)
+
+    selectedCategory.text = category.name
+    console.log(selectedCategory)
+    await catalogue.save()
+
+    res.status(200).json({
+        success: true,
+        data: catalogue,
+        message: "Catalogue category updated successfully"
+    })
+})
+
 export {
     createCatalogueOwner,
     createCatalogue,
@@ -1048,5 +1114,6 @@ export {
     deleteCatalogue,
     updateStatusActive,
     updateStatusPaid,
-    getAllRecycledCatalogues
+    getAllRecycledCatalogues,
+    editCategory
 }

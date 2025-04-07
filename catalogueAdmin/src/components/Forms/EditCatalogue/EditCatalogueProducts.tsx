@@ -8,7 +8,7 @@ import { Switch } from '@/components/ui/switch'
 import { toast } from 'sonner'
 import { Textarea } from '@/components/ui/textarea'
 import { addProductSchema, categorisedProductResponse, productDetail, uncategorisedProductResponse, uncategrisedProduct } from '@/validations/CatalogueValidation'
-import { useGetAllCategoryQuery, useAddProductMutation, useGetAllCategoryProductsQuery, useDeleteProductMutation, useEditProductMutation } from '@/Redux/API/CatalogueApi'
+import { useGetAllCategoryQuery, useAddProductMutation, useGetAllCategoryProductsQuery, useDeleteProductMutation, useEditProductMutation, useEditCategoryMutation } from '@/Redux/API/CatalogueApi'
 import { v4 as uuidv4 } from 'uuid'
 import { SelectNative } from '@/components/ui/select-native'
 import { AnimatePresence } from 'framer-motion'
@@ -33,6 +33,7 @@ const EditCatalogueProducts = ({ userName, ownerId }: { userName: string | undef
 
     const [addProduct] = useAddProductMutation()
     const [editProduct] = useEditProductMutation()
+    const [editCategory] = useEditCategoryMutation()
     const { data: category } = useGetAllCategoryQuery({ ownerId })
     const { data: allProduct, refetch } = useGetAllCategoryProductsQuery({ userName })
     const [deleteProduct, { isLoading: deleteLoading }] = useDeleteProductMutation()
@@ -42,6 +43,8 @@ const EditCatalogueProducts = ({ userName, ownerId }: { userName: string | undef
             image: [{ uniqueId: "", publicId: "", url: "" }],
         }
     })
+
+    console.log(allProduct)
 
     const [addOpen, setAddOpen] = useState(false)
     const [deleteId, setDeleteId] = useState("")
@@ -54,7 +57,6 @@ const EditCatalogueProducts = ({ userName, ownerId }: { userName: string | undef
     }, [ownerId, editOpen, addOpen])
 
     const [files, setFiles] = useState<File[]>([]);
-    console.log(getValues("image"))
     const onSubmit = async (data: productDetail) => {
         try {
             console.log(data)
@@ -95,7 +97,7 @@ const EditCatalogueProducts = ({ userName, ownerId }: { userName: string | undef
         control,
         name: 'image'
     })
-    console.log(errors)
+
     const removeImage = (ind: number) => {
         setFiles((prevFiles: File[] | null) => {
             const newFiles = [...(prevFiles || [])];
@@ -151,8 +153,6 @@ const EditCatalogueProducts = ({ userName, ownerId }: { userName: string | undef
 
     const [deleteModalActive, setDeleteModalActive] = useState(false)
 
-    console.log(deleteId)
-
     const handleDelete = async () => {
         const res = await deleteProduct({ id: deleteId }).unwrap()
         if (res?.success) {
@@ -161,7 +161,14 @@ const EditCatalogueProducts = ({ userName, ownerId }: { userName: string | undef
         }
     }
 
-    console.log(getValues("stock"))
+    const [editCategoryValue, setEditCategoryValue] = useState<Record<string, string>>({})
+
+    console.log(editCategoryValue)
+    const handleEditCategory = async (categoryId: string) => {
+        const categoryText = editCategoryValue[categoryId]
+        await editCategory({ userName: userName, data: { id: categoryId, name: categoryText } }).unwrap()
+    }
+
     return (
         <HomeLayout>
             <h1 className='text-2xl font-semibold mb-3 text-center text-neutral-700'>Products</h1>
@@ -402,7 +409,16 @@ const EditCatalogueProducts = ({ userName, ownerId }: { userName: string | undef
                                 {/* <Label htmlFor={"moq"} className="text-neutral-700 font-semibold">
                                     Category <span className="text-[#ff3f69]">*</span>
                                 </Label> */}
-                                <Input value={product?.text} placeholder="Enter category..." type="text" className={`${errors.category && "border-[#E11D48] "} py-[0.45rem]  text-neutral-800`} />
+                                <div className='relative'>
+                                    <Input value={editCategoryValue[product.id as string] ?? product?.text}
+                                        onChange={(e) =>
+                                            setEditCategoryValue(prev => ({
+                                                ...prev,
+                                                [product.id]: e.target.value
+                                            }))
+                                        } placeholder="Enter category..." type="text" className={`${errors.category && "border-[#E11D48] "} py-[0.45rem]  text-neutral-800`} />
+                                    <button onClick={() => handleEditCategory(product.id as string)} className="text-sm text-white bg-[#E11D48] flex rounded-r items-center gap-1 justify-center h-full px-2 absolute top-0 right-0"><IconEdit className='w-4.5 h-4.5 ' /> Edit</button>
+                                </div>
                                 {errors.category && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.category.message}</p>}
                             </div>
                             <div className='p-2 bg-[#F9FAFB] rounded-b-md'>

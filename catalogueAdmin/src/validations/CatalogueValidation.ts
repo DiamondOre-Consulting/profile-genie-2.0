@@ -45,7 +45,7 @@ export const addCatalogueSchema = z.object({
     category: categorySchema,
     isPaid: z.boolean().default(false).optional(),
     isActive: z.boolean().default(false),
-    description: z.string().min(250, 'Description is required (MIN 250 Characters)').max(350, 'Short Description must be less than 350 characters'),
+    description: z.string().min(350, 'Description is required (MIN 350 Characters)').max(400, 'Short Description must be less than 400 characters'),
 
     heroImage: z.object({
         publicId: z.string().optional(),
@@ -73,7 +73,7 @@ export const addProductSchema = z.object({
     })),
     stock: z.boolean().default(false),
     moq: z.string().min(2, 'MOQ is required'),
-    description: z.string().min(150, 'Description is required (MIN 200 Characters)').max(200, 'Short Description must be less than 400 characters'),
+    description: z.string().min(300, 'Description is required (MIN 300 Characters)').max(350, 'Short Description must be less than 350 characters'),
 })
 
 

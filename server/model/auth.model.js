@@ -73,6 +73,8 @@ userSchema.pre('save', async function (next) {
 userSchema.methods = {
     comparePassword: async function (password) {
         try {
+            console.log(password, this.password)
+            console.log(await bcrypt.compare(password, this.password))
             return await bcrypt.compare(password, this.password)
         } catch (err) {
             return false
@@ -84,13 +86,13 @@ userSchema.methods = {
     generateAccessToken: function () {
         return jwt.sign({ id: this._id }, process.env.JWT_ACCESS_SECRET, { expiresIn: process.env.JWT_ACCESS_EXPIRES_IN })
     },
-    generateResetPasswordToken: function () {
-        const resetToken = crypto.randomBytes(32).toString('hex')
+    generatePasswordResetToken: async function () {
+        const resetToken = crypto.randomBytes(20).toString('hex')
+
         this.resetPasswordToken = crypto
             .createHash('sha256')
             .update(resetToken)
-            .digest('hex')
-
+            .digest('hex');
         this.resetPasswordExpiry = Date.now() + 5 * 60 * 1000
 
         return resetToken

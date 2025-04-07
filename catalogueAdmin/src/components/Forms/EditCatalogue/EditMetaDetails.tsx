@@ -1,16 +1,14 @@
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { addMetaDetailsSchema } from '@/validations/PortfolioValidation'
 import { IconCamera, IconSquareRoundedArrowRightFilled, IconWhirl } from '@tabler/icons-react'
 import { useEffect, useState } from 'react'
-import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Textarea } from '@/components/ui/textarea'
 import { useUpdateMetaDetailsMutation } from '@/Redux/API/CatalogueApi'
 import { HomeLayout } from '@/Layout/HomeLayout'
+import { addMetaDetailsSchema, metaDetails } from '@/validations/CatalogueValidation'
 
-type metaDetails = z.infer<typeof addMetaDetailsSchema>
 
 interface apiRes {
     success: boolean

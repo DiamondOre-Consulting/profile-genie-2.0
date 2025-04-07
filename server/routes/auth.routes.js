@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { register, login, logout, profile, handleSocialLogin, forgotPassword, refreshAccessAndRefreshToken } from "../controller/auth.controller.js";
+import { register, login, logout, profile, handleSocialLogin, forgotPassword, refreshAccessAndRefreshToken, resetPassword } from "../controller/auth.controller.js";
 import { verifyJWT } from "../middleware/auth.middleware.js";
 import upload from "../middleware/multer.middleware.js";
 import passport from "../passport/passport.js";
@@ -13,6 +13,8 @@ router.post('/login', login)
 router.get('/logout', verifyJWT, logout)
 
 router.post('/forgot-password', forgotPassword)
+
+router.post('/reset-password/:token', resetPassword)
 
 router.get('/profile', verifyJWT, profile)
 

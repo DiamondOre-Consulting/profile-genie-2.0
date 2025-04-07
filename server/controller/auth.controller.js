@@ -3,6 +3,9 @@ import sendMail from "../utils/mail.utils.js";
 import User from "../model/auth.model.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import jwt from 'jsonwebtoken'
+import crypto from 'crypto'
+import bcrypt from 'bcryptjs'
+
 
 const accessTokenOptions = {
     httpOnly: true,
@@ -64,13 +67,14 @@ const register = asyncHandler(async (req, res) => {
 
 const login = asyncHandler(async (req, res) => {
     const { email, password } = req.body
-
+    console.log(req.body)
     const user = await User.findOne({ email }).select("+password")
     if (!user) {
         throw new AppError("Email is not registered!", 400)
     }
 
     const isMatch = await user.comparePassword(password)
+    console.log(isMatch)
     if (!isMatch) {
         throw new AppError("Password is wrong!", 400)
     }
@@ -111,25 +115,16 @@ const handleSocialLogin = asyncHandler(async (req, res) => {
 
     const { accessToken, refreshToken } = await generateAuthTokens(req.user._id)
 
-    const referer = req.headers.referer || "";
-    const isAdminDomain = referer.includes("master.webakash1806.com");
-    const isCatalogueDomain = referer.includes("catalogue.webakash1806.com");
-    console.log(referer, isAdminDomain, isCatalogueDomain)
-    let redirectUrl = "https://profilegenie.in";
 
+    let redirectUrl = "https://profilegenie.in";
+    console.log(req.user.role)
     if (req.user.role === "SUPERADMIN") {
 
-        if (isAdminDomain) {
-            redirectUrl = process.env.ADMIN_URL;
-        } else if (isCatalogueDomain) {
-            redirectUrl = process.env.CATALOGUE_ADMIN_URL;
-        }
+        redirectUrl = process.env.ADMIN_URL;
     } else if (req.user.role === "CATALOGUE_OWNER") {
-        if (isCatalogueDomain) {
-            redirectUrl = process.env.CATALOGUE_ADMIN_URL;
-        } else {
-            redirectUrl = process.env.CATALOGUE_ADMIN_URL;
-        }
+
+        redirectUrl = process.env.CATALOGUE_ADMIN_URL;
+
     }
 
 
@@ -141,26 +136,34 @@ const handleSocialLogin = asyncHandler(async (req, res) => {
 })
 
 const forgotPassword = asyncHandler(async (req, res) => {
-    const { email, medium } = req.body
-
+    const { email } = req.body
     const user = await User.findOne({ email })
 
     if (!user) {
         throw new AppError("User not found!", 400)
     }
+    console.log("email", email)
 
-    if (medium !== "link") {
-        const resetToken = await user.generateResetPasswordToken()
-        console.log(Date.now() + 1 * 60 * 1000)
-        const { resetPasswordExpiry } = user
-        const expiryTime = encodeURIComponent(resetPasswordExpiry)
-        const link = `https://test.webakash1806.com/reset-password/${resetToken}/${email}/${expiryTime}`
+    let redirectUrl = "https://profilegenie.in";
 
-        await sendMail(email, "Reset Password", link)
+    if (user.role === "SUPERADMIN") {
+        redirectUrl = process.env.ADMIN_URL;
+    } else if (user.role === "CATALOGUE_OWNER") {
+        redirectUrl = process.env.CATALOGUE_ADMIN_URL;
     }
 
+    const resetToken = await user.generatePasswordResetToken()
+    await user.save({ validateBeforeSave: false })
 
-    await user.save()
+    console.log(resetToken)
+    console.log(user.resetPasswordToken)
+    const { resetPasswordExpiry } = user
+    const expiryTime = encodeURIComponent(resetPasswordExpiry)
+    const link = `${redirectUrl}/reset-password/${resetToken}/${email}/${expiryTime}`
+    console.log(link)
+    await sendMail(email, "Reset Password", link, "Reset Password")
+    console.log(2)
+
     return res.status(200).json({ success: true, message: "Reset password link has been sent to your email" })
 
 })
@@ -197,6 +200,49 @@ const refreshAccessAndRefreshToken = asyncHandler(async (req, res) => {
         })
 })
 
+
+const resetPassword = asyncHandler(async (req, res) => {
+
+    const { token } = req.params;
+    let { password: newPassword } = req.body;
+
+    console.log(newPassword)
+
+
+    if (!newPassword) {
+        return res.status(400).json({ message: 'Please provide a new password' });
+    }
+
+    console.log(token)
+
+    const forgetPasswordToken = crypto
+        .createHash('sha256')
+        .update(token)
+        .digest('hex');
+
+    const existingUser = await User.findOne({
+        resetPasswordToken: forgetPasswordToken,
+        resetPasswordExpiry: { $gt: Date.now() },
+    }).select('+password');
+
+    console.log(existingUser)
+
+    if (!existingUser) {
+        return res.status(400).json({ message: 'Invalid or expired time limit' });
+    }
+
+    existingUser.password = newPassword
+    existingUser.resetPasswordToken = undefined;
+    existingUser.resetPasswordExpiry = undefined;
+    await existingUser.save();
+
+    res.status(200).json({ message: 'Password updated successfully!', success: true });
+
+
+
+})
+
+
 export {
     register,
     login,
@@ -204,5 +250,6 @@ export {
     profile,
     handleSocialLogin,
     forgotPassword,
-    refreshAccessAndRefreshToken
+    refreshAccessAndRefreshToken,
+    resetPassword
 }
