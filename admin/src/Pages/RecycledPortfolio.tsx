@@ -182,55 +182,60 @@ const RecycledPortfolio = () => {
             </AnimatePresence>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mx-auto">
                 {isLoading ?
-                    <div className="group relative max-w-[40rem] mx-auto w-full animate-pulse">
-                        <div className="absolute rounded-xl bg-gradient-to-r from-[#E11D48] via-[#E11D48] to-orange-500 opacity-10 blur-sm"></div>
-                        <div className="relative rounded-xl w-full border border-white/20 bg-gradient-to-b from-gray-900 via-gray-950 to-black p-3 shadow-md">
-                            <div className="relative flex items-center justify-between gap-6">
-                                <div className="flex items-center gap-4">
-                                    <div className="relative flex h-12 w-12 items-center justify-center">
-                                        <div className="absolute inset-0 rounded-full border border-rose-500/20 border-t-rose-500"></div>
-                                        <div className="h-12 w-12 rounded-full bg-gray-700"></div>
+                    Array.from({ length: 12 }).map((_, index) => {
+                        return (<div key={index} className="group relative max-w-[40rem] mx-auto w-full animate-pulse">
+                            <div className="absolute rounded-xl bg-gradient-to-r from-[#E11D48] via-[#E11D48] to-orange-500 opacity-10 blur-sm"></div>
+                            <div className="relative rounded-xl w-full border border-white/20 bg-gradient-to-b from-gray-900 via-gray-950 to-black p-3 shadow-md">
+                                <div className="relative flex items-center justify-between gap-6">
+                                    <div className="flex items-center gap-4">
+                                        <div className="relative flex h-12 w-12 items-center justify-center">
+                                            <div className="absolute inset-0 rounded-full border border-rose-500/20 border-t-rose-500"></div>
+                                            <div className="h-12 w-12 rounded-full bg-gray-700"></div>
+                                        </div>
+
+                                        <div className="flex flex-col gap-1">
+                                            <div className="h-4 w-32 bg-gray-700 rounded"></div>
+                                            <div className="h-3 w-20 bg-gray-700 rounded"></div>
+                                        </div>
                                     </div>
 
-                                    <div className="flex flex-col gap-1">
-                                        <div className="h-4 w-32 bg-gray-700 rounded"></div>
-                                        <div className="h-3 w-20 bg-gray-700 rounded"></div>
-                                    </div>
-                                </div>
-
-                                <div className="flex gap-2">
-                                    <div className="h-2 w-2 rounded-full bg-gray-700"></div>
-                                    <div className="h-2 w-2 rounded-full bg-gray-700"></div>
-                                    <div className="h-2 w-2 rounded-full bg-gray-700"></div>
-                                </div>
-                            </div>
-
-                            <div className="flex flex-col gap-2 ml-1 mt-4">
-                                <div className="flex sm:flex-row flex-col md:flex-col gap-2 justify-between">
                                     <div className="flex gap-2">
-                                        <div className="h-8 w-8 bg-gray-700 rounded"></div>
-                                        <div className="h-4 w-28 bg-gray-700 rounded"></div>
-                                    </div>
-                                    <div className="flex gap-2">
-                                        <div className="h-8 w-8 bg-gray-700 rounded"></div>
-                                        <div className="h-4 w-28 bg-gray-700 rounded"></div>
+                                        <div className="h-2 w-2 rounded-full bg-gray-700"></div>
+                                        <div className="h-2 w-2 rounded-full bg-gray-700"></div>
+                                        <div className="h-2 w-2 rounded-full bg-gray-700"></div>
                                     </div>
                                 </div>
 
-                                <div className="flex items-center justify-between w-full gap-1">
-                                    <div className="h-4 w-20 bg-gray-700 rounded"></div>
-                                    <div className="h-4 w-6 bg-gray-700 rounded"></div>
-                                    <div className="h-4 w-20 bg-gray-700 rounded"></div>
+                                {/* Contact Details */}
+                                <div className="flex flex-col gap-2 ml-1 mt-4">
+                                    <div className="flex sm:flex-row flex-col md:flex-col gap-2 justify-between">
+                                        <div className="flex gap-2">
+                                            <div className="h-8 w-8 bg-gray-700 rounded"></div>
+                                            <div className="h-4 w-28 bg-gray-700 rounded"></div>
+                                        </div>
+                                        <div className="flex gap-2">
+                                            <div className="h-8 w-8 bg-gray-700 rounded"></div>
+                                            <div className="h-4 w-28 bg-gray-700 rounded"></div>
+                                        </div>
+                                    </div>
+
+                                    {/* Date Range */}
+                                    <div className="flex items-center justify-between w-full gap-1">
+                                        <div className="h-4 w-20 bg-gray-700 rounded"></div>
+                                        <div className="h-4 w-6 bg-gray-700 rounded"></div>
+                                        <div className="h-4 w-20 bg-gray-700 rounded"></div>
+                                    </div>
+                                </div>
+
+                                {/* Action Buttons */}
+                                <div className="flex items-center justify-evenly gap-4 mt-4">
+                                    {Array(5).fill(0).map((_, i) => (
+                                        <div key={i} className="relative flex size-10 items-center justify-center bg-gray-700 rounded-full"></div>
+                                    ))}
                                 </div>
                             </div>
-
-                            <div className="flex items-center justify-evenly gap-4 mt-4">
-                                {Array(5).fill(0).map((_, i) => (
-                                    <div key={i} className="relative flex size-10 items-center justify-center bg-gray-700 rounded-full"></div>
-                                ))}
-                            </div>
-                        </div>
-                    </div> :
+                        </div>)
+                    }) :
                     data?.data.map((item: any) => (
                         <AnimatePresence key={item?._id}>
                             <motion.div

@@ -1,4 +1,4 @@
-import { IconMinus, IconPlus, IconSalad, IconShoppingBag, IconTrash } from "@tabler/icons-react";
+import { IconMinus, IconPlus, IconSalad, IconShoppingBag, IconTrash, IconWhirl } from "@tabler/icons-react";
 import React, { Fragment, useState } from "react";
 import AnimateNumber from "../components/AnimateNumber";
 import { Label } from "@/components/ui/label";
@@ -24,14 +24,20 @@ const lightenColor = (color, percent) => {
 
 const SideBar = ({ bgColor, cart, setCart, data: catalogueData }) => {
     const [sendQuotation] = useSendQuotationMutation()
-    const { register, handleSubmit, setValue, reset, watch, control, getValues, formState: { errors, isSubmitting } } = useForm<quoteFormResponse>({
+    const { register, handleSubmit, reset, control, getValues, formState: { errors, isSubmitting } } = useForm<quoteFormResponse>({
         resolver: zodResolver(quoteFormSchema)
     })
 
     const onSubmit = async (data: quoteFormResponse) => {
         console.log(data)
 
-        await sendQuotation({ data: { ...data, products: cart }, ownerId: catalogueData?.data?._id })
+        const res = await sendQuotation({ data: { ...data, products: cart }, ownerId: catalogueData?.data?._id })
+
+        if (res?.data?.success) {
+            setCart([])
+            localStorage.setItem("cart", JSON.stringify([]))
+            reset()
+        }
     }
 
     return (
@@ -112,7 +118,7 @@ const SideBar = ({ bgColor, cart, setCart, data: catalogueData }) => {
                     </p>
                 )}
             </div>
-            <button style={{ backgroundColor: lightenColor(bgColor, -0.3) }} type="submit" className=" text-white py-2 px-4 rounded w-full mt-2">Quote me!</button>
+            <button disabled={isSubmitting} style={{ backgroundColor: lightenColor(bgColor, -0.3) }} type="submit" className=" text-white py-2 px-4 rounded w-full mt-2">{isSubmitting?<IconWhirl/>:"Quote me!"}</button>
         </form>
     )
 }
