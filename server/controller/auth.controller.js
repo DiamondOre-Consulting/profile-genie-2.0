@@ -119,7 +119,6 @@ const handleSocialLogin = asyncHandler(async (req, res) => {
     let redirectUrl = "https://profilegenie.in";
     console.log(req.user.role)
     if (req.user.role === "SUPERADMIN") {
-
         redirectUrl = process.env.ADMIN_URL;
     } else if (req.user.role === "CATALOGUE_OWNER") {
 

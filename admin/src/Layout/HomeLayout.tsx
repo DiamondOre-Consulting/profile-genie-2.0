@@ -27,7 +27,7 @@ const tabs = [
 
 export function HomeLayout({ children }: { children: ReactNode }) {
     const [collapsed, setCollapsed] = useState(
-        window.innerWidth >= 768 ? false : true
+        window.innerWidth >= 820 ? false : true
     );
 
     const dispatch = useDispatch()

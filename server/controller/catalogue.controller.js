@@ -565,8 +565,6 @@ const getSingleProduct = asyncHandler(async (req, res) => {
 const getAllCatalogues = asyncHandler(async (req, res) => {
 
     const { search, filter } = req.query
-    console.log(search)
-
 
     const pipeline = [
         {
@@ -603,6 +601,7 @@ const getAllCatalogues = asyncHandler(async (req, res) => {
                     $or: [
                         { userName: { $regex: search, $options: "i" } },
                         { name: { $regex: search, $options: "i" } },
+                        { isRecycled: false },
                         { "ownerDetails.authAccountDetails.fullName": { $regex: search, $options: "i" } },
                         { "ownerDetails.authAccountDetails.email": { $regex: search, $options: "i" } },
                         { "ownerDetails.phoneList.phone": { $regex: search, $options: "i" } },
@@ -612,8 +611,6 @@ const getAllCatalogues = asyncHandler(async (req, res) => {
 
             },
         },
-
-
         {
             $project: {
                 _id: 1,
