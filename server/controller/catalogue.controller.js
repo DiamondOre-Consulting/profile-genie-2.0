@@ -1011,6 +1011,7 @@ const getAllRecycledCatalogues = asyncHandler(async (req, res) => {
                 userName: 1,
                 paidDate: 1,
                 logo: 1,
+                createdAt: 1,
                 "ownerDetails._id": 1,
                 "ownerDetails.phoneList": 1,
                 "ownerDetails.whatsappNo": 1,
