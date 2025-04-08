@@ -1,33 +1,38 @@
-import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import Marquee from "react-fast-marquee";
 import { Swiper, SwiperSlide } from "swiper/react";
+//@ts-expect-error Swiper CSS imports are not typed, but are required for styling
 import "swiper/css";
+//@ts-expect-error Swiper CSS imports are not typed, but are required for styling
 import "swiper/css/navigation";
+//@ts-expect-error Swiper CSS imports are not typed, but are required for styling
 import "swiper/css/pagination";
 import { Navigation, Autoplay } from "swiper/modules";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import AnimateNumber from "../components/AnimateNumber";
 import { useNavigate } from "react-router-dom";
 import { IconPlus, IconMinus } from "@tabler/icons-react";
 import { SparklesText } from "@/components/ui/sparkles-text";
+import { lightenColor } from "../Hooks/calculations";
+import { productDetail } from "@/validations/CatalogueValidation";
 
-const ProductItem = ({ product, cart, setCart, bgColor }) => {
+const ProductItem = ({ product, cart, setCart, bgColor }: { product: productDetail, cart: productDetail[], setCart: React.Dispatch<React.SetStateAction<productDetail[]>>, bgColor: string }) => {
     const { userName } = useParams()
 
     const [quantity, setQuantity] = useState([{ id: '', quantity: 0 }]);
     const navigate = useNavigate()
 
-    const updateCartInLocalStorage = (newCart) => {
+    const updateCartInLocalStorage = (newCart: productDetail[]) => {
         localStorage.setItem("cart", JSON.stringify(newCart));
     };
 
     useEffect(() => {
-        const cartItem = cart.find((item) => (item._id || item.id) === (product?._id || product?.id));
+        const cartItem = cart.find((item: productDetail) => (item._id || item.id) === (product?._id || product?.id));
         setQuantity(
             cartItem
-                ? [{ id: (product._id || product.id), quantity: cartItem.quantity }]
-                : [{ id: (product._id || product.id), quantity: 0 }]
+                ? [{ id: (product?._id || product?.id || ''), quantity: (cartItem?.quantity ?? 0) }]
+                : [{ id: (product?._id || product?.id || ''), quantity: 0 }]
         );
     }, [product?._id, product?.id, cart]);
 
@@ -90,15 +95,7 @@ const ProductItem = ({ product, cart, setCart, bgColor }) => {
         }
     };
 
-    const lightenColor = (color, percent) => {
-        const num = parseInt(color?.slice(1), 16),
-            amt = Math.round(2.55 * percent * 100),
-            r = (num >> 16) + amt,
-            g = ((num >> 8) & 0x00ff) + amt,
-            b = (num & 0x0000ff) + amt;
 
-        return `rgb(${Math.min(255, r)}, ${Math.min(255, g)}, ${Math.min(255, b)})`;
-    };
 
     return (
         <div onClick={(e) => {
@@ -121,7 +118,7 @@ const ProductItem = ({ product, cart, setCart, bgColor }) => {
                         modules={[Navigation, Autoplay]}
                         className="w-full h-full"
                     >
-                        {product.image.map((image, index) => (
+                        {product?.image?.map((image: { url: string; publicId?: string | undefined; uniqueId: string }, index: number) => (
                             <SwiperSlide key={index}>
                                 <img
                                     src={image?.url}
@@ -158,7 +155,7 @@ const ProductItem = ({ product, cart, setCart, bgColor }) => {
                                             className="text-center cursor-pointer h-[2.4rem] w-full"
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                increaseQuantity(product.id || product._id)
+                                                increaseQuantity(product.id || product._id || '')
                                             }
                                             }
                                         >
@@ -173,7 +170,7 @@ const ProductItem = ({ product, cart, setCart, bgColor }) => {
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     const qty = quantity.find((item) => item.id === (product.id || product._id))?.quantity ?? 0;
-                                                    return qty === 1 ? removeFromCart(product.id || product._id) : decreaseQuantity(product.id || product._id);
+                                                    return qty === 1 ? removeFromCart(product.id || product._id || '') : decreaseQuantity(product.id || product._id || '');
                                                 }}
                                                 className=" pr-4 pl-3  h-[2.4rem] flex items-center justify-center cursor-pointer"
                                             >
@@ -188,7 +185,7 @@ const ProductItem = ({ product, cart, setCart, bgColor }) => {
                                             <div
                                                 onClick={(e) => {
                                                     e.stopPropagation();
-                                                    increaseQuantity(product.id || product._id)
+                                                    increaseQuantity(product.id || product._id || '')
                                                 }
                                                 }
                                                 className=" pl-4  h-[2.4rem] flex items-center justify-center pr-3 cursor-pointer"
@@ -211,7 +208,7 @@ const ProductItem = ({ product, cart, setCart, bgColor }) => {
     );
 };
 
-const ExploreProduct = ({ cart, setCart, exploreProduct, bgColor }) => {
+const ExploreProduct = ({ cart, setCart, exploreProduct, bgColor }: { cart: productDetail[], setCart: React.Dispatch<React.SetStateAction<productDetail[]>>, exploreProduct: { products: productDetail[] }[], bgColor: string }) => {
 
 
 
@@ -224,7 +221,7 @@ const ExploreProduct = ({ cart, setCart, exploreProduct, bgColor }) => {
             <div className="w-20 h-1 mx-auto mb-10 bg-dark md:w-60" data-aos="fade-left"></div>
             <Marquee className="overflow-hidden h-fit" pauseOnHover={true}>
                 <div className="flex mx-3 gap-6 overflow-hidden" data-aos="fade-up">
-                    {[...exploreProduct?.flatMap((item: ExploreProductItem) => item?.products ?? [])].concat([...exploreProduct?.flatMap((item: ExploreProductItem) => item?.products ?? [])]).map((product, index) => {
+                    {[...((exploreProduct ?? []).flatMap((item: { products: productDetail[] }) => item?.products ?? []))].concat([...((exploreProduct ?? []).flatMap((item: { products: productDetail[] }) => item?.products ?? []))]).map((product) => {
                         return (
                             <ProductItem bgColor={bgColor} product={product} cart={cart} setCart={setCart} />
                         );

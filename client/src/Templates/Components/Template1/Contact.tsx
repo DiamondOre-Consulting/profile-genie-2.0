@@ -1,4 +1,3 @@
-import { ButtonColorful } from "@/components/ui/button-colorful";
 import { cn } from "@/lib/utils";
 import { portfolioResponse } from "@/validations/PortfolioValidation";
 import {
@@ -48,8 +47,18 @@ const Contact = ({ contact, bulkLinks, fullName }: { contact: portfolioResponse[
         window.open(twitterUrl, "_blank");
     };
 
+    const getMapSrc = (mapLink?: string): string => {
+        if (!mapLink) return '';
 
-    console.log(bulkLinks)
+        if (mapLink.startsWith('http')) {
+            return mapLink;
+        }
+
+        const match = mapLink.match(/src=["']([^"']+)["']/);
+        console.log(match)
+        return match ? match[1] : '';
+    };
+
     return (
         <div className="bg-transparent relative z-20 py-10 px-2 sm:px-6 md:px-16">
 
@@ -80,12 +89,12 @@ const Contact = ({ contact, bulkLinks, fullName }: { contact: portfolioResponse[
             <div className="flex flex-col items-center bg-gradient-to-b from-[#101828] to-black shadow-md rounded-lg mt-8 p-1.5 ">
 
                 <div className="flex items-center flex-col sm:flex-row w-full  mx-auto">
-                    <div className="w-full h-70">
+                    <div className="w-full h-70 overflow-hidden">
                         {(contact?.mapLink) &&
                             <iframe
                                 title="Google Maps"
                                 className="w-full h-full rounded-lg rounded-r-none "
-                                src={contact?.mapLink}
+                                src={getMapSrc(contact?.mapLink)}
                                 loading="lazy"
                             >
                             </iframe>

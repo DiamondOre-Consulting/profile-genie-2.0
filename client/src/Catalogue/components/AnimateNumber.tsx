@@ -3,10 +3,10 @@ import { useEffect, useState, useRef } from "react";
 
 const AnimateNumber = ({ value }: { value: number }) => {
     const [displayValue, setDisplayValue] = useState(value);
-    const prevValueRef = useRef(value); // Store previous value
+    const prevValueRef = useRef(value);
 
     useEffect(() => {
-        prevValueRef.current = displayValue; // Update previous value before setting new one
+        prevValueRef.current = displayValue;
         setDisplayValue(value);
     }, [value]);
 

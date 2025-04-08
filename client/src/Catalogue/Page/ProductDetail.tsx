@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useGetSingleProductQuery } from "@/Redux/API/CatalogueApi";
-import { IconMinus, IconPlus, IconShare } from "@tabler/icons-react";
+import { IconMinus, IconPlus } from "@tabler/icons-react";
 import ExploreProduct from "./ExploreProduct";
 import AnimateNumber from "../components/AnimateNumber";
+import { catalogueResponse, productDetail } from "@/validations/CatalogueValidation";
 
-const ProductDetail = ({ cart, setCart, productData, bgColor }) => {
+const ProductDetail = ({ cart, setCart, productData, bgColor, userName }: { cart: productDetail[], setCart: React.Dispatch<React.SetStateAction<productDetail[]>>, productData: catalogueResponse, bgColor: string, userName: string }) => {
     const { productId } = useParams();
     const { data, isLoading, refetch } = useGetSingleProductQuery({ productId })
-    const [product, setProduct] = useState()
-    console.log("cdhcj", productData)
-    const [mainImage, setMainImage] = useState(null);
+    const [product, setProduct] = useState<productDetail>()
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -20,9 +19,8 @@ const ProductDetail = ({ cart, setCart, productData, bgColor }) => {
 
     useEffect(() => {
         if (data) {
-            setMainImage(data?.data?.image[0]?.url);
 
-            const cartItem = cart.find((item) => (item.id || item._id) === productId);
+            const cartItem = cart.find((item: productDetail) => (item.id || item._id) === productId);
             if (cartItem) {
                 setProduct({ ...data?.data, quantity: cartItem.quantity });
             } else {
@@ -31,7 +29,7 @@ const ProductDetail = ({ cart, setCart, productData, bgColor }) => {
         }
     }, [productId, cart, isLoading, data]);
 
-    const updateCartInLocalStorage = (newCart) => {
+    const updateCartInLocalStorage = (newCart: productDetail[]) => {
         localStorage.setItem("cart", JSON.stringify(newCart));
     };
 
@@ -46,43 +44,44 @@ const ProductDetail = ({ cart, setCart, productData, bgColor }) => {
         const existingItem = cart.find((item) => (item._id || item.id) === id)
 
         if (existingItem) {
-            const updatedCart = cart.map((item) =>
+            const updatedCart = cart.map((item: productDetail) =>
                 (item._id || item?.id) === (product?._id || product?.id) ? { ...item, quantity: newQuantity } : item
             );
             setCart(updatedCart)
             updateCartInLocalStorage(updatedCart)
         } else {
             const updatedCart = [...cart, { ...product, quantity: newQuantity }]
-            setCart(updatedCart);
-            updateCartInLocalStorage(updatedCart);
+            setCart(updatedCart as productDetail[]);
+            updateCartInLocalStorage(updatedCart as productDetail[]);
         }
     };
 
 
     const removeFromCart = () => {
         console.log(cart)
-        const updatedCart = cart.filter((item) => (item._id || item.id) !== product?._id);
+        const updatedCart = cart.filter((item) => (item._id || item.id) !== (product?._id || product?.id));
         setCart(updatedCart)
         updateCartInLocalStorage(updatedCart)
     };
 
     const increaseQuantity = () => {
-        console.log(cart)
-        const updatedItem = cart.find((item) => (item.id || item._id) === product?._id);
+        const updatedItem = cart.find((item) => (item.id || item._id) === (product?._id || product?.id));
         console.log(updatedItem)
         if (updatedItem) {
-            addToCart(updatedItem?.quantity + 1, product?._id);
+            if ((product?._id || product?.id)) {
+                addToCart((updatedItem?.quantity ?? 0) + 1, (product?._id || product?.id || ''));
+            }
         }
         else {
-            addToCart(1, product?._id);
+            addToCart(1, (product?._id || product?.id || ''));
         }
 
     };
 
     const decreaseQuantity = () => {
         const updatedItem = cart.find((item) => (item.id || item._id) === product?._id);
-        if (updatedItem && updatedItem.quantity > 1) {
-            addToCart(updatedItem.quantity - 1, product?._id);
+        if (updatedItem && (updatedItem.quantity ?? 0) > 1) {
+            addToCart((updatedItem?.quantity ?? 0) - 1, (product?._id || product?.id || ''));
         } else {
             removeFromCart();
         }
@@ -92,25 +91,24 @@ const ProductDetail = ({ cart, setCart, productData, bgColor }) => {
         return <div>Product not found!</div>;
     }
 
-    const isInCart = cart.some((item) => (item.id || item._id) === product?._id);
+    const isInCart = cart.some((item) => (item.id || item._id) === (product?._id || product?.id));
 
     const buyButton = () => {
         if (isInCart) {
-            navigate("/cart");
+            navigate(`/catalogue/1/${userName}/cart`);
         } else {
-            const updatedItem = cart.find((item) => (item.id || item._id) === product?._id);
+            const updatedItem = cart.find((item) => (item.id || item._id) === (product?._id || product?.id));
             console.log(updatedItem)
             if (updatedItem) {
-                addToCart(updatedItem.quantity + 1, product?._id);
+                addToCart((updatedItem.quantity ?? 0) + 1, (product?._id || product?.id || ''));
             }
-            navigate("/cart");
+            navigate(`/catalogue/1/${userName}/cart`);
         }
     };
 
 
-    const ProductPreviews = ({ images }) => {
+    const ProductPreviews = ({ images }: { images: string }) => {
         const [selectedImage, setSelectedImage] = useState(0);
-        const [videoActive, setVideoActive] = useState(false);
         const [isZoomed, setIsZoomed] = useState(false);
 
         const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -125,8 +123,8 @@ const ProductDetail = ({ cart, setCart, productData, bgColor }) => {
                         onMouseEnter={() => setIsZoomed(true)}
                         onMouseLeave={() => setIsZoomed(false)}
                         onMouseMove={(e) => {
-                            const { left, top, width, height } =
-                                e.target.getBoundingClientRect();
+                            const target = e.target as HTMLElement;
+                            const { left, top, width, height } = target.getBoundingClientRect();
                             const x = ((e.clientX - left) / width) * 100;
                             const y = ((e.clientY - top) / height) * 100;
                             setMousePosition({ x, y });
@@ -150,9 +148,8 @@ const ProductDetail = ({ cart, setCart, productData, bgColor }) => {
                             key={index}
                             onClick={() => {
                                 setSelectedImage(index);
-                                setVideoActive(false);
                             }}
-                            className={`w-20 h-20  ${selectedImage === index
+                            className={`w-20 h-20 overflow-hidden object-cover  ${selectedImage === index
                                 ? " border-blue-400"
                                 : " border-gray-500"
                                 } border-2 rounded`}
@@ -189,7 +186,7 @@ const ProductDetail = ({ cart, setCart, productData, bgColor }) => {
         );
     };
 
-    const lightenColor = (color, percent) => {
+    const lightenColor = (color: string, percent: number) => {
         const num = parseInt(color?.slice(1), 16),
             amt = Math.round(2.55 * percent * 100),
             r = (num >> 16) + amt,
@@ -199,7 +196,7 @@ const ProductDetail = ({ cart, setCart, productData, bgColor }) => {
         return `rgb(${Math.min(255, r)}, ${Math.min(255, g)}, ${Math.min(255, b)})`;
     };
 
-    const slightlyModifyColor = (color, shift = 10) => {
+    const slightlyModifyColor = (color: string, shift = 10) => {
 
         const num = parseInt(color.slice(1), 16)
         let r = (num >> 16) & 255,
@@ -220,7 +217,7 @@ const ProductDetail = ({ cart, setCart, productData, bgColor }) => {
 
                 <div className="grid items-center grid-cols-1 gap-6 mt-4 lg:grid-cols-2 md:gap-0">
                     <div data-aos="zoom-in" className=" top-0 w-full mx-auto sm:w-[90%] ">
-                        <ProductPreviews images={product.previews} />
+                        <ProductPreviews images={product.previews ?? ''} />
                     </div>
 
                     <div className=" lg:w-[90%]">
@@ -266,7 +263,7 @@ const ProductDetail = ({ cart, setCart, productData, bgColor }) => {
                                             }} className="flex w-full items-center justify-between font-semibold    h-[2.4rem] rounded-md py-[0.54rem]">
                                                 <div
                                                     onClick={() => {
-                                                        product.quantity === 1 ? removeFromCart() : decreaseQuantity();
+                                                        return product?.quantity === 1 ? removeFromCart() : decreaseQuantity();
                                                     }}
                                                     className=" pr-4 pl-3  h-[2.5rem] flex items-center justify-center cursor-pointer"
                                                 >

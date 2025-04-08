@@ -5,8 +5,9 @@ import Catalogue1 from './Page/Catalogue1';
 import Catalogue1Layout from './Layout/Catalogue1Layout';
 import Catalogue1Cart from './Page/Catalogue1Cart';
 import ProductDetail from './Page/ProductDetail';
+import { catalogueResponse, metaDetails } from '@/validations/CatalogueValidation';
 
-const Catalogue1Dashboard = ({ setMetaDetails }) => {
+const Catalogue1Dashboard = ({ setMetaDetails }: { setMetaDetails: React.Dispatch<React.SetStateAction<metaDetails | undefined>> }) => {
 
     const [cart, setCart] = useState(() => {
         const savedCart = localStorage.getItem("cart");
@@ -15,7 +16,7 @@ const Catalogue1Dashboard = ({ setMetaDetails }) => {
 
     const { userName } = useParams()
 
-    const [catalogueData, setCatalogueData] = useState()
+    const [catalogueData, setCatalogueData] = useState<catalogueResponse>()
 
     useEffect(() => {
         localStorage.setItem("cart", JSON.stringify(cart));
@@ -46,14 +47,17 @@ const Catalogue1Dashboard = ({ setMetaDetails }) => {
 
     return (
         <>
-            <Catalogue1Layout cart={cart} data={catalogueData}>
-                <Routes>
-                    <Route path="/" element={<Catalogue1 cart={cart} setCart={setCart} data={catalogueData} />} />
-                    <Route path='/cart' element={<Catalogue1Cart cart={cart} setCart={setCart} data={catalogueData} bgColor={catalogueData?.data?.backgroundColor} />} />
-                    <Route path='/product/:productId' element={<ProductDetail cart={cart} setCart={setCart} productData={catalogueData} bgColor={catalogueData?.data?.backgroundColor} />} />
-                </Routes>
-            </Catalogue1Layout>
+            {catalogueData && (
+                <Catalogue1Layout cart={cart} data={catalogueData}>
+                    <Routes>
+                        <Route path="/" element={<Catalogue1 cart={cart} setCart={setCart} data={catalogueData} />} />
+                        <Route path='/cart' element={<Catalogue1Cart cart={cart} setCart={setCart} data={catalogueData} bgColor={catalogueData?.data?.backgroundColor} />} />
+                        <Route path='/product/:productId' element={<ProductDetail userName={userName ?? ''} cart={cart} setCart={setCart} productData={catalogueData} bgColor={catalogueData?.data?.backgroundColor} />} />
+                    </Routes>
+                </Catalogue1Layout>
+            )}
         </>
+
     )
 }
 

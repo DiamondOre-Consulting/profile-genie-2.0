@@ -1,10 +1,8 @@
-import { portfolioResponse } from "@/validations/PortfolioValidation";
 import {
     IconMapPin,
     IconPhone,
     IconMail,
     IconBrandWhatsapp,
-    IconDeviceFloppy,
     IconBrandFacebook,
     IconBrandX,
 } from "@tabler/icons-react";
@@ -12,10 +10,11 @@ import { useState } from "react";
 
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
-import { Link } from "react-router-dom"
+import { lightenColor } from "../Hooks/calculations";
+import { catalogueResponse } from "@/validations/CatalogueValidation";
 
 
-const Contact = ({ contact, bgColor }: { contact: portfolioResponse['contactData'], bulkLinks: portfolioResponse['otherDetails']['bulkLink'], fullName: string }) => {
+const Contact = ({ contact, bgColor, fullName }: { contact: catalogueResponse['data']['catalogueOwner'], bgColor: string, fullName: string }) => {
     console.log(contact)
     const [whatsappNo, setWhatsAppNo] = useState('');
     const url = encodeURIComponent(window.location.href);
@@ -41,14 +40,16 @@ const Contact = ({ contact, bgColor }: { contact: portfolioResponse['contactData
         window.open(twitterUrl, "_blank");
     };
 
-    const lightenColor = (color, percent) => {
-        const num = parseInt(color?.slice(1), 16),
-            amt = Math.round(2.55 * percent * 100),
-            r = (num >> 16) + amt,
-            g = ((num >> 8) & 0x00ff) + amt,
-            b = (num & 0x0000ff) + amt;
+    const getMapSrc = (mapLink?: string): string => {
+        if (!mapLink) return '';
 
-        return `rgb(${Math.min(255, r)}, ${Math.min(255, g)}, ${Math.min(255, b)})`;
+        if (mapLink.startsWith('http')) {
+            return mapLink;
+        }
+
+        const match = mapLink.match(/src=["']([^"']+)["']/);
+        console.log(match)
+        return match ? match[1] : '';
     };
 
 
@@ -58,7 +59,7 @@ const Contact = ({ contact, bgColor }: { contact: portfolioResponse['contactData
                 <div className="flex shadow-md items-center flex-col sm:flex-row w-full  mx-auto">
                     <div className="w-full h-70">
                         {(contact?.mapLink) &&
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d28054.49214055431!2d77.08672!3d28.4852224!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1743401160150!5m2!1sen!2sin" loading="lazy" className="w-full h-full sm:rounded-tr-none sm:rounded-l-md rounded-t-md "></iframe>
+                            <iframe src={getMapSrc(contact?.mapLink)} loading="lazy" className="w-full h-full sm:rounded-tr-none sm:rounded-l-md rounded-t-md "></iframe>
                         }
                     </div>
 
@@ -90,33 +91,7 @@ const Contact = ({ contact, bgColor }: { contact: portfolioResponse['contactData
                             </div>
                             <div className=" flex flex-wrap mt-4 justify-center md:justify-start gap-3 ">
 
-                                {contact?.contactCSV &&
-                                    <Link to={contact?.contactCSV} className="bg-[#0890b21a] flex w-full items-center justify-center gap-1 text-[#0891b2] border border-[#0891b2] border-b-4 font-medium overflow-hidden relative px-2 py-2 rounded-md hover:brightness-150 hover:border-t-4 hover:border-b active:opacity-75 outline-none duration-300 group">
-                                        <span className="bg-[#0891b2] shadow-[#0891b2] absolute -top-[150%] left-0 inline-flex w-80 h-[5px] rounded-md opacity-50 group-hover:top-[150%] duration-500 shadow-[0_0_10px_10px_rgba(0,0,0,0.3)]"></span>
-                                        <IconDeviceFloppy size={18} /> Save Contact
-                                    </Link>
-                                }
-                                {(contact?.brochureLink?.link) &&
-                                    <Link to={contact?.brochureLink?.link}
-                                        className="cursor-pointer w-full flex justify-between bg-rose-500 px-3 py-2 rounded-md text-white tracking-wider shadow-xl hover:bg-red-600  duration-500 hover:ring-1 font-mono "
-                                    >
-                                        {contact?.brochureLink?.tagline}
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke-width="2"
-                                            stroke="currentColor"
-                                            className="w-5 h-5 animate-bounce"
-                                        >
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3"
-                                            ></path>
-                                        </svg>
-                                    </Link>
-                                }
+
 
                             </div>
                         </div>

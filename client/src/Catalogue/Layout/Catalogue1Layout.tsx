@@ -1,9 +1,11 @@
-import { IconMenu, IconShoppingCart, IconX } from '@tabler/icons-react';
+import { catalogueResponse, productDetail } from '@/validations/CatalogueValidation';
+import { IconArrowUp, IconMenu, IconShoppingCart, IconX } from '@tabler/icons-react';
 import React, { useEffect, useState } from 'react'
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import { Link } from 'react-scroll'
+import { lightenColor } from '../Hooks/calculations';
 
-const Catalogue1Layout = ({ cart, children, data }: { logo?: string, name: string }) => {
+const Catalogue1Layout = ({ cart, children, data }: { cart: productDetail[], children: React.ReactNode, data: catalogueResponse }) => {
     const [menuOpen, setMenuOpen] = useState(false);
     const [showScrollToTop, setShowScrollToTop] = useState(false);
     const { userName } = useParams()
@@ -51,15 +53,7 @@ const Catalogue1Layout = ({ cart, children, data }: { logo?: string, name: strin
         };
     }, []);
 
-    const lightenColor = (color, percent) => {
-        const num = parseInt(color?.slice(1), 16),
-            amt = Math.round(2.55 * percent * 100),
-            r = (num >> 16) + amt,
-            g = ((num >> 8) & 0x00ff) + amt,
-            b = (num & 0x0000ff) + amt;
 
-        return `rgb(${Math.min(255, r)}, ${Math.min(255, g)}, ${Math.min(255, b)})`;
-    };
 
     return (
         <>
@@ -77,7 +71,7 @@ const Catalogue1Layout = ({ cart, children, data }: { logo?: string, name: strin
                         <img
                             src={data?.data?.logo?.url}
                             alt="Logo"
-                            className="w-16 h-16"
+                            className=" h-13"
                         />
                         <span className="text-lg font-semibold text-black">
                             {data?.data?.name || "Profile Genie"}
@@ -161,6 +155,7 @@ const Catalogue1Layout = ({ cart, children, data }: { logo?: string, name: strin
                 )}
             </header>
             <div className='' >
+                {showScrollToTop && <div onClick={scrollToTop} style={{ backgroundColor: lightenColor(data?.data?.backgroundColor, -0.3) }} className='fixed text-white p-2 rounded-md shadow-md cursor-pointer bottom-2 right-2 z-[10]'><IconArrowUp /></div>}
                 {children}
             </div>
             <footer className='border-t border-gray-300 mt-4 shadow-[10px_0px_10px_#808080]' style={{ backgroundColor: lightenColor(data?.data?.backgroundColor, 0.85) }}>

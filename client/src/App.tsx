@@ -1,14 +1,13 @@
 import { lazy, Suspense, useEffect, useState } from "react"
-import { Route, Routes } from "react-router-dom"
-import Catalogue1 from "./Catalogue/Page/Catalogue1"
-import Catalogue1Cart from "./Catalogue/Page/Catalogue1Cart"
+import { Route, Routes, useLocation } from "react-router-dom"
 import Catalogue1Dashboard from "./Catalogue/Catalogue1Dashboard"
+import { metaDetails } from "./validations/CatalogueValidation"
 const Home = lazy(() => import("./Pages/Home"))
 const Template1 = lazy(() => import("./Templates/templatePages/Template1"))
 
 function App() {
-
-  const [metaDetails, setMetaDetails] = useState()
+  const location = useLocation()
+  const [metaDetails, setMetaDetails] = useState<metaDetails>()
 
   useEffect(() => {
     if (metaDetails?.favIcon?.url) {
@@ -23,6 +22,13 @@ function App() {
       }
     }
   }, [metaDetails])
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, [location.pathname]);
 
   return (
     <>

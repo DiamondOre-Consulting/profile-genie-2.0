@@ -8,11 +8,11 @@ import { Link, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useGetSinglePortfolioQuery } from '@/Redux/API/PortfolioApi'
 import { Product } from '../Components/Template1/Product'
-import { portfolioResponse } from '../../validations/PortfolioValidation'
+import { metaDetails, portfolioResponse } from '../../validations/PortfolioValidation'
 import loading from "../../assets/loading.webm"
 import { IconAlertTriangle } from '@tabler/icons-react'
 
-const Template1 = ({ setMetaDetails }) => {
+const Template1 = ({ setMetaDetails }: { setMetaDetails: React.Dispatch<React.SetStateAction<metaDetails | undefined>> }) => {
     const { username } = useParams()
 
     const [profileData, setProfileData] = useState<portfolioResponse>()
@@ -25,17 +25,7 @@ const Template1 = ({ setMetaDetails }) => {
             setMetaDetails(data?.data?.metaDetails)
         }
 
-        // if (data?.data?.metaDetails?.favIcon?.url) {
-        //     const favicon = document.querySelector("link[rel='icon']") as HTMLLinkElement;
-        //     if (favicon) {
-        //         favicon.href = data?.data?.metaDetails.favIcon.url;
-        //     } else {
-        //         const newFavicon = document.createElement("link");
-        //         newFavicon.rel = "icon";
-        //         newFavicon.href = data?.data?.metaDetails.favIcon.url;
-        //         document.head.appendChild(newFavicon);
-        //     }
-        // }
+
     }, [isFetching, data, isLoading])
 
     useEffect(() => {

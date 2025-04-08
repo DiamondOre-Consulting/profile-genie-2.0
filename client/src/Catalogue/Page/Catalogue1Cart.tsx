@@ -1,5 +1,5 @@
-import { IconMinus, IconPlus, IconSalad, IconShoppingBag, IconTrash, IconWhirl } from "@tabler/icons-react";
-import React, { Fragment, useState } from "react";
+import { IconMinus, IconPlus, IconTrash, IconWhirl } from "@tabler/icons-react";
+import React, { Fragment } from "react";
 import AnimateNumber from "../components/AnimateNumber";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -10,21 +10,14 @@ import PhoneInput from "react-phone-input-2";
 import { Textarea } from "@/components/ui/textarea";
 import { Link, useParams } from "react-router-dom";
 import { useSendQuotationMutation } from "@/Redux/API/CatalogueApi";
-
-const lightenColor = (color, percent) => {
-    const num = parseInt(color?.slice(1), 16),
-        amt = Math.round(2.55 * percent * 100),
-        r = (num >> 16) + amt,
-        g = ((num >> 8) & 0x00ff) + amt,
-        b = (num & 0x0000ff) + amt;
-
-    return `rgb(${Math.min(255, r)}, ${Math.min(255, g)}, ${Math.min(255, b)})`;
-};
+import { catalogueResponse, productDetail } from "@/validations/CatalogueValidation";
+import { lightenColor } from "../Hooks/calculations";
 
 
-const SideBar = ({ bgColor, cart, setCart, data: catalogueData }) => {
+
+const SideBar = ({ bgColor, cart, setCart, data: catalogueData }: { bgColor: string, cart: productDetail[], setCart: React.Dispatch<React.SetStateAction<productDetail[]>>, data: catalogueResponse }) => {
     const [sendQuotation] = useSendQuotationMutation()
-    const { register, handleSubmit, reset, control, getValues, formState: { errors, isSubmitting } } = useForm<quoteFormResponse>({
+    const { register, handleSubmit, reset, control, formState: { errors, isSubmitting } } = useForm<quoteFormResponse>({
         resolver: zodResolver(quoteFormSchema)
     })
 
@@ -118,22 +111,22 @@ const SideBar = ({ bgColor, cart, setCart, data: catalogueData }) => {
                     </p>
                 )}
             </div>
-            <button disabled={isSubmitting} style={{ backgroundColor: lightenColor(bgColor, -0.3) }} type="submit" className=" text-white py-2 px-4 rounded w-full mt-2">{isSubmitting?<IconWhirl/>:"Quote me!"}</button>
+            <button disabled={isSubmitting} style={{ backgroundColor: lightenColor(bgColor, -0.3) }} type="submit" className=" text-white py-2 px-4 rounded w-full mt-2">{isSubmitting ? <IconWhirl className="animate-spin" /> : "Quote me!"}</button>
         </form>
     )
 }
 
-const ProductItem = ({ product, index, setCart, cart, bgColor }) => {
+const ProductItem = ({ product, setCart, cart, bgColor }: { product: productDetail, setCart: React.Dispatch<React.SetStateAction<productDetail[]>>, cart: productDetail[], bgColor: string }) => {
 
-    const updateCartInLocalStorage = (newCart) => {
+    const updateCartInLocalStorage = (newCart: productDetail[]) => {
         localStorage.setItem("cart", JSON.stringify(newCart));
     };
 
     const addToCart = (newQuantity: number, id: string) => {
-        const existingItem = cart.find((item) => (item._id || item.id) === id);
+        const existingItem = cart.find((item: productDetail) => (item._id || item.id) === id);
 
         if (existingItem) {
-            const updatedCart = cart.map((item) =>
+            const updatedCart = cart.map((item: productDetail) =>
                 (item._id || item?.id) === (product?._id || product?.id) ? { ...item, quantity: newQuantity } : item
             );
             setCart(updatedCart);
@@ -147,23 +140,23 @@ const ProductItem = ({ product, index, setCart, cart, bgColor }) => {
 
 
     const removeFromCart = (id: string) => {
-        const updatedCart = cart.filter((item) => (item._id || item.id) !== id);
+        const updatedCart = cart.filter((item: productDetail) => (item._id || item.id) !== id);
         setCart(updatedCart);
         updateCartInLocalStorage(updatedCart);
     };
 
     const increaseQuantity = (id: string) => {
-        const updatedItem = cart.find((item) => (item.id || item._id) === id);
+        const updatedItem = cart.find((item: productDetail) => (item.id || item._id) === id);
         console.log(updatedItem)
         if (updatedItem) {
-            addToCart(updatedItem.quantity + 1, id);
+            addToCart((updatedItem?.quantity ?? 0) + 1, id);
         }
     };
 
     const decreaseQuantity = (id: string) => {
-        const updatedItem = cart.find((item) => (item.id || item._id) === id);
-        if (updatedItem && updatedItem.quantity > 1) {
-            addToCart(updatedItem.quantity - 1, id);
+        const updatedItem = cart.find((item: productDetail) => (item.id || item._id) === id);
+        if (updatedItem && (updatedItem?.quantity ?? 0) > 1) {
+            addToCart((updatedItem?.quantity ?? 0) - 1, id);
         } else {
             removeFromCart(id);
         }
@@ -194,14 +187,14 @@ const ProductItem = ({ product, index, setCart, cart, bgColor }) => {
                         <h3 style={{ color: lightenColor(bgColor, -0.3) }} className="text-xl font-bold ">Rs. {product?.price.toLocaleString("en-IN")}</h3>
                         <div className="flex items-center gap-3 mt-4">
                             <div>
-                                <button onClick={() => removeFromCart(product.id || product._id)} className="size-9.5 border cursor-pointer bg-red-100 border-red-400 shadow-md text-red-600 inline-flex justify-center items-center rounded-md">
+                                <button onClick={() => removeFromCart(product?.id || product?._id || '')} className="size-9.5 border cursor-pointer bg-red-100 border-red-400 shadow-md text-red-600 inline-flex justify-center items-center rounded-md">
                                     <IconTrash />
                                 </button>
                             </div>
                             <div style={{ backgroundColor: lightenColor(bgColor, -0.3) }} className="flex w-full items-center justify-between font-semibold text-white  h-[2.4rem] rounded-md py-[0.54rem]">
                                 <div
                                     onClick={() => {
-                                        const qty = product.quantity === 1 ? removeFromCart(product.id || product._id) : decreaseQuantity(product.id || product._id);
+                                        const qty = product.quantity === 1 ? removeFromCart(product?.id || product?._id || '') : decreaseQuantity(product.id || product._id || '');
 
                                         return qty
                                     }}
@@ -211,11 +204,11 @@ const ProductItem = ({ product, index, setCart, cart, bgColor }) => {
                                 </div>
                                 <div className="h-[2.6rem]  flex  items-center justify-center">
                                     <AnimateNumber
-                                        value={product?.quantity}
+                                        value={product?.quantity ?? 0}
                                     />
                                 </div>
                                 <div
-                                    onClick={() => increaseQuantity(product.id || product._id)}
+                                    onClick={() => increaseQuantity(product.id || product._id || '')}
                                     className=" pl-4  h-[2.6rem] flex items-center justify-center pr-3 cursor-pointer"
                                 >
                                     <IconPlus />
@@ -231,7 +224,7 @@ const ProductItem = ({ product, index, setCart, cart, bgColor }) => {
     );
 };
 
-const Catalogue1Cart = ({ cart, setCart, bgColor, data }) => {
+const Catalogue1Cart = ({ cart, setCart, bgColor, data }: { cart: productDetail[], setCart: React.Dispatch<React.SetStateAction<productDetail[]>>, bgColor: string, data: catalogueResponse }) => {
     const { userName } = useParams()
 
     return (
@@ -240,13 +233,12 @@ const Catalogue1Cart = ({ cart, setCart, bgColor, data }) => {
                 {cart?.length > 0 ?
                     <div className="flex py-14 md:py-24 flex-col lg:flex-row gap-6">
                         <div style={{ backgroundColor: lightenColor(bgColor, 0.95) }} className="  rounded-xl shadow-lg border border-gray-200 w-full h-fit lg:w-2/3">
-                            {cart.map((item, i) => (
+                            {cart.map((item: productDetail, i: number) => (
                                 <Fragment key={i}>
                                     {!!i && <hr className="my-4 border-slate-300" />}
                                     <ProductItem
                                         product={item}
                                         bgColor={bgColor}
-                                        index={i}
                                         setCart={setCart}
                                         cart={cart}
                                         key={i}

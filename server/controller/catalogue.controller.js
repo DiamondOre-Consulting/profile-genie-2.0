@@ -601,7 +601,7 @@ const getAllCatalogues = asyncHandler(async (req, res) => {
                     $or: [
                         { userName: { $regex: search, $options: "i" } },
                         { name: { $regex: search, $options: "i" } },
-                        { isRecycled: false },
+                        { isRecycled: { $ne: true } },
                         { "ownerDetails.authAccountDetails.fullName": { $regex: search, $options: "i" } },
                         { "ownerDetails.authAccountDetails.email": { $regex: search, $options: "i" } },
                         { "ownerDetails.phoneList.phone": { $regex: search, $options: "i" } },
@@ -621,6 +621,7 @@ const getAllCatalogues = asyncHandler(async (req, res) => {
                 userName: 1,
                 paidDate: 1,
                 logo: 1,
+                createdAt: 1,
                 "ownerDetails._id": 1,
                 "ownerDetails.phoneList": 1,
                 "ownerDetails.whatsappNo": 1,

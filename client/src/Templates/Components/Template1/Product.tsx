@@ -58,7 +58,7 @@ export const Product = ({
 
   return (
     <div ref={ref} style={{ perspective: 1000 }} className="h-full overflow-hidden  relative flex flex-col">
-      <Header tagline={products?.tagline} />
+      <Header tagline={products?.tagline as string} />
       <motion.div style={{ marginTop, rotateX, rotateZ, translateY, opacity }} >
         <motion.div>
           <Marquee pauseOnHover loop={0} direction="right" speed={30} >

@@ -1,9 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react"
 import axiosBaseQuery from "../../Helper/axiosBaseQuery"
 
-interface AddAccessoriesProps {
-    formData: FormData;
-}
 
 export const portfolioApi = createApi({
     reducerPath: "portfolioApi",

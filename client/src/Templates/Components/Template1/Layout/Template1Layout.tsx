@@ -1,5 +1,5 @@
 import { IconBrandFacebook, IconBrandWhatsapp, IconBrandX, IconShare3 } from '@tabler/icons-react'
-import React, { ReactNode, useState } from 'react'
+import { ReactNode, useState } from 'react'
 
 import { Link } from "react-scroll"
 

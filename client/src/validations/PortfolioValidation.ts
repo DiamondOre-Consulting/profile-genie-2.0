@@ -170,9 +170,9 @@ export type previewDetail = z.infer<typeof addPreviewSchema>
 
 
 export interface portfolioResponse extends profileDetail {
-    _id: string,
-    createdAt: string,
-    updatedAt: string,
+    _id?: string,
+    createdAt?: string,
+    updatedAt?: string,
     metaDetails: metaDetails,
     contactData: contactDetails,
     otherDetails: otherDetails

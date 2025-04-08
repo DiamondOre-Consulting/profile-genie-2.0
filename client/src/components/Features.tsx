@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { IconAdjustments, IconChartBar, IconClick, IconCloud, IconCurrencyDollar, IconLeaf, IconMessageCircle, IconShare, IconSmartHome, IconUsers } from "@tabler/icons-react";
+import { IconClick, IconCloud, IconCurrencyDollar, IconLeaf, IconMessageCircle, IconShare, IconSmartHome, IconUsers } from "@tabler/icons-react";
 
 export function FeaturesSectionDemo() {
     const features = [

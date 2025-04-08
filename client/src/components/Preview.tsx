@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Badge } from './ui/badge'
 import Hero from '@/Templates/Components/Template1/Hero'
 import { useForm } from 'react-hook-form'
