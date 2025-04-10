@@ -82,6 +82,7 @@ function App() {
               <iframe
                 src="https://profile-genie-2-0-niyor.onrender.com/1/Ishan_Niyor_Perfumes"
                 title="Niyor home page"
+                style={{ width: "100%", minHeight: "100vh", border: "none" }}
               />
             }
           />
@@ -91,6 +92,8 @@ function App() {
               <iframe
                 src="https://profile-genie-2-0-niyor.onrender.com/admin-login/1"
                 title="Niyor admin login"
+                style={{ width: "100%", minHeight: "100vh", border: "none" }}
+
               />
             }
           />
@@ -100,6 +103,8 @@ function App() {
               <iframe
                 src="https://profile-genie-2-0-niyor.onrender.com/admin/1/Ishan_Niyor_Perfumes"
                 title="Niyor home page"
+                style={{ width: "100%", minHeight: "100vh", border: "none" }}
+
               />
             }
           />
