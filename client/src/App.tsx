@@ -80,9 +80,9 @@ function App() {
             path="/dynamic-catalogue/*"
             element={
               <iframe
-                src="/niyor/index.html"
+                src="https://profile-genie-2-0-niyor.onrender.com"
                 style={{ width: "100%", height: "100vh", border: "none" }}
-                title="Dynamic Catalogue"
+                title="Catalogue"
               />
             }
           />
