@@ -9,7 +9,7 @@ const Catalogue1Hero = ({ catalogueDetail }: { catalogueDetail: catalogueApiRes[
 
     return (
         <section
-            className="ezy__header21 light py-12  relative overflow-hidden text-indigo-900"
+            className="ezy__header21 light py-12 lg:py-20 min-h-[80vh] flex items-center justify-center relative overflow-hidden text-indigo-900"
             style={{ backgroundImage: `linear-gradient(-180deg, ${lightenColor(catalogueDetail?.backgroundColor, 0.85)}, #fff)` }}
         >
             <div className="container lg:max-w-[80rem] gap-10 px-4 mx-auto relative flex flex-col lg:flex-row items-center  justify-between">
@@ -33,11 +33,11 @@ const Catalogue1Hero = ({ catalogueDetail }: { catalogueDetail: catalogueApiRes[
                         </Link>
                     </div>
                 </div>
-                <div className="  lg:w-[37%]  text-center">
+                <div className="  lg:w-[37%] w-full sm:w-[85%] shadow-md rounded-xl text-center">
                     <img
                         src={catalogueDetail?.heroImage?.url}
                         alt=""
-                        className="rounded-xl shadow-md max-w-full h-auto "
+                        className="rounded-xl shadow-md w-full h-auto "
                     />
                 </div>
             </div>

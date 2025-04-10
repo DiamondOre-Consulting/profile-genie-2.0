@@ -9,7 +9,7 @@ import { catalogueResponse, productDetail } from "@/validations/CatalogueValidat
 
 const ProductDetail = ({ cart, setCart, productData, bgColor, userName }: { cart: productDetail[], setCart: React.Dispatch<React.SetStateAction<productDetail[]>>, productData: catalogueResponse, bgColor: string, userName: string }) => {
     const { productId } = useParams();
-    const { data, isLoading, refetch } = useGetSingleProductQuery({ productId })
+    const { data, isLoading, refetch, isFetching } = useGetSingleProductQuery({ productId })
     const [product, setProduct] = useState<productDetail>()
     const navigate = useNavigate();
 
@@ -87,9 +87,9 @@ const ProductDetail = ({ cart, setCart, productData, bgColor, userName }: { cart
         }
     };
 
-    if (!product) {
-        return <div>Product not found!</div>;
-    }
+    // if (!product) {
+    //     return <div>Product not found!</div>;
+    // }
 
     const isInCart = cart.some((item) => (item.id || item._id) === (product?._id || product?.id));
 
@@ -115,7 +115,7 @@ const ProductDetail = ({ cart, setCart, productData, bgColor, userName }: { cart
 
         console.log(images);
         return (
-            <div style={{ backgroundColor: lightenColor(bgColor, 0.95) }} className="flex flex-col  p-2 rounded-md sm:flex-row-reverse items-center gap-4">
+            <div style={{ backgroundColor: lightenColor(bgColor, 0.95) }} className="flex flex-col shadow-lg border border-gray-200  p-2 rounded-md sm:flex-row-reverse items-center gap-4">
                 <div className="flex w-full space-x-2 top-10">
 
                     <div
@@ -210,97 +210,136 @@ const ProductDetail = ({ cart, setCart, productData, bgColor, userName }: { cart
         return `rgb(${r}, ${g}, ${b})`;
     };
 
-    return (
-        <div className="overflow-hidden bg-white overflow-x-hidden">
-
-            <div className="w-full py-10 md:py-16 max-w-[80rem] p-4 px-4 sm:px-10 mx-auto  md:px-20 lg:px-6">
-
+    const ProductSkeleton = () => {
+        return (
+            <div className="w-full py-10 md:py-16 max-w-[80rem] p-4 px-4 sm:px-10 mx-auto md:px-20 lg:px-6">
                 <div className="grid items-center grid-cols-1 gap-6 mt-4 lg:grid-cols-2 md:gap-0">
-                    <div data-aos="zoom-in" className=" top-0 w-full mx-auto sm:w-[90%] ">
-                        <ProductPreviews images={product.previews ?? ''} />
+                    <div className="top-0 w-full mx-auto sm:w-[90%] animate-pulse">
+                        <div className="w-full h-[300px] sm:h-[400px] bg-gray-300 rounded-lg"></div>
                     </div>
 
-                    <div className=" lg:w-[90%]">
-                        <div className="mb-6 ">
-                            <h1 style={{ color: lightenColor(bgColor, -0.3) }} className="text-2xl leading-none md:text-4xl font-medium mb-4">
-                                {product.name}
-                            </h1>
-
-                            <p className="opacity-70 lg:mr-16 xl:mr-20 my-4">
-                                {product.description}
-                            </p>
-                            <div className="flex items-center gap-4">
-                                <h3 style={{ color: lightenColor(bgColor, -0.35) }} className="text-2xl text-blue-600 font-medium">
-                                    Rs. {product.price}
-                                </h3>
-                                <p className="mt-1">{product?.stock ? <span className="flex items-center gap-1 w-fit rounded-full border text-xs px-2 bg-green-100 border-green-700 text-green-700 font-semibold"><span className="bg-green-700 inline-block size-1 rounded-full animate-ping"></span> In Stock</span> : <span className="flex items-center gap-1 w-fit rounded-full border text-xs px-2 bg-red-100 border-red-700 text-red-700 font-semibold"><span className="bg-red-700 inline-block size-1 rounded-full animate-ping"></span> Out of Stock</span>}</p>
-                            </div>
+                    <div className="lg:w-[90%] animate-pulse">
+                        <div className="h-8 w-3/4 bg-gray-300 rounded mb-4"></div>
+                        <div className="space-y-2 mb-6">
+                            <div className="h-4 w-full bg-gray-300 rounded"></div>
+                            <div className="h-4 w-5/6 bg-gray-300 rounded"></div>
+                            <div className="h-4 w-5/6 bg-gray-300 rounded"></div>
+                            <div className="h-4 w-2/3 bg-gray-300 rounded"></div>
+                            <div className="h-4 w-2/3 bg-gray-300 rounded"></div>
+                            <div className="h-4 w-1/2 bg-gray-300 rounded"></div>
                         </div>
 
+                        {/* Price + Stock */}
+                        <div className="flex items-center gap-4 mb-6">
+                            <div className="h-6 w-20 bg-gray-300 rounded"></div>
+                            <div className="h-5 w-24 bg-gray-300 rounded"></div>
+                        </div>
 
-                        <div
-                            className="flex items-center justify-start gap-4 mt-6"
-                            data-aos-offset="10"
-                        >
+                        {/* Quantity Controls */}
+                        <div className="flex items-center justify-start gap-4 mt-6">
                             <div className="flex gap-2 w-full items-center">
-
-                                <motion.div style={{ backgroundColor: lightenColor(bgColor, -0.3) }}
-                                    className={`text-sm  w-full h-[2.5rem]  flex items-center justify-between animate transform duration-300 text-white  rounded-md py-[0.54rem] font-semibold`}
-                                >
-                                    {(product?.quantity ?? 0) < 1
-                                        ? (
-                                            <motion.button
-                                                className="text-center cursor-pointer h-[2.5rem] w-full"
-                                                onClick={() => increaseQuantity()}
-
-                                            >
-                                                Add to Cart
-                                            </motion.button>
-                                        ) : (
-                                            <div style={{
-                                                backgroundColor: lightenColor(bgColor, -0.3),
-                                                color: lightenColor(bgColor, 0.95),
-                                            }} className="flex w-full items-center justify-between font-semibold    h-[2.4rem] rounded-md py-[0.54rem]">
-                                                <div
-                                                    onClick={() => {
-                                                        return product?.quantity === 1 ? removeFromCart() : decreaseQuantity();
-                                                    }}
-                                                    className=" pr-4 pl-3  h-[2.5rem] flex items-center justify-center cursor-pointer"
-                                                >
-                                                    <IconMinus />
-                                                </div>
-                                                <div className="h-[2.4rem]  flex  items-center justify-center">
-                                                    <AnimateNumber
-                                                        value={product.quantity ?? 0}
-                                                    />
-                                                </div>
-
-                                                <div
-                                                    onClick={() => increaseQuantity()}
-                                                    className=" pl-4  h-[2.5rem] flex items-center justify-center pr-3 cursor-pointer"
-                                                >
-                                                    <IconPlus />
-                                                </div>
-                                            </div>
-                                        )
-                                    }
-
-                                </motion.div>
-
-
+                                <div className="text-sm w-full h-[2.5rem] bg-gray-300 rounded-md"></div>
                             </div>
-                            <div
-                                style={{ backgroundColor: slightlyModifyColor(bgColor, 100) }}
-                                data-aos-offset="10"
-                                onClick={() => buyButton()}
-                                className="w-full px-4 py-2 text-center text-white rounded bg-dark cursor-pointer bg-red-500 hover:bg-[#1d8883]"
-                            >
-                                Quote me
-                            </div>
+                            <div className="w-full h-[2.5rem] bg-gray-300 rounded-md"></div>
                         </div>
                     </div>
                 </div>
             </div>
+        );
+    };
+
+
+    return (
+        <div className="overflow-hidden bg-white overflow-x-hidden">
+            {(isLoading || isFetching || !product) ? <ProductSkeleton /> :
+                <div className="w-full py-10 md:py-16 max-w-[80rem] p-4 px-4 sm:px-10 mx-auto  md:px-20 lg:px-6">
+
+                    <div className="grid items-center grid-cols-1 gap-6 mt-4 lg:grid-cols-2 md:gap-0">
+                        <div data-aos="zoom-in" className=" top-0 w-full mx-auto sm:w-[90%] ">
+                            <ProductPreviews images={product.previews ?? ''} />
+                        </div>
+
+                        <div className=" lg:w-[90%]">
+                            <div className="mb-6 ">
+                                <h1 style={{ color: lightenColor(bgColor, -0.3) }} className="text-2xl leading-none md:text-4xl font-medium mb-4">
+                                    {product.name}
+                                </h1>
+
+                                <p className="opacity-70 lg:mr-16 xl:mr-20 my-4">
+                                    {product.description}
+                                </p>
+                                <div className="flex items-center gap-4">
+                                    <h3 style={{ color: lightenColor(bgColor, -0.35) }} className="text-2xl text-blue-600 font-medium">
+                                        Rs. {product.price.toLocaleString("en-IN")}
+                                    </h3>
+                                    <p className="mt-1">{product?.stock ? <span className="flex items-center gap-1 w-fit rounded-full border text-xs px-2 bg-green-100 border-green-700 text-green-700 font-semibold"><span className="bg-green-700 inline-block size-1 rounded-full animate-ping"></span> In Stock</span> : <span className="flex items-center gap-1 w-fit rounded-full border text-xs px-2 bg-red-100 border-red-700 text-red-700 font-semibold"><span className="bg-red-700 inline-block size-1 rounded-full animate-ping"></span> Out of Stock</span>}</p>
+                                </div>
+                            </div>
+
+
+                            <div
+                                className="flex items-center justify-start gap-4 mt-6"
+                                data-aos-offset="10"
+                            >
+                                <div className="flex gap-2 w-full items-center">
+
+                                    <motion.div style={{ backgroundColor: lightenColor(bgColor, -0.3) }}
+                                        className={`text-sm  w-full h-[2.5rem]  flex items-center justify-between animate transform duration-300 text-white  rounded-md py-[0.54rem] font-semibold`}
+                                    >
+                                        {(product?.quantity ?? 0) < 1
+                                            ? (
+                                                <motion.button
+                                                    className="text-center cursor-pointer h-[2.5rem] w-full"
+                                                    onClick={() => increaseQuantity()}
+
+                                                >
+                                                    Add to Cart
+                                                </motion.button>
+                                            ) : (
+                                                <div style={{
+                                                    backgroundColor: lightenColor(bgColor, -0.3),
+                                                    color: lightenColor(bgColor, 0.95),
+                                                }} className="flex w-full items-center justify-between font-semibold    h-[2.4rem] rounded-md py-[0.54rem]">
+                                                    <div
+                                                        onClick={() => {
+                                                            return product?.quantity === 1 ? removeFromCart() : decreaseQuantity();
+                                                        }}
+                                                        className=" pr-4 pl-3  h-[2.5rem] flex items-center justify-center cursor-pointer"
+                                                    >
+                                                        <IconMinus />
+                                                    </div>
+                                                    <div className="h-[2.4rem]  flex  items-center justify-center">
+                                                        <AnimateNumber
+                                                            value={product.quantity ?? 0}
+                                                        />
+                                                    </div>
+
+                                                    <div
+                                                        onClick={() => increaseQuantity()}
+                                                        className=" pl-4  h-[2.5rem] flex items-center justify-center pr-3 cursor-pointer"
+                                                    >
+                                                        <IconPlus />
+                                                    </div>
+                                                </div>
+                                            )
+                                        }
+
+                                    </motion.div>
+
+
+                                </div>
+                                <div
+
+                                    data-aos-offset="10"
+                                    onClick={() => buyButton()}
+                                    className="w-full px-4 py-2 text-center text-white rounded bg-dark duration-300 cursor-pointer bg-blue-600 hover:bg-[#1d1d88]"
+                                >
+                                    Quote me
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>}
 
             {/* <div>
                 <RelatedProducts
@@ -311,9 +350,11 @@ const ProductDetail = ({ cart, setCart, productData, bgColor, userName }: { cart
                 />
             </div> */}
 
-            <div className="mb-10">
-                <ExploreProduct bgColor={bgColor} cart={cart} setCart={setCart} exploreProduct={productData?.categorisedProducts?.filter(category => category.products.length > 0)} />
-            </div>
+            {productData?.categorisedProducts?.length > 0 &&
+                <div className="mb-10">
+                    <ExploreProduct bgColor={bgColor} cart={cart} setCart={setCart} exploreProduct={productData?.categorisedProducts?.filter(category => category.products.length > 0)} />
+                </div>
+            }
         </div>
     );
 };

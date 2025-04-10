@@ -1,9 +1,10 @@
 import { lazy, Suspense, useEffect, useState } from "react"
-import { Route, Routes, useLocation } from "react-router-dom"
-import Catalogue1Dashboard from "./Catalogue/Catalogue1Dashboard"
+import { Navigate, Route, Routes, useLocation } from "react-router-dom"
 import { metaDetails } from "./validations/CatalogueValidation"
+import Loader from "./components/loader"
 const Home = lazy(() => import("./Pages/Home"))
 const Template1 = lazy(() => import("./Templates/templatePages/Template1"))
+const Catalogue1Dashboard = lazy(() => import("./Catalogue/Catalogue1Dashboard"))
 
 function App() {
   const location = useLocation()
@@ -70,11 +71,21 @@ function App() {
       <meta property="og:locale" content="en_US" />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
-      <Suspense fallback={<div>loading</div>}>
+      <Suspense fallback={<Loader />}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/profile/1/:username" element={<Template1 setMetaDetails={setMetaDetails} />} />
           <Route path="/catalogue/1/:userName/*" element={<Catalogue1Dashboard setMetaDetails={setMetaDetails} />} />
+          <Route
+            path="/dynamic-catalogue/*"
+            element={
+              <iframe
+                src="/dist/index.html"
+                style={{ width: "100%", height: "100vh", border: "none" }}
+                title="Dynamic Catalogue"
+              />
+            }
+          />
         </Routes>
       </Suspense>
     </>

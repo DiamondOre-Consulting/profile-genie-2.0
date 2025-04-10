@@ -210,7 +210,7 @@ const Product = ({ data, cart, setCart }: { data: catalogueResponse, cart: produ
 
 
     return (
-        <section className="ezy__epgrid5 relative light py-14 md:py-24 bg-white dark:bg-[#0b1727] text-zinc-900   overflow-hidden ">
+        <section id='product' className="ezy__epgrid5 relative light py-14  bg-white dark:bg-[#0b1727] text-zinc-900   overflow-hidden ">
             {data?.uncategorisedProducts && <div className="container py-10 lg:max-w-[80rem] xl:max-w-[90rem] px-4 mx-auto">
                 <h2 className="text-center my-6 ">
                     <SparklesText text="Our Products" />

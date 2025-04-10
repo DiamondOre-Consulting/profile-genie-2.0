@@ -25,6 +25,9 @@ const Catalogue1Dashboard = ({ setMetaDetails }: { setMetaDetails: React.Dispatc
     const { data, isLoading, isFetching, error } = useGetSingleCatalogueQuery({ username: userName })
     useEffect(() => {
         if (!isFetching && !isLoading) {
+            if (data?.data?.isPaid === false || data?.data?.isActive === false) {
+                window.location.href = "https://profilegenie.store"
+            }
             setCatalogueData(data)
             setMetaDetails(data?.data?.metaDetails)
         }
@@ -37,9 +40,7 @@ const Catalogue1Dashboard = ({ setMetaDetails }: { setMetaDetails: React.Dispatc
     if (!catalogueData && !isFetching && !isLoading) {
         if (error) {
             return (
-                <div className='relative z-100'>
-                    <h1>No portfolio found</h1>
-                </div>
+                window.location.href = "https://profilegenie.store"
             )
         }
     }
