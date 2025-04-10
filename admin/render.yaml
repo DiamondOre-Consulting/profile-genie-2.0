@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: my-admin-frontend
+    env: static
+    staticPublishPath: admin/build
+    buildCommand: cd admin && npm install --legacy-peer-deps && npm run build
+    branch: main
