@@ -77,6 +77,7 @@ const Footer = ({ myprofile }) => {
             <ul className="flex space-x-6 text-sm font-medium text-gray-500 ">
               <li>
                 <a
+                  target="_blank"
                   href="https://test.profilegenie.in/dynamic-catalogue/admin-login/1"
                   className="text-gray-100 underline"
                 >
