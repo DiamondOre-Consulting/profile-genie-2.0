@@ -76,12 +76,12 @@ const Footer = ({ myprofile }) => {
           <div className="flex justify-center md:justify-end">
             <ul className="flex space-x-6 text-sm font-medium text-gray-500 ">
               <li>
-                <Link
-                  to="https://test.profilegenie.in/dynamic-catalogue/admin-login/1"
+                <a
+                  href="https://test.profilegenie.in/dynamic-catalogue/admin-login/1"
                   className="text-gray-100 underline"
                 >
                   Admin Login
-                </Link>
+                </a>
               </li>
             </ul>
           </div>
