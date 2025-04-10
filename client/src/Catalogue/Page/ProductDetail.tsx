@@ -115,7 +115,7 @@ const ProductDetail = ({ cart, setCart, productData, bgColor, userName }: { cart
 
         console.log(images);
         return (
-            <div style={{ backgroundColor: lightenColor(bgColor, 0.95) }} className="flex flex-col shadow-lg border border-gray-200  p-2 rounded-md sm:flex-row-reverse items-center gap-4">
+            <div style={{ backgroundColor: lightenColor(bgColor, 0.95) }} className="flex flex-col items-center gap-4 p-2 border border-gray-200 rounded-md shadow-lg sm:flex-row-reverse">
                 <div className="flex w-full space-x-2 top-10">
 
                     <div
@@ -143,7 +143,7 @@ const ProductDetail = ({ cart, setCart, productData, bgColor, userName }: { cart
 
                 </div>
                 <div className="flex gap-4 top-10 sm:flex-col">
-                    {product?.image?.length > 1 && product?.image.map((image, index) => (
+                    {product?.image && product?.image?.length > 1 && product?.image.map((image, index) => (
                         <button
                             key={index}
                             onClick={() => {
@@ -196,19 +196,7 @@ const ProductDetail = ({ cart, setCart, productData, bgColor, userName }: { cart
         return `rgb(${Math.min(255, r)}, ${Math.min(255, g)}, ${Math.min(255, b)})`;
     };
 
-    const slightlyModifyColor = (color: string, shift = 10) => {
 
-        const num = parseInt(color.slice(1), 16)
-        let r = (num >> 16) & 255,
-            g = (num >> 8) & 255,
-            b = num & 255;
-
-        r = (r + shift) % 256;
-        g = (g + shift) % 256;
-        b = (b + shift) % 256;
-
-        return `rgb(${r}, ${g}, ${b})`;
-    };
 
     const ProductSkeleton = () => {
         return (
@@ -219,25 +207,25 @@ const ProductDetail = ({ cart, setCart, productData, bgColor, userName }: { cart
                     </div>
 
                     <div className="lg:w-[90%] animate-pulse">
-                        <div className="h-8 w-3/4 bg-gray-300 rounded mb-4"></div>
-                        <div className="space-y-2 mb-6">
-                            <div className="h-4 w-full bg-gray-300 rounded"></div>
-                            <div className="h-4 w-5/6 bg-gray-300 rounded"></div>
-                            <div className="h-4 w-5/6 bg-gray-300 rounded"></div>
-                            <div className="h-4 w-2/3 bg-gray-300 rounded"></div>
-                            <div className="h-4 w-2/3 bg-gray-300 rounded"></div>
-                            <div className="h-4 w-1/2 bg-gray-300 rounded"></div>
+                        <div className="w-3/4 h-8 mb-4 bg-gray-300 rounded"></div>
+                        <div className="mb-6 space-y-2">
+                            <div className="w-full h-4 bg-gray-300 rounded"></div>
+                            <div className="w-5/6 h-4 bg-gray-300 rounded"></div>
+                            <div className="w-5/6 h-4 bg-gray-300 rounded"></div>
+                            <div className="w-2/3 h-4 bg-gray-300 rounded"></div>
+                            <div className="w-2/3 h-4 bg-gray-300 rounded"></div>
+                            <div className="w-1/2 h-4 bg-gray-300 rounded"></div>
                         </div>
 
                         {/* Price + Stock */}
                         <div className="flex items-center gap-4 mb-6">
-                            <div className="h-6 w-20 bg-gray-300 rounded"></div>
-                            <div className="h-5 w-24 bg-gray-300 rounded"></div>
+                            <div className="w-20 h-6 bg-gray-300 rounded"></div>
+                            <div className="w-24 h-5 bg-gray-300 rounded"></div>
                         </div>
 
                         {/* Quantity Controls */}
                         <div className="flex items-center justify-start gap-4 mt-6">
-                            <div className="flex gap-2 w-full items-center">
+                            <div className="flex items-center w-full gap-2">
                                 <div className="text-sm w-full h-[2.5rem] bg-gray-300 rounded-md"></div>
                             </div>
                             <div className="w-full h-[2.5rem] bg-gray-300 rounded-md"></div>
@@ -250,7 +238,7 @@ const ProductDetail = ({ cart, setCart, productData, bgColor, userName }: { cart
 
 
     return (
-        <div className="overflow-hidden bg-white overflow-x-hidden">
+        <div className="overflow-hidden overflow-x-hidden bg-white">
             {(isLoading || isFetching || !product) ? <ProductSkeleton /> :
                 <div className="w-full py-10 md:py-16 max-w-[80rem] p-4 px-4 sm:px-10 mx-auto  md:px-20 lg:px-6">
 
@@ -261,18 +249,18 @@ const ProductDetail = ({ cart, setCart, productData, bgColor, userName }: { cart
 
                         <div className=" lg:w-[90%]">
                             <div className="mb-6 ">
-                                <h1 style={{ color: lightenColor(bgColor, -0.3) }} className="text-2xl leading-none md:text-4xl font-medium mb-4">
+                                <h1 style={{ color: lightenColor(bgColor, -0.3) }} className="mb-4 text-2xl font-medium leading-none md:text-4xl">
                                     {product.name}
                                 </h1>
 
-                                <p className="opacity-70 lg:mr-16 xl:mr-20 my-4">
+                                <p className="my-4 opacity-70 lg:mr-16 xl:mr-20">
                                     {product.description}
                                 </p>
                                 <div className="flex items-center gap-4">
-                                    <h3 style={{ color: lightenColor(bgColor, -0.35) }} className="text-2xl text-blue-600 font-medium">
+                                    <h3 style={{ color: lightenColor(bgColor, -0.35) }} className="text-2xl font-medium text-blue-600">
                                         Rs. {product.price.toLocaleString("en-IN")}
                                     </h3>
-                                    <p className="mt-1">{product?.stock ? <span className="flex items-center gap-1 w-fit rounded-full border text-xs px-2 bg-green-100 border-green-700 text-green-700 font-semibold"><span className="bg-green-700 inline-block size-1 rounded-full animate-ping"></span> In Stock</span> : <span className="flex items-center gap-1 w-fit rounded-full border text-xs px-2 bg-red-100 border-red-700 text-red-700 font-semibold"><span className="bg-red-700 inline-block size-1 rounded-full animate-ping"></span> Out of Stock</span>}</p>
+                                    <p className="mt-1">{product?.stock ? <span className="flex items-center gap-1 px-2 text-xs font-semibold text-green-700 bg-green-100 border border-green-700 rounded-full w-fit"><span className="inline-block bg-green-700 rounded-full size-1 animate-ping"></span> In Stock</span> : <span className="flex items-center gap-1 px-2 text-xs font-semibold text-red-700 bg-red-100 border border-red-700 rounded-full w-fit"><span className="inline-block bg-red-700 rounded-full size-1 animate-ping"></span> Out of Stock</span>}</p>
                                 </div>
                             </div>
 
@@ -281,7 +269,7 @@ const ProductDetail = ({ cart, setCart, productData, bgColor, userName }: { cart
                                 className="flex items-center justify-start gap-4 mt-6"
                                 data-aos-offset="10"
                             >
-                                <div className="flex gap-2 w-full items-center">
+                                <div className="flex items-center w-full gap-2">
 
                                     <motion.div style={{ backgroundColor: lightenColor(bgColor, -0.3) }}
                                         className={`text-sm  w-full h-[2.5rem]  flex items-center justify-between animate transform duration-300 text-white  rounded-md py-[0.54rem] font-semibold`}

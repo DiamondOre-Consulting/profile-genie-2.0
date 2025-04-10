@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from "react"
-import { Navigate, Route, Routes, useLocation } from "react-router-dom"
+import { Route, Routes, useLocation } from "react-router-dom"
 import { metaDetails } from "./validations/CatalogueValidation"
-import Loader from "./components/loader"
+import Loader from "./components/Loader"
 const Home = lazy(() => import("./Pages/Home"))
 const Template1 = lazy(() => import("./Templates/templatePages/Template1"))
 const Catalogue1Dashboard = lazy(() => import("./Catalogue/Catalogue1Dashboard"))
