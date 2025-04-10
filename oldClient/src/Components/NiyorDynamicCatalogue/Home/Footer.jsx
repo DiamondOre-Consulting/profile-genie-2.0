@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 
 const Footer = ({ myprofile }) => {
   return (
-    <footer className="bg-c1 shadow ">
-      <div className="max-w-7xl mx-auto p-4 md:py-8">
-        <div className="flex  md:flex-row justify-between items-center md:items-start space-y-3 md:space-y-0">
+    <footer className="shadow bg-c1 ">
+      <div className="p-4 mx-auto max-w-7xl md:py-8">
+        <div className="flex items-center justify-between space-y-3 md:flex-row md:items-start md:space-y-0">
           <div className="flex justify-center md:justify-start">
             <img
               src={
@@ -17,7 +17,7 @@ const Footer = ({ myprofile }) => {
           </div>
 
           {myprofile?.brand?.brandSocials && (
-            <div className="flex justify-center md:justify-end items-center space-x-2 md:space-x-8">
+            <div className="flex items-center justify-center space-x-2 md:justify-end md:space-x-8">
               {myprofile.brand?.brandSocials?.facebook && (
                 <a
                   href={myprofile.brand?.brandSocials?.facebook}
@@ -53,7 +53,7 @@ const Footer = ({ myprofile }) => {
                   <img
                     src="https://img.icons8.com/?size=100&id=fJp7hepMryiw&format=png&color=000000"
                     alt="Twitter"
-                    className="w-6 md:w-8 bg-white rounded-full p-1"
+                    className="w-6 p-1 bg-white rounded-full md:w-8"
                   />
                 </a>
               )}
@@ -77,8 +77,8 @@ const Footer = ({ myprofile }) => {
             <ul className="flex space-x-6 text-sm font-medium text-gray-500 ">
               <li>
                 <Link
-                  to="/dynamic-catalogue/admin-login/1"
-                  className="underline text-gray-100"
+                  to="https://profile-genie-2-0-niyor.onrender.com/dynamic-catalogue/admin-login/1"
+                  className="text-gray-100 underline"
                 >
                   Admin Login
                 </Link>
@@ -87,15 +87,15 @@ const Footer = ({ myprofile }) => {
           </div>
         </div>
 
-        <hr className="my-6 border-gray-200 sm:mx-auto  lg:my-8" />
+        <hr className="my-6 border-gray-200 sm:mx-auto lg:my-8" />
 
-        <span className="block text-sm text-gray-100 flex max-w-7xl mx-auto justify-center md:ml-20">
+        <span className="flex justify-center block mx-auto text-sm text-gray-100 max-w-7xl md:ml-20">
           Created By{" "}
           <a
             href="https://www.profilegenie.in/"
             target="_blank"
             rel="noopener noreferrer"
-            className="underline ml-1"
+            className="ml-1 underline"
           >
             Profile-Genie
           </a>
