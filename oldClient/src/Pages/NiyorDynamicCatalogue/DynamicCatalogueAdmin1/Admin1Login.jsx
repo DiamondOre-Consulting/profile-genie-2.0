@@ -19,7 +19,7 @@ const Admin1Login = () => {
     if (decodedToken) {
       console.log("Decoded Token:", decodedToken);
       const userId = decodedToken.userId;
-      navigate(`/dynamic-catalogue/admin/1/${userId}`);
+      navigate(`https://profile-genie-2-0-niyor.onrender.com/admin/1/Ishan_Niyor_Perfumes`);
     }
   }, [decodedToken, navigate]);
 
@@ -40,7 +40,7 @@ const Admin1Login = () => {
         setShowLoader(false);
         localStorage.setItem("token", token);
         setToken(token);
-        navigate(`/dynamic-catalogue/admin/1/${userName}`);
+        navigate(`https://profile-genie-2-0-niyor.onrender.com/admin/1/Ishan_Niyor_Perfumes`);
       }
     } catch (error) {
       if (error.response) {
@@ -120,7 +120,7 @@ const Admin1Login = () => {
                       type="checkbox"
                       value={showPassword}
                       onChange={() => setShowPassword((prev) => !prev)}
-                      className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300    "
+                      className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 "
                       required=""
                     />
                   </div>
@@ -144,7 +144,7 @@ const Admin1Login = () => {
               {showLoader ? (
                 <svg
                   aria-hidden="true"
-                  className="inline w-4 h-4 text-gray-200 animate-spin  fill-blue-600"
+                  className="inline w-4 h-4 text-gray-200 animate-spin fill-blue-600"
                   viewBox="0 0 100 101"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
