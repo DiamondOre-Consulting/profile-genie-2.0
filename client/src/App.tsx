@@ -77,12 +77,29 @@ function App() {
           <Route path="/profile/1/:username" element={<Template1 setMetaDetails={setMetaDetails} />} />
           <Route path="/catalogue/1/:userName/*" element={<Catalogue1Dashboard setMetaDetails={setMetaDetails} />} />
           <Route
-            path="/dynamic-catalogue/*"
+            path="/dynamic-catalogue/1/Ishan_Niyor_Perfumes"
             element={
               <iframe
-                src="https://profile-genie-2-0-niyor.onrender.com"
-                style={{ width: "100%", height: "100vh", border: "none" }}
-                title="Catalogue"
+                src="https://profile-genie-2-0-niyor.onrender.com/1/Ishan_Niyor_Perfumes"
+                title="Niyor home page"
+              />
+            }
+          />
+          <Route
+            path="/dynamic-catalogue/admin-login/1"
+            element={
+              <iframe
+                src="https://profile-genie-2-0-niyor.onrender.com/admin-login/1"
+                title="Niyor admin login"
+              />
+            }
+          />
+          <Route
+            path="/dynamic-catalogue/admin/1/Ishan_Niyor_Perfumes"
+            element={
+              <iframe
+                src="https://profile-genie-2-0-niyor.onrender.com/admin/1/Ishan_Niyor_Perfumes"
+                title="Niyor home page"
               />
             }
           />
