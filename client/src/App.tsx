@@ -80,7 +80,7 @@ function App() {
             path="/dynamic-catalogue/*"
             element={
               <iframe
-                src="/dist/index.html"
+                src="/niyor/index.html"
                 style={{ width: "100%", height: "100vh", border: "none" }}
                 title="Dynamic Catalogue"
               />
