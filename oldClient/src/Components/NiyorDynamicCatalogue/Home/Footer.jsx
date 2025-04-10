@@ -77,7 +77,7 @@ const Footer = ({ myprofile }) => {
             <ul className="flex space-x-6 text-sm font-medium text-gray-500 ">
               <li>
                 <Link
-                  to="https://profile-genie-2-0-niyor.onrender.com/dynamic-catalogue/admin-login/1"
+                  to="https://test.profilegenie.in/dynamic-catalogue/admin-login/1"
                   className="text-gray-100 underline"
                 >
                   Admin Login
