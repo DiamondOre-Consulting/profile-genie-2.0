@@ -6,13 +6,7 @@ import Catalogue from "../model/catalogueModel/catalogue.model.js";
 
 
 export const portfolioCrone = () => {
-    cron.schedule("* * * * *", async () => {
-        try {
-            console.log("Cron job triggered every minute");
-        } catch (error) {
-            console.error("❌ Error in cron job:", error);
-        }
-    });
+
 
     cron.schedule("12 18 * * *", async () => {
         try {
@@ -24,13 +18,12 @@ export const portfolioCrone = () => {
                 { $set: { isPaid: false } }
             );
 
-            console.log(`✅ Updated ${result.modifiedCount} records: isPaid set to false`);
         } catch (error) {
             console.error("❌ Error in isPaid cron job:", error);
         }
     });
 
-    cron.schedule("* * * * *", async () => {
+    cron.schedule("12 18 * * *", async () => {
         try {
             const today = new Date();
 
@@ -57,7 +50,6 @@ export const portfolioCrone = () => {
                 }
             }
 
-            console.log(`✅ Reminder emails sent for portfolios expiring soon.`);
         } catch (error) {
             console.error("❌ Error in reminder cron job:", error);
         }
@@ -84,7 +76,6 @@ export const catalogueCrone = () => {
                 { $set: { isPaid: false } }
             );
 
-            console.log(`✅ Updated ${result.modifiedCount} records: isPaid set to false`);
         } catch (error) {
             console.error("❌ Error in isPaid cron job:", error);
         }
@@ -130,7 +121,6 @@ export const catalogueCrone = () => {
                 }
             }
 
-            console.log(`✅ Reminder emails sent for catalogue expiring soon.`);
         } catch (error) {
             console.error("❌ Error in reminder cron job:", error);
         }
