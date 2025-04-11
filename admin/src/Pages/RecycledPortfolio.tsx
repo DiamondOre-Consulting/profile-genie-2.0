@@ -407,16 +407,16 @@ const RecycledPortfolio = () => {
                                             <div className="absolute inset-[3px] rounded-full bg-gray-950"></div>
                                             <span className="relative text-sm font-bold text-[#E11D48]"><IconTrash /></span>
                                         </div>
-                                        <div onClick={() => navigate(`/edit-portfolio/${item?.userName}`)} className="relative flex items-center justify-center cursor-pointer size-10 group/inner">
+                                        {/* <div onClick={() => navigate(`/edit-portfolio/${item?.userName}`)} className="relative flex items-center justify-center cursor-pointer size-10 group/inner">
                                             <div
                                                 className="absolute inset-0 transition-transform duration-1000 border rounded-full border-amber-400/20 border-t-purple-400 group-hover/inner:rotate-180"
                                             >
                                             </div>
                                             <div className="absolute inset-[3px] rounded-full bg-gray-950"></div>
                                             <span className="relative text-sm font-bold text-purple-400"><IconEye /></span>
-                                        </div>
+                                        </div> */}
 
-                                        <div className="relative flex items-center justify-center cursor-pointer size-10 group/inner">
+                                        <div onClick={() => navigate(`/edit-portfolio/${item?.userName}`)} className="relative flex items-center justify-center cursor-pointer size-10 group/inner">
                                             <div
                                                 className="absolute inset-0 transition-transform duration-1000 border rounded-full border-amber-400/20 border-t-purple-400 group-hover/inner:rotate-180"
                                             >
