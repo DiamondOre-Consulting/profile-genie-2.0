@@ -32,18 +32,17 @@ router.get('/google',
 
 const handleSocialLoginFailure = (req, res) => {
     const referer = req.headers.referer || "";
-    const isAdminDomain = referer.includes("master.webakash1806.com");
-    const isCatalogueDomain = referer.includes("catalogue.webakash1806.com");
+    const isAdminDomain = referer.includes("master.profilegenie.in");
+    const isCatalogueDomain = referer.includes("catalogue.profilegenie.in");
 
-    let redirectUrl = "https://default.webakash1806.com/login?error=Email is not registered!";
+    let redirectUrl = "https://profilegenie.in/login?error=Email is not registered!";
 
     console.log(isAdminDomain, isCatalogueDomain, referer)
 
     if (isAdminDomain) {
-        console.log(1)
-        redirectUrl = "https://master.webakash1806.com/login?error=Email is not registered!";
+        redirectUrl = "https://master.profilegenie.in/login?error=Email is not registered!";
     } else if (isCatalogueDomain) {
-        redirectUrl = "https://catalogue.webakash1806.com/login?error=Email is not registered!";
+        redirectUrl = "https://catalogue.profilegenie.in/login?error=Email is not registered!";
     }
 
     return res.redirect(redirectUrl);

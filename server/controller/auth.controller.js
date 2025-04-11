@@ -121,9 +121,7 @@ const handleSocialLogin = asyncHandler(async (req, res) => {
     if (req.user.role === "SUPERADMIN") {
         redirectUrl = process.env.ADMIN_URL;
     } else if (req.user.role === "CATALOGUE_OWNER") {
-
         redirectUrl = process.env.CATALOGUE_ADMIN_URL;
-
     }
 
 
