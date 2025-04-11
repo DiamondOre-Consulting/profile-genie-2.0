@@ -66,7 +66,7 @@ const Template1Layout = ({ children, fullName }: { children: ReactNode, fullName
                                 href="https://www.instagram.com/profile_genie_1?igsh=MW01amE5aHVwMTVpaw=="
                                 rel="noreferrer"
                                 target="_blank"
-                                className="text-gray-900 transition hover:text-gray-900/75"
+                                className="text-gray-200 transition hover:text-gray-100/75"
                             >
                                 <IconBrandInstagram className='size-7' />
                             </a>
@@ -79,7 +79,7 @@ const Template1Layout = ({ children, fullName }: { children: ReactNode, fullName
                                 onClick={shareOnWhatsApp}
                                 rel="noreferrer"
                                 target="_blank"
-                                className="text-gray-900 transition hover:text-gray-900/75"
+                                className="text-gray-200 transition hover:text-gray-100/75"
                             >
                                 <IconBrandWhatsapp className='size-7' />
                             </a>
@@ -91,7 +91,7 @@ const Template1Layout = ({ children, fullName }: { children: ReactNode, fullName
                                 href={`tel:${918750316743}`}
                                 rel="noreferrer"
                                 target="_blank"
-                                className="text-gray-900 transition hover:text-gray-900/75"
+                                className="text-gray-200 transition hover:text-gray-100/75"
                             >
                                 <IconPhoneCalling className='size-7' />
                             </a>
