@@ -30,6 +30,12 @@ const Contact = ({ contact, bulkLinks, fullName }: { contact: portfolioResponse[
     // const whatsappUrl = `https://wa.me/?text=${message}`;
     // window.open(whatsappUrl, "_blank");
 
+    const shareWithNumber = () => {
+        const personalMessage = `Hi! I am *${fullName}*, let's connect!%0A%0AIf you are eager to know what I do,%0Aplease visit my portfolio at %0A%0A ${url}`;
+        const whatsappUrl = `https://wa.me/${whatsappNo}?text=${personalMessage}`;
+        window.open(whatsappUrl, "_blank");
+    };
+
     const shareOnWhatsApp = () => {
         const personalMessage = `Hi! I am *${fullName}*, let's connect!%0A%0AIf you are eager to know what I do,%0Aplease visit my portfolio at %0A%0A ${url}`;
         const whatsappUrl = `https://wa.me/?text=${personalMessage}`;
@@ -106,12 +112,10 @@ const Contact = ({ contact, bulkLinks, fullName }: { contact: portfolioResponse[
                         <div className="w-full p-4 rounded-t-xl">
                             <div className="mt-1 flex flex-col w-full text-black  bg-[#00b718] shadow-md p-[2px] rounded-sm md:flex-row items-center relative gap-4  mx-auto">
                                 <div className="bg-[#00b718] shadow-md h-9 w-12 cursor-pointer rounded-sm flex right-0.5 items-center justify-center gap-4 z-10 absolute border-green-500">
-                                    <IconBrandWhatsapp onClick={() => {
-                                        shareOnWhatsApp()
-                                    }} className="text-white" size={24} />
+                                    <IconBrandWhatsapp onClick={shareWithNumber} className="text-white" size={24} />
                                 </div>
                                 <PhoneInput
-                                    placeholder="Enter phone number"
+                                    placeholder="Enter phone number..."
                                     country={'in'}
                                     inputStyle={{ width: '100%', border: 'none', fontSize: '14px' }}
                                     value={whatsappNo}

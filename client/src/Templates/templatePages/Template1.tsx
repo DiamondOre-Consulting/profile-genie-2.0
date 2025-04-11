@@ -81,7 +81,7 @@ const Template1 = ({ setMetaDetails }: { setMetaDetails: React.Dispatch<React.Se
                         </div>
                     </div>
                 </div> :
-                    <Template1Layout>
+                    <Template1Layout fullName={profileData?.fullName}>
                         <div id='home'>
                             <Hero portfolio={profileData} />
                         </div>
