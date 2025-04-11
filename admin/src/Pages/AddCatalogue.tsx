@@ -43,11 +43,14 @@ export default function AddCatalogue() {
 
     return (
         <HomeLayout>
+            <h2 className="mb-3 font-semibold text-white">
+                Add Catalogue
+            </h2>
             <div className="space-y-8  relative max-w-[50rem] mx-auto bg-[#010101] pb-0 border border-[#3c3c3c] p-4 sm:p-6 lg:p-8 py-8 rounded">
                 <Stepper onValueChange={setCurrentStep} value={currentStep} >
                     {steps.map(({ step, title }) => (
                         <StepperItem key={step} step={step} className="relative flex-1 !flex-col">
-                            <div className="flex-col gap-1 text-white inline-flex items-center  disabled:pointer-events-none disabled:opacity-50">
+                            <div className="inline-flex flex-col items-center gap-1 text-white disabled:pointer-events-none disabled:opacity-50">
                                 <StepperIndicator />
                                 <div className="px-2">
                                     <StepperTitle>{title}</StepperTitle>

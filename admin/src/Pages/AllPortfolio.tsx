@@ -60,11 +60,11 @@ const AllPortfolio = () => {
 
     return (
         <HomeLayout>
-            <div>
-                All portfolio
-            </div>
+            <h2 className="mb-3 font-semibold text-white">
+                All Portfolio
+            </h2>
 
-            <div className=" my-2 flex items-center justify-center gap-1">
+            <div className="flex items-center justify-center gap-1 my-2 ">
                 <Search setDebouncedSearchValue={setDebouncedSearchValue} />
                 <Filter setFilterValue={setFilterValue} />
             </div>
@@ -72,7 +72,7 @@ const AllPortfolio = () => {
             <AnimatePresence>
                 {deleteModalActive && (
                     <motion.div
-                        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-start pt-30 justify-center"
+                        className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 backdrop-blur-sm pt-30"
                         variants={backdropVariants}
                         initial="hidden"
                         animate="visible"
@@ -86,7 +86,7 @@ const AllPortfolio = () => {
                             exit="exit"
                         >
                             <button
-                                className="absolute top-3 right-3 text-gray-400 hover:text-white transition"
+                                className="absolute text-gray-400 transition top-3 right-3 hover:text-white"
                                 onClick={() => setDeleteModalActive(false)}
                             >
                                 <IconX size={24} />
@@ -95,13 +95,13 @@ const AllPortfolio = () => {
                                 <IconTrash className="text-[#E11D48] text-2xl" />
                                 <h2 className="text-lg font-semibold">You’re about to delete this page</h2>
                             </div>
-                            <p className="text-gray-100 mb-2">
+                            <p className="mb-2 text-gray-100">
                                 Before you delete it permanently, there’s some things you should know:
                             </p>
-                            <ul className="text-gray-300 list-disc pl-6">
+                            <ul className="pl-6 text-gray-300 list-disc">
                                 <li>If you delete a page, it will be moved to the &quot;Recycle bin&quot;.</li>
                             </ul>
-                            <div className="mt-6 flex justify-end gap-4">
+                            <div className="flex justify-end gap-4 mt-6">
                                 <button
                                     disabled={recycleLoading}
                                     onClick={() => setDeleteModalActive(false)}
@@ -125,57 +125,57 @@ const AllPortfolio = () => {
                 )}
             </AnimatePresence>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mx-auto">
+            <div className="grid grid-cols-1 gap-6 mx-auto md:grid-cols-2 lg:grid-cols-3">
                 {isLoading ?
                     Array.from({ length: 12 }).map((_, index) => {
                         return (<div key={index} className="group relative max-w-[40rem] mx-auto w-full animate-pulse">
                             <div className="absolute rounded-xl bg-gradient-to-r from-[#E11D48] via-[#E11D48] to-orange-500 opacity-10 blur-sm"></div>
-                            <div className="relative rounded-xl w-full border border-white/20 bg-gradient-to-b from-gray-900 via-gray-950 to-black p-3 shadow-md">
+                            <div className="relative w-full p-3 border shadow-md rounded-xl border-white/20 bg-gradient-to-b from-gray-900 via-gray-950 to-black">
                                 <div className="relative flex items-center justify-between gap-6">
                                     <div className="flex items-center gap-4">
-                                        <div className="relative flex h-12 w-12 items-center justify-center">
-                                            <div className="absolute inset-0 rounded-full border border-rose-500/20 border-t-rose-500"></div>
-                                            <div className="h-12 w-12 rounded-full bg-gray-700"></div>
+                                        <div className="relative flex items-center justify-center w-12 h-12">
+                                            <div className="absolute inset-0 border rounded-full border-rose-500/20 border-t-rose-500"></div>
+                                            <div className="w-12 h-12 bg-gray-700 rounded-full"></div>
                                         </div>
 
                                         <div className="flex flex-col gap-1">
-                                            <div className="h-4 w-32 bg-gray-700 rounded"></div>
-                                            <div className="h-3 w-20 bg-gray-700 rounded"></div>
+                                            <div className="w-32 h-4 bg-gray-700 rounded"></div>
+                                            <div className="w-20 h-3 bg-gray-700 rounded"></div>
                                         </div>
                                     </div>
 
                                     <div className="flex gap-2">
-                                        <div className="h-2 w-2 rounded-full bg-gray-700"></div>
-                                        <div className="h-2 w-2 rounded-full bg-gray-700"></div>
-                                        <div className="h-2 w-2 rounded-full bg-gray-700"></div>
+                                        <div className="w-2 h-2 bg-gray-700 rounded-full"></div>
+                                        <div className="w-2 h-2 bg-gray-700 rounded-full"></div>
+                                        <div className="w-2 h-2 bg-gray-700 rounded-full"></div>
                                     </div>
                                 </div>
 
                                 {/* Contact Details */}
-                                <div className="flex flex-col gap-2 ml-1 mt-4">
-                                    <div className="flex sm:flex-row flex-col md:flex-col gap-2 justify-between">
+                                <div className="flex flex-col gap-2 mt-4 ml-1">
+                                    <div className="flex flex-col justify-between gap-2 sm:flex-row md:flex-col">
                                         <div className="flex gap-2">
-                                            <div className="h-8 w-8 bg-gray-700 rounded"></div>
-                                            <div className="h-4 w-28 bg-gray-700 rounded"></div>
+                                            <div className="w-8 h-8 bg-gray-700 rounded"></div>
+                                            <div className="h-4 bg-gray-700 rounded w-28"></div>
                                         </div>
                                         <div className="flex gap-2">
-                                            <div className="h-8 w-8 bg-gray-700 rounded"></div>
-                                            <div className="h-4 w-28 bg-gray-700 rounded"></div>
+                                            <div className="w-8 h-8 bg-gray-700 rounded"></div>
+                                            <div className="h-4 bg-gray-700 rounded w-28"></div>
                                         </div>
                                     </div>
 
                                     {/* Date Range */}
                                     <div className="flex items-center justify-between w-full gap-1">
-                                        <div className="h-4 w-20 bg-gray-700 rounded"></div>
-                                        <div className="h-4 w-6 bg-gray-700 rounded"></div>
-                                        <div className="h-4 w-20 bg-gray-700 rounded"></div>
+                                        <div className="w-20 h-4 bg-gray-700 rounded"></div>
+                                        <div className="w-6 h-4 bg-gray-700 rounded"></div>
+                                        <div className="w-20 h-4 bg-gray-700 rounded"></div>
                                     </div>
                                 </div>
 
                                 {/* Action Buttons */}
-                                <div className="flex items-center justify-evenly gap-4 mt-4">
+                                <div className="flex items-center gap-4 mt-4 justify-evenly">
                                     {Array(5).fill(0).map((_, i) => (
-                                        <div key={i} className="relative flex size-10 items-center justify-center bg-gray-700 rounded-full"></div>
+                                        <div key={i} className="relative flex items-center justify-center bg-gray-700 rounded-full size-10"></div>
                                     ))}
                                 </div>
                             </div>
@@ -203,22 +203,22 @@ const AllPortfolio = () => {
                                     className="absolute rounded- bg-gradient-to-r from-[#E11D48] via-[#E11D48] to-orange-500 opacity-10 blur-sm transition-all duration-500 group-hover:opacity-80 group-hover:blur-lg"
                                 ></div>
                                 <div
-                                    className="relative rounded-xl w-full border border-white/20 bg-gradient-to-b from-gray-900 via-gray-950 to-black p-3 shadow-md"
+                                    className="relative w-full p-3 border shadow-md rounded-xl border-white/20 bg-gradient-to-b from-gray-900 via-gray-950 to-black"
                                 >
                                     <div
-                                        className="absolute inset-x-0 top-px h-px bg-gradient-to-r from-transparent via-rose-500 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                                        className="absolute inset-x-0 h-px transition-opacity duration-500 opacity-0 top-px bg-gradient-to-r from-transparent via-rose-500 to-transparent group-hover:opacity-100"
                                     ></div>
                                     <div
-                                        className="absolute inset-x-0 bottom-px h-px bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                                        className="absolute inset-x-0 h-px transition-opacity duration-500 opacity-0 bottom-px bg-gradient-to-r from-transparent via-orange-500 to-transparent group-hover:opacity-100"
                                     ></div>
                                     <div className="relative flex items-center justify-between gap-6">
                                         <div className="flex items-center gap-4">
-                                            <div className="relative flex h-12 w-12 items-center justify-center">
+                                            <div className="relative flex items-center justify-center w-12 h-12">
                                                 <div
-                                                    className="absolute inset-0 rounded-full border border-rose-500/20 border-t-rose-500 transition-transform duration-1000 group-hover:rotate-180"
+                                                    className="absolute inset-0 transition-transform duration-1000 border rounded-full border-rose-500/20 border-t-rose-500 group-hover:rotate-180"
                                                 >
                                                 </div>
-                                                <img src={item.image.url} alt="Portfolio profile image" className="h-full w-full rounded-full object-cover" />
+                                                <img src={item.image.url} alt="Portfolio profile image" className="object-cover w-full h-full rounded-full" />
                                                 {/* <div className="absolute inset-[3px] rounded-full bg-gray-950"></div>
                                         <span className="relative text-sm font-bold text-rose-500">L24</span> */}
                                             </div>
@@ -226,12 +226,12 @@ const AllPortfolio = () => {
                                             <div className="flex flex-col gap-1">
                                                 <div className="flex flex-col items-start">
                                                     <div className="flex items-center gap-2">
-                                                        <h2 className="text-base leading-4 font-bold text-white">{item?.fullName}</h2>
+                                                        <h2 className="text-base font-bold leading-4 text-white">{item?.fullName}</h2>
                                                         <div
                                                             className="h-1.5 w-1.5 rounded-full bg-green-500 shadow-lg shadow-green-500/50"
                                                         ></div>
                                                     </div>
-                                                    <p className="text-white text-sm">{item?.tagline}</p>
+                                                    <p className="text-sm text-white">{item?.tagline}</p>
                                                 </div>
 
 
@@ -260,20 +260,20 @@ const AllPortfolio = () => {
                                                     <DropdownMenuContent className="max-w-38">
                                                         <DropdownMenuLabel className="flex items-start gap-3">
 
-                                                            <div className="flex min-w-0 flex-col">
-                                                                <span className=" truncate text-sm font-medium text-zinc-50">Update Status</span>
-                                                                <span className="text-zinc-500 truncate text-xs font-normal dark:text-zinc-400">
+                                                            <div className="flex flex-col min-w-0">
+                                                                <span className="text-sm font-medium truncate text-zinc-50">Update Status</span>
+                                                                <span className="text-xs font-normal truncate text-zinc-500 dark:text-zinc-400">
                                                                     @{item?.userName}
                                                                 </span>
                                                             </div>
                                                         </DropdownMenuLabel>
                                                         <DropdownMenuSeparator />
                                                         <DropdownMenuGroup>
-                                                            <DropdownMenuItem onClick={() => handleUpdateStatus(item?._id, "isActive")} className="hover:bg-neutral-950 cursor-pointer">
+                                                            <DropdownMenuItem onClick={() => handleUpdateStatus(item?._id, "isActive")} className="cursor-pointer hover:bg-neutral-950">
                                                                 <BoltIcon size={16} className="opacity-60" aria-hidden="true" />
                                                                 <span>Mark as {item?.isActive ? "Inactive" : "Active"}</span>
                                                             </DropdownMenuItem>
-                                                            {!item.isPaid && <DropdownMenuItem onClick={() => handleUpdateStatus(item?._id, "isPaid")} className="hover:bg-neutral-950 cursor-pointer">
+                                                            {!item.isPaid && <DropdownMenuItem onClick={() => handleUpdateStatus(item?._id, "isPaid")} className="cursor-pointer hover:bg-neutral-950">
 
                                                                 <Layers2Icon size={16} className="opacity-60" aria-hidden="true" />
                                                                 <span>Mark as Paid</span>
@@ -286,9 +286,9 @@ const AllPortfolio = () => {
                                         </div>
                                     </div>
 
-                                    <div className="text-white flex flex-col gap-2 ml-1 mt-4">
-                                        <div className="flex sm:flex-row flex-col md:flex-col  gap-2 justify-between">
-                                            <div onClick={() => window.open(`mailto:${item.email}`)} className="items-center cursor-pointer flex gap-2">
+                                    <div className="flex flex-col gap-2 mt-4 ml-1 text-white">
+                                        <div className="flex flex-col justify-between gap-2 sm:flex-row md:flex-col">
+                                            <div onClick={() => window.open(`mailto:${item.email}`)} className="flex items-center gap-2 cursor-pointer">
                                                 <div
                                                     className="relative flex h-8 w-8 items-center justify-center rounded bg-[#FBBC04]/20"
                                                 >
@@ -296,10 +296,10 @@ const AllPortfolio = () => {
                                                 </div>
                                                 <span className="text-sm font-semibold">{item.email}</span>
                                             </div>
-                                            <div onClick={() => window.open(`tel:${item.phoneNumber}`)} className="items-center flex gap-2 cursor-pointer">
-                                                <div className="items-center flex gap-2">
+                                            <div onClick={() => window.open(`tel:${item.phoneNumber}`)} className="flex items-center gap-2 cursor-pointer">
+                                                <div className="flex items-center gap-2">
                                                     <div
-                                                        className="relative flex h-8 w-8 items-center justify-center rounded bg-purple-700/20"
+                                                        className="relative flex items-center justify-center w-8 h-8 rounded bg-purple-700/20"
                                                     >
                                                         <IconPhone className="text-purple-600" />
                                                     </div>
@@ -307,9 +307,9 @@ const AllPortfolio = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div onClick={() => window.open(`tel:${item.phoneNumber}`)} className="items-center flex gap-2 cursor-pointer">
+                                        <div onClick={() => window.open(`tel:${item.phoneNumber}`)} className="flex items-center gap-2 cursor-pointer">
                                             <div
-                                                className="relative flex h-8 min-w-8 items-center justify-center rounded bg-purple-700/20"
+                                                className="relative flex items-center justify-center h-8 rounded min-w-8 bg-purple-700/20"
                                             >
                                                 <IconClock className="text-purple-600" />
                                             </div>
@@ -327,17 +327,17 @@ const AllPortfolio = () => {
                                         </div>
                                     </div>
 
-                                    <div className="flex items-center justify-evenly gap-4 mt-4 ">
-                                        <div onClick={() => window.open(`https://wa.me/${Number(item?.whatsappNo)}`, '_blank')} className="relative cursor-pointer flex size-10 items-center justify-center group/inner">
-                                            <div className="absolute inset-0 rounded-full border border-green-500/20 border-t-green-500 transition-transform duration-1000 group-hover/inner:rotate-180">
+                                    <div className="flex items-center gap-4 mt-4 justify-evenly ">
+                                        <div onClick={() => window.open(`https://wa.me/${Number(item?.whatsappNo)}`, '_blank')} className="relative flex items-center justify-center cursor-pointer size-10 group/inner">
+                                            <div className="absolute inset-0 transition-transform duration-1000 border rounded-full border-green-500/20 border-t-green-500 group-hover/inner:rotate-180">
                                             </div>
                                             <div className="absolute inset-[3px] rounded-full bg-gray-950"></div>
                                             <span className="relative text-sm font-bold text-green-500"><IconBrandWhatsapp /></span>
                                         </div>
 
-                                        <div onClick={() => window.open(``)} className="relative cursor-pointer flex size-10 items-center justify-center group/inner">
+                                        <div onClick={() => window.open(``)} className="relative flex items-center justify-center cursor-pointer size-10 group/inner">
                                             <div
-                                                className="absolute inset-0 rounded-full border border-amber-400/20 border-t-amber-400 transition-transform duration-1000 group-hover/inner:rotate-180"
+                                                className="absolute inset-0 transition-transform duration-1000 border rounded-full border-amber-400/20 border-t-amber-400 group-hover/inner:rotate-180"
                                             >
                                             </div>
                                             <div className="absolute inset-[3px] rounded-full bg-gray-950"></div>
@@ -346,7 +346,7 @@ const AllPortfolio = () => {
                                         <div onClick={() => {
                                             setRecycleId(item._id)
                                             setDeleteModalActive(true)
-                                        }} className="relative cursor-pointer flex size-10 items-center justify-center group/inner">
+                                        }} className="relative flex items-center justify-center cursor-pointer size-10 group/inner">
                                             <div
                                                 className="absolute inset-0 rounded-full border border-[#E11D48]/20 border-t-[#E11D48] transition-transform duration-1000 group-hover/inner:rotate-180"
                                             >
@@ -354,17 +354,17 @@ const AllPortfolio = () => {
                                             <div className="absolute inset-[3px] rounded-full bg-gray-950"></div>
                                             <span className="relative text-sm font-bold text-[#E11D48]"><IconTrash /></span>
                                         </div>
-                                        <div onClick={() => navigate(`/portfolio/preview/template1/${item?.userName}`)} className="relative cursor-pointer flex size-10 items-center justify-center group/inner">
+                                        <div onClick={() => navigate(`/portfolio/preview/template1/${item?.userName}`)} className="relative flex items-center justify-center cursor-pointer size-10 group/inner">
                                             <div
-                                                className="absolute inset-0 rounded-full border border-amber-400/20 border-t-purple-400 transition-transform duration-1000 group-hover/inner:rotate-180"
+                                                className="absolute inset-0 transition-transform duration-1000 border rounded-full border-amber-400/20 border-t-purple-400 group-hover/inner:rotate-180"
                                             >
                                             </div>
                                             <div className="absolute inset-[3px] rounded-full bg-gray-950"></div>
                                             <span className="relative text-sm font-bold text-purple-400"><IconEye /></span>
                                         </div>
 
-                                        <div onClick={() => navigate(`/edit-portfolio/${item?.userName}`)} className="relative cursor-pointer flex size-10 items-center justify-center group/inner">
-                                            <div className="absolute inset-0 rounded-full border border-amber-400/20 border-t-purple-400 transition-transform duration-1000 group-hover/inner:rotate-180">
+                                        <div onClick={() => navigate(`/edit-portfolio/${item?.userName}`)} className="relative flex items-center justify-center cursor-pointer size-10 group/inner">
+                                            <div className="absolute inset-0 transition-transform duration-1000 border rounded-full border-amber-400/20 border-t-purple-400 group-hover/inner:rotate-180">
                                             </div>
                                             <div className="absolute inset-[3px] rounded-full bg-gray-950"></div>
                                             <span className="relative text-sm font-bold text-purple-400"><IconEdit /></span>

@@ -68,13 +68,16 @@ export default function EditPortfolio() {
     console.log(data)
     return (
         <HomeLayout>
+            <h2 className="mb-3 font-semibold text-white">
+                Edit Portfolio
+            </h2>
             <div className="space-y-8 overflow-hidden relative max-w-[50rem] mx-auto bg-[#010101] pb-0 border border-[#3c3c3c] p-4 sm:p-6 lg:p-8 py-8 rounded">
                 <Stepper onValueChange={setCurrentStep} value={currentStep} >
                     {steps.map(({ step, title }) => (
                         <StepperItem key={step} step={step} className="relative flex-1 !flex-col">
                             <StepperTrigger className="flex-col gap-1 text-white">
                                 <StepperIndicator />
-                                <div className=" px-2">
+                                <div className="px-2 ">
                                     <StepperTitle>{title}</StepperTitle>
                                 </div>
                             </StepperTrigger>

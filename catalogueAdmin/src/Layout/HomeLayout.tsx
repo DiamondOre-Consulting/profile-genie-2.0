@@ -57,7 +57,7 @@ export function HomeLayout({ children }: { children: ReactNode }) {
     return (
         <div className="flex h-screen overflow-hidden">
             <div className="bg-[#E11D48] fixed top-0 left-0 w-full h-[14rem]"></div>
-            <div className=" relative z-20 h-full flex bg-white w-full lg: sm:m-2 lg:m-5 mb-0 sm:rounded-t-xl overflow-hidden ">
+            <div className="relative z-20 flex w-full h-full mb-0 overflow-hidden bg-white  lg: sm:m-2 lg:m-5 sm:rounded-t-xl">
                 <nav
                     className={` top-2 left-2 h-screen bg-[#ffdce3] text-black shadow-lg transition-all duration-300 
                 ${collapsed ? "w-13" : "w-54"} `}

@@ -7,12 +7,14 @@ const SelectTemplate = () => {
     const navigate = useNavigate()
     return (
         <HomeLayout>
-            <div>select template</div>
+            <h2 className="mb-3 font-semibold text-white">
+                Select template
+            </h2>
             <Link to={"/add-portfolio/template1"} className='text-white cursor-pointer inline-block overflow-hidden w-fit rounded bg-[#101828] border border-neutral-500'>
 
-                <div className='font-semibold pl-2 flex items-center justify-between text-center uppercase tracking-wide'>
+                <div className='flex items-center justify-between pl-2 font-semibold tracking-wide text-center uppercase'>
                     <h3>Template 1</h3>
-                    <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate('/portfolio/preview/template1/GR17') }} className='bg-amber-500 flex items-center justify-center h-9 w-12'>
+                    <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate('/portfolio/preview/template1/GR17') }} className='flex items-center justify-center w-12 bg-amber-500 h-9'>
                         <IconEye />
                     </button>
                 </div>

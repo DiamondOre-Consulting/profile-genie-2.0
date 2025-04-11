@@ -66,6 +66,9 @@ export default function EditCatalogue() {
     console.log(catalogueData)
     return (
         <HomeLayout>
+            <h2 className="mb-3 font-semibold text-white">
+                Edit Catalogue
+            </h2>
             <div className="space-y-8 overflow-hidden relative max-w-[50rem] mx-auto bg-[#010101] pb-0 border border-[#3c3c3c] p-4 sm:p-6 lg:p-8 py-8 rounded">
                 <Stepper onValueChange={setCurrentStep} value={currentStep} >
                     {steps.map(({ step, title }) => (

@@ -108,7 +108,7 @@ export function HomeLayout({ children }: { children: ReactNode }) {
                     </div>
                 </div>
             </nav>
-            <div className={`${collapsed ? "ml-13" : "ml-54"} py-6 px-2  min-h-screen transition-all bg-[#171717] duration-300`}>
+            <div className={`${collapsed ? "ml-13" : "ml-54"} py-6 pt-2 px-2  min-h-screen transition-all bg-[#171717] duration-300`}>
                 {children}
             </div>
         </>
