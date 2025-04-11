@@ -7,8 +7,6 @@ import { catalogueResponse, productDetail } from '@/validations/CatalogueValidat
 
 const Catalogue1 = ({ cart, setCart, data }: { cart: productDetail[], setCart: React.Dispatch<React.SetStateAction<productDetail[]>>, data: catalogueResponse }) => {
 
-
-
     return (
         <div className='' style={{ backgroundColor: lightenColor(data?.data?.backgroundColor, 0.85) }}>
             <Catalogue1Hero catalogueDetail={data?.data} />

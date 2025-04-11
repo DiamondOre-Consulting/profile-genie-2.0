@@ -25,7 +25,6 @@ const Template1 = ({ setMetaDetails }: { setMetaDetails: React.Dispatch<React.Se
             setMetaDetails(data?.data?.metaDetails)
         }
 
-
     }, [isFetching, data, isLoading])
 
     useEffect(() => {
@@ -56,26 +55,26 @@ const Template1 = ({ setMetaDetails }: { setMetaDetails: React.Dispatch<React.Se
       radial-gradient(at 100% 100%, hsla(305, 92%, 90%, 1) 0px, transparent 50%),
       radial-gradient(at 34% 3%, hsla(261, 93%, 90%, 1) 0px, transparent 50%),
       radial-gradient(at 0% 100%, hsla(336, 97%, 86%, 0.57) 0px, transparent 50%)`
-            }} className="   h-screen w-screen fixed top-0 left-0">
+            }} className="fixed top-0 left-0 w-screen h-screen ">
             </div>
-            {(!profileData) ? <div className='h-screen w-screen flex items-center justify-center relative z-100'><video src={loading} playsInline autoPlay loop muted></video></div> :
-                (!profileData.isActive || !profileData.isPaid) ? <div className="flex flex-col relative z-100 items-center justify-center min-h-screen bg-transparent text-white px-6">
+            {(!profileData) ? <div className='relative flex items-center justify-center w-screen h-screen z-100'><video src={loading} playsInline autoPlay loop muted></video></div> :
+                (!profileData.isActive || !profileData.isPaid) ? <div className="relative flex flex-col items-center justify-center min-h-screen px-6 text-white bg-transparent z-100">
                     <div className="text-center max-w-[32rem] w-[96vw]">
-                        <IconAlertTriangle className="size-16 text-red-600 mx-auto mb-4" />
+                        <IconAlertTriangle className="mx-auto mb-4 text-red-600 size-16" />
                         <h1 className="text-4xl font-bold text-red-500">Profile Not Active</h1>
                         <p className="mt-3 text-gray-900">
                             It looks like the profile you are trying to access is currently inactive. Please try again later or contact the profile owner for more information.
                         </p>
-                        <div className="mt-6 flex justify-center gap-4">
+                        <div className="flex justify-center gap-4 mt-6">
                             <Link
                                 to="/"
-                                className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-md transition"
+                                className="px-6 py-2 text-white transition bg-blue-500 rounded-md hover:bg-blue-600"
                             >
                                 Go Home
                             </Link>
                             <Link
                                 to="/contact"
-                                className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-md transition"
+                                className="px-6 py-2 text-white transition bg-red-500 rounded-md hover:bg-red-600"
                             >
                                 Contact Support
                             </Link>

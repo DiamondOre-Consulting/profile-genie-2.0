@@ -54,7 +54,7 @@ function App() {
 
       <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-      <link rel="canonical" href={"http://localhost:5173/"} />
+      <link rel="canonical" href={"https://profilegenie.in"} />
 
       <meta name="robots" content="index, follow" />
 
