@@ -33,11 +33,9 @@ const Template1 = ({ setMetaDetails }: { setMetaDetails: React.Dispatch<React.Se
 
     if (!profileData && !isFetching && !isLoading) {
         if (error) {
-            console.log("hello")
+
             return (
-                <div className='relative z-100'>
-                    <h1>No portfolio found</h1>
-                </div>
+                window.location.href = "https://profilegenie.store"
             )
         }
     }
