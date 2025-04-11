@@ -2,12 +2,12 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { addMetaDetailsSchema } from '@/validations/PortfolioValidation'
 import { IconCamera, IconSquareRoundedArrowLeftFilled, IconSquareRoundedArrowRightFilled, IconWhirl } from '@tabler/icons-react'
-import { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Textarea } from '@/components/ui/textarea'
-import { useAddMetaDetailsMutation } from '@/Redux/API/CatalogueApi'
+import { useUpdateMetaDetailsMutation } from '@/Redux/API/CatalogueApi'
 
 type metaDetails = z.infer<typeof addMetaDetailsSchema>
 
@@ -17,13 +17,21 @@ interface apiRes {
     data: { _id: string, metaDetail: metaDetails }
 }
 
-const EditMetaDetails = ({ currentStep, stepsLength, ownerId }: { currentStep: number, stepsLength: number, ownerId: string }) => {
 
-    const [addMetaDetails] = useAddMetaDetailsMutation()
+const EditMetaDetails = ({ setCurrentStep, currentStep, stepsLength, catalogueId, metaDetails }: { setCurrentStep: React.Dispatch<React.SetStateAction<number>>, currentStep: number, stepsLength: number, metaDetails: metaDetails, catalogueId: string }) => {
 
-    const { register, handleSubmit, setValue, getValues, formState: { errors, isSubmitting } } = useForm<metaDetails>({
-        resolver: zodResolver(addMetaDetailsSchema)
+
+    const [updateMetaDetails] = useUpdateMetaDetailsMutation()
+
+    const { register, handleSubmit, setValue, getValues, reset, formState: { errors, isSubmitting } } = useForm<metaDetails>({
+        resolver: zodResolver(addMetaDetailsSchema),
+        defaultValues: metaDetails
     })
+
+    useEffect(() => {
+        reset(metaDetails)
+    }, [reset, metaDetails])
+
 
     const [files, setFiles] = useState<File | null>(null);
     console.log(files)
@@ -44,7 +52,7 @@ const EditMetaDetails = ({ currentStep, stepsLength, ownerId }: { currentStep: n
         formData.append("formData", JSON.stringify(data))
         formData.append("favIcon", files as File)
 
-        const res = await addMetaDetails({ formData, id: ownerId }).unwrap() as { data: apiRes }
+        const res = await updateMetaDetails({ formData, id: catalogueId }).unwrap() as { data: apiRes }
 
         if (res?.data?.success) {
             console.log("success")
@@ -55,7 +63,7 @@ const EditMetaDetails = ({ currentStep, stepsLength, ownerId }: { currentStep: n
 
     return (
         <form className='' onSubmit={handleSubmit(onSubmit)} noValidate >
-            <div className='grid grid-cols-1  gap-x-6 gap-y-2'>
+            <div className='grid grid-cols-1 gap-x-6 gap-y-2'>
 
                 <div className="space-y-1">
                     <Label htmlFor={"title"} className="text-neutral-300 ">
@@ -91,38 +99,39 @@ const EditMetaDetails = ({ currentStep, stepsLength, ownerId }: { currentStep: n
 
             </div>
 
-            <div className='flex gap-3 sm:flex-row flex-col my-4 mt-5 items-center justify-center'>
+            <div className='flex flex-col items-center justify-center gap-3 my-4 mt-5 sm:flex-row'>
                 <div className="size-30 relative group border border-dashed border-[#E11D48] rounded overflow-hidden">
                     <h1 className='text-white relative z-10 uppercase text-[0.8rem] bg-[#E11D48] font-semibold text-center py-0.5'>Image</h1>
                     <input
                         type="file"
                         onChange={(e) => handleFileChange("favIcon", e.target.files?.[0])}
                         name='favIcon'
-                        className="absolute z-10 inset-0 w-full h-full opacity-0 cursor-pointer"
+                        className="absolute inset-0 z-10 w-full h-full opacity-0 cursor-pointer"
                     />
                     {getValues("favIcon.url") ? (
                         <img
                             src={getValues("favIcon.url")}
                             alt="Preview"
-                            className="w-full h-full object-contain"
+                            className="object-contain w-full h-full"
                         />
                     ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-neutral-950">
-                            <p className="text-gray-400 text-center">Select Image</p>
+                        <div className="flex items-center justify-center w-full h-full bg-neutral-950">
+                            <p className="text-center text-gray-400">Select Image</p>
                         </div>
                     )}
-                    <div className="absolute inset-0  bg-black/80 hidden group-hover:flex items-center justify-center transition-all duration-300">
-                        <IconCamera className="text-white text-5xl" />
+                    <div className="absolute inset-0 items-center justify-center hidden transition-all duration-300 bg-black/80 group-hover:flex">
+                        <IconCamera className="text-5xl text-white" />
                     </div>
-                    <label htmlFor="favIcon" className="cursor-pointer absolute inset-0"></label>
+                    <label htmlFor="favIcon" className="absolute inset-0 cursor-pointer"></label>
                 </div>
 
             </div>
 
-            <div className="flex mt-6 justify-between space-x-4">
+            <div className="flex justify-between mt-6 space-x-4">
                 <button
                     className={`bg-[#1c1c1c] border border-[#565656]   text-white flex items-center gap-3 py-1.5 text-sm px-4 rounded ${currentStep === 1 ? "blur-[1px] cursor-not-allowed" : "cursor-pointer"}`}
-                    disabled={true}
+                    onClick={() => setCurrentStep((prev) => prev - 1)}
+                    disabled={currentStep === 1}
                 >
 
                     <IconSquareRoundedArrowLeftFilled />

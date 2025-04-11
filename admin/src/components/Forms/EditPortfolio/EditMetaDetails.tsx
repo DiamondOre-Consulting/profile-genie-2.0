@@ -7,7 +7,7 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Textarea } from '@/components/ui/textarea'
-import { useUpdateMetaDetailsMutation } from '@/Redux/API/CatalogueApi'
+import { useUpdateMetaDetailsMutation } from '@/Redux/API/PortfolioApi'
 
 type metaDetails = z.infer<typeof addMetaDetailsSchema>
 
@@ -63,7 +63,7 @@ const EditMetaDetails = ({ setCurrentStep, currentStep, stepsLength, catalogueId
 
     return (
         <form className='' onSubmit={handleSubmit(onSubmit)} noValidate >
-            <div className='grid grid-cols-1  gap-x-6 gap-y-2'>
+            <div className='grid grid-cols-1 gap-x-6 gap-y-2'>
 
                 <div className="space-y-1">
                     <Label htmlFor={"title"} className="text-neutral-300 ">
@@ -99,35 +99,35 @@ const EditMetaDetails = ({ setCurrentStep, currentStep, stepsLength, catalogueId
 
             </div>
 
-            <div className='flex gap-3 sm:flex-row flex-col my-4 mt-5 items-center justify-center'>
+            <div className='flex flex-col items-center justify-center gap-3 my-4 mt-5 sm:flex-row'>
                 <div className="size-30 relative group border border-dashed border-[#E11D48] rounded overflow-hidden">
                     <h1 className='text-white relative z-10 uppercase text-[0.8rem] bg-[#E11D48] font-semibold text-center py-0.5'>Image</h1>
                     <input
                         type="file"
                         onChange={(e) => handleFileChange("favIcon", e.target.files?.[0])}
                         name='favIcon'
-                        className="absolute z-10 inset-0 w-full h-full opacity-0 cursor-pointer"
+                        className="absolute inset-0 z-10 w-full h-full opacity-0 cursor-pointer"
                     />
                     {getValues("favIcon.url") ? (
                         <img
                             src={getValues("favIcon.url")}
                             alt="Preview"
-                            className="w-full h-full object-contain"
+                            className="object-contain w-full h-full"
                         />
                     ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-neutral-950">
-                            <p className="text-gray-400 text-center">Select Image</p>
+                        <div className="flex items-center justify-center w-full h-full bg-neutral-950">
+                            <p className="text-center text-gray-400">Select Image</p>
                         </div>
                     )}
-                    <div className="absolute inset-0  bg-black/80 hidden group-hover:flex items-center justify-center transition-all duration-300">
-                        <IconCamera className="text-white text-5xl" />
+                    <div className="absolute inset-0 items-center justify-center hidden transition-all duration-300 bg-black/80 group-hover:flex">
+                        <IconCamera className="text-5xl text-white" />
                     </div>
-                    <label htmlFor="favIcon" className="cursor-pointer absolute inset-0"></label>
+                    <label htmlFor="favIcon" className="absolute inset-0 cursor-pointer"></label>
                 </div>
 
             </div>
 
-            <div className="flex mt-6 justify-between space-x-4">
+            <div className="flex justify-between mt-6 space-x-4">
                 <button
                     className={`bg-[#1c1c1c] border border-[#565656]   text-white flex items-center gap-3 py-1.5 text-sm px-4 rounded ${currentStep === 1 ? "blur-[1px] cursor-not-allowed" : "cursor-pointer"}`}
                     onClick={() => setCurrentStep((prev) => prev - 1)}

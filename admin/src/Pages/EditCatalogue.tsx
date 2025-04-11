@@ -1,8 +1,8 @@
 
 import EditCatalogueDetail from "@/components/Forms/EditCatalogue/EditCatalogueDetail";
 import EditCatalogueProducts from "@/components/Forms/EditCatalogue/EditCatalogueProducts";
+import EditMetaDetails from "@/components/Forms/EditCatalogue/EditMetaDetails";
 import EditOwner from "@/components/Forms/EditCatalogue/EditOwner";
-import EditMetaDetails from "@/components/Forms/EditPortfolio/EditMetaDetails";
 import {
     Stepper,
     StepperIndicator,
@@ -19,8 +19,6 @@ import { addMetaDetailsSchema } from "@/validations/PortfolioValidation";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { z } from "zod";
-
-
 
 const steps = [
     {
@@ -74,7 +72,7 @@ export default function EditCatalogue() {
                         <StepperItem key={step} step={step} className="relative flex-1 !flex-col">
                             <StepperTrigger className="flex-col gap-1 text-white">
                                 <StepperIndicator />
-                                <div className=" px-2">
+                                <div className="px-2 ">
                                     <StepperTitle>{title}</StepperTitle>
                                 </div>
                             </StepperTrigger>

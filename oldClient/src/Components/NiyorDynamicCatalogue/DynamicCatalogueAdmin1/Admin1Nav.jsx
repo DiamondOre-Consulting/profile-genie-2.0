@@ -14,17 +14,17 @@ const Admin1Nav = ({ logo, myprofile }) => {
   const handleLogout = () => {
     if (window.confirm("Are you sure you want to log out?")) {
       localStorage.removeItem("token");
-      navigate("/dynamic-catalogue/admin-login/1");
+      window.open(`https://test.profilegenie.in/dynamic-catalogue/admin/1/Ishan_Niyor_Perfumes`, '_blank');
     }
   };
 
   return (
-    <nav className="bg-black p-4">
-      <div className="container mx-auto flex items-center justify-between">
-        <div className="text-white text-2xl font-bold">
+    <nav className="p-4 bg-black">
+      <div className="container flex items-center justify-between mx-auto">
+        <div className="text-2xl font-bold text-white">
           <img src={logo} alt="Logo" className="w-40" />
         </div>
-        <div className="hidden md:flex space-x-8 text-white">
+        <div className="hidden space-x-8 text-white md:flex">
           <Link
             to={`/dynamic-catalogue/admin/${userName}`}
             className="hover:text-gray-300"
@@ -40,7 +40,7 @@ const Admin1Nav = ({ logo, myprofile }) => {
             My Catalogue
           </Link>
           <a
-            className="hover:text-gray-300 cursor-pointer"
+            className="cursor-pointer hover:text-gray-300"
             onClick={handleLogout}
           >
             Logout
@@ -69,7 +69,7 @@ const Admin1Nav = ({ logo, myprofile }) => {
         </div>
       </div>
       {isOpen && (
-        <div className="md:hidden flex flex-col space-y-4 mt-4 text-white">
+        <div className="flex flex-col mt-4 space-y-4 text-white md:hidden">
           <Link
             to={`/dynamic-catalogue/admin/${userName}`}
             className="hover:text-gray-300"
@@ -85,7 +85,7 @@ const Admin1Nav = ({ logo, myprofile }) => {
             My Catalogue
           </Link>
           <a
-            className="hover:text-gray-300 cursor-pointer"
+            className="cursor-pointer hover:text-gray-300"
             onClick={handleLogout}
           >
             Logout
