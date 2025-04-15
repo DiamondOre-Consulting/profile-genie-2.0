@@ -98,9 +98,9 @@ const EditProfileDetail = ({ setCurrentStep, currentStep, stepsLength, portfolio
                         onCheckedChange={(e) => setValue("isActive", e)}
                         className="order-1 h-4 w-6 after:absolute after:inset-0 [&_span]:size-3 [&_span]:data-[state=checked]:translate-x-2 rtl:[&_span]:data-[state=checked]:-translate-x-2"
                     />
-                    <div className="flex grow items-center gap-2">
+                    <div className="flex items-center gap-2 grow">
                         <IconRosetteDiscountCheckFilled className='w-8 h-8 text-green-500' />
-                        <div className="grid grow gap-1">
+                        <div className="grid gap-1 grow">
                             <Label className='text-white'>
                                 Active
                             </Label>
@@ -124,7 +124,7 @@ const EditProfileDetail = ({ setCurrentStep, currentStep, stepsLength, portfolio
                                 )}
                                 onClick={() => setOpen(!open)}
                             >
-                                <CalendarIcon className="mr-2 h-4 w-4" />
+                                <CalendarIcon className="w-4 h-4 mr-2" />
                                 {watch("paidDate") ? format(new Date(watch("paidDate")), "PPP") : "Pick a date"}
                             </Button>
                         </PopoverTrigger>
@@ -231,7 +231,7 @@ const EditProfileDetail = ({ setCurrentStep, currentStep, stepsLength, portfolio
                         htmlFor={"about.body"}
                         className="text-neutral-300 "
                     >
-                        Short Description (150-200 Characters) <span className="text-[#ff3f69]">*</span>
+                        Short Description (20-200 Characters) <span className="text-[#ff3f69]">*</span>
                     </Label>
                     <Textarea {...register("shortDescription")} placeholder="Enter meta keyword..." className={`${errors.shortDescription && "border-[#E11D48] "} py-[0.45rem]  text-neutral-200`} />
 
@@ -268,84 +268,84 @@ const EditProfileDetail = ({ setCurrentStep, currentStep, stepsLength, portfolio
                 </div>
 
             </div>
-            <div className='flex gap-3 sm:flex-row flex-col my-4 mt-5 items-center justify-center'>
-                <div className='flex items-center gap-3 justify-between'>
+            <div className='flex flex-col items-center justify-center gap-3 my-4 mt-5 sm:flex-row'>
+                <div className='flex items-center justify-between gap-3'>
                     <div className="size-30 relative group border border-dashed border-[#E11D48] rounded overflow-hidden">
                         <h1 className='text-white relative z-10 uppercase text-[0.8rem] bg-[#E11D48] font-semibold text-center py-0.5'>Image</h1>
                         <input
                             type="file"
                             onChange={(e) => handleFileChange("image", e.target.files?.[0])}
                             name='image'
-                            className="absolute z-10 inset-0 w-full h-full opacity-0 cursor-pointer"
+                            className="absolute inset-0 z-10 w-full h-full opacity-0 cursor-pointer"
                         />
                         {getValues("image.url") ? (
                             <img
                                 src={getValues("image.url")}
                                 alt="Preview"
-                                className="w-full h-full object-contain"
+                                className="object-contain w-full h-full"
                             />
                         ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-neutral-950">
-                                <p className="text-gray-400 text-center">Select Image</p>
+                            <div className="flex items-center justify-center w-full h-full bg-neutral-950">
+                                <p className="text-center text-gray-400">Select Image</p>
                             </div>
                         )}
-                        <div className="absolute inset-0  bg-black/80 hidden group-hover:flex items-center justify-center transition-all duration-300">
-                            <IconCamera className="text-white text-5xl" />
+                        <div className="absolute inset-0 items-center justify-center hidden transition-all duration-300 bg-black/80 group-hover:flex">
+                            <IconCamera className="text-5xl text-white" />
                         </div>
-                        <label htmlFor="image" className="cursor-pointer absolute inset-0"></label>
+                        <label htmlFor="image" className="absolute inset-0 cursor-pointer"></label>
                     </div>
-                    <div className="size-30 relative group border border-dashed border-[#E11D48] rounded overflow-hidden">
+                    <div className="size-30 hidden relative group border border-dashed border-[#E11D48] rounded overflow-hidden">
                         <h1 className='text-white relative z-10 uppercase text-[0.8rem] bg-[#E11D48] font-semibold text-center py-0.5'>Logo</h1>
                         <input
                             type="file"
                             onChange={(e) => handleFileChange("logo", e.target.files?.[0])}
                             name='logo'
-                            className="absolute z-10 inset-0 w-full h-full opacity-0 cursor-pointer"
+                            className="absolute inset-0 z-10 w-full h-full opacity-0 cursor-pointer"
                         />
                         {getValues("logo.url") ? (
                             <img
                                 src={getValues("logo.url")}
                                 alt="Preview"
-                                className="w-full h-full object-contain"
+                                className="object-contain w-full h-full"
                             />
                         ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-neutral-950">
-                                <p className="text-gray-400 text-center">Select Logo</p>
+                            <div className="flex items-center justify-center w-full h-full bg-neutral-950">
+                                <p className="text-center text-gray-400">Select Logo</p>
                             </div>
                         )}
-                        <div className="absolute inset-0  bg-black/80 hidden group-hover:flex items-center justify-center transition-all duration-300">
-                            <IconCamera className="text-white text-5xl" />
+                        <div className="absolute inset-0 items-center justify-center hidden transition-all duration-300 bg-black/80 group-hover:flex">
+                            <IconCamera className="text-5xl text-white" />
                         </div>
-                        <label htmlFor="image" className="cursor-pointer absolute inset-0"></label>
+                        <label htmlFor="image" className="absolute inset-0 cursor-pointer"></label>
                     </div>
                 </div>
-                <div className="h-30  w-64 relative group border border-dashed border-[#E11D48] rounded overflow-hidden">
+                <div className="h-30 hidden w-64 relative group border border-dashed border-[#E11D48] rounded overflow-hidden">
                     <h1 className='text-white relative z-10 uppercase text-[0.8rem] bg-[#E11D48] font-semibold text-center py-0.5'>Background</h1>
                     <input
                         type="file"
                         onChange={(e) => handleFileChange("backgroundImage", e.target.files?.[0])}
                         name='backgroundImage'
-                        className="absolute z-10 inset-0 w-full h-full opacity-0 cursor-pointer"
+                        className="absolute inset-0 z-10 w-full h-full opacity-0 cursor-pointer"
                     />
                     {getValues("backgroundImage.url") ? (
                         <img
                             src={getValues("backgroundImage.url")}
                             alt="Preview"
-                            className="w-full h-full object-contain"
+                            className="object-contain w-full h-full"
                         />
                     ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-neutral-950">
-                            <p className="text-gray-400 text-center">Select Background</p>
+                        <div className="flex items-center justify-center w-full h-full bg-neutral-950">
+                            <p className="text-center text-gray-400">Select Background</p>
                         </div>
                     )}
-                    <div className="absolute inset-0  bg-black/80 hidden group-hover:flex items-center justify-center transition-all duration-300">
-                        <IconCamera className="text-white text-5xl" />
+                    <div className="absolute inset-0 items-center justify-center hidden transition-all duration-300 bg-black/80 group-hover:flex">
+                        <IconCamera className="text-5xl text-white" />
                     </div>
-                    <label htmlFor="image" className="cursor-pointer absolute inset-0"></label>
+                    <label htmlFor="image" className="absolute inset-0 cursor-pointer"></label>
                 </div>
             </div>
 
-            <div className="flex mt-6 justify-between space-x-4">
+            <div className="flex justify-between mt-6 space-x-4">
                 <button
                     className={`bg-[#1c1c1c] border border-[#565656]   text-white flex items-center gap-3 py-1.5 text-sm px-4 rounded ${currentStep === 1 ? "blur-[1px] cursor-not-allowed" : "cursor-pointer"}`}
                     onClick={() => setCurrentStep((prev) => prev - 1)}

@@ -249,7 +249,7 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId
                 <div>
                     <div>
                         <Label htmlFor={"tagline"} className="text-neutral-300 ">
-                            Brand Tagline <span className="text-[#ff3f69]">*</span>
+                            Brand Tagline
                         </Label>
                         <Input {...register("brands.tagline")} placeholder="Enter tagline..." type="text" className={`${errors.brands?.tagline && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
                         {errors.brands?.tagline && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.brands?.tagline.message}</p>}
@@ -260,35 +260,35 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId
                                 return <div className='space-y-2  p-2 my-3 rounded bg-[#ff17a21b] border border-rose-800' key={ind}>
                                     <div>
                                         <Label htmlFor={`brands.brandList${ind}.brandName`} className="text-neutral-300 ">
-                                            Brand name <span className="text-[#ff3f69]">*</span>
+                                            Brand name
                                         </Label>
                                         <Input {...register(`brands.brandList.${ind}.brandName`)} placeholder="Enter brand name..." type="text" className={`${errors.brands?.brandList?.[ind]?.brandName && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
                                         {errors.brands?.brandList?.[ind]?.brandName && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.brands?.brandList?.[ind]?.brandName.message}</p>}
                                     </div>
-                                    <div className='flex  justify-evenly'>
+                                    <div className='flex justify-evenly'>
                                         <div className="h-24  w-24 relative group border border-dashed border-[#E11D48] rounded overflow-hidden">
 
                                             <input
                                                 type="file"
                                                 onChange={(e) => handleBrandsFileChange(e, ind)}
                                                 name='imageImage'
-                                                className="absolute z-10 inset-0 w-full h-full opacity-0 cursor-pointer"
+                                                className="absolute inset-0 z-10 w-full h-full opacity-0 cursor-pointer"
                                             />
                                             {getValues(`brands.brandList.${ind}.image.url`) ? (
                                                 <img
                                                     src={getValues(`brands.brandList.${ind}.image.url`)}
                                                     alt="Preview"
-                                                    className="w-full h-full object-contain"
+                                                    className="object-contain w-full h-full"
                                                 />
                                             ) : (
-                                                <div className="w-full h-full flex items-center justify-center bg-neutral-950">
-                                                    <p className="text-gray-400 text-center">Select image</p>
+                                                <div className="flex items-center justify-center w-full h-full bg-neutral-950">
+                                                    <p className="text-center text-gray-400">Select image</p>
                                                 </div>
                                             )}
-                                            <div className="absolute inset-0  bg-black/80 hidden group-hover:flex items-center justify-center transition-all duration-300">
-                                                <IconCamera className="text-white text-5xl" />
+                                            <div className="absolute inset-0 items-center justify-center hidden transition-all duration-300 bg-black/80 group-hover:flex">
+                                                <IconCamera className="text-5xl text-white" />
                                             </div>
-                                            <label htmlFor="image" className="cursor-pointer absolute inset-0"></label>
+                                            <label htmlFor="image" className="absolute inset-0 cursor-pointer"></label>
                                         </div>
 
                                         {
@@ -315,7 +315,7 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId
                 <div>
                     <div>
                         <Label htmlFor={"bulkLink.tagline"} className="text-neutral-300 ">
-                            Bulk link Tagline <span className="text-[#ff3f69]">*</span>
+                            Bulk link Tagline
                         </Label>
                         <Input {...register("bulkLink.tagline")} placeholder="Enter bulk link tagline..." type="text" className={`${errors.bulkLink?.tagline && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
                         {errors.bulkLink?.tagline && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.bulkLink.tagline.message}</p>}
@@ -327,19 +327,19 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId
                                 return <div className='space-y-2  p-2 my-3 rounded bg-[#ff17a21b] border border-rose-800' key={ind}>
                                     <div>
                                         <Label htmlFor={`bulkLink.bulkLinkList.${ind}.linkName`} className="text-neutral-300 ">
-                                            Link name <span className="text-[#ff3f69]">*</span>
+                                            Link name
                                         </Label>
                                         <Input {...register(`bulkLink.bulkLinkList.${ind}.linkName`)} placeholder="Enter brand name..." type="text" className={`${errors.bulkLink?.bulkLinkList?.[ind]?.linkName && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
                                         {errors.bulkLink?.bulkLinkList?.[ind]?.linkName && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.bulkLink?.bulkLinkList?.[ind]?.linkName.message}</p>}
                                     </div>
                                     <div>
                                         <Label htmlFor={`bulkLink.${ind}.link`} className="text-neutral-300 ">
-                                            Link <span className="text-[#ff3f69]">*</span>
+                                            Link
                                         </Label>
                                         <Input {...register(`bulkLink.bulkLinkList.${ind}.link`)} placeholder="Enter link ..." type="text" className={`${errors.bulkLink?.bulkLinkList?.[ind]?.link && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
                                         {errors.bulkLink?.bulkLinkList?.[ind]?.link && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.bulkLink?.bulkLinkList?.[ind]?.link.message}</p>}
                                     </div>
-                                    <div className='flex gap-2 justify-evenly mt-3'>
+                                    <div className='flex gap-2 mt-3 justify-evenly'>
 
                                         <div className='size-9 px-5 border border-[#E11D48] flex items-center justify-center rounded bg-[#010101]'>
                                             {ind + 1}
@@ -377,7 +377,7 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId
                 <div>
                     <div>
                         <Label htmlFor={"services.tagline"} className="text-neutral-300 ">
-                            Service Tagline <span className="text-[#ff3f69]">*</span>
+                            Service Tagline
                         </Label>
                         <Input {...register("services.tagline")} placeholder="Enter service tagline..." type="text" className={`${errors.services?.tagline && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
                         {errors.services?.tagline && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.services?.tagline.message}</p>}
@@ -389,42 +389,42 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId
                                 return <div className='space-y-2  p-2 my-3 rounded bg-[#ff17a21b] border border-rose-800' key={ind}>
                                     <div>
                                         <Label htmlFor={`services.serviceList.${ind}.serviceName`} className="text-neutral-300 ">
-                                            Service title <span className="text-[#ff3f69]">*</span>
+                                            Service title
                                         </Label>
                                         <Input {...register(`services.serviceList.${ind}.title`)} placeholder="Enter service name..." type="text" className={`${errors.services?.serviceList?.[ind]?.title && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
                                         {errors.services?.serviceList?.[ind]?.title && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.services?.serviceList?.[ind]?.title.message}</p>}
                                     </div>
                                     <div>
                                         <Label htmlFor={`services.serviceList.${ind}.detail`} className="text-neutral-300 ">
-                                            Service description <span className="text-[#ff3f69]">*</span>
+                                            Service description
                                         </Label>
                                         <Textarea {...register(`services.serviceList.${ind}.detail`)} placeholder="Enter service detail..." className={`${errors.services?.serviceList?.[ind]?.detail && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
                                         {errors.services?.serviceList?.[ind]?.detail && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.services?.serviceList?.[ind]?.detail.message}</p>}
                                     </div>
-                                    <div className='flex  justify-evenly'>
+                                    <div className='flex justify-evenly'>
                                         <div className="h-24  w-24 relative group border border-dashed border-[#E11D48] rounded overflow-hidden">
 
                                             <input
                                                 type="file"
                                                 onChange={(e) => handleServiceFileChange(e, ind)}
                                                 name='imageImage'
-                                                className="absolute z-10 inset-0 w-full h-full opacity-0 cursor-pointer"
+                                                className="absolute inset-0 z-10 w-full h-full opacity-0 cursor-pointer"
                                             />
                                             {getValues(`services.serviceList.${ind}.image.url`) ? (
                                                 <img
                                                     src={getValues(`services.serviceList.${ind}.image.url`)}
                                                     alt="Preview"
-                                                    className="w-full h-full object-contain"
+                                                    className="object-contain w-full h-full"
                                                 />
                                             ) : (
-                                                <div className="w-full h-full flex items-center justify-center bg-neutral-950">
-                                                    <p className="text-gray-400 text-center">Select image</p>
+                                                <div className="flex items-center justify-center w-full h-full bg-neutral-950">
+                                                    <p className="text-center text-gray-400">Select image</p>
                                                 </div>
                                             )}
-                                            <div className="absolute inset-0  bg-black/80 hidden group-hover:flex items-center justify-center transition-all duration-300">
-                                                <IconCamera className="text-white text-5xl" />
+                                            <div className="absolute inset-0 items-center justify-center hidden transition-all duration-300 bg-black/80 group-hover:flex">
+                                                <IconCamera className="text-5xl text-white" />
                                             </div>
-                                            <label htmlFor="image" className="cursor-pointer absolute inset-0"></label>
+                                            <label htmlFor="image" className="absolute inset-0 cursor-pointer"></label>
                                         </div>
 
                                         {
@@ -451,7 +451,7 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId
                 <div>
                     <div>
                         <Label htmlFor={"products?.tagline"} className="text-neutral-300 ">
-                            Product Tagline <span className="text-[#ff3f69]">*</span>
+                            Product Tagline
                         </Label>
                         <Input {...register("products.tagline")} placeholder="Enter service tagline..." type="text" className={`${errors.products?.tagline && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
                         {errors.products?.tagline && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.products?.tagline.message}</p>}
@@ -463,42 +463,42 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId
                                 return <div className='space-y-2  p-2 my-3 rounded bg-[#ff17a21b] border border-rose-800' key={ind}>
                                     <div>
                                         <Label htmlFor={`products.productList.${ind}.serviceName`} className="text-neutral-300 ">
-                                            Product title <span className="text-[#ff3f69]">*</span>
+                                            Product title
                                         </Label>
                                         <Input {...register(`products.productList.${ind}.title`)} placeholder="Enter service name..." type="text" className={`${errors.products?.productList?.[ind]?.title && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
                                         {errors.products?.productList?.[ind]?.title && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.products?.productList?.[ind]?.title.message}</p>}
                                     </div>
                                     <div>
                                         <Label htmlFor={`products.productList.${ind}.detail`} className="text-neutral-300 ">
-                                            Product description <span className="text-[#ff3f69]">*</span>
+                                            Product description
                                         </Label>
                                         <Textarea {...register(`products.productList.${ind}.detail`)} placeholder="Enter service detail..." className={`${errors.products?.productList?.[ind]?.detail && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
                                         {errors.products?.productList?.[ind]?.detail && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.products?.productList?.[ind]?.detail.message}</p>}
                                     </div>
-                                    <div className='flex  justify-evenly'>
+                                    <div className='flex justify-evenly'>
                                         <div className="h-24  w-24 relative group border border-dashed border-[#E11D48] rounded overflow-hidden">
 
                                             <input
                                                 type="file"
                                                 onChange={(e) => handleProductFileChange(e, ind)}
                                                 name='imageImage'
-                                                className="absolute z-10 inset-0 w-full h-full opacity-0 cursor-pointer"
+                                                className="absolute inset-0 z-10 w-full h-full opacity-0 cursor-pointer"
                                             />
                                             {getValues(`products.productList.${ind}.image.url`) ? (
                                                 <img
                                                     src={getValues(`products.productList.${ind}.image.url`)}
                                                     alt="Preview"
-                                                    className="w-full h-full object-contain"
+                                                    className="object-contain w-full h-full"
                                                 />
                                             ) : (
-                                                <div className="w-full h-full flex items-center justify-center bg-neutral-950">
-                                                    <p className="text-gray-400 text-center">Select image</p>
+                                                <div className="flex items-center justify-center w-full h-full bg-neutral-950">
+                                                    <p className="text-center text-gray-400">Select image</p>
                                                 </div>
                                             )}
-                                            <div className="absolute inset-0  bg-black/80 hidden group-hover:flex items-center justify-center transition-all duration-300">
-                                                <IconCamera className="text-white text-5xl" />
+                                            <div className="absolute inset-0 items-center justify-center hidden transition-all duration-300 bg-black/80 group-hover:flex">
+                                                <IconCamera className="text-5xl text-white" />
                                             </div>
-                                            <label htmlFor="image" className="cursor-pointer absolute inset-0"></label>
+                                            <label htmlFor="image" className="absolute inset-0 cursor-pointer"></label>
                                         </div>
 
                                         {
@@ -543,7 +543,7 @@ const AddOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId
                     </AccordionItem>
                 ))}
             </Accordion>
-            <div className="flex mt-6 justify-between space-x-4">
+            <div className="flex justify-between mt-6 space-x-4">
                 <button
                     className={`bg-[#1c1c1c] border border-[#565656]   text-white flex items-center gap-3 py-1.5 text-sm px-4 rounded ${currentStep === 1 ? "blur-[1px] cursor-not-allowed" : "cursor-pointer"}`}
                     disabled={true}

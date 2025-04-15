@@ -198,7 +198,7 @@ const EditContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfoli
                                 </div>
                                 <div className='flex items-center justify-between'>
                                     <fieldset className="space-y-1">
-                                        <legend className="text-foreground text-sm leading-none font-medium">
+                                        <legend className="text-sm font-medium leading-none text-foreground">
                                             Rate your experience
                                         </legend>
                                         <RadioGroup className="inline-flex gap-0" >
@@ -296,24 +296,24 @@ const EditContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfoli
                                             type="file"
                                             onChange={(e) => handleFileChange(e, ind)}
                                             name='imageImage'
-                                            className="absolute z-10 inset-0 w-full h-full opacity-0 cursor-pointer"
+                                            className="absolute inset-0 z-10 w-full h-full opacity-0 cursor-pointer"
                                         />
                                         {getValues(`social.otherSocialList.${ind}.img.url`) ? (
                                             <img
                                                 src={getValues(`social.otherSocialList.${ind}.img.url`)}
                                                 alt="Preview"
-                                                className="w-full h-full object-contain"
+                                                className="object-contain w-full h-full"
                                             />
                                         ) : (
-                                            <div className="w-full h-full flex items-center justify-center bg-neutral-950">
-                                                <IconCamera className="text-white text-5xl" />
+                                            <div className="flex items-center justify-center w-full h-full bg-neutral-950">
+                                                <IconCamera className="text-5xl text-white" />
 
                                             </div>
                                         )}
-                                        <div className="absolute inset-0  bg-black/80 hidden group-hover:flex items-center justify-center transition-all duration-300">
-                                            <IconCamera className="text-white text-5xl" />
+                                        <div className="absolute inset-0 items-center justify-center hidden transition-all duration-300 bg-black/80 group-hover:flex">
+                                            <IconCamera className="text-5xl text-white" />
                                         </div>
-                                        <label htmlFor="image" className="cursor-pointer absolute inset-0"></label>
+                                        <label htmlFor="image" className="absolute inset-0 cursor-pointer"></label>
                                     </div>
                                     <div className='w-full'>
                                         <Label htmlFor={`social.otherSocialList.${ind}.link`} className="text-neutral-300 ">
@@ -324,7 +324,7 @@ const EditContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfoli
                                     </div>
 
                                 </div>
-                                <div className='flex gap-2 justify-evenly mt-3'>
+                                <div className='flex gap-2 mt-3 justify-evenly'>
 
                                     <div className='size-9 px-5 border border-[#E11D48] flex items-center justify-center rounded bg-[#010101]'>
                                         {ind + 1}
@@ -376,7 +376,7 @@ const EditContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfoli
                                     <Input {...register(`emailList.${ind}.email`)} placeholder="Enter service name..." type="text" className={`${errors.emailList?.[ind]?.email && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
                                     {errors.emailList?.[ind]?.email && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.emailList?.[ind]?.email.message}</p>}
                                 </div>
-                                <div className='flex gap-2 justify-evenly mt-3'>
+                                <div className='flex gap-2 mt-3 justify-evenly'>
 
                                     <div className='size-9 px-5 border border-[#E11D48] flex items-center justify-center rounded bg-[#010101]'>
                                         {ind + 1}
@@ -457,7 +457,7 @@ const EditContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfoli
                                     )}
                                 </div>
 
-                                <div className='flex gap-2 justify-evenly mt-3'>
+                                <div className='flex gap-2 mt-3 justify-evenly'>
                                     <div className='size-9 px-5 border border-[#E11D48] flex items-center justify-center rounded bg-[#010101]'>
                                         {ind + 1}
                                     </div>
@@ -507,7 +507,7 @@ const EditContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfoli
                                     <Input {...register(`address.${ind}.detail`)} placeholder="Enter service name..." type="text" className={`${errors.address?.[ind]?.detail && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
                                     {errors.address?.[ind]?.detail && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.address?.[ind]?.detail.message}</p>}
                                 </div>
-                                <div className='flex gap-2 justify-evenly mt-3'>
+                                <div className='flex gap-2 mt-3 justify-evenly'>
 
                                     <div className='size-9 px-5 border border-[#E11D48] flex items-center justify-center rounded bg-[#010101]'>
                                         {ind + 1}
@@ -552,9 +552,9 @@ const EditContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfoli
                         </div>
                         <div>
                             <Label className="text-neutral-300 ">
-                                Contact CSV <span className="text-[#ff3f69]">*</span>
+                                Contact VCF <span className="text-[#ff3f69]">*</span>
                             </Label>
-                            <Input {...register("contactCSV")} placeholder="Enter contact CSV..." type="text" className={`${errors?.contactCSV && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                            <Input {...register("contactCSV")} placeholder="Enter contact VCF..." type="text" className={`${errors?.contactCSV && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
                             {errors?.contactCSV && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors?.contactCSV.message}</p>}
                         </div>
                         <div>
@@ -626,7 +626,7 @@ const EditContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfoli
                     </AccordionItem>
                 ))}
             </Accordion>
-            <div className="flex mt-6 justify-between space-x-4">
+            <div className="flex justify-between mt-6 space-x-4">
                 <button
                     className={`bg-[#1c1c1c] border border-[#565656]   text-white flex items-center gap-3 py-1.5 text-sm px-4 rounded ${currentStep === 1 ? "blur-[1px] cursor-not-allowed" : "cursor-pointer"}`}
                     onClick={() => setCurrentStep((prev) => prev - 1)}
