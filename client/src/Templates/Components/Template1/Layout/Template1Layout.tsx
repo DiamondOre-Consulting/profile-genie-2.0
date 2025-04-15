@@ -60,7 +60,7 @@ const Template1Layout = ({ children, fullName }: { children: ReactNode, fullName
                     </div>
 
                     <p className="text-sm text-gray-300">Powered by <Link to="https://profilegenie.in" target='_blank' className="hover:underline text-[#f43f5e]">Profile Genie</Link></p>
-                    <ul className="flex justify-center gap-6 md:gap-8">
+                    <ul className="flex justify-center gap-6 mt-3 md:gap-8">
                         <li>
                             <a
                                 href="https://www.instagram.com/profile_genie_1?igsh=MW01amE5aHVwMTVpaw=="
