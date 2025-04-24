@@ -396,7 +396,7 @@ const createPortfolioDetail = asyncHandler(async (req, res) => {
         },
         bulkLink: {
             tagline: bulkLink.tagline || "",
-            bulkLinkList: bulkLink
+            bulkLinkList: []
         },
         services: {
             tagline: services.tagline || "",
@@ -408,11 +408,17 @@ const createPortfolioDetail = asyncHandler(async (req, res) => {
         }
     })
 
+    bulkLink.bulkLinkList.forEach(link => {
+        portfolioDetail.bulkLink.bulkLinkList.push({ ...link })
+    });
+
     let brandImages = []
 
     if (req?.files?.brands) {
         brandImages = await multipleFileUpload(req?.files?.brands)
     }
+
+    console.log(portfolioDetail)
 
     brands.brandList.forEach(brand => {
         let existingBrand = portfolioDetail.brands.brandList.find(b => b.uniqueId === brand.uniqueId);
@@ -508,7 +514,7 @@ const createPortfolioDetail = asyncHandler(async (req, res) => {
     res.status(200).json({
         success: true,
         data: portfolioDetail,
-        message: "Portfolio detail created successfully"
+        message: "Portfolio detail created successfully!"
     })
 })
 
