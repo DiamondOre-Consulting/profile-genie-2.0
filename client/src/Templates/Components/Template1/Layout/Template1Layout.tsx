@@ -7,6 +7,8 @@ const Template1Layout = ({ children, fullName, aboutActive, contactActive, produ
     const [isOpen, setIsOpen] = useState(false)
 
 
+    console.log("object", productActive, serviceActive, aboutActive, contactActive)
+
     const shareOnWhatsApp = () => {
         const personalMessage = `Hi! Let's connect.`;
         const encodedMessage = encodeURIComponent(personalMessage);
