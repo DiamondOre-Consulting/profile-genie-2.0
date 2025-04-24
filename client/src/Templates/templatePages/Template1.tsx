@@ -87,10 +87,10 @@ const Template1 = ({ setMetaDetails }: { setMetaDetails: React.Dispatch<React.Se
                             <About about={profileData?.about} brands={profileData?.otherDetails?.brands} />
                         </div>
                         <div id='services'>
-                            {profileData?.otherDetails?.services && <Service services={profileData?.otherDetails?.services} />}
+                            {profileData?.otherDetails?.services?.tagline && <Service services={profileData?.otherDetails?.services} />}
                         </div>
                         <div id='product'>
-                            {profileData?.otherDetails?.products && <Product products={profileData?.otherDetails?.products} />}
+                            {profileData?.otherDetails?.products?.tagline && <Product products={profileData?.otherDetails?.products} />}
                         </div>
                         <div id='contact'>
                             <Contact contact={profileData?.contactData} bulkLinks={profileData?.otherDetails?.bulkLink} fullName={profileData?.fullName} />

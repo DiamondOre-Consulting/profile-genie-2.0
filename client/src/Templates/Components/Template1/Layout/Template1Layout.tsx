@@ -38,12 +38,12 @@ const Template1Layout = ({ children, fullName, aboutActive, contactActive, produ
                         </button>
                     </div>
                     <div className={`items-center justify-between  w-full md:flex md:w-auto md:order-1 transition duration-300 relative z-[100] ease-in-out ${isOpen ? 'fixed top-0 left-0 right-0 bottom-0 flex-col' : 'hidden'}`} id="navbar-cta">
-                        <ul className="flex flex-col items-center justify-center bg-[#101828] p-4 mt-4 font-medium border border-gray-100 rounded-lg cursor-pointer md:p-0 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0">
-                            <Link to="home" smooth={true} duration={500} className="hover:underline">Home</Link>
-                            {aboutActive && <Link to="about" smooth={true} duration={500} offset={-100} className="hover:underline">About</Link>}
-                            {serviceActive && <Link to="services" smooth={true} duration={500} offset={-80} className="hover:underline">Services</Link>}
-                            {productActive && <Link to="product" smooth={true} duration={500} offset={-100} className="hover:underline">Product</Link>}
-                            {contactActive && <Link to="contact" smooth={true} duration={500} offset={-50} className="hover:underline">Contact</Link>}
+                        <ul className="flex flex-col items-center justify-center bg-[#101828] p-4 mt-4 font-medium border border-gray-100 rounded-lg cursor-pointer space-y-2 md:space-y-0 md:p-0 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0">
+                            <Link to="home" onClick={() => setIsOpen(false)} smooth={true} duration={500} className="hover:underline">Home</Link>
+                            {aboutActive && <Link onClick={() => setIsOpen(false)} to="about" smooth={true} duration={500} offset={-100} className="hover:underline">About</Link>}
+                            {serviceActive && <Link onClick={() => setIsOpen(false)} to="services" smooth={true} duration={500} offset={-80} className="hover:underline">Services</Link>}
+                            {productActive && <Link onClick={() => setIsOpen(false)} to="product" smooth={true} duration={500} offset={-100} className="hover:underline">Product</Link>}
+                            {contactActive && <Link onClick={() => setIsOpen(false)} to="contact" smooth={true} duration={500} offset={-50} className="hover:underline">Contact</Link>}
                         </ul>
                     </div>
                 </div>
