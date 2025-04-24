@@ -3,7 +3,7 @@ import { ReactNode, useState } from 'react'
 
 import { Link } from "react-scroll"
 
-const Template1Layout = ({ children, fullName }: { children: ReactNode, fullName: string }) => {
+const Template1Layout = ({ children, fullName, aboutActive, contactActive, productActive, serviceActive }: { children: ReactNode, fullName: string, aboutActive: boolean, contactActive: boolean, productActive: boolean, serviceActive: boolean }) => {
     const [isOpen, setIsOpen] = useState(false)
 
 
@@ -38,10 +38,10 @@ const Template1Layout = ({ children, fullName }: { children: ReactNode, fullName
                     <div className={`items-center justify-between  w-full md:flex md:w-auto md:order-1 transition duration-300 relative z-[100] ease-in-out ${isOpen ? 'fixed top-0 left-0 right-0 bottom-0 flex-col' : 'hidden'}`} id="navbar-cta">
                         <ul className="flex flex-col p-4 mt-4 font-medium border border-gray-100 rounded-lg cursor-pointer md:p-0 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                             <Link to="home" smooth={true} duration={500} className="hover:underline">Home</Link>
-                            <Link to="about" smooth={true} duration={500} offset={-100} className="hover:underline">About</Link>
-                            <Link to="services" smooth={true} duration={500} offset={-80} className="hover:underline">Services</Link>
-                            <Link to="product" smooth={true} duration={500} offset={-100} className="hover:underline">Product</Link>
-                            <Link to="contact" smooth={true} duration={500} offset={-50} className="hover:underline">Contact</Link>
+                            {aboutActive && <Link to="about" smooth={true} duration={500} offset={-100} className="hover:underline">About</Link>}
+                            {serviceActive && <Link to="services" smooth={true} duration={500} offset={-80} className="hover:underline">Services</Link>}
+                            {productActive && <Link to="product" smooth={true} duration={500} offset={-100} className="hover:underline">Product</Link>}
+                            {contactActive && <Link to="contact" smooth={true} duration={500} offset={-50} className="hover:underline">Contact</Link>}
                         </ul>
                     </div>
                 </div>
@@ -52,11 +52,16 @@ const Template1Layout = ({ children, fullName }: { children: ReactNode, fullName
                     <h2 className="mb-4 text-xl font-semibold">Profile Genie</h2>
                     <div className="flex justify-center mb-4 space-x-6 text-sm">
                         <Link to="home" smooth={true} duration={500} className="hover:underline">Home</Link>
-                        <Link to="about" smooth={true} duration={500} offset={-100} className="hover:underline">About</Link>
-                        <Link to="services" smooth={true} duration={500} offset={-80} className="hover:underline">Services</Link>
-                        <Link to="product" smooth={true} duration={500} offset={-100} className="hover:underline">Product</Link>
-                        <Link to="contact" smooth={true} duration={500} offset={-50} className="hover:underline">Contact</Link>
-
+                        {aboutActive && <Link to="about" smooth={true} duration={500} offset={-100} className="hover:underline">About</Link>}
+                        {serviceActive &&
+                            <Link to="services" smooth={true} duration={500} offset={-80} className="hover:underline">Services</Link>
+                        }
+                        {productActive &&
+                            <Link to="product" smooth={true} duration={500} offset={-100} className="hover:underline">Product</Link>
+                        }
+                        {contactActive &&
+                            <Link to="contact" smooth={true} duration={500} offset={-50} className="hover:underline">Contact</Link>
+                        }
                     </div>
 
                     <p className="text-sm text-gray-300">Powered by <Link to="https://profilegenie.in" target='_blank' className="hover:underline text-[#f43f5e]">Profile Genie</Link></p>

@@ -385,6 +385,8 @@ const createPortfolioDetail = asyncHandler(async (req, res) => {
     const otherData = JSON.parse(req.body.data)
     const { brands, bulkLink, services, products } = otherData
 
+    console.log(bulkLink)
+
     const portfolioDetail = await PortfolioDetail.create({
         portfolio: id,
         brands: {

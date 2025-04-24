@@ -66,7 +66,7 @@ const Contact = ({ contact, bulkLinks, fullName }: { contact: portfolioResponse[
     };
 
     console.log(contact)
-
+    console.log("bulk", bulkLinks)
     return (
         <div className="relative z-20 px-2 py-10 bg-transparent sm:px-6 md:px-16">
 
