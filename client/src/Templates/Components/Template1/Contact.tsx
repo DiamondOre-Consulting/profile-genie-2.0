@@ -73,23 +73,25 @@ const Contact = ({ contact, bulkLinks, fullName }: { contact: portfolioResponse[
             {(bulkLinks?.bulkLinkList?.length > 0) &&
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-3 sm:grid-cols-2">
                     {bulkLinks?.bulkLinkList?.map((link, index) => (
-                        <Link key={index}
-                            target="_blank"
-                            to={link?.link ?? ""}
-                            className={cn(
-                                "relative   px-4 py-2 rounded-md overflow-hidden",
-                                "shadow-md shadow-[#FF2056]/50 ",
-                                "transition-all hover:-translate-y-0.5 cursor-pointer duration-200 bg-[#101828]",
-                                "group",
-                            )}
-                        >
+                        link?.link && link?.linkName && (
+                            <Link key={index}
+                                target="_blank"
+                                to={link?.link ?? ""}
+                                className={cn(
+                                    "relative   px-4 py-2 rounded-md overflow-hidden",
+                                    "shadow-md shadow-[#FF2056]/50 ",
+                                    "transition-all hover:-translate-y-0.5 cursor-pointer duration-200 bg-[#101828]",
+                                    "group",
+                                )}
+                            >
 
 
-                            <div className="relative flex items-center justify-center gap-2">
-                                <span className="pr-4 text-white">{link?.linkName}</span>
-                                <IconLink className="w-5 absolute top-0 -right-2 text-[#FF2056] " />
-                            </div>
-                        </Link>
+                                <div className="relative flex items-center justify-center gap-2">
+                                    <span className="pr-4 text-white">{link?.linkName}</span>
+                                    <IconLink className="w-5 absolute top-0 -right-2 text-[#FF2056] " />
+                                </div>
+                            </Link>
+                        )
                     ))}
                 </div>
             }
