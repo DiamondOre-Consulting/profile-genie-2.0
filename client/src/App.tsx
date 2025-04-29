@@ -74,6 +74,7 @@ function App() {
       <Suspense fallback={<Loader />}>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/demo" element={<Home />} />
           <Route path="/profile/1/:username" element={<Template1 setMetaDetails={setMetaDetails} />} />
           <Route path="/catalogue/1/:userName/*" element={<Catalogue1Dashboard setMetaDetails={setMetaDetails} />} />
           <Route
