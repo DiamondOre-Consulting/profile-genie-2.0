@@ -24,6 +24,20 @@ const RedirectToStore = () => {
   return null; 
 };
 
+  const RedirectToUtsav = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    console.log(window.location)
+    if (window.location.hostname !== "profilegenie.store" && location.pathname === "/profile/2/UM99") {
+ console.log("hello")
+      window.location.href = "https://profilegenie.in/profile/1/UM99";
+    }
+  }, [location]);
+
+  return null; 
+};
+
   
   useEffect(() => {
     if (metaDetails?.favIcon?.url) {
@@ -88,6 +102,7 @@ const RedirectToStore = () => {
       <meta property="og:image:height" content="630" />
       <Suspense fallback={<Loader />}>
            <RedirectToStore />
+        <RedirectToUtsav/>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/demo" element={<Home />} />
