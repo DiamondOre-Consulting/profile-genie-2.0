@@ -10,19 +10,19 @@ function App() {
   const location = useLocation()
   const [metaDetails, setMetaDetails] = useState<metaDetails>()
 
-// const RedirectToStore = () => {
-//   const location = useLocation();
+const RedirectToStore = () => {
+  const location = useLocation();
 
-//   useEffect(() => {
-//     console.log(window.location)
-//     if (window.location.hostname !== "profilegenie.store" && location.pathname === "/") {
-//  console.log("hello")
-//       window.location.href = "https://profilegenie.store/";
-//     }
-//   }, [location]);
+  useEffect(() => {
+    console.log(window.location)
+    if (window.location.hostname !== "profilegenie.store" && location.pathname === "/") {
+ console.log("hello")
+      window.location.href = "https://profilegenie.store/";
+    }
+  }, [location]);
 
-//   return null; 
-// };
+  return null; 
+};
 
   
   useEffect(() => {
@@ -87,7 +87,7 @@ function App() {
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
       <Suspense fallback={<Loader />}>
-{/*            <RedirectToStore /> */}
+           <RedirectToStore />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/demo" element={<Home />} />
