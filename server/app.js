@@ -22,7 +22,7 @@ app.use(express.json())
 app.use(cookieParser())
 
 app.use(cors({
-    origin: ["http://localhost:5176", "https://test.webakash1806.com", process.env.FRONTEND_URL, process.env.CATALOGUE_ADMIN_URL, process.env.ADMIN_URL],
+    origin: ["https://www.profilegenie.in", "https://profilegenie.in", process.env.FRONTEND_URL, process.env.CATALOGUE_ADMIN_URL, process.env.ADMIN_URL],
     credentials: true
 }))
 
