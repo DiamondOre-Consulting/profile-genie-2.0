@@ -14,7 +14,7 @@ const Admin1Nav = ({ logo, myprofile }) => {
   const handleLogout = () => {
     if (window.confirm("Are you sure you want to log out?")) {
       localStorage.removeItem("token");
-      window.open(`https://test.profilegenie.in/dynamic-catalogue/1/Ishan_Niyor_Perfumes`, '_blank');
+      window.open(`https://profilegenie.in/dynamic-catalogue/1/Ishan_Niyor_Perfumes`, '_blank');
     }
   };
 

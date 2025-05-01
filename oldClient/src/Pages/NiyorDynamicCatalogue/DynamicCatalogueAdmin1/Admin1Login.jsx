@@ -19,7 +19,7 @@ const Admin1Login = () => {
     if (decodedToken) {
       console.log("Decoded Token:", decodedToken);
       const userId = decodedToken.userId;
-      window.open(`https://test.profilegenie.in/dynamic-catalogue/admin/1/Ishan_Niyor_Perfumes`, '_blank');
+      window.open(`https://profilegenie.in/dynamic-catalogue/admin/1/Ishan_Niyor_Perfumes`, '_blank');
     }
   }, [decodedToken, navigate]);
 
@@ -40,7 +40,7 @@ const Admin1Login = () => {
         setShowLoader(false);
         localStorage.setItem("token", token);
         setToken(token);
-        window.open(`https://test.profilegenie.in/dynamic-catalogue/admin/1/Ishan_Niyor_Perfumes`, '_blank');
+        window.open(`https://profilegenie.in/dynamic-catalogue/admin/1/Ishan_Niyor_Perfumes`, '_blank');
       }
     } catch (error) {
       if (error.response) {

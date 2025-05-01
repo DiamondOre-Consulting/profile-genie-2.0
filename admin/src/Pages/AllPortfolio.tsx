@@ -335,7 +335,7 @@ const AllPortfolio = () => {
                                             <span className="relative text-sm font-bold text-green-500"><IconBrandWhatsapp /></span>
                                         </div>
 
-                                        <div onClick={() => window.open(`https://test.profilegenie.in/profile/1/${item?.userName}`)} className="relative flex items-center justify-center cursor-pointer size-10 group/inner">
+                                        <div onClick={() => window.open(`https://profilegenie.in/profile/1/${item?.userName}`)} className="relative flex items-center justify-center cursor-pointer size-10 group/inner">
                                             <div
                                                 className="absolute inset-0 transition-transform duration-1000 border rounded-full border-amber-400/20 border-t-amber-400 group-hover/inner:rotate-180"
                                             >
@@ -354,7 +354,7 @@ const AllPortfolio = () => {
                                             <div className="absolute inset-[3px] rounded-full bg-gray-950"></div>
                                             <span className="relative text-sm font-bold text-[#E11D48]"><IconTrash /></span>
                                         </div>
-                                        <div onClick={() => window.open(`https://test.profilegenie.in/profile/1/${item?.userName}`)} className="relative flex items-center justify-center cursor-pointer size-10 group/inner">
+                                        <div onClick={() => window.open(`https://profilegenie.in/profile/1/${item?.userName}`)} className="relative flex items-center justify-center cursor-pointer size-10 group/inner">
                                             <div
                                                 className="absolute inset-0 transition-transform duration-1000 border rounded-full border-amber-400/20 border-t-purple-400 group-hover/inner:rotate-180"
                                             >

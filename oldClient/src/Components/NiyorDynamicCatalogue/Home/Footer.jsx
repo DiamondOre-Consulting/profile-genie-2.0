@@ -78,7 +78,7 @@ const Footer = ({ myprofile }) => {
               <li>
                 <a
                   target="_blank"
-                  href="https://test.profilegenie.in/dynamic-catalogue/admin-login/1"
+                  href="https://profilegenie.in/dynamic-catalogue/admin-login/1"
                   className="text-gray-100 underline"
                 >
                   Admin Login
