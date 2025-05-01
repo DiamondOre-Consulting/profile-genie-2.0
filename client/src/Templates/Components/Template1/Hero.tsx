@@ -39,7 +39,7 @@ const Hero = ({ portfolio }: { portfolio: portfolioResponse }) => {
                     alt="Pattern Image"
                 />
                 {<div className='relative bottom-0 flex items-end justify-center w-full z-1 '>
-                    <img src={((portfolio?.image?.url) ? portfolio?.image?.url :(portfolio?.gender === "female") ? girlImg : boyImg}
+                    <img src={(portfolio?.image?.url) ? portfolio?.image?.url :(portfolio?.gender === "female") ? girlImg : boyImg}
                         className="relative object-cover w-auto bottom-0 h-auto max-h-[26rem]"
                         alt="Overlay Image"
                     />
