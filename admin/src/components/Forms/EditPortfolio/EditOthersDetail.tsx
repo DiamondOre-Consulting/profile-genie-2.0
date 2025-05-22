@@ -14,8 +14,8 @@ import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { IconCamera, IconPlus, IconSquareRoundedArrowLeftFilled, IconSquareRoundedArrowRightFilled, IconWhirl, IconX } from '@tabler/icons-react'
 import { v4 as uuidv4 } from 'uuid'
-import { Textarea } from '@/components/ui/textarea'
 import { useUpdateOtherDetailsMutation } from '@/Redux/API/PortfolioApi'
+import TextEditor from '@/components/TextEditor'
 
 
 type othersProfileDetail = z.infer<typeof addOthersDetailSchema>
@@ -31,7 +31,7 @@ const EditOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioI
 
     const [updateOtherDetails] = useUpdateOtherDetailsMutation()
 
-    const { register, handleSubmit, getValues, reset, setValue, control, formState: { errors, isSubmitting } } = useForm<othersProfileDetail>({
+    const { register, handleSubmit, getValues, reset, trigger, setValue, control, formState: { errors, isSubmitting } } = useForm<othersProfileDetail>({
         resolver: zodResolver(addOthersDetailSchema),
         defaultValues: {
             ...othersDetail,
@@ -406,7 +406,13 @@ const EditOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioI
                                     <Label htmlFor={`services.serviceList.${ind}.detail`} className="text-neutral-300 ">
                                         Service description
                                     </Label>
-                                    <Textarea {...register(`services.serviceList.${ind}.detail`)} placeholder="Enter service detail..." className={`${errors.services?.serviceList?.[ind]?.detail && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                                    <TextEditor
+                                        value={getValues(`services.serviceList.${ind}.detail`) as string}
+                                        handleBlur={(value) => {
+                                            setValue(`services.serviceList.${ind}.detail`, value, { shouldValidate: true });
+                                            trigger(`services.serviceList.${ind}.detail`);
+                                        }}
+                                    />
                                     {errors.services?.serviceList?.[ind]?.detail && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.services?.serviceList?.[ind]?.detail.message}</p>}
                                 </div>
                                 <div className='flex justify-evenly'>
@@ -477,7 +483,13 @@ const EditOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioI
                                     <Label htmlFor={`products.productList.${ind}.detail`} className="text-neutral-300 ">
                                         Product description
                                     </Label>
-                                    <Textarea {...register(`products.productList.${ind}.detail`)} placeholder="Enter service detail..." className={`${errors.products?.productList?.[ind]?.detail && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                                    <TextEditor
+                                        value={getValues(`products.productList.${ind}.detail`) as string}
+                                        handleBlur={(value) => {
+                                            setValue(`products.productList.${ind}.detail`, value, { shouldValidate: true });
+                                            trigger(`products.productList.${ind}.detail`);
+                                        }}
+                                    />
                                     {errors.products?.productList?.[ind]?.detail && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.products?.productList?.[ind]?.detail.message}</p>}
                                 </div>
                                 <div className='flex justify-evenly'>

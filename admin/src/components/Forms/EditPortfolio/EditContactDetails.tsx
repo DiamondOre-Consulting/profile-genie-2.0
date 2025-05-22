@@ -14,11 +14,11 @@ import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { IconCamera, IconPlus, IconSquareRoundedArrowLeftFilled, IconSquareRoundedArrowRightFilled, IconWhirl, IconX } from '@tabler/icons-react'
 import { v4 as uuidv4 } from 'uuid'
-import { Textarea } from '@/components/ui/textarea'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { RiStarFill } from '@remixicon/react'
 import { useUpdateContactDetailsMutation } from '@/Redux/API/PortfolioApi'
 import PhoneInput from 'react-phone-input-2'
+import TextEditor from '@/components/TextEditor'
 
 
 
@@ -35,7 +35,7 @@ const EditContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfoli
 
     const [updateContactDetails] = useUpdateContactDetailsMutation()
 
-    const { register, handleSubmit, getValues, reset, setValue, control, watch, formState: { errors, isSubmitting } } = useForm<profileContactDetail>({
+    const { register, handleSubmit, getValues, reset, setValue, control, watch, formState: { errors, isSubmitting }, trigger } = useForm<profileContactDetail>({
         resolver: zodResolver(addContactDetailSchema),
         defaultValues: {
             ...contactDetails,
@@ -193,7 +193,13 @@ const EditContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfoli
                                     <Label htmlFor={`testimonial.${ind}.detail`} className="text-neutral-300 ">
                                         Review description <span className="text-[#ff3f69]">*</span>
                                     </Label>
-                                    <Textarea {...register(`testimonial.testimonialList.${ind}.detail`)} placeholder="Enter review detail..." className={`${errors.testimonial?.testimonialList?.[ind]?.detail && "border-[#E11D48] "} py-[0.45rem] h-[5rem] text-neutral-200`} />
+                                    <TextEditor
+                                        value={getValues(`testimonial.testimonialList.${ind}.detail`) as string}
+                                        handleBlur={(value) => {
+                                            setValue(`testimonial.testimonialList.${ind}.detail`, value, { shouldValidate: true });
+                                            trigger(`testimonial.testimonialList.${ind}.detail`);
+                                        }}
+                                    />
                                     {errors.testimonial?.testimonialList?.[ind]?.detail && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.testimonial?.testimonialList?.[ind]?.detail.message}</p>}
                                 </div>
                                 <div className='flex items-center justify-between'>

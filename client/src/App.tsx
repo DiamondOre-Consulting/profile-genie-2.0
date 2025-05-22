@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useState } from "react"
 import { Route, Routes, useLocation } from "react-router-dom"
 import { metaDetails } from "./validations/CatalogueValidation"
 import Loader from "./components/Loader"
+import Template2 from "./Templates/templatePages/Template2"
 const Home = lazy(() => import("./Pages/Home"))
 const Template1 = lazy(() => import("./Templates/templatePages/Template1"))
 const Catalogue1Dashboard = lazy(() => import("./Catalogue/Catalogue1Dashboard"))
@@ -10,35 +11,35 @@ function App() {
   const location = useLocation()
   const [metaDetails, setMetaDetails] = useState<metaDetails>()
 
-const RedirectToStore = () => {
-  const location = useLocation();
+  const RedirectToStore = () => {
+    const location = useLocation();
 
-  useEffect(() => {
-    console.log(window.location)
-    if (window.location.hostname !== "profilegenie.store" && location.pathname === "/") {
- console.log("hello")
-      window.location.href = "https://profilegenie.store/";
-    }
-  }, [location]);
+    useEffect(() => {
+      console.log(window.location)
+      if (window.location.hostname !== "profilegenie.store" && location.pathname === "/") {
+        console.log("hello")
+        window.location.href = "https://profilegenie.store/";
+      }
+    }, [location]);
 
-  return null; 
-};
+    return null;
+  };
 
   const RedirectToUtsav = () => {
-  const location = useLocation();
+    const location = useLocation();
 
-  useEffect(() => {
-    console.log(window.location)
-    if (window.location.hostname !== "profilegenie.store" && location.pathname === "/profile/2/UM99") {
- console.log("hello")
-      window.location.href = "https://profilegenie.in/profile/1/UM99";
-    }
-  }, [location]);
+    useEffect(() => {
+      console.log(window.location)
+      if (window.location.hostname !== "profilegenie.store" && location.pathname === "/profile/2/UM99") {
+        console.log("hello")
+        window.location.href = "https://profilegenie.in/profile/1/UM99";
+      }
+    }, [location]);
 
-  return null; 
-};
+    return null;
+  };
 
-  
+
   useEffect(() => {
     if (metaDetails?.favIcon?.url) {
       const favicon = document.querySelector("link[rel='icon']") as HTMLLinkElement;
@@ -101,12 +102,13 @@ const RedirectToStore = () => {
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
       <Suspense fallback={<Loader />}>
-           <RedirectToStore />
-        <RedirectToUtsav/>
+        <RedirectToStore />
+        <RedirectToUtsav />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/demo" element={<Home />} />
-          <Route path="/profile/1/:username" element={<Template1 setMetaDetails={setMetaDetails} />} />
+          <Route path="/profile/1/:username" element={<Template2 setMetaDetails={setMetaDetails} />} />
+          <Route path="/profile/9510/:username" element={<Template1 setMetaDetails={setMetaDetails} />} />
           <Route path="/catalogue/1/:userName/*" element={<Catalogue1Dashboard setMetaDetails={setMetaDetails} />} />
           <Route
             path="/dynamic-catalogue/1/Ishan_Niyor_Perfumes"

@@ -20,6 +20,25 @@
   background: radial-gradient(140% 125% at 50% 100%, transparent 50%, #63e 72%, #fff 100%);
 }
 
+.text-pink {
+  color: #F43F5E;
+}
+
+.bg-pink {
+  background-color: #F43F5E;
+}
+
+.bg-blue {
+  background-color: #0891B2;
+}
+
+.text-blue {
+  color: #0891B2;
+}
+
+.bg-template2mainBg {
+  background-color: #EDE9FE;
+}
 
 @layer base {
   @property --pos-x {

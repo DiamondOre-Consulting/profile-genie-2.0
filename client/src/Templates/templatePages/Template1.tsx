@@ -35,7 +35,7 @@ const Template1 = ({ setMetaDetails }: { setMetaDetails: React.Dispatch<React.Se
         if (error) {
 
             return (
-                window.location.href = "https://profilegenie.store"
+                window.location.href = "https://profilegenie.in"
             )
         }
     }

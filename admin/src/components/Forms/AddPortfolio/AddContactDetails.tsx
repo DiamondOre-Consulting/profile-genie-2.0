@@ -19,6 +19,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { RiStarFill } from '@remixicon/react'
 import { useAddContactDetailsMutation } from '@/Redux/API/PortfolioApi'
 import PhoneInput from 'react-phone-input-2'
+import TextEditor from '@/components/TextEditor'
 
 type profileContactDetail = z.infer<typeof addContactDetailSchema>
 
@@ -33,7 +34,7 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
 
     const [addContactDetails] = useAddContactDetailsMutation()
 
-    const { register, handleSubmit, getValues, setValue, control, watch, formState: { errors, isSubmitting } } = useForm<profileContactDetail>({
+    const { register, handleSubmit, getValues, setValue, control, watch, formState: { errors, isSubmitting }, trigger } = useForm<profileContactDetail>({
         resolver: zodResolver(addContactDetailSchema),
         defaultValues: {
             testimonial: { testimonialList: [{ uniqueId: "", name: "", detail: "", star: 0 }] },
@@ -184,6 +185,13 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                                         <Label htmlFor={`testimonial.${ind}.detail`} className="text-neutral-300 ">
                                             Review description
                                         </Label>
+                                        <TextEditor
+                                            value={getValues(`testimonial.testimonialList.${ind}.detail`) as string}
+                                            handleBlur={(value) => {
+                                                setValue(`testimonial.testimonialList.${ind}.detail`, value, { shouldValidate: true });
+                                                trigger(`testimonial.testimonialList.${ind}.detail`);
+                                            }}
+                                        />
                                         <Textarea {...register(`testimonial.testimonialList.${ind}.detail`)} placeholder="Enter review detail..." className={`${errors.testimonial?.testimonialList?.[ind]?.detail && "border-[#E11D48] "} py-[0.45rem] h-[5rem] text-neutral-200`} />
                                         {errors.testimonial?.testimonialList?.[ind]?.detail && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.testimonial?.testimonialList?.[ind]?.detail.message}</p>}
                                     </div>
