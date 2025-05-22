@@ -38,7 +38,7 @@ const Testimonials = ({ portfolioData }: { portfolioData: portfolioResponse }) =
 
   return (
     <>
-      {portfolioData?.contactData?.testimonial && portfolioData?.contactData?.testimonial?.testimonialList?.length > 0 && (
+      {portfolioData?.contactData?.testimonial?.tagline && portfolioData?.contactData?.testimonial?.testimonialList?.length > 0 && (
         <div>
           <section
             id="testimonials"
