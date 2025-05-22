@@ -34,7 +34,7 @@ const Login = () => {
 
     const handleGoogleLogin = async () => {
         try {
-            window.location.href = "https://server.profilegenie.in/api/v1/auth/google";
+            window.location.href = "https://profile-genie-2-0-server.onrender.com/api/v1/auth/google";
             // window.location.href = "http://localhost:8000/api/v1/auth/google";
         } catch (err) {
             console.log(err);
