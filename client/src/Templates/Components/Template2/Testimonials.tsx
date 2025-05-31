@@ -46,7 +46,7 @@ const Testimonials = ({ portfolioData }: { portfolioData: portfolioResponse }) =
             className="py-20 sm:py-32"
           >
             <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-              <div className="mx-auto text-center md:text-leftr">
+              <div className="mx-auto text-center md:text-left">
                 <h2 className="text-3xl font-bold tracking-tight uppercase font-display text-slate-900 sm:text-5xl ">
                   Testimonials
                 </h2>
