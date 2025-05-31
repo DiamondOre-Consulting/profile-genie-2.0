@@ -63,7 +63,7 @@ const Hero = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
     console.log(portfolioData)
 
     return (
-        <div className="relative flex flex-col items-center max-w-screen-xl px-4 mx-auto bg-template2mainBg md:flex-row sm:px-6">
+        <div className="relative flex flex-col items-center max-w-screen-xl px-4 mx-auto md:flex-row sm:px-6">
             <div className="flex items-center justify-center w-full py-5 md:w-1/2 md:pb-20 md:pt-10 md:pr-10">
                 <div className="text-left">
                     <h2 className="text-lg font-extrabold leading-10 tracking-tight text-gray-900 md:text-3xl sm:leading-none first">

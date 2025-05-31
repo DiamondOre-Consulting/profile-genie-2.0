@@ -42,7 +42,7 @@ const Template2 = ({ setMetaDetails }: { setMetaDetails: React.Dispatch<React.Se
     return (
         <>
             {profileData &&
-                <>
+                <div className="bg-[#fefbff]">
                     <div className="bg-template2mainBg">
                         <Nav portfolioData={profileData} />
                         <Hero portfolioData={profileData} />
@@ -54,7 +54,7 @@ const Template2 = ({ setMetaDetails }: { setMetaDetails: React.Dispatch<React.Se
                     <Testimonials portfolioData={profileData} />
                     <ContactUs portfolioData={profileData} />
                     <Footer portfolioData={profileData} />
-                </>
+                </div>
             }
         </>
     );
