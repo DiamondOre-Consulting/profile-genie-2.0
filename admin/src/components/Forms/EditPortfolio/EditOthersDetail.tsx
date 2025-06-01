@@ -1,6 +1,6 @@
 import { addOthersDetailSchema } from '@/validations/PortfolioValidation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import React, { useEffect, useState } from 'react'
+import React, {  useEffect, useState } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import {
@@ -28,7 +28,7 @@ interface apiRes {
 
 const EditOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioId, othersDetail }: { currentStep: number, stepsLength: number, setCurrentStep: React.Dispatch<React.SetStateAction<number>>, portfolioId: string, othersDetail: othersProfileDetail }) => {
 
-
+const [openedItem,setOpenedItem] = useState<string>("1")
     const [updateOtherDetails] = useUpdateOtherDetailsMutation()
 
     const { register, handleSubmit, getValues, reset, trigger, setValue, control, formState: { errors, isSubmitting } } = useForm<othersProfileDetail>({
@@ -49,12 +49,11 @@ const EditOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioI
             },
             bulkLink: {
                 ...othersDetail?.bulkLink,
-                bulkLinkList: othersDetail?.bulkLink?.bulkLinkList && (othersDetail?.bulkLink?.bulkLinkList.length > 1) ? othersDetail?.bulkLink?.bulkLinkList : [{ linkName: "", link: "" }]
+                bulkLinkList: othersDetail?.bulkLink?.bulkLinkList && (othersDetail?.bulkLink?.bulkLinkList.length > 1) ? othersDetail?.bulkLink?.bulkLinkList : [{uniqueId:"", linkName: "", link: "",image: { publicId: "", url: "" } }]
             }
         }
     })
 
-    console.log(portfolioId)
 
     useEffect(() => {
         if (othersDetail) {
@@ -65,6 +64,7 @@ const EditOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioI
     const [brandsFiles, setBrandsFiles] = useState<File[] | null>(null)
     const [servicesFiles, setServicesFiles] = useState<File[] | null>(null)
     const [productsFiles, setProductsFiles] = useState<File[] | null>(null)
+    const [bulkLinkFiles,setBulkLinkFiles] = useState<File[] | null>(null)
 
     const getUniqueCode = (): string => {
         return uuidv4().slice(0, 10);
@@ -124,10 +124,55 @@ const EditOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioI
         }
     }
 
+     const handleBulkLinkFileChanges = (e: React.ChangeEvent<HTMLInputElement> | null, ind: number) => {
+        const selectedFile = e?.target?.files?.[0]
+        if (selectedFile) {
+            const uniqueCode = getUniqueCode()
+            const fileExtension = getFileExtension(selectedFile.name)
+            if (!getValues(`bulkLink.bulkLinkList.${ind}.uniqueId`)) {
+
+                const fileName = `${uniqueCode}.${fileExtension}`
+                setValue(`bulkLink.bulkLinkList.${ind}.uniqueId`, uniqueCode)
+                setValue(`bulkLink.bulkLinkList.${ind}.image.url`, URL.createObjectURL(selectedFile))
+
+                setBulkLinkFiles((prevFiles: File[] | null) => {
+                    const newFiles = [...(prevFiles) || []]
+                    newFiles[ind] = new File([selectedFile], fileName, { type: selectedFile.type })
+                    return newFiles
+                })
+            } else {
+                const uniqueId = getValues(`bulkLink.bulkLinkList.${ind}.uniqueId`);
+                const fileName = `${uniqueId}.${fileExtension}`;
+                setValue(`bulkLink.bulkLinkList.${ind}.uniqueId`, uniqueId);
+                setValue(`bulkLink.bulkLinkList.${ind}.image.url`, URL.createObjectURL(selectedFile));
+
+                setBulkLinkFiles((prevFiles: File[] | null) => {
+                    const newFiles = [...(prevFiles || [])];
+                    newFiles[ind] = new File([selectedFile], fileName, { type: selectedFile.type });
+                    return newFiles;
+                })
+            }
+        }
+    }
+
     const { fields: linkFields, append: linkAppend, remove: linkRemove } = useFieldArray({
         control,
         name: 'bulkLink.bulkLinkList'
     })
+
+    const removeBulkLink = (ind: number) => {
+        setBulkLinkFiles((prevFiles: File[] | null) => {
+            const newFiles = [...(prevFiles || [])];
+            newFiles.splice(ind, 1);
+            return newFiles;
+        })
+
+        if (serviceFields.length === 1) {
+            setValue(`bulkLink.bulkLinkList.${ind}`, { uniqueId: "", link: "", image: { url: "", publicId: "" }, linkName: "" })
+        } else {
+            linkRemove(ind)
+        }
+    }
 
     const handleServiceFileChange = (e: React.ChangeEvent<HTMLInputElement> | null, ind: number) => {
         const selectedFile = e?.target?.files?.[0]
@@ -246,13 +291,29 @@ const EditOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioI
             formData.append('products', img)
         })
 
+        bulkLinkFiles?.forEach((img) => {
+            formData.append('bulkLink', img)
+        })
+
         const response = await updateOtherDetails({ formData, id: portfolioId }).unwrap() as apiRes
-        console.log(response)
+
         if (response?.success) {
             setCurrentStep(currentStep + 1)
         }
 
     }
+
+    useEffect(()=>{
+     if(errors?.brands){
+            setOpenedItem("1")
+        }else if(errors?.bulkLink){
+            setOpenedItem("2")
+        }else if(errors?.services){
+            setOpenedItem("3")
+        }else if(errors?.products){
+            setOpenedItem("4")
+        }
+       },[errors])
 
     const items = [
         {
@@ -266,9 +327,8 @@ const EditOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioI
                             Brand Tagline
                         </Label>
                         <Input {...register("brands.tagline")} placeholder="Enter tagline..." type="text" className={`${errors.brands?.tagline && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                        {errors.brands?.tagline && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.brands?.tagline.message}</p>}
+                        {errors.brands?.tagline && <p className="text-main tracking-wide text-sm font-semibold">{errors.brands?.tagline.message}</p>}
                     </div>
-                    {getValues("brands.tagline") &&
                         <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2'>
                             {brandsFields?.map((_, ind) => {
                                 return <div className='space-y-2  p-2 my-3 rounded bg-[#ff17a21b] border border-rose-800' key={ind}>
@@ -277,7 +337,7 @@ const EditOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioI
                                             Brand name
                                         </Label>
                                         <Input {...register(`brands.brandList.${ind}.brandName`)} placeholder="Enter brand name..." type="text" className={`${errors.brands?.brandList?.[ind]?.brandName && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                                        {errors.brands?.brandList?.[ind]?.brandName && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.brands?.brandList?.[ind]?.brandName.message}</p>}
+                                        {errors.brands?.brandList?.[ind]?.brandName && <p className="text-main tracking-wide text-sm font-semibold">{errors.brands?.brandList?.[ind]?.brandName.message}</p>}
                                     </div>
                                     <div className='flex justify-evenly'>
                                         <div className="h-24  w-24 relative group border border-dashed border-[#E11D48] rounded overflow-hidden">
@@ -307,17 +367,17 @@ const EditOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioI
 
                                         {
                                             brandsFields.length && (
-                                                <button type='button' onClick={() => removeBrand(ind)} className='flex size-24 gap-2 items-center justify-center bg-[#E11D48] text-white p-1 px-2 rounded'><IconX className='size-4' /> {brandsFields.length !== 1 ? "Remove" : "Clear"}</button>
+                                                <button type='button' onClick={() => removeBrand(ind)} className='flex size-24 gap-2 items-center justify-center bg-main text-white p-1 px-2 rounded'><IconX className='size-4' /> {brandsFields.length !== 1 ? "Remove" : "Clear"}</button>
                                             )
                                         }
                                     </div>
                                 </div>
                             })}
 
-                            <button type='button' className='bg-[#E11D48] flex items-center justify-center cursor-pointer gap-2 my-3 p-2 px-4 rounded text-white' onClick={() => brandsAppend({ uniqueId: "", brandName: "", image: { publicId: "", url: "" } })}>
+                            <button type='button' className='bg-main flex items-center justify-center cursor-pointer gap-2 my-3 p-2 px-4 rounded text-white' onClick={() => brandsAppend({ uniqueId: "", brandName: "", image: { publicId: "", url: "" } })}>
                                 <IconPlus className='size-4.5' /> Add more
                             </button>
-                        </div>}
+                        </div>
                 </div>,
         },
         {
@@ -331,7 +391,7 @@ const EditOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioI
                             Bulk link Tagline
                         </Label>
                         <Input {...register("bulkLink.tagline")} placeholder="Enter bulk link tagline..." type="text" className={`${errors.bulkLink?.tagline && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                        {errors.bulkLink?.tagline && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.bulkLink.tagline.message}</p>}
+                        {errors.bulkLink?.tagline && <p className="text-main tracking-wide text-sm font-semibold">{errors.bulkLink.tagline.message}</p>}
                     </div>
                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2'>
                         {linkFields?.map((_, ind) => {
@@ -341,39 +401,51 @@ const EditOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioI
                                         Link name
                                     </Label>
                                     <Input {...register(`bulkLink.bulkLinkList.${ind}.linkName`)} placeholder="Enter brand name..." type="text" className={`${errors.bulkLink?.bulkLinkList?.[ind]?.linkName && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                                    {errors.bulkLink?.bulkLinkList?.[ind]?.linkName && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.bulkLink?.bulkLinkList?.[ind]?.linkName.message}</p>}
+                                    {errors.bulkLink?.bulkLinkList?.[ind]?.linkName && <p className="text-main tracking-wide text-sm font-semibold">{errors.bulkLink?.bulkLinkList?.[ind]?.linkName.message}</p>}
                                 </div>
                                 <div>
                                     <Label htmlFor={`bulkLink.${ind}.link`} className="text-neutral-300 ">
                                         Link
                                     </Label>
                                     <Input {...register(`bulkLink.bulkLinkList.${ind}.link`)} placeholder="Enter link ..." type="text" className={`${errors.bulkLink?.bulkLinkList?.[ind]?.link && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                                    {errors.bulkLink?.bulkLinkList?.[ind]?.link && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.bulkLink?.bulkLinkList?.[ind]?.link.message}</p>}
+                                    {errors.bulkLink?.bulkLinkList?.[ind]?.link && <p className="text-main tracking-wide text-sm font-semibold">{errors.bulkLink?.bulkLinkList?.[ind]?.link.message}</p>}
                                 </div>
                                 <div className='flex gap-2 mt-3 justify-evenly'>
 
-                                    <div className='size-9 px-5 border border-[#E11D48] flex items-center justify-center rounded bg-[#010101]'>
-                                        {ind + 1}
+                                       <div className="size-20 min-w-20 relative group border border-dashed border-[#E11D48] rounded overflow-hidden">
+
+                                        <input
+                                            type="file"
+                                            onChange={(e) => handleBulkLinkFileChanges(e, ind)}
+                                            name='imageImage'
+                                            className="absolute inset-0 z-10 w-full h-full opacity-0 cursor-pointer"
+                                        />
+                                        {getValues(`bulkLink.bulkLinkList.${ind}.image.url`) ? (
+                                            <img
+                                                src={getValues(`bulkLink.bulkLinkList.${ind}.image.url`)}
+                                                alt="Preview"
+                                                className="object-contain w-full h-full"
+                                            />
+                                        ) : (
+                                            <div className="flex items-center justify-center w-full h-full bg-neutral-950">
+                                                <p className="text-center text-gray-400">Select image</p>
+                                            </div>
+                                        )}
+                                        <div className="absolute inset-0 items-center justify-center hidden transition-all duration-300 bg-black/80 group-hover:flex">
+                                            <IconCamera className="text-5xl text-white" />
+                                        </div>
+                                        <label htmlFor="image" className="absolute inset-0 cursor-pointer"></label>
                                     </div>
-                                    {
+                                      {
                                         linkFields.length && (
-                                            <button type='button'
-                                                onClick={() => {
-                                                    if (linkFields.length === 1) {
-                                                        setValue(`bulkLink.bulkLinkList.${ind}`, { link: "", linkName: "" });
-                                                    } else {
-                                                        linkRemove(ind);
-                                                    }
-                                                }}
-                                                className='flex w-full gap-2 items-center justify-center bg-[#E11D48] text-white px-2 rounded'><IconX className='size-4' /> {linkFields.length !== 1 ? "Remove" : "Clear"}
-                                            </button>
+                                            <button type='button' onClick={() => removeBulkLink(ind)} className='flex h-20 w-full gap-2 items-center justify-center bg-main text-white p-1 px-2 rounded'><IconX className='size-4' /> {linkFields.length !== 1 ? "Remove" : "Clear"}</button>
                                         )
                                     }
                                 </div>
                             </div>
                         })}
 
-                        <button type='button' className='bg-[#E11D48] flex items-center justify-center cursor-pointer gap-2 my-3 p-2 px-4 rounded text-white' onClick={() => linkAppend({ linkName: "", link: "" })}>
+                        <button type='button' className='bg-main flex items-center justify-center cursor-pointer gap-2 my-3 p-2 px-4 rounded text-white' onClick={() => linkAppend({ linkName: "", link: "" })}>
                             <IconPlus className='size-4.5' /> Add more
                         </button>
                     </div>
@@ -390,9 +462,9 @@ const EditOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioI
                             Service Tagline
                         </Label>
                         <Input {...register("services.tagline")} placeholder="Enter service tagline..." type="text" className={`${errors.services?.tagline && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                        {errors.services?.tagline && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.services?.tagline.message}</p>}
+                        {errors.services?.tagline && <p className="text-main tracking-wide text-sm font-semibold">{errors.services?.tagline.message}</p>}
                     </div>
-                    <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2'>
+                    <div className='grid grid-cols-1 gap-x-6 gap-y-2'>
                         {serviceFields?.map((_, ind) => {
                             return <div className='space-y-2  p-2 my-3 rounded bg-[#ff17a21b] border border-rose-800' key={ind}>
                                 <div>
@@ -400,7 +472,7 @@ const EditOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioI
                                         Service title
                                     </Label>
                                     <Input {...register(`services.serviceList.${ind}.title`)} placeholder="Enter service name..." type="text" className={`${errors.services?.serviceList?.[ind]?.title && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                                    {errors.services?.serviceList?.[ind]?.title && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.services?.serviceList?.[ind]?.title.message}</p>}
+                                    {errors.services?.serviceList?.[ind]?.title && <p className="text-main tracking-wide text-sm font-semibold">{errors.services?.serviceList?.[ind]?.title.message}</p>}
                                 </div>
                                 <div>
                                     <Label htmlFor={`services.serviceList.${ind}.detail`} className="text-neutral-300 ">
@@ -413,7 +485,7 @@ const EditOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioI
                                             trigger(`services.serviceList.${ind}.detail`);
                                         }}
                                     />
-                                    {errors.services?.serviceList?.[ind]?.detail && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.services?.serviceList?.[ind]?.detail.message}</p>}
+                                    {errors.services?.serviceList?.[ind]?.detail && <p className="text-main tracking-wide text-sm font-semibold">{errors.services?.serviceList?.[ind]?.detail.message}</p>}
                                 </div>
                                 <div className='flex justify-evenly'>
                                     <div className="h-24  w-24 relative group border border-dashed border-[#E11D48] rounded overflow-hidden">
@@ -443,14 +515,14 @@ const EditOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioI
 
                                     {
                                         brandsFields.length && (
-                                            <button type='button' onClick={() => removeService(ind)} className='flex size-24 gap-2 items-center justify-center bg-[#E11D48] text-white p-1 px-2 rounded'><IconX className='size-4' /> {serviceFields.length !== 1 ? "Remove" : "Clear"}</button>
+                                            <button type='button' onClick={() => removeService(ind)} className='flex size-24 gap-2 items-center justify-center bg-main text-white p-1 px-2 rounded'><IconX className='size-4' /> {serviceFields.length !== 1 ? "Remove" : "Clear"}</button>
                                         )
                                     }
                                 </div>
                             </div>
                         })}
 
-                        <button type='button' className='bg-[#E11D48] flex items-center justify-center cursor-pointer gap-2 my-3 p-2 px-4 rounded text-white' onClick={() => serviceAppend({ uniqueId: "", title: "", image: { publicId: "", url: "" }, detail: "" })}>
+                        <button type='button' className='bg-main flex items-center justify-center cursor-pointer gap-2 my-3 p-2 px-4 rounded text-white' onClick={() => serviceAppend({ uniqueId: "", title: "", image: { publicId: "", url: "" }, detail: "" })}>
                             <IconPlus className='size-4.5' /> Add more
                         </button>
                     </div>
@@ -467,9 +539,9 @@ const EditOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioI
                             Product Tagline
                         </Label>
                         <Input {...register("products.tagline")} placeholder="Enter service tagline..." type="text" className={`${errors.products?.tagline && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                        {errors.products?.tagline && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.products?.tagline.message}</p>}
+                        {errors.products?.tagline && <p className="text-main tracking-wide text-sm font-semibold">{errors.products?.tagline.message}</p>}
                     </div>
-                    <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2'>
+                    <div className='grid grid-cols-1 gap-x-6 gap-y-2'>
                         {productsFields?.map((_, ind) => {
                             return <div className='space-y-2  p-2 my-3 rounded bg-[#ff17a21b] border border-rose-800' key={ind}>
                                 <div>
@@ -477,7 +549,7 @@ const EditOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioI
                                         Product title
                                     </Label>
                                     <Input {...register(`products.productList.${ind}.title`)} placeholder="Enter service name..." type="text" className={`${errors.products?.productList?.[ind]?.title && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                                    {errors.products?.productList?.[ind]?.title && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.products?.productList?.[ind]?.title.message}</p>}
+                                    {errors.products?.productList?.[ind]?.title && <p className="text-main tracking-wide text-sm font-semibold">{errors.products?.productList?.[ind]?.title.message}</p>}
                                 </div>
                                 <div>
                                     <Label htmlFor={`products.productList.${ind}.detail`} className="text-neutral-300 ">
@@ -490,7 +562,7 @@ const EditOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioI
                                             trigger(`products.productList.${ind}.detail`);
                                         }}
                                     />
-                                    {errors.products?.productList?.[ind]?.detail && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.products?.productList?.[ind]?.detail.message}</p>}
+                                    {errors.products?.productList?.[ind]?.detail && <p className="text-main tracking-wide text-sm font-semibold">{errors.products?.productList?.[ind]?.detail.message}</p>}
                                 </div>
                                 <div className='flex justify-evenly'>
                                     <div className="h-24  w-24 relative group border border-dashed border-[#E11D48] rounded overflow-hidden">
@@ -520,14 +592,14 @@ const EditOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioI
 
                                     {
                                         brandsFields.length && (
-                                            <button type='button' onClick={() => removeProducts(ind)} className='flex size-24 gap-2 items-center justify-center bg-[#E11D48] text-white p-1 px-2 rounded'><IconX className='size-4' /> {productsFields.length !== 1 ? "Remove" : "Clear"}</button>
+                                            <button type='button' onClick={() => removeProducts(ind)} className='flex size-24 gap-2 items-center justify-center bg-main text-white p-1 px-2 rounded'><IconX className='size-4' /> {productsFields.length !== 1 ? "Remove" : "Clear"}</button>
                                         )
                                     }
                                 </div>
                             </div>
                         })}
 
-                        <button type='button' className='bg-[#E11D48] flex items-center justify-center cursor-pointer gap-2 my-3 p-2 px-4 rounded text-white' onClick={() => productsAppend({ uniqueId: "", title: "", image: { publicId: "", url: "" }, detail: "" })}>
+                        <button type='button' className='bg-main flex items-center justify-center cursor-pointer gap-2 my-3 p-2 px-4 rounded text-white' onClick={() => productsAppend({ uniqueId: "", title: "", image: { publicId: "", url: "" }, detail: "" })}>
                             <IconPlus className='size-4.5' /> Add more
                         </button>
                     </div>
@@ -537,9 +609,9 @@ const EditOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioI
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <Accordion type="single" className="w-full" defaultValue="1">
+            <Accordion type="single" className="w-full" value={openedItem} defaultValue="1">
                 {items.map((item) => (
-                    <AccordionItem value={item.id} key={item.id} className="py-2">
+                    <AccordionItem onClick={()=>setOpenedItem(item?.id)} value={item.id} key={item.id} className="py-2">
                         <AccordionTrigger className="py-2 text-[15px] leading-6 hover:no-underline">
                             <span className="flex items-center gap-3">
                                 <item.icon
@@ -571,7 +643,7 @@ const EditOthersDetail = ({ currentStep, stepsLength, setCurrentStep, portfolioI
                 </button>
                 <button
                     type='submit'
-                    className="bg-[#E11D48] cursor-pointer text-white flex items-center gap-3 py-1.5 text-sm px-4 rounded"
+                    className="bg-main cursor-pointer text-white flex items-center gap-3 py-1.5 text-sm px-4 rounded"
                     disabled={isSubmitting || currentStep > stepsLength}
                 >
                     Next   {

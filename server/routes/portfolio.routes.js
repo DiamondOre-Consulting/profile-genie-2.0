@@ -42,12 +42,14 @@ portfolioRouter.route('/others/:id', verifyJWT)
     .post(upload.fields([
         { name: "brands", maxCount: 30 },
         { name: "services", maxCount: 30 },
-        { name: "products", maxCount: 30 }]),
+        { name: "products", maxCount: 30 },
+        { name: "bulkLink", maxCount: 30 }]),
         createPortfolioDetail)
     .put(upload.fields([
         { name: "brands", maxCount: 30 },
         { name: "services", maxCount: 30 },
-        { name: "products", maxCount: 30 }]),
+        { name: "products", maxCount: 30 },
+        { name: "bulkLink", maxCount: 30 }]),
         updatePortfolioDetail)
 
 portfolioRouter.route('/contact/:id', verifyJWT)

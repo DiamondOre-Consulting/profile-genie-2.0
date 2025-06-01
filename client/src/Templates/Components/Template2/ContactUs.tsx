@@ -32,13 +32,13 @@ const ContactUs = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
         <div className="mt-10 mb-10">
           <dl className="grid grid-cols-1 gap-10 md:grid-cols-3">
             {/* Address Section */}
+              {portfolioData?.contactData?.address && portfolioData.contactData.address.length > 0 && (
             <div className="flex items-start">
               <div className="flex-shrink-0">
                 <div className="flex items-center justify-center w-12 h-12 text-white bg-[#0891B2] rounded-lg">
                   <MapPin className="w-6 h-6" />
                 </div>
               </div>
-              {portfolioData?.contactData?.address && portfolioData.contactData.address.length > 0 && (
                 <div className="ml-4">
                   <dt className="text-lg font-medium leading-6 text-gray-900">
                     Addresses
@@ -58,17 +58,17 @@ const ContactUs = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
                     ))}
                   </dd>
                 </div>
-              )}
             </div>
+              )}
 
             {/* Phone Number Section */}
+              {portfolioData?.contactData?.phoneList && portfolioData.contactData.phoneList[0].phone && (
             <div className="flex items-start">
               <div className="flex-shrink-0">
                 <div className="flex items-center justify-center w-12 h-12 text-white bg-[#0891B2] rounded-lg">
                   <Phone className="w-6 h-6" />
                 </div>
               </div>
-              {portfolioData?.contactData?.phoneList && portfolioData.contactData.phoneList.length > 0 && (
                 <div className="ml-4">
                   <dt className="text-lg font-medium leading-6 text-gray-900">
                     Phone Numbers
@@ -86,32 +86,37 @@ const ContactUs = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
                     ))}
                   </dd>
                 </div>
-              )}
             </div>
+              )}
 
             {/* Email Section */}
+              {portfolioData?.contactData?.emailList &&portfolioData?.contactData?.emailList[0].email && (
             <div className="flex items-start">
               <div className="flex-shrink-0">
                 <div className="flex items-center justify-center w-12 h-12 text-white bg-[#0891B2] rounded-lg">
                   <Mail className="w-6 h-6" />
                 </div>
               </div>
-              {portfolioData?.email && (
                 <div className="ml-4">
                   <dt className="text-lg font-medium leading-6 text-gray-900">
                     Email
                   </dt>
                   <dd className="mt-2">
-                    <a
-                      href={`mailto:${portfolioData.email}`}
-                      className="text-base text-gray-600 hover:text-[#0891B2] transition-colors"
-                    >
-                      {portfolioData.email}
-                    </a>
+                  {portfolioData?.contactData?.emailList.map((emailItem, index) => (
+                      <div key={index}>
+                        <a
+                        target="_blank"
+                          href={`mailto:"${emailItem?.email}"`}
+                          className="text-base text-gray-600 hover:text-[#0891B2] transition-colors"
+                        >
+                          {emailItem?.email}
+                        </a>
+                      </div>
+                    ))}
                   </dd>
                 </div>
-              )}
             </div>
+              )}
           </dl>
         </div>
         <div className="flex flex-col items-center justify-center w-full my-4">
@@ -149,7 +154,7 @@ const ContactUs = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
               <a
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-[#0891B2] p-2 px-6 text-white rounded"
+                className="bg-[#0891B2] p-2 px-4 sm:px-6 text-white rounded"
                 href={`https://wa.me/${whatsAppNumber}?text=${encodedMessage}`}
               >
                 Send
@@ -175,7 +180,7 @@ const ContactUs = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
               className="relative w-full h-12 p-2 px-3 sm:px-10 text-[0.9rem] overflow-hidden font-semibold text-white bg-[#0891B2] border-none rounded-full cursor-pointer group"
             >
               <div className='flex items-center justify-center gap-2 sm:gap-4'>
-                <FaDownload className='text-[1.1rem]' /> Download Brochure
+                <FaDownload className='text-[1.1rem]' /> {portfolioData?.contactData?.brochureLink?.tagline || "Download Brochure"}
               </div>
             </button>
           )}

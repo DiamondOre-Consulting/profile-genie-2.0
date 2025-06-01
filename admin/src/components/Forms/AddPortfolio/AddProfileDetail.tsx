@@ -9,7 +9,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Switch } from '@/components/ui/switch'
 import { useAddPortfolioMutation } from '@/Redux/API/PortfolioApi'
 import { toast } from 'sonner'
-import { Textarea } from '@/components/ui/textarea'
 import PhoneInput from 'react-phone-input-2'
 import {
     Popover,
@@ -99,7 +98,7 @@ const AddProfileDetail = ({ setCurrentStep, template, currentStep, stepsLength, 
                 </div>
                 <div className="space-y-1">
                     <Label htmlFor={"paidDate"} className="text-neutral-300 ">
-                        Paid Date <span className="text-[#ff3f69]">*</span>
+                        Paid Date <span className="text-main">*</span>
                     </Label>
                     <Popover open={open} onOpenChange={setOpen}>
                         <PopoverTrigger asChild >
@@ -127,27 +126,27 @@ const AddProfileDetail = ({ setCurrentStep, template, currentStep, stepsLength, 
                             />
                         </PopoverContent>
                     </Popover>
-                    {errors.paidDate && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.paidDate.message}</p>}
+                    {errors.paidDate && <p className="text-sm font-semibold tracking-wide text-main">{errors.paidDate.message}</p>}
 
                 </div>
                 <div className="space-y-1">
                     <Label htmlFor={"fullName"} className="text-neutral-300 ">
-                        Your Name <span className="text-[#ff3f69]">*</span>
+                        Your Name <span className="text-main">*</span>
                     </Label>
                     <Input {...register("fullName")} placeholder="Enter full name..." type="text" className={`${errors.fullName && "border-[#E11D48] "} py-[0.45rem]  text-neutral-200`} />
-                    {errors.fullName && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.fullName.message}</p>}
+                    {errors.fullName && <p className="text-sm font-semibold tracking-wide text-main">{errors.fullName.message}</p>}
                 </div>
                 <div className="space-y-1">
                     <Label htmlFor={"userName"} className="text-neutral-300 ">
-                        Username <span className="text-[#ff3f69]">*</span>
+                        Username <span className="text-main">*</span>
                     </Label>
                     <Input {...register("userName")} placeholder="Enter username..." type="text" className={`${errors.userName && "border-[#E11D48] "} py-[0.45rem]  text-neutral-200`} />
-                    {errors.userName && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.userName.message}</p>}
+                    {errors.userName && <p className="text-sm font-semibold tracking-wide text-main">{errors.userName.message}</p>}
                 </div>
 
                 <div className="space-y-1">
                     <Label htmlFor={"phoneNumber"} className="text-neutral-300 ">
-                        Phone Number <span className="text-[#ff3f69]">*</span>
+                        Phone Number <span className="text-main">*</span>
                     </Label>
                     <Controller
                         name="phoneNumber"
@@ -184,54 +183,63 @@ const AddProfileDetail = ({ setCurrentStep, template, currentStep, stepsLength, 
                         )}
                     />
 
-                    {errors.phoneNumber && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.phoneNumber.message}</p>}
+                    {errors.phoneNumber && <p className="text-sm font-semibold tracking-wide text-main">{errors.phoneNumber.message}</p>}
                 </div>
 
                 <div className="space-y-1">
                     <Label htmlFor={"email"} className="text-neutral-300 ">
-                        Your Email <span className="text-[#ff3f69]">*</span>
+                        Your Email <span className="text-main">*</span>
                     </Label>
                     <Input {...register("email")} placeholder="Enter email..." type="email" className={`${errors.email && "border-[#E11D48] "} py-[0.45rem]  text-neutral-200`} />
-                    {errors.email && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.email.message}</p>}
+                    {errors.email && <p className="text-sm font-semibold tracking-wide text-main">{errors.email.message}</p>}
                 </div>
-                <div>
+                {/* <div>
                     <Label htmlFor={"tagline"} className="text-neutral-300 ">
-                        Tagline/title <span className="text-[#ff3f69]">*</span>
+                        Tagline/title <span className="text-main">*</span>
                     </Label>
                     <Input {...register("tagline")} placeholder="Enter tagline..." type="text" className={`${errors.tagline && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                    {errors.tagline && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.tagline.message}</p>}
-                </div>
-                <div>
-                    <Label htmlFor={"about.head"} className="text-neutral-300 ">
-                        About Heading <span className="text-[#ff3f69]">*</span>
-                    </Label>
-                    <Input {...register("about.head")} placeholder="Enter heading..." type="text" className={`${errors.about?.head && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                    {errors.about?.head && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.about?.head.message}</p>}
-                </div>
+                    {errors.tagline && <p className="text-sm font-semibold tracking-wide text-main">{errors.tagline.message}</p>}
+                </div> */}
+               
             </div>
 
             <div className='mt-3'>
                 <div className="mt-3">
                     <Label
-                        htmlFor="shortDescription"
+                        htmlFor={"tagline"}
                         className="text-neutral-300 "
                     >
-                        Short Description (20-200 Characters) <span className="text-[#ff3f69]">*</span>
+                       Tagline <span className="text-main">*</span>
                     </Label>
-                    <Textarea {...register("shortDescription")} placeholder="Enter short description..."
-                        className={`${errors.shortDescription && "border-[#E11D48] "} py-[0.45rem]  text-neutral-200`} />
-                    {errors.shortDescription && (
-                        <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">
-                            {errors.shortDescription.message}
+                    <TextEditor
+                    height={280}
+                            value={getValues("tagline")}
+                            handleBlur={(value) => {
+                                setValue("tagline", value, { shouldValidate: true });
+                                trigger("tagline");
+                            }}
+                        />
+
+                    {errors.tagline && (
+                        <p className="text-sm font-semibold tracking-wide text-main">
+                            {errors.tagline.message}
                         </p>
                     )}
+                </div>
+
+                 <div>
+                    <Label htmlFor={"about.head"} className="text-neutral-300 ">
+                        About Heading <span className="text-main">*</span>
+                    </Label>
+                    <Input {...register("about.head")} placeholder="Enter heading..." type="text" className={`${errors.about?.head && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
+                    {errors.about?.head && <p className="text-sm font-semibold tracking-wide text-main">{errors.about?.head.message}</p>}
                 </div>
                 <div className="mt-3">
                     <Label
                         htmlFor={"about.body"}
                         className="text-neutral-300 "
                     >
-                        About Body <span className="text-[#ff3f69]">*</span>
+                        About Body <span className="text-main">*</span>
                     </Label>
                     <div
                         className={`${errors.about?.body ? "border-[#E11D48] border" : ""
@@ -246,7 +254,7 @@ const AddProfileDetail = ({ setCurrentStep, template, currentStep, stepsLength, 
                         />
                     </div>
                     {errors.about?.body && (
-                        <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">
+                        <p className="text-sm font-semibold tracking-wide text-main">
                             {errors.about?.body.message}
                         </p>
                     )}
@@ -256,7 +264,7 @@ const AddProfileDetail = ({ setCurrentStep, template, currentStep, stepsLength, 
             <div className='flex flex-col items-center justify-center gap-3 my-4 mt-5 sm:flex-row'>
                 <div className='flex items-center justify-between gap-3'>
                     <div className="size-30 relative group border border-dashed border-[#E11D48] rounded overflow-hidden">
-                        <h1 className='text-white relative z-10 uppercase text-[0.8rem] bg-[#E11D48] font-semibold text-center py-0.5'>Image</h1>
+                        <h1 className='text-white relative z-10 uppercase text-[0.8rem] bg-main font-semibold text-center py-0.5'>Image</h1>
                         <input
                             type="file"
                             onChange={(e) => handleFileChange("image", e.target.files?.[0])}
@@ -280,7 +288,7 @@ const AddProfileDetail = ({ setCurrentStep, template, currentStep, stepsLength, 
                         <label htmlFor="image" className="absolute inset-0 cursor-pointer"></label>
                     </div>
                     <div className="size-30 hidden relative group border border-dashed border-[#E11D48] rounded overflow-hidden">
-                        <h1 className='text-white relative z-10 uppercase text-[0.8rem] bg-[#E11D48] font-semibold text-center py-0.5'>Logo</h1>
+                        <h1 className='text-white relative z-10 uppercase text-[0.8rem] bg-main font-semibold text-center py-0.5'>Logo</h1>
                         <input
                             type="file"
                             onChange={(e) => handleFileChange("logo", e.target.files?.[0])}
@@ -305,7 +313,7 @@ const AddProfileDetail = ({ setCurrentStep, template, currentStep, stepsLength, 
                     </div>
                 </div>
                 <div className="h-30 hidden w-64 relative group border border-dashed border-[#E11D48] rounded overflow-hidden">
-                    <h1 className='text-white relative z-10 uppercase text-[0.8rem] bg-[#E11D48] font-semibold text-center py-0.5'>Background</h1>
+                    <h1 className='text-white relative z-10 uppercase text-[0.8rem] bg-main font-semibold text-center py-0.5'>Background</h1>
                     <input
                         type="file"
                         onChange={(e) => handleFileChange("backgroundImage", e.target.files?.[0])}
@@ -342,7 +350,7 @@ const AddProfileDetail = ({ setCurrentStep, template, currentStep, stepsLength, 
                 </button>
                 <button
                     type='submit'
-                    className="bg-[#E11D48] cursor-pointer text-white flex items-center gap-3 py-1.5 text-sm px-4 rounded"
+                    className="bg-main cursor-pointer text-white flex items-center gap-3 py-1.5 text-sm px-4 rounded"
                     disabled={isSubmitting || currentStep > stepsLength}
                 >
                     Next   {

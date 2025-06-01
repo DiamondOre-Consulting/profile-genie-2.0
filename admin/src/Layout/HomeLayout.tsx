@@ -72,7 +72,7 @@ export function HomeLayout({ children }: { children: ReactNode }) {
                     tabs.map((item) => {
                         return (<div
                             className={`flex items-center cursor-pointer w-full overflow-hidden space-y-2  space-x-2 h-[2.3rem]  rounded transition-all duration-300 
-                ${pathname === item.link ? "bg-[#E11D48] text-white" : "text-gray-300 hover:bg-gray-700"} 
+                ${pathname === item.link ? "bg-main text-white" : "text-gray-300 hover:bg-gray-700"} 
                 ${collapsed ? "justify-center " : " items-center px-2"}`}
                             key={item.label}
                             onClick={(event) => {

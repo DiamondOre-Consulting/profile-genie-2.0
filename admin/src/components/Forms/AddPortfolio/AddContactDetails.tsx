@@ -1,6 +1,6 @@
 import { addContactDetailSchema } from '@/validations/PortfolioValidation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import React, { useId, useState } from 'react'
+import React, { useEffect, useId, useState } from 'react'
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import {
@@ -32,6 +32,7 @@ interface apiRes {
 
 const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolioId }: { currentStep: number, stepsLength: number, setCurrentStep: React.Dispatch<React.SetStateAction<number>>, portfolioId: string }) => {
 
+    const [openedItem, setOpenedItem] = useState<string>("1")
     const [addContactDetails] = useAddContactDetailsMutation()
 
     const { register, handleSubmit, getValues, setValue, control, watch, formState: { errors, isSubmitting }, trigger } = useForm<profileContactDetail>({
@@ -135,8 +136,7 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
         name: 'address'
     })
 
-    console.log(1)
-    console.log(errors)
+ 
     const onSubmit = async (data: profileContactDetail) => {
         console.log(2)
 
@@ -155,6 +155,16 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
         }
     }
 
+    useEffect(()=>{
+     if(errors?.testimonial){
+            setOpenedItem("1")
+        }else if(errors?.social){
+            setOpenedItem("2")
+        }else if(errors?.mapLink || errors?.emailList || errors?.phoneList || errors?.address){
+            setOpenedItem("3")
+        }
+       },[errors])
+
     const items = [
         {
             id: "1",
@@ -167,10 +177,10 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                             Testimonial Tagline
                         </Label>
                         <Input {...register("testimonial.tagline")} placeholder="Enter tagline..." type="text" className={`${errors.testimonial?.tagline && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                        {errors.testimonial?.tagline && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.testimonial.tagline.message}</p>}
+                        {errors.testimonial?.tagline && <p className="text-sm font-semibold tracking-wide text-main">{errors.testimonial.tagline.message}</p>}
                     </div>
                     {watch("testimonial.tagline") &&
-                        <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2'>
+                        <div className='grid grid-cols-1 gap-x-6 gap-y-2'>
                             {testimonialFields?.map((_, ind) => {
                                 return <div className='space-y-2  p-2 my-3 rounded bg-[#ff17a21b] border border-rose-800' key={ind}>
                                     <div>
@@ -178,7 +188,7 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                                             Reviewer name
                                         </Label>
                                         <Input {...register(`testimonial.testimonialList.${ind}.name`)} placeholder="Enter brand name..." type="text" className={`${errors.testimonial?.testimonialList?.[ind]?.name && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                                        {errors.testimonial?.testimonialList?.[ind]?.name && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.testimonial.testimonialList?.[ind]?.name.message}</p>}
+                                        {errors.testimonial?.testimonialList?.[ind]?.name && <p className="text-sm font-semibold tracking-wide text-main">{errors.testimonial.testimonialList?.[ind]?.name.message}</p>}
                                     </div>
 
                                     <div>
@@ -193,7 +203,7 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                                             }}
                                         />
                                         <Textarea {...register(`testimonial.testimonialList.${ind}.detail`)} placeholder="Enter review detail..." className={`${errors.testimonial?.testimonialList?.[ind]?.detail && "border-[#E11D48] "} py-[0.45rem] h-[5rem] text-neutral-200`} />
-                                        {errors.testimonial?.testimonialList?.[ind]?.detail && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.testimonial?.testimonialList?.[ind]?.detail.message}</p>}
+                                        {errors.testimonial?.testimonialList?.[ind]?.detail && <p className="text-sm font-semibold tracking-wide text-main">{errors.testimonial?.testimonialList?.[ind]?.detail.message}</p>}
                                     </div>
                                     <div className='flex items-center justify-between'>
                                         <fieldset className="space-y-1">
@@ -221,14 +231,14 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                                         </fieldset>
                                         {
                                             testimonialFields.length && (
-                                                <button type='button' onClick={() => removeTestimonial(ind)} className='flex size-8 gap-2 items-center justify-center bg-[#E11D48] text-white p-1 px-2 rounded'><IconX className='size-4' /> {testimonialFields.length !== 1 ? "" : ""}</button>
+                                                <button type='button' onClick={() => removeTestimonial(ind)} className='flex items-center justify-center gap-2 p-1 px-2 text-white rounded size-8 bg-main'><IconX className='size-4' /> {testimonialFields.length !== 1 ? "" : ""}</button>
                                             )
                                         }
                                     </div>
                                 </div>
                             })}
 
-                            <button type='button' className='bg-[#E11D48] flex items-center justify-center cursor-pointer gap-2 my-3 p-2 px-4 rounded text-white' onClick={() => testimonialAppend({ uniqueId: "", name: "", detail: "", star: 0 })}>
+                            <button type='button' className='flex items-center justify-center gap-2 p-2 px-4 my-3 text-white rounded cursor-pointer bg-main' onClick={() => testimonialAppend({ uniqueId: "", name: "", detail: "", star: 0 })}>
                                 <IconPlus className='size-4.5' /> Add more
                             </button>
                         </div>
@@ -247,42 +257,42 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                                 Facebook
                             </Label>
                             <Input {...register("social.facebook")} placeholder="Enter bulk link tagline..." type="text" className={`${errors.social?.facebook && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                            {errors.social?.facebook && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.social?.facebook.message}</p>}
+                            {errors.social?.facebook && <p className="text-sm font-semibold tracking-wide text-main">{errors.social?.facebook.message}</p>}
                         </div>
                         <div>
                             <Label htmlFor={"social.instagram"} className="text-neutral-300 ">
                                 Instagram
                             </Label>
                             <Input {...register("social.instagram")} placeholder="Enter bulk link tagline..." type="text" className={`${errors.social?.instagram && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                            {errors.social?.instagram && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.social?.instagram.message}</p>}
+                            {errors.social?.instagram && <p className="text-sm font-semibold tracking-wide text-main">{errors.social?.instagram.message}</p>}
                         </div>
                         <div>
                             <Label htmlFor={"social.linkedin"} className="text-neutral-300 ">
                                 Linkedin
                             </Label>
                             <Input {...register("social.linkedin")} placeholder="Enter bulk link tagline..." type="text" className={`${errors.social?.linkedin && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                            {errors.social?.linkedin && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.social?.linkedin.message}</p>}
+                            {errors.social?.linkedin && <p className="text-sm font-semibold tracking-wide text-main">{errors.social?.linkedin.message}</p>}
                         </div>
                         <div>
                             <Label htmlFor={"social.twitter"} className="text-neutral-300 ">
                                 X - (Twitter)
                             </Label>
                             <Input {...register("social.twitter")} placeholder="Enter bulk link tagline..." type="text" className={`${errors.social?.twitter && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                            {errors.social?.twitter && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.social?.twitter.message}</p>}
+                            {errors.social?.twitter && <p className="text-sm font-semibold tracking-wide text-main">{errors.social?.twitter.message}</p>}
                         </div>
                         <div>
                             <Label htmlFor={"social.youtube"} className="text-neutral-300 ">
                                 Youtube
                             </Label>
                             <Input {...register("social.youtube")} placeholder="Enter bulk link tagline..." type="text" className={`${errors.social?.youtube && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                            {errors.social?.youtube && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.social?.youtube.message}</p>}
+                            {errors.social?.youtube && <p className="text-sm font-semibold tracking-wide text-main">{errors.social?.youtube.message}</p>}
                         </div>
                         <div>
                             <Label htmlFor={"social.googleLink"} className="text-neutral-300 ">
                                 Google Link
                             </Label>
                             <Input {...register("social.googleLink")} placeholder="Enter bulk link tagline..." type="text" className={`${errors.social?.googleLink && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                            {errors.social?.googleLink && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.social?.googleLink.message}</p>}
+                            {errors.social?.googleLink && <p className="text-sm font-semibold tracking-wide text-main">{errors.social?.googleLink.message}</p>}
                         </div>
                     </div>
                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2'>
@@ -319,7 +329,7 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                                             Link
                                         </Label>
                                         <Input {...register(`social.otherSocialList.${ind}.link`)} placeholder="Enter brand name..." type="text" className={`${errors.social?.otherSocialList?.[ind]?.link && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                                        {errors.social?.otherSocialList?.[ind]?.link && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.social?.otherSocialList?.[ind]?.link.message}</p>}
+                                        {errors.social?.otherSocialList?.[ind]?.link && <p className="text-sm font-semibold tracking-wide text-main">{errors.social?.otherSocialList?.[ind]?.link.message}</p>}
                                     </div>
 
                                 </div>
@@ -338,7 +348,7 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                                                         removeSocial(ind);
                                                     }
                                                 }}
-                                                className='flex w-full gap-2 items-center justify-center bg-[#E11D48] text-white px-2 rounded'><IconX className='size-4' /> {socialFields.length !== 1 ? "Remove" : "Clear"}
+                                                className='flex items-center justify-center w-full gap-2 px-2 text-white rounded bg-main'><IconX className='size-4' /> {socialFields.length !== 1 ? "Remove" : "Clear"}
                                             </button>
                                         )
                                     }
@@ -346,7 +356,7 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                             </div>
                         })}
 
-                        <button type='button' className='bg-[#E11D48] flex items-center justify-center cursor-pointer gap-2 my-3 p-2 px-4 rounded text-white' onClick={() => socialAppend({ uniqueId: "", link: "", img: { url: "", publicId: "" } })}>
+                        <button type='button' className='flex items-center justify-center gap-2 p-2 px-4 my-3 text-white rounded cursor-pointer bg-main' onClick={() => socialAppend({ uniqueId: "", link: "", img: { url: "", publicId: "" } })}>
                             <IconPlus className='size-4.5' /> Add more
                         </button>
                     </div>
@@ -360,20 +370,20 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                 <div>
                     <div>
                         <Label htmlFor={"serviceTagline"} className="text-neutral-300 ">
-                            Map Iframe link <span className="text-[#ff3f69]">*</span>
+                            Map Iframe link <span className="text-main">*</span>
                         </Label>
                         <Input {...register("mapLink")} placeholder="Enter service tagline..." type="text" className={`${errors.mapLink && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                        {errors.mapLink && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.mapLink.message}</p>}
+                        {errors.mapLink && <p className="text-sm font-semibold tracking-wide text-main">{errors.mapLink.message}</p>}
                     </div>
                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2'>
                         {emailFields?.map((_, ind) => {
                             return <div className='space-y-2  p-2 my-3 rounded bg-[#ff17a21b] border border-rose-800' key={ind}>
                                 <div>
                                     <Label htmlFor={`emailList.${ind}.email`} className="text-neutral-300 ">
-                                        Email <span className="text-[#ff3f69]">*</span>
+                                        Email <span className="text-main">*</span>
                                     </Label>
                                     <Input {...register(`emailList.${ind}.email`)} placeholder="Enter service name..." type="text" className={`${errors.emailList?.[ind]?.email && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                                    {errors.emailList?.[ind]?.email && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.emailList?.[ind]?.email.message}</p>}
+                                    {errors.emailList?.[ind]?.email && <p className="text-sm font-semibold tracking-wide text-main">{errors.emailList?.[ind]?.email.message}</p>}
                                 </div>
                                 <div className='flex gap-2 mt-3 justify-evenly'>
 
@@ -390,7 +400,7 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                                                         emailRemove(ind);
                                                     }
                                                 }}
-                                                className='flex w-full gap-2 items-center justify-center bg-[#E11D48] text-white px-2 rounded'><IconX className='size-4' /> {emailFields.length !== 1 ? "Remove" : "Clear"}
+                                                className='flex items-center justify-center w-full gap-2 px-2 text-white rounded bg-main'><IconX className='size-4' /> {emailFields.length !== 1 ? "Remove" : "Clear"}
                                             </button>
                                         )
                                     }
@@ -398,7 +408,7 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                             </div>
                         })}
 
-                        <button type='button' className='bg-[#E11D48] flex items-center justify-center cursor-pointer gap-2 my-3 p-2 px-4 rounded text-white' onClick={() => emailAppend({ email: "" })}>
+                        <button type='button' className='flex items-center justify-center gap-2 p-2 px-4 my-3 text-white rounded cursor-pointer bg-main' onClick={() => emailAppend({ email: "" })}>
                             <IconPlus className='size-4.5' /> Add more
                         </button>
                     </div>
@@ -407,7 +417,7 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                             return <div className='space-y-2  p-2 my-3 rounded bg-[#ff17a21b] border border-rose-800' key={ind}>
                                 <div>
                                     <Label htmlFor={`services.${ind}.serviceName`} className="text-neutral-300 ">
-                                        Phone Number <span className="text-[#ff3f69]">*</span>
+                                        Phone Number <span className="text-main">*</span>
                                     </Label>
 
                                     <Controller
@@ -448,7 +458,7 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                                             />
                                         )}
                                     />
-                                    {errors.phoneList?.[ind]?.phone && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.phoneList?.[ind]?.phone.message}</p>}
+                                    {errors.phoneList?.[ind]?.phone && <p className="text-sm font-semibold tracking-wide text-main">{errors.phoneList?.[ind]?.phone.message}</p>}
                                 </div>
                                 <div className='flex gap-2 mt-3 justify-evenly'>
 
@@ -465,7 +475,7 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                                                         phoneRemove(ind);
                                                     }
                                                 }}
-                                                className='flex w-full gap-2 items-center justify-center bg-[#E11D48] text-white px-2 rounded'><IconX className='size-4' /> {phoneFields.length !== 1 ? "Remove" : "Clear"}
+                                                className='flex items-center justify-center w-full gap-2 px-2 text-white rounded bg-main'><IconX className='size-4' /> {phoneFields.length !== 1 ? "Remove" : "Clear"}
                                             </button>
                                         )
                                     }
@@ -473,7 +483,7 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                             </div>
                         })}
 
-                        <button type='button' className='bg-[#E11D48] flex items-center justify-center cursor-pointer gap-2 my-3 p-2 px-4 rounded text-white' onClick={() => phoneAppend({ phone: 0 })}>
+                        <button type='button' className='flex items-center justify-center gap-2 p-2 px-4 my-3 text-white rounded cursor-pointer bg-main' onClick={() => phoneAppend({ phone: 0 })}>
                             <IconPlus className='size-4.5' /> Add more
                         </button>
                     </div>
@@ -485,14 +495,14 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                                         Address type
                                     </Label>
                                     <Input {...register(`address.${ind}.title`)} placeholder="Enter service name..." type="text" className={`${errors.address?.[ind]?.title && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                                    {errors.address?.[ind]?.title && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.address?.[ind]?.title.message}</p>}
+                                    {errors.address?.[ind]?.title && <p className="text-sm font-semibold tracking-wide text-main">{errors.address?.[ind]?.title.message}</p>}
                                 </div>
                                 <div>
                                     <Label htmlFor={`address.${ind}.detail`} className="text-neutral-300 ">
                                         Full address
                                     </Label>
                                     <Input {...register(`address.${ind}.detail`)} placeholder="Enter service name..." type="text" className={`${errors.address?.[ind]?.detail && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                                    {errors.address?.[ind]?.detail && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.address?.[ind]?.detail.message}</p>}
+                                    {errors.address?.[ind]?.detail && <p className="text-sm font-semibold tracking-wide text-main">{errors.address?.[ind]?.detail.message}</p>}
                                 </div>
                                 <div className='flex gap-2 mt-3 justify-evenly'>
 
@@ -509,7 +519,7 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                                                         addressRemove(ind);
                                                     }
                                                 }}
-                                                className='flex w-full gap-2 items-center justify-center bg-[#E11D48] text-white px-2 rounded'><IconX className='size-4' /> {addressFields.length !== 1 ? "Remove" : "Clear"}
+                                                className='flex items-center justify-center w-full gap-2 px-2 text-white rounded bg-main'><IconX className='size-4' /> {addressFields.length !== 1 ? "Remove" : "Clear"}
                                             </button>
                                         )
                                     }
@@ -517,7 +527,7 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                             </div>
                         })}
 
-                        <button type='button' className='bg-[#E11D48] flex items-center justify-center cursor-pointer gap-2 my-3 p-2 px-4 rounded text-white' onClick={() => addressAppend({ title: "", detail: "" })}>
+                        <button type='button' className='flex items-center justify-center gap-2 p-2 px-4 my-3 text-white rounded cursor-pointer bg-main' onClick={() => addressAppend({ title: "", detail: "" })}>
                             <IconPlus className='size-4.5' /> Add more
                         </button>
                     </div>
@@ -525,28 +535,28 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
 
                         <div>
                             <Label className="text-neutral-300 ">
-                                Brochure Tagline <span className="text-[#ff3f69]">*</span>
+                                Brochure Tagline <span className="text-main">*</span>
                             </Label>
                             <Input {...register("brochureLink.tagline")} placeholder="Enter service tagline..." type="text" className={`${errors?.brochureLink?.tagline && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                            {errors?.brochureLink?.tagline && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors?.brochureLink?.tagline?.message}</p>}
+                            {errors?.brochureLink?.tagline && <p className="text-sm font-semibold tracking-wide text-main">{errors?.brochureLink?.tagline?.message}</p>}
                         </div>
                         <div>
                             <Label className="text-neutral-300 ">
-                                Brochure Link <span className="text-[#ff3f69]">*</span>
+                                Brochure Link <span className="text-main">*</span>
                             </Label>
                             <Input {...register("brochureLink.link")} placeholder="Enter service tagline..." type="text" className={`${errors?.brochureLink?.link && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                            {errors?.brochureLink?.link && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors?.brochureLink?.link?.message}</p>}
+                            {errors?.brochureLink?.link && <p className="text-sm font-semibold tracking-wide text-main">{errors?.brochureLink?.link?.message}</p>}
                         </div>
                         <div>
                             <Label className="text-neutral-300 ">
-                                Contact VCF <span className="text-[#ff3f69]">*</span>
+                                Contact VCF <span className="text-main">*</span>
                             </Label>
                             <Input {...register("contactCSV")} placeholder="Enter contact VCF..." type="text" className={`${errors?.contactCSV && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                            {errors?.contactCSV && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors?.contactCSV.message}</p>}
+                            {errors?.contactCSV && <p className="text-sm font-semibold tracking-wide text-main">{errors?.contactCSV.message}</p>}
                         </div>
                         <div>
                             <Label className="text-neutral-300 ">
-                                Whatsapp No <span className="text-[#ff3f69]">*</span>
+                                Whatsapp No <span className="text-main">*</span>
                             </Label>
                             <Controller
                                 name="whatsappNo"
@@ -582,7 +592,7 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                                     />
                                 )}
                             />
-                            {errors?.whatsappNo && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors?.whatsappNo?.message}</p>}
+                            {errors?.whatsappNo && <p className="text-sm font-semibold tracking-wide text-main">{errors?.whatsappNo?.message}</p>}
                         </div>
                     </div>
                 </div>,
@@ -591,9 +601,9 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <Accordion type="single" className="w-full" defaultValue="1">
+            <Accordion type="single" className="w-full" value={openedItem} defaultValue="1">
                 {items.map((item) => (
-                    <AccordionItem value={item.id} key={item.id} className="py-2">
+                    <AccordionItem onClick={()=>setOpenedItem(item?.id)} value={item.id} key={item.id} className="py-2">
                         <AccordionTrigger className="py-2 text-[15px] leading-6 hover:no-underline">
                             <span className="flex items-center gap-3">
                                 <item.icon
@@ -624,7 +634,7 @@ const AddContactDetails = ({ currentStep, stepsLength, setCurrentStep, portfolio
                 </button>
                 <button
                     type='submit'
-                    className="bg-[#E11D48] cursor-pointer text-white flex items-center gap-3 py-1.5 text-sm px-4 rounded"
+                    className="bg-main cursor-pointer text-white flex items-center gap-3 py-1.5 text-sm px-4 rounded"
                     disabled={isSubmitting || currentStep > stepsLength}
                 >
                     Next   {

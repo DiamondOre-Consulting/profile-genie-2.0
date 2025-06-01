@@ -1,3 +1,11 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
+
+.text-main{
+    color: #ff3f69;
+}
+
+.bg-main{
+    background-color: #E11D48;
+}

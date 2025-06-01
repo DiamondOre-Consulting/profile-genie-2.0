@@ -213,22 +213,22 @@ const EditCatalogueProducts = ({ setCurrentStep, userName, ownerId, currentStep 
                             </div>
                             <div className="space-y-1">
                                 <Label htmlFor={"HSNCode"} className="text-neutral-300 ">
-                                    HSN Code <span className="text-[#ff3f69]">*</span>
+                                    HSN Code <span className="text-main">*</span>
                                 </Label>
                                 <Input {...register("HSNCode")} placeholder="Enter full name..." type="text" className={`${errors.HSNCode && "border-[#E11D48] "} py-[0.45rem]  text-neutral-200`} />
-                                {errors.HSNCode && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.HSNCode.message}</p>}
+                                {errors.HSNCode && <p className="text-main tracking-wide text-sm font-semibold">{errors.HSNCode.message}</p>}
                             </div>
                             <div className='grid grid-cols-2 gap-x-1'>
                                 <div className="space-y-1">
                                     <Label htmlFor={"moq"} className="text-neutral-300 ">
-                                        MOQ <span className="text-[#ff3f69]">*</span>
+                                        MOQ <span className="text-main">*</span>
                                     </Label>
                                     <Input {...register("moq")} placeholder="Enter moq..." type="text" className={`${errors.moq && "border-[#E11D48] "} py-[0.45rem]  text-neutral-200`} />
-                                    {errors.moq && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.moq.message}</p>}
+                                    {errors.moq && <p className="text-main tracking-wide text-sm font-semibold">{errors.moq.message}</p>}
                                 </div>
                                 <div className="space-y-1">
                                     <Label htmlFor={"price"} className="text-neutral-300 ">
-                                        Price <span className="text-[#ff3f69]">*</span>
+                                        Price <span className="text-main">*</span>
                                     </Label>
                                     <Input
                                         {...register("price", { valueAsNumber: true })}
@@ -236,28 +236,28 @@ const EditCatalogueProducts = ({ setCurrentStep, userName, ownerId, currentStep 
                                         type="number"
                                         className={`${errors.price && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`}
                                     />
-                                    {errors.price && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.price.message}</p>}
+                                    {errors.price && <p className="text-main tracking-wide text-sm font-semibold">{errors.price.message}</p>}
                                 </div>
                             </div>
                         </div>
                         <div className="space-y-1">
                             <Label htmlFor={"name"} className="text-neutral-300 ">
-                                Product name <span className="text-[#ff3f69]">*</span>
+                                Product name <span className="text-main">*</span>
                             </Label>
                             <Input {...register("name")} placeholder="Enter product name..." type="text" className={`${errors.name && "border-[#E11D48] "} py-[0.45rem]  text-neutral-200`} />
-                            {errors.name && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.name.message}</p>}
+                            {errors.name && <p className="text-main tracking-wide text-sm font-semibold">{errors.name.message}</p>}
                         </div>
                         <div className="mt-1">
                             <Label
                                 htmlFor={"description"}
                                 className="text-neutral-300"
                             >
-                                Product Description (150-200 Characters) <span className="text-[#ff3f69]">*</span>
+                                Product Description (150-200 Characters) <span className="text-main">*</span>
                             </Label>
                             <Textarea {...register("description")} placeholder="Enter meta keyword..." className={`${errors.description && "border-[#E11D48] "} py-[0.45rem]  text-neutral-200 h-[6rem]`} />
 
                             {errors.description && (
-                                <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">
+                                <p className="text-main tracking-wide text-sm font-semibold">
                                     {errors.description.message}
                                 </p>
                             )}
@@ -270,7 +270,7 @@ const EditCatalogueProducts = ({ setCurrentStep, userName, ownerId, currentStep 
                                 htmlFor={"description"}
                                 className="text-neutral-300"
                             >
-                                Select Image <span className="text-[#ff3f69]">*</span>
+                                Select Image <span className="text-main">*</span>
                             </Label>
                             <div className='flex gap-3 flex-wrap'>
                                 {fields?.map((_, ind) => {
@@ -302,7 +302,7 @@ const EditCatalogueProducts = ({ setCurrentStep, userName, ownerId, currentStep 
                                     </div>
                                 })}
 
-                                <div onClick={() => append({ url: "", uniqueId: "", publicId: "" })} className="size-24 relative group border border-dashed bg-[#E11D48] rounded overflow-hidden  flex items-center justify-center text-white text-sm">
+                                <div onClick={() => append({ url: "", uniqueId: "", publicId: "" })} className="size-24 relative group border border-dashed bg-main rounded overflow-hidden  flex items-center justify-center text-white text-sm">
                                     Add more
                                 </div>
                             </div>
@@ -323,7 +323,7 @@ const EditCatalogueProducts = ({ setCurrentStep, userName, ownerId, currentStep 
                             </button>
                             <button
                                 type='submit'
-                                className="bg-[#E11D48] cursor-pointer text-white flex items-center gap-3 py-1.5 text-sm px-4 rounded"
+                                className="bg-main cursor-pointer text-white flex items-center gap-3 py-1.5 text-sm px-4 rounded"
                                 disabled={isSubmitting}
                             >
                                 {editOpen ? "Update" : "Add"} Product {
@@ -397,13 +397,13 @@ const EditCatalogueProducts = ({ setCurrentStep, userName, ownerId, currentStep 
                         <div onClick={() => {
                             reset({ category: [{ id: product?.id, text: product?.text }] })
                             setAddOpen(true)
-                        }} className='absolute top-0 right-0 rounded-bl-md bg-[#E11D48] text-white px-2 py-1 text-sm'>+ Add Product</div>
+                        }} className='absolute top-0 right-0 rounded-bl-md bg-main text-white px-2 py-1 text-sm'>+ Add Product</div>
                         <div className="space-y-1">
                             <Label htmlFor={"moq"} className="text-neutral-300 ">
-                                Category <span className="text-[#ff3f69]">*</span>
+                                Category <span className="text-main">*</span>
                             </Label>
                             <Input value={product?.text} placeholder="Enter category..." type="text" className={`${errors.category && "border-[#E11D48] "} py-[0.45rem]  text-neutral-200`} />
-                            {errors.category && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.category.message}</p>}
+                            {errors.category && <p className="text-main tracking-wide text-sm font-semibold">{errors.category.message}</p>}
                         </div>
                         {product?.products?.map((product: productDetail) => {
                             return <article className="rounded-lg relative text-white border-2 mt-2 border-gray-800 bg-[#010101]">
@@ -477,13 +477,13 @@ const EditCatalogueProducts = ({ setCurrentStep, userName, ownerId, currentStep 
                         <div onClick={() => {
                             setValue("category", [{ id: "", text: "" }])
                             setAddOpen(true)
-                        }} className='absolute top-0 right-0 rounded-bl-md bg-[#E11D48] text-white px-2 py-1 text-sm'>+ Add Product</div>
+                        }} className='absolute top-0 right-0 rounded-bl-md bg-main text-white px-2 py-1 text-sm'>+ Add Product</div>
                         <div className="space-y-1">
                             <Label htmlFor={"moq"} className="text-neutral-300 ">
-                                Category <span className="text-[#ff3f69]">*</span>
+                                Category <span className="text-main">*</span>
                             </Label>
                             <Input value={product?.text} placeholder="Enter category..." type="text" className={`${errors.category && "border-[#E11D48] "} py-[0.45rem]  text-neutral-200`} />
-                            {errors.category && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.category.message}</p>}
+                            {errors.category && <p className="text-main tracking-wide text-sm font-semibold">{errors.category.message}</p>}
                         </div>
                         {product?.products?.map((product: uncategrisedProduct) => {
                             return <div key={product?.id}>
@@ -571,7 +571,7 @@ const EditCatalogueProducts = ({ setCurrentStep, userName, ownerId, currentStep 
                     <button
                         onClick={() => setCurrentStep(currentStep + 1)}
                         type='submit'
-                        className="bg-[#E11D48] cursor-pointer text-white flex items-center gap-3 py-1.5 text-sm px-4 rounded"
+                        className="bg-main cursor-pointer text-white flex items-center gap-3 py-1.5 text-sm px-4 rounded"
                         disabled={isSubmitting}
                     >
                         Next

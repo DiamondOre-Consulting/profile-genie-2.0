@@ -33,8 +33,7 @@ const portfolioSchema = new Schema({
         }
     },
     shortDescription: {
-        type: String,
-        required: true
+        type: String
     },
     backgroundImage: {
         publicId: {

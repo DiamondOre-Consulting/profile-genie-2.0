@@ -1,48 +1,26 @@
-import { lazy, Suspense, useEffect, useState } from "react"
-import { Route, Routes, useLocation } from "react-router-dom"
-import { metaDetails } from "./validations/CatalogueValidation"
-import Loader from "./components/Loader"
-import Template2 from "./Templates/templatePages/Template2"
-const Home = lazy(() => import("./Pages/Home"))
-const Template1 = lazy(() => import("./Templates/templatePages/Template1"))
-const Catalogue1Dashboard = lazy(() => import("./Catalogue/Catalogue1Dashboard"))
+import { lazy, Suspense, useEffect, useState } from "react";
+import { Route, Routes, useLocation } from "react-router-dom";
+import { metaDetails } from "./validations/CatalogueValidation";
+import Loader from "./components/Loader";
+import Template2 from "./Templates/templatePages/Template2";
+const Home = lazy(() => import("./Pages/Home"));
+const Template1 = lazy(() => import("./Templates/templatePages/Template1"));
+const Catalogue1Dashboard = lazy(
+  () => import("./Catalogue/Catalogue1Dashboard")
+);
+
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 function App() {
-  const location = useLocation()
-  const [metaDetails, setMetaDetails] = useState<metaDetails>()
-
-  const RedirectToStore = () => {
-    const location = useLocation();
-
-    useEffect(() => {
-      console.log(window.location)
-      if (window.location.hostname !== "profilegenie.store" && location.pathname === "/") {
-        console.log("hello")
-        window.location.href = "https://profilegenie.store/";
-      }
-    }, [location]);
-
-    return null;
-  };
-
-  const RedirectToUtsav = () => {
-    const location = useLocation();
-
-    useEffect(() => {
-      console.log(window.location)
-      if (window.location.hostname !== "profilegenie.store" && location.pathname === "/profile/2/UM99") {
-        console.log("hello")
-        window.location.href = "https://profilegenie.in/profile/1/UM99";
-      }
-    }, [location]);
-
-    return null;
-  };
-
+  const location = useLocation();
+  const [metaDetails, setMetaDetails] = useState<metaDetails>();
 
   useEffect(() => {
     if (metaDetails?.favIcon?.url) {
-      const favicon = document.querySelector("link[rel='icon']") as HTMLLinkElement;
+      const favicon = document.querySelector(
+        "link[rel='icon']"
+      ) as HTMLLinkElement;
       if (favicon) {
         favicon.href = metaDetails.favIcon.url;
       } else {
@@ -52,7 +30,7 @@ function App() {
         document.head.appendChild(newFavicon);
       }
     }
-  }, [metaDetails])
+  }, [metaDetails]);
 
   useEffect(() => {
     window.scrollTo({
@@ -61,22 +39,97 @@ function App() {
     });
   }, [location.pathname]);
 
+  const RedirectToStore = () => {
+    const location = useLocation();
+
+    useEffect(() => {
+      if (
+        window.location.hostname !== "profilegenie.store" &&
+        location.pathname === "/profile/1/lp123"
+      ) {
+        window.location.href = "https://profilegenie.in/profile/1/lp115";
+      }
+
+      if (
+        window.location.hostname !== "profilegenie.store" &&
+        location.pathname === "/profile/1/UM99"
+      ) {
+        window.location.href = "https://profilegenie.in/profile/2/UM99";
+      }
+
+      if (
+        location.pathname === "/profile/1/lp107" ||
+        location.pathname === "/profile/1/lp112"
+      ) {
+        window.location.href = "https://profilegenie.in/profile/1/lp108";
+      }
+
+      if (location.pathname === "/profile/1/lp06") {
+        window.location.href = "https://profilegenie.in/profile/1/lp223";
+      }
+
+      if (location.pathname === "/profile/1/lp129") {
+        window.location.href = "https://profilegenie.in/profile/1/lp220";
+      }
+
+      if (location.pathname === "/profile/1/lp143") {
+        window.location.href = "https://profilegenie.in/profile/1/lp206";
+      }
+
+      if (location.pathname === "/profile/1/aa38") {
+        window.location.href = "https://profilegenie.in/profile/1/R2R3";
+      }
+
+      if (location.pathname === "/profile/1/lp132") {
+        window.location.href = "https://profilegenie.in/profile/1/lp222";
+      }
+
+      if (location.pathname === "/profile/1/lp207") {
+        window.location.href = "https://profilegenie.in/profile/1/lp04";
+      }
+
+      if (location.pathname === "/profile/1/lp126") {
+        window.location.href = "https://profilegenie.in/profile/1/lp214";
+      }
+
+      if (location.pathname === "/profile/1/lp205") {
+        window.location.href = "https://profilegenie.in/profile/1/lp115";
+      }
+    }, [location]);
+
+    return null;
+  };
+
+    useEffect(() => {
+    AOS.init();
+  }, []);
+
   return (
     <>
-      <title>{`${metaDetails?.title ? `${metaDetails?.title} | Profile Genie` : "Profile Genie"}`}</title>
+      <title>{`${
+        metaDetails?.title
+          ? `${metaDetails?.title} | Profile Genie`
+          : "Profile Genie"
+      }`}</title>
       <meta name="author" content="Profile Genie | Akash Kumar Singh" />
       <meta name="description" content={metaDetails?.description} />
       <meta name="keywords" content={metaDetails?.keywords} />
 
       <meta property="og:type" content="website" />
-      <meta property="og:title" content={`${metaDetails?.title} | Profile Genie`} />
+      <meta
+        property="og:title"
+        content={`${metaDetails?.title} | Profile Genie`}
+      />
       <meta property="og:description" content={metaDetails?.description} />
       <meta property="og:image" content={"routeImage"} />
       <meta property="og:url" content={"routeUrl"} />
       <meta property="og:site_name" content="Profile Genie" />
 
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={`${metaDetails?.title} | Profile Genie`} />
+      <meta
+        name="twitter:title"
+        content={`${metaDetails?.title} | Profile Genie`}
+      />
       <meta name="twitter:description" content={metaDetails?.description} />
       <meta name="twitter:image" content={"routeImage"} />
       <meta name="twitter:site" content="@yourTwitterHandle" />
@@ -103,13 +156,21 @@ function App() {
       <meta property="og:image:height" content="630" />
       <Suspense fallback={<Loader />}>
         <RedirectToStore />
-        <RedirectToUtsav />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/demo" element={<Home />} />
-          <Route path="/profile/1/:username" element={<Template2 setMetaDetails={setMetaDetails} />} />
-          <Route path="/profile/9510/:username" element={<Template1 setMetaDetails={setMetaDetails} />} />
-          <Route path="/catalogue/1/:userName/*" element={<Catalogue1Dashboard setMetaDetails={setMetaDetails} />} />
+          <Route
+            path="/profile/1/:username"
+            element={<Template2 setMetaDetails={setMetaDetails} />}
+          />
+          <Route
+            path="/profile/9510/:username"
+            element={<Template1 setMetaDetails={setMetaDetails} />}
+          />
+          <Route
+            path="/catalogue/1/:userName/*"
+            element={<Catalogue1Dashboard setMetaDetails={setMetaDetails} />}
+          />
           <Route
             path="/dynamic-catalogue/1/Ishan_Niyor_Perfumes"
             element={
@@ -127,7 +188,6 @@ function App() {
                 src="https://profile-genie-2-0-niyor.onrender.com/admin-login/1"
                 title="Niyor admin login"
                 style={{ width: "100%", minHeight: "100vh", border: "none" }}
-
               />
             }
           />
@@ -138,15 +198,13 @@ function App() {
                 src="https://profile-genie-2-0-niyor.onrender.com/admin/1/Ishan_Niyor_Perfumes"
                 title="Niyor home page"
                 style={{ width: "100%", minHeight: "100vh", border: "none" }}
-
               />
             }
           />
         </Routes>
       </Suspense>
     </>
-  )
+  );
 }
 
-export default App
-
+export default App;

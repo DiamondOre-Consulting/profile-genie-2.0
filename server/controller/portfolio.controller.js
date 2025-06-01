@@ -384,9 +384,6 @@ const createPortfolioDetail = asyncHandler(async (req, res) => {
 
     const otherData = JSON.parse(req.body.data)
     const { brands, bulkLink, services, products } = otherData
-    console.log(req.body)
-    console.log("object", otherData)
-    console.log(bulkLink)
 
     const portfolioDetail = await PortfolioDetail.create({
         portfolio: id,
@@ -408,8 +405,32 @@ const createPortfolioDetail = asyncHandler(async (req, res) => {
         }
     })
 
-    bulkLink.bulkLinkList.forEach(link => {
-        portfolioDetail.bulkLink.bulkLinkList.push({ ...link })
+let bulkLinkImages = []
+
+    if (req?.files?.bulkLink) {
+        bulkLinkImages = await multipleFileUpload(req?.files?.bulkLink)
+    }
+
+    bulkLink.bulkLinkList.forEach(bulkLink => {
+        let esistingLink = portfolioDetail.bulkLink.bulkLinkList.find(b => b.uniqueId === bulkLink.uniqueId);
+        if (!esistingLink) {
+            const uploadedFile = bulkLinkImages.find(uf => uf.uniqueId === bulkLink.uniqueId);
+            if (uploadedFile) {
+                portfolioDetail.bulkLink.bulkLinkList.push({ ...bulkLink, image: { url: uploadedFile.result.secure_url, publicId: uploadedFile.result.public_id } });
+            }
+        } else {
+            const uploadedFile = bulkLinkImages.find(uf => uf.uniqueId === esistingLink.uniqueId);
+            if (uploadedFile) {
+                esistingLink.linkName = bulkLink.linkName;
+                esistingLink.link = bulkLink.link;
+                esistingLink.uniqueId = bulkLink.uniqueId;
+                esistingLink.image = { url: uploadedFile.result.secure_url, publicId: uploadedFile.result.public_id };
+            } else {
+                esistingLink.linkName = bulkLink.linkName;
+                esistingLink.link = bulkLink.link;
+                esistingLink.uniqueId = bulkLink.uniqueId;
+            }
+        }
     });
 
     let brandImages = []
@@ -417,8 +438,6 @@ const createPortfolioDetail = asyncHandler(async (req, res) => {
     if (req?.files?.brands) {
         brandImages = await multipleFileUpload(req?.files?.brands)
     }
-
-    console.log(portfolioDetail)
 
     brands.brandList.forEach(brand => {
         let existingBrand = portfolioDetail.brands.brandList.find(b => b.uniqueId === brand.uniqueId);
@@ -530,7 +549,7 @@ const updatePortfolioDetail = asyncHandler(async (req, res) => {
             $set: {
                 'brands.tagline': brands.tagline,
                 'bulkLink.tagline': bulkLink.tagline,
-                'bulkLink.bulkLinkList': bulkLink.bulkLinkList,
+                'bulkLink.tagline': bulkLink.tagline,
                 'services.tagline': services.tagline,
                 'products.tagline': products.tagline
             }
@@ -541,6 +560,50 @@ const updatePortfolioDetail = asyncHandler(async (req, res) => {
         }
     );
 
+    let bulkLinkImages = []
+
+    console.log(req?.files)
+
+    if (req?.files?.bulkLink) {
+        console.log("hello")
+        bulkLinkImages = await multipleFileUpload(req?.files?.bulkLink)
+    }
+
+    bulkLink.bulkLinkList.forEach(bulkLink => {
+        let esistingLink = portfolioDetail.bulkLink.bulkLinkList.find(b => b.uniqueId === bulkLink.uniqueId);
+        if (!esistingLink) {
+            const uploadedFile = bulkLinkImages.find(uf => uf.uniqueId === bulkLink.uniqueId);
+            if (uploadedFile) {
+                portfolioDetail.bulkLink.bulkLinkList.push({ ...bulkLink, image: { url: uploadedFile.result.secure_url, publicId: uploadedFile.result.public_id } });
+            }
+        } else {
+            const uploadedFile = bulkLinkImages.find(uf => uf.uniqueId === esistingLink.uniqueId);
+            if (uploadedFile) {
+                esistingLink.linkName = bulkLink.linkName;
+                esistingLink.link = bulkLink.link;
+                esistingLink.uniqueId = bulkLink.uniqueId;
+                esistingLink.image = { url: uploadedFile.result.secure_url, publicId: uploadedFile.result.public_id };
+            } else {
+                esistingLink.linkName = bulkLink.linkName;
+                esistingLink.link = bulkLink.link;
+                esistingLink.uniqueId = bulkLink.uniqueId;
+            }
+        }
+    });
+
+    portfolioDetail.bulkLink.bulkLinkList = portfolioDetail.bulkLink.bulkLinkList.filter(bulkLinkData => {
+        const isExistingData = bulkLink.bulkLinkList.some(data => data.uniqueId === bulkLinkData.uniqueId);
+        if (!isExistingData && bulkLinkData.image.publicId) {
+            cloudinary.v2.uploader.destroy(bulkLinkData.image.publicId, (error, result) => {
+                if (error) {
+                    console.error("Failed to destroy image:", error);
+                } else {
+                    console.log("Image destroyed:", result);
+                }
+            });
+        }
+        return isExistingData;
+    });
 
     let brandImages = []
 

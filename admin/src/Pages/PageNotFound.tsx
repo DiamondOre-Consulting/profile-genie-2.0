@@ -22,7 +22,7 @@ const PageNotFound = () => {
         Page Not Found
       </FuzzyText>
 
-      <Link to={'/'} className='bg-[#E11D48] p-2 px-4 rounded text-white flex items-center font-semibold gap-2'><IconHome className='size-[1.4rem]' /> Home</Link>
+      <Link to={'/'} className='bg-main p-2 px-4 rounded text-white flex items-center font-semibold gap-2'><IconHome className='size-[1.4rem]' /> Home</Link>
     </div>
   )
 }

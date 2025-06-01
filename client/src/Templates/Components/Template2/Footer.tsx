@@ -92,8 +92,9 @@ const Footer = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
               </Link>
             )}
             {
-              portfolioData?.contactData?.social?.otherSocialList?.map((social) => (
+              portfolioData?.contactData?.social?.otherSocialList?.map((social,index) => (
                 <Link
+                key={social?.uniqueId|| index}
                   to={social?.link as string}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -112,7 +113,6 @@ const Footer = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
           </div>
         )}
         <div>
-          {/* This will display on larger screens (e.g., laptop and above) */}
           <p
             className="hidden pt-2 font-medium text-center sm:block"
 

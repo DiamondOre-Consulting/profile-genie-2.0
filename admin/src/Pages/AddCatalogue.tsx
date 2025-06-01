@@ -73,7 +73,7 @@ export default function AddCatalogue() {
                 {currentStep === 4 &&
                     <AddMetaDetails ownerId={ownerId} stepsLength={steps?.length} currentStep={currentStep} />}
 
-                <p className="bg-[#E11D48] w-full bottom-0 p-1 pr-4 left-0 absolute text-xs text-end text-white" role="region" aria-live="polite">
+                <p className="bg-main w-full bottom-0 p-1 pr-4 left-0 absolute text-xs text-end text-white" role="region" aria-live="polite">
                     <span className="">
                         Powered by <span className="font-semibold">@profilegenie</span>
                     </span>

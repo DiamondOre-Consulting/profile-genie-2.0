@@ -59,41 +59,41 @@ const AddMetaDetails = ({ currentStep, stepsLength, ownerId }: { currentStep: nu
 
                 <div className="space-y-1">
                     <Label htmlFor={"title"} className="text-neutral-300 ">
-                        Title <span className="text-[#ff3f69]">*</span>
+                        Title <span className="text-main">*</span>
                     </Label>
                     <Input {...register("title")} placeholder="Enter full name..." type="text" className={`${errors.title && "border-[#E11D48] "} py-[0.45rem]  text-neutral-200`} />
-                    {errors.title && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.title.message}</p>}
+                    {errors.title && <p className="text-main tracking-wide text-sm font-semibold">{errors.title.message}</p>}
                 </div>
                 <div className="space-y-1">
                     <Label htmlFor={"description"} className="text-neutral-300 ">
-                        Description <span className="text-[#ff3f69]">*</span>
+                        Description <span className="text-main">*</span>
                     </Label>
                     <Textarea {...register("description")} placeholder="Enter description..." className={`${errors.description && "border-[#E11D48] "} py-[0.45rem]  text-neutral-200`} />
-                    {errors.description && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.description.message}</p>}
+                    {errors.description && <p className="text-main tracking-wide text-sm font-semibold">{errors.description.message}</p>}
                 </div>
 
                 <div className="space-y-1">
                     <Label htmlFor={"keywords"} className="text-neutral-300 ">
-                        Keyword <span className="text-[#ff3f69]">*</span>
+                        Keyword <span className="text-main">*</span>
                     </Label>
                     <Textarea {...register("keywords")} placeholder="Enter meta keyword..." className={`${errors.keywords && "border-[#E11D48] "} py-[0.45rem]  text-neutral-200`} />
-                    {errors.keywords && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.keywords.message}</p>}
+                    {errors.keywords && <p className="text-main tracking-wide text-sm font-semibold">{errors.keywords.message}</p>}
                 </div>
 
 
                 <div>
                     <Label htmlFor={"canonical"} className="text-neutral-300 ">
-                        Tagline/title <span className="text-[#ff3f69]">*</span>
+                        Tagline/title <span className="text-main">*</span>
                     </Label>
                     <Input {...register("canonical")} placeholder="Enter canonical..." type="text" className={`${errors.canonical && "border-[#E11D48] "} py-[0.45rem] text-neutral-200`} />
-                    {errors.canonical && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.canonical.message}</p>}
+                    {errors.canonical && <p className="text-main tracking-wide text-sm font-semibold">{errors.canonical.message}</p>}
                 </div>
 
             </div>
 
             <div className='flex gap-3 sm:flex-row flex-col my-4 mt-5 items-center justify-center'>
                 <div className="size-30 relative group border border-dashed border-[#E11D48] rounded overflow-hidden">
-                    <h1 className='text-white relative z-10 uppercase text-[0.8rem] bg-[#E11D48] font-semibold text-center py-0.5'>Image</h1>
+                    <h1 className='text-white relative z-10 uppercase text-[0.8rem] bg-main font-semibold text-center py-0.5'>Image</h1>
                     <input
                         type="file"
                         onChange={(e) => handleFileChange("favIcon", e.target.files?.[0])}
@@ -130,7 +130,7 @@ const AddMetaDetails = ({ currentStep, stepsLength, ownerId }: { currentStep: nu
                 </button>
                 <button
                     type='submit'
-                    className="bg-[#E11D48] cursor-pointer text-white flex items-center gap-3 py-1.5 text-sm px-4 rounded"
+                    className="bg-main cursor-pointer text-white flex items-center gap-3 py-1.5 text-sm px-4 rounded"
                     disabled={isSubmitting || currentStep > stepsLength}
                 >
                     Add Portfolio   {

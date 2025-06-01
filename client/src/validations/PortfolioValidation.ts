@@ -30,7 +30,7 @@ export const addProfileDetailSchema = z.object({
     tagline: z.string().min(1, 'Tagline is required'),
     isPaid: z.boolean().default(false),
     isActive: z.boolean().default(false),
-    shortDescription: z.string().min(150, 'Short Description is required (MIN 200 Characters)').max(200, 'Short Description must be less than 400 characters'),
+    shortDescription: z.string().optional(),
     image: z.object({
         publicId: z.string().optional(),
         url: z.string().min(1, 'Image is required')
@@ -71,7 +71,12 @@ export const addOthersDetailSchema = z.object({
         bulkLinkList: z.array(
             z.object({
                 linkName: z.string().optional(),
-                link: z.string().optional()
+                link: z.string().optional(),
+                uniqueId: z.string().optional(),
+                image: z.object({
+                    publicId: z.string().optional(),
+                    url: z.string().optional()
+                }).optional()
             })
         )
     }),

@@ -4,15 +4,17 @@ import JoditEditor from "jodit-react";
 export default function TextEditor({
     value,
     handleBlur,
+    height,
 }: {
     value: string;
     handleBlur: (value: string) => void;
+    height?: number;
 }) {
     const editor = useRef(null);
 
     const config = {
         readonly: false,
-        height: 350,
+        height:  height || 320,
         toolbarSticky: true,
         toolbarAdaptive: false,
         showCharsCounter: true,
@@ -70,7 +72,7 @@ export default function TextEditor({
     };
 
     return (
-        <div className="mx-auto max-w-4xl rounded">
+        <div className="max-w-4xl mx-auto rounded">
             <JoditEditor
                 ref={editor}
                 value={value}

@@ -103,7 +103,7 @@ const AddCatalogueDetail = ({ setCurrentStep, ownerId, currentStep, stepsLength,
                 </div>
                 <div className="space-y-1">
                     <Label htmlFor={"paidDate"} className="text-neutral-300 ">
-                        Paid Date <span className="text-[#ff3f69]">*</span>
+                        Paid Date <span className="text-main">*</span>
                     </Label>
                     <Popover open={open} onOpenChange={setOpen}>
                         <PopoverTrigger asChild>
@@ -132,7 +132,7 @@ const AddCatalogueDetail = ({ setCurrentStep, ownerId, currentStep, stepsLength,
                             />
                         </PopoverContent>
                     </Popover>
-                    {errors.paidDate && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.paidDate.message}</p>}
+                    {errors.paidDate && <p className="text-main tracking-wide text-sm font-semibold">{errors.paidDate.message}</p>}
 
                 </div>
                 <div className="flex bg-[#171717] border-neutral-800 flex-col items-center space-y-2 p-4 py-1 border rounded-lg shadow-lg">
@@ -165,37 +165,37 @@ const AddCatalogueDetail = ({ setCurrentStep, ownerId, currentStep, stepsLength,
                 </div>
                 <div className="space-y-1">
                     <Label htmlFor={"fullName"} className="text-neutral-300 ">
-                        Name <span className="text-[#ff3f69]">*</span>
+                        Name <span className="text-main">*</span>
                     </Label>
                     <Input {...register("name")} placeholder="Enter full name..." type="text" className={`${errors.name && "border-[#E11D48] "} py-[0.45rem]  text-neutral-200`} />
-                    {errors.name && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.name.message}</p>}
+                    {errors.name && <p className="text-main tracking-wide text-sm font-semibold">{errors.name.message}</p>}
                 </div>
                 <div className="space-y-1">
                     <Label htmlFor={"userName"} className="text-neutral-300 ">
-                        Username <span className="text-[#ff3f69]">*</span>
+                        Username <span className="text-main">*</span>
                     </Label>
                     <Input {...register("userName")} placeholder="Enter username..." type="text" className={`${errors.userName && "border-[#E11D48] "} py-[0.45rem]  text-neutral-200`} />
-                    {errors.userName && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.userName.message}</p>}
+                    {errors.userName && <p className="text-main tracking-wide text-sm font-semibold">{errors.userName.message}</p>}
                 </div>
             </div>
             <div className="space-y-1">
                 <Label htmlFor={"tagline"} className="text-neutral-300 ">
-                    Hero Tagline <span className="text-[#ff3f69]">*</span>
+                    Hero Tagline <span className="text-main">*</span>
                 </Label>
                 <Input {...register("tagline")} placeholder="Enter tagline..." type="text" className={`${errors.tagline && "border-[#E11D48] "} py-[0.45rem]  text-neutral-200`} />
-                {errors.tagline && <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">{errors.tagline.message}</p>}
+                {errors.tagline && <p className="text-main tracking-wide text-sm font-semibold">{errors.tagline.message}</p>}
             </div>
             <div className="mt-1">
                 <Label
                     htmlFor={"about.body"}
                     className="text-neutral-300"
                 >
-                    Hero Description (150-200 Characters) <span className="text-[#ff3f69]">*</span>
+                    Hero Description (150-200 Characters) <span className="text-main">*</span>
                 </Label>
                 <Textarea {...register("description")} placeholder="Enter meta keyword..." className={`${errors.description && "border-[#E11D48] "} py-[0.45rem]  text-neutral-200 h-[12rem]`} />
 
                 {errors.description && (
-                    <p className="text-[#ff3f69] tracking-wide text-sm font-semibold">
+                    <p className="text-main tracking-wide text-sm font-semibold">
                         {errors.description.message}
                     </p>
                 )}
@@ -207,7 +207,7 @@ const AddCatalogueDetail = ({ setCurrentStep, ownerId, currentStep, stepsLength,
                 <div className='flex gap-3 sm:flex-row flex-col my-4 mt-5 items-center justify-center'>
                     <div className='flex items-center gap-3 justify-between'>
                         <div className="size-30 relative group border border-dashed border-[#E11D48] rounded overflow-hidden">
-                            <h1 className='text-white relative z-10 uppercase text-[0.8rem] bg-[#E11D48] font-semibold text-center py-0.5'>Hero Image</h1>
+                            <h1 className='text-white relative z-10 uppercase text-[0.8rem] bg-main font-semibold text-center py-0.5'>Hero Image</h1>
                             <input
                                 type="file"
                                 onChange={(e) => handleFileChange("heroImage", e.target.files?.[0])}
@@ -231,7 +231,7 @@ const AddCatalogueDetail = ({ setCurrentStep, ownerId, currentStep, stepsLength,
                             <label htmlFor="image" className="cursor-pointer absolute inset-0"></label>
                         </div>
                         <div className="size-30 relative group border border-dashed border-[#E11D48] rounded overflow-hidden">
-                            <h1 className='text-white relative z-10 uppercase text-[0.8rem] bg-[#E11D48] font-semibold text-center py-0.5'>Logo</h1>
+                            <h1 className='text-white relative z-10 uppercase text-[0.8rem] bg-main font-semibold text-center py-0.5'>Logo</h1>
                             <input
                                 type="file"
                                 onChange={(e) => handleFileChange("logo", e.target.files?.[0])}
@@ -300,7 +300,7 @@ const AddCatalogueDetail = ({ setCurrentStep, ownerId, currentStep, stepsLength,
                 </button>
                 <button
                     type='submit'
-                    className="bg-[#E11D48] cursor-pointer text-white flex items-center gap-3 py-1.5 text-sm px-4 rounded"
+                    className="bg-main cursor-pointer text-white flex items-center gap-3 py-1.5 text-sm px-4 rounded"
                     disabled={isSubmitting || currentStep > stepsLength}
                 >
                     Next   {

@@ -42,8 +42,8 @@ const Template2 = ({ setMetaDetails }: { setMetaDetails: React.Dispatch<React.Se
     return (
         <>
             {profileData &&
-                <div className="bg-[#fefbff]">
-                    <div className="bg-template2mainBg">
+                <div className="bg-[#fefbff] w-full  overflow-x-hidden">
+                    <div id="home" className="bg-template2mainBg">
                         <Nav portfolioData={profileData} />
                         <Hero portfolioData={profileData} />
                     </div>

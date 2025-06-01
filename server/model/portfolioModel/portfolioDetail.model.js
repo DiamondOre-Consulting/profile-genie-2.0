@@ -36,6 +36,18 @@ const portfolioDetailSchema = new Schema({
             },
             link: {
                 type: String
+            },
+             uniqueId: {
+                type: String
+            },
+           
+            image: {
+                publicId: {
+                    type: String
+                },
+                url: {
+                    type: String
+                }
             }
         }]
     },

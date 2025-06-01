@@ -1,10 +1,10 @@
-import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import LinkButtonComponent2 from "./LinkButtonComponent2";
 import { portfolioResponse } from "@/validations/PortfolioValidation";
 import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group";
 import { RiStarFill } from "@remixicon/react";
+import { FaLink } from "react-icons/fa";
+import { SparklesText } from "@/components/ui/sparkles-text";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,33 +13,9 @@ const Testimonials = ({
 }: {
   portfolioData: portfolioResponse;
 }) => {
-  const testimonialsRef = useRef([]);
-
-  useEffect(() => {
-    testimonialsRef.current.forEach((el, index) => {
-      gsap.fromTo(
-        el,
-        { opacity: 0, y: 50 },
-        {
-          opacity: 1,
-          y: 0,
-          scrollTrigger: {
-            trigger: el,
-            start: "top 80%",
-            end: "top 30%",
-            toggleActions: "play none none reverse",
-          },
-          delay: index * 0.2,
-          duration: 1,
-        }
-      );
-    });
-  }, []);
-
-  console.log(portfolioData?.otherDetails);
-
+ 
   return (
-    <>
+    <div className="flex flex-col max-w-screen-xl gap-10 px-4 pt-20 mx-auto">
       {portfolioData?.contactData?.testimonial?.tagline &&
         portfolioData?.contactData?.testimonial?.testimonialList?.length >
           0 && (
@@ -49,7 +25,7 @@ const Testimonials = ({
               aria-label="What our customers are saying"
               className="py-20 sm:py-32"
             >
-              <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+              <div className="px-4 mx-auto sm:px-6 lg:px-8">
                 <div className="mx-auto text-center md:text-left">
                   <h2 className="text-3xl font-bold tracking-tight uppercase font-display text-slate-900 sm:text-5xl ">
                     Testimonials
@@ -134,13 +110,16 @@ const Testimonials = ({
 
       {portfolioData?.otherDetails?.bulkLink?.bulkLinkList &&
         portfolioData?.otherDetails?.bulkLink?.bulkLinkList.length > 0 && (
-          <>
-            <div className="mx-auto text-center md:text-left">
-              <h2 className="text-3xl font-bold tracking-tight capitalise font-display text-slate-900 sm:text-5xl ">
-                {portfolioData?.otherDetails?.bulkLink?.tagline ||
+          <div className="">
+            <h2 className="my-8 text-center ">
+              <SparklesText
+                sparklesCount={3}
+                text={portfolioData?.otherDetails?.bulkLink?.tagline ||
                   "Useful Links"}
-              </h2>
-            </div>
+              />
+            </h2>
+
+           
             <div
               className={`grid ${
                 portfolioData?.otherDetails?.bulkLink?.bulkLinkList.length %
@@ -148,23 +127,47 @@ const Testimonials = ({
                 0
                   ? "grid-cols-1 md:grid-cols-3"
                   : "grid-cols-1 md:grid-cols-3"
-              } w-fit mx-auto place-items-start   gap-y-6 gap-x-6  px-10`}
+              } w-fit mx-auto place-items-start   gap-y-6 gap-x-6  `}
             >
               {portfolioData?.otherDetails?.bulkLink?.bulkLinkList.map(
-                (link) => {
+                (link,index) => {
                   return (
-                    <LinkButtonComponent2
-                      key={link.linkName}
-                      linkName={link.linkName as string}
-                      linkUrl={link.link as string}
-                    />
+                    <a key={link?.uniqueId||index} href={link?.link} target="_black" className="">
+                      <div className="flex items-center">
+                        <div className="flex-shrink-0 border border-gray-300 rounded-md shadow-md">
+                          {link?.image?.url ? (
+                            <img
+                              src={link?.image?.url}
+                              alt={link?.linkName}
+                              className="object-cover rounded-md size-12 min-w-12 min-h-12"
+                            />
+                          ) : (
+                            <div
+                              className="flex items-center justify-center  w-12 h-12 text-white  bg-[#2EAAC1] rounded-md"
+                              // style={{ backgroundColor: buttonBgColor }}
+                            >
+                              <FaLink />
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="ml-4">
+                          <dt
+                            className="font-medium leading-6 text-md"
+                            // style={{ color: primaryTextColor }}
+                          >
+                            {link?.linkName}
+                          </dt>
+                        </div>
+                      </div>
+                    </a>
                   );
                 }
               )}
             </div>
-          </>
+          </div>
         )}
-    </>
+    </div>
   );
 };
 

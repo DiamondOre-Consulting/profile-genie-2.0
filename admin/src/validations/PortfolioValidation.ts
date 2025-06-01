@@ -30,7 +30,7 @@ export const addProfileDetailSchema = z.object({
     paidDate: z.string(),
     isPaid: z.boolean().default(false).optional(),
     isActive: z.boolean().default(false),
-    shortDescription: z.string().min(20, 'Short Description is required (MIN 150 Characters)').max(200, 'Short Description must be less than 200 characters'),
+    shortDescription: z.string().optional(),
     image: z.object({
         publicId: z.string().optional(),
         url: z.string().min(1, 'Image is required')
@@ -71,7 +71,12 @@ export const addOthersDetailSchema = z.object({
         bulkLinkList: z.array(
             z.object({
                 linkName: z.string().optional(),
-                link: z.string().optional()
+                link: z.string().optional(),
+                uniqueId: z.string().optional(),
+                image: z.object({
+                    publicId: z.string().optional(),
+                    url: z.string().optional()
+                }).optional()
             })
         ).optional()
     }),
@@ -105,7 +110,7 @@ export const addContactDetailSchema = z.object({
         )
     }),
     mapLink: z.string().optional(),
-    contactCSV: z.string().min(1, 'Contact CSV is required'),
+    contactCSV: z.string().optional(),
     emailList: z.array(z.object({
         email: z.string().min(1, 'Email is required')
     })).optional(),
@@ -114,9 +119,9 @@ export const addContactDetailSchema = z.object({
     })),
     whatsappNo: z.number().min(1, "WhatsApp Number is required"),
     brochureLink: z.object({
-        tagline: z.string().min(1, 'Tagline is required'),
-        link: z.string().min(1, 'Link is required')
-    }),
+        tagline: z.string().min(1, 'Tagline is required').optional(),
+        link: z.string().min(1, 'Link is required').optional(),
+    }).optional(),
     address: z.array(
         z.object({
             title: z.string().optional(),
