@@ -1,6 +1,6 @@
 // import Contact from '@/components/Contact'
 // import { FeaturesSectionDemo } from '@/components/Features'
-// import Hero from '@/components/Hero'
+import Hero from '@/components/Hero'
 import Preview from '@/components/Preview'
 // import Testimonial from '@/components/Testimonial'
 // import VideoSection from '@/components/VideoSection'
@@ -12,7 +12,7 @@ const Home = () => {
         <div className='bg-[#010101] py-6'>
             {/* <HomeLayout> */}
 
-            {/* <Hero /> */}
+            <Hero />
             <Preview />
             {/* <FeaturesSectionDemo /> */}
             {/* <VideoSection /> */}

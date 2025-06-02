@@ -100,7 +100,7 @@ function App() {
     return null;
   };
 
-    useEffect(() => {
+  useEffect(() => {
     AOS.init();
   }, []);
 
