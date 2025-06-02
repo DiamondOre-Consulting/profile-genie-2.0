@@ -5,31 +5,31 @@ const Contact = () => {
     return (
         <section className="pt-20">
             <div className="container text-white max-w-[82rem] mx-auto px-4">
-                <div className="mb-10 flex flex-col items-center">
+                <div className="flex flex-col items-center mb-10 text-center">
                     <span className="text-sm font-semibold">Reach Us</span>
-                    <h1 className="mb-3 mt-1 text-balance text-3xl font-semibold md:text-4xl">
+                    <h1 className="mt-1 mb-3 text-3xl font-semibold text-balance md:text-4xl">
                         Speak with Our Friendly Team
                     </h1>
-                    <p className="text-lg text-muted-foreground">
+                    <p className="md:text-lg text-md text-muted-foreground">
                         We&apos;d love to assist you. Fill out the form or drop us an email.
                     </p>
                 </div>
-                <div className="grid  md:grid-cols-3">
+                <div className="grid md:grid-cols-3">
                     <div
                         className={
                             "flex flex-col border py-10 bg-[#010102] group/feature border-neutral-800  transition-all duration-500  h-full w-full hover:bg-gradient-to-t hover:from-[#6738e7]/80 via-[#4826A7]/20  to-transparent "}
                     >
 
-                        <div className="mb-4 relative z-10 px-10 text-neutral-400">
+                        <div className="relative z-10 px-10 mb-4 text-neutral-400">
                             <MapPin />
                         </div>
-                        <div className="text-lg font-bold mb-2 relative z-10 px-10">
+                        <div className="relative z-10 px-10 mb-2 text-lg font-bold">
                             <div className="absolute left-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tr-full rounded-br-full bg-neutral-700 group-hover/feature:bg-[#6E3DEF] transition-all duration-200 origin-center" />
-                            <span className="group-hover/feature:translate-x-2 transition duration-200 inline-block text-neutral-100">
+                            <span className="inline-block transition duration-200 group-hover/feature:translate-x-2 text-neutral-100">
                                 Visit Us
                             </span>
                         </div>
-                        <p className="text-sm text-neutral-300 max-w-xs relative z-10 px-10">
+                        <p className="relative z-10 max-w-xs px-10 text-sm text-neutral-300">
                             Drop by our office for a chat.
                         </p>
                         <Link to="" className="px-10 font-semibold hover:underline">
@@ -41,16 +41,16 @@ const Contact = () => {
                             "flex flex-col border py-10 bg-[#010102] group/feature border-neutral-800  transition-all duration-500  h-full w-full hover:bg-gradient-to-t hover:from-[#6738e7]/80 via-[#4826A7]/20  to-transparent "}
                     >
 
-                        <div className="mb-4 relative z-10 px-10 text-neutral-400">
+                        <div className="relative z-10 px-10 mb-4 text-neutral-400">
                             <Mail />
                         </div>
-                        <div className="text-lg font-bold mb-2 relative z-10 px-10">
+                        <div className="relative z-10 px-10 mb-2 text-lg font-bold">
                             <div className="absolute left-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tr-full rounded-br-full bg-neutral-700 group-hover/feature:bg-[#6E3DEF] transition-all duration-200 origin-center" />
-                            <span className="group-hover/feature:translate-x-2 transition duration-200 inline-block text-neutral-100">
+                            <span className="inline-block transition duration-200 group-hover/feature:translate-x-2 text-neutral-100">
                                 Call Us
                             </span>
                         </div>
-                        <p className="text-sm text-neutral-300 max-w-xs relative z-10 px-10">
+                        <p className="relative z-10 max-w-xs px-10 text-sm text-neutral-300">
                             We&apos;re available Mon-Fri, 9am-5pm.
                         </p>
                         <Link to="" className="px-10 font-semibold hover:underline">
@@ -61,16 +61,16 @@ const Contact = () => {
                             "flex flex-col border py-10 bg-[#010102] group/feature border-neutral-800  transition-all duration-500  h-full w-full hover:bg-gradient-to-t hover:from-[#6738e7]/80 via-[#4826A7]/20  to-transparent "}
                     >
 
-                        <div className="mb-4 relative z-10 px-10 text-neutral-400">
+                        <div className="relative z-10 px-10 mb-4 text-neutral-400">
                             <Mail />
                         </div>
-                        <div className="text-lg font-bold mb-2 relative z-10 px-10">
+                        <div className="relative z-10 px-10 mb-2 text-lg font-bold">
                             <div className="absolute left-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tr-full rounded-br-full bg-neutral-700 group-hover/feature:bg-[#6E3DEF] transition-all duration-200 origin-center" />
-                            <span className="group-hover/feature:translate-x-2 transition duration-200 inline-block text-neutral-100">
+                            <span className="inline-block transition duration-200 group-hover/feature:translate-x-2 text-neutral-100">
                                 Email Us
                             </span>
                         </div>
-                        <p className="text-sm text-neutral-300 max-w-xs relative z-10 px-10">
+                        <p className="relative z-10 max-w-xs px-10 text-sm text-neutral-300">
                             Our team is ready to assist.
                         </p>
                         <Link to="" className="px-10 font-semibold hover:underline">
