@@ -39,12 +39,6 @@ portfolioRouter.route('/:userName')
     .get(getSinglePortfolio)
 
 portfolioRouter.route('/others/:id', verifyJWT)
-    .post(upload.fields([
-        { name: "brands", maxCount: 30 },
-        { name: "services", maxCount: 30 },
-        { name: "products", maxCount: 30 },
-        { name: "bulkLink", maxCount: 30 }]),
-        createPortfolioDetail)
     .put(upload.fields([
         { name: "brands", maxCount: 30 },
         { name: "services", maxCount: 30 },
@@ -53,15 +47,11 @@ portfolioRouter.route('/others/:id', verifyJWT)
         updatePortfolioDetail)
 
 portfolioRouter.route('/contact/:id', verifyJWT)
-    .post(upload.fields([
-        { name: "otherSocial", maxCount: 15 }]),
-        createPortfolioContact)
     .put(upload.fields([
         { name: "otherSocial", maxCount: 15 }]),
         updatePortfolioContact)
 
 portfolioRouter.route('/meta/:id', verifyJWT)
-    .post(upload.single("favIcon"), createMetaData)
     .put(upload.single("favIcon"), updateMetaData)
 
 portfolioRouter.route('/recycle/all-portfolio', verifyJWT)

@@ -119,8 +119,8 @@ export const addContactDetailSchema = z.object({
     })),
     whatsappNo: z.number().min(1, "WhatsApp Number is required"),
     brochureLink: z.object({
-        tagline: z.string().min(1, 'Tagline is required').optional(),
-        link: z.string().min(1, 'Link is required').optional(),
+        tagline: z.string().optional(),
+        link: z.string().optional(),
     }).optional(),
     address: z.array(
         z.object({

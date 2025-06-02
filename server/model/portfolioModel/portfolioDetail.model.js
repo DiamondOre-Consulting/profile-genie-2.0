@@ -7,97 +7,112 @@ const portfolioDetailSchema = new Schema({
     },
     brands: {
         tagline: {
-            type: String
+            type: String,
+            default: ""
         },
-        brandList: [{
-            uniqueId: {
-                type: String
-            },
-            brandName: {
-                type: String
-            },
-            image: {
-                publicId: {
+        brandList: {
+            type: [{
+                uniqueId: {
                     type: String
                 },
-                url: {
+                brandName: {
                     type: String
+                },
+                image: {
+                    publicId: {
+                        type: String
+                    },
+                    url: {
+                        type: String
+                    }
                 }
-            }
-        }]
+            }],
+            default: []
+        }
     },
     bulkLink: {
         tagline: {
-            type: String
+            type: String,
+            default: ""
         },
-        bulkLinkList: [{
-            linkName: {
-                type: String
-            },
-            link: {
-                type: String
-            },
-             uniqueId: {
-                type: String
-            },
-           
-            image: {
-                publicId: {
+        bulkLinkList: {
+            type: [{
+                linkName: {
                     type: String
                 },
-                url: {
+                link: {
                     type: String
+                },
+                uniqueId: {
+                    type: String
+                },
+                image: {
+                    publicId: {
+                        type: String
+                    },
+                    url: {
+                        type: String
+                    }
                 }
-            }
-        }]
+            }],
+            default: []
+        }
     },
     services: {
         tagline: {
-            type: String
+            type: String,
+            default: ""
         },
-        serviceList: [{
-            uniqueId: {
-                type: String
-            },
-            image: {
-                publicId: {
+        serviceList: {
+            type: [{
+                uniqueId: {
                     type: String
                 },
-                url: {
+                image: {
+                    publicId: {
+                        type: String
+                    },
+                    url: {
+                        type: String
+                    }
+                },
+                title: {
+                    type: String
+                },
+                detail: {
                     type: String
                 }
-            },
-            title: {
-                type: String
-            },
-            detail: {
-                type: String
-            }
-        }]
+            }],
+            default: []
+        }
     },
     products: {
         tagline: {
-            type: String
+            type: String,
+            default: ""
         },
-        productList: [{
-            uniqueId: {
-                type: String
-            },
-            image: {
-                publicId: {
+        productList: {
+            type: [{
+                uniqueId: {
                     type: String
                 },
-                url: {
+                image: {
+                    publicId: {
+                        type: String
+                    },
+                    url: {
+                        type: String
+                    }
+                },
+                title: {
+                    type: String
+                },
+                detail: {
                     type: String
                 }
-            },
-            title: {
-                type: String
-            },
-            detail: {
-                type: String
-            }
-        }]
+            }],
+            default: []
+        }
     }
 }, {
     timestamps: true

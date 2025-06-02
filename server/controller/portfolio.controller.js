@@ -54,6 +54,8 @@ const createPortfolio = asyncHandler(async (req, res) => {
         }
     })
 
+    
+
     if (!portfolio) {
         throw new AppError("Something went wrong!", 400)
     }
@@ -82,6 +84,58 @@ const createPortfolio = asyncHandler(async (req, res) => {
         }
     });
 
+    const portfolioContact = await PortfolioContact.create({
+        portfolio: portfolio._id,
+        testimonial: [],
+        mapLink: "",
+        emailList: [],
+        phoneList: [],
+        address: [],
+        whatsappNo: "",
+        brochureLink: "",
+        contactCSV: "",
+        social: {
+            facebook: "",
+            instagram: "",
+            linkedin: "",
+            twitter: "",
+            youtube: "",
+            googleLink: "",
+            otherSocialList: []
+        }
+    })
+
+    portfolio.contactData = portfolioContact._id
+    const portfolioDetail = await PortfolioDetail.create({
+        portfolio: portfolio._id,
+        brands: {
+            tagline: "",
+            brandList: []
+        },
+        bulkLink: {
+            tagline: "",
+            bulkLinkList: []
+        },
+        services: {
+            tagline: "",
+            serviceList: []
+        },
+        products: {
+            tagline: "",
+            productList: []
+        }
+    })
+
+    portfolio.otherDetails = portfolioDetail._id
+    portfolio.metaDetails = await MetaData.create({
+        portfolio: portfolio._id,
+        title: "",
+        description: "",
+        keywords: "",
+    })
+
+    portfolio.metaDetails = portfolio.metaDetails._id
+   
     await portfolio.save()
 
     res.status(200).json({
@@ -542,7 +596,7 @@ const updatePortfolioDetail = asyncHandler(async (req, res) => {
 
     const otherData = JSON.parse(req.body.data)
     const { brands, bulkLink, services, products } = otherData
-    console.log(otherData)
+    console.log(bulkLink)
     const portfolioDetail = await PortfolioDetail.findOneAndUpdate(
         { portfolio: id },
         {
@@ -562,25 +616,27 @@ const updatePortfolioDetail = asyncHandler(async (req, res) => {
 
     let bulkLinkImages = []
 
-    console.log(req?.files)
 
     if (req?.files?.bulkLink) {
-        console.log("hello")
         bulkLinkImages = await multipleFileUpload(req?.files?.bulkLink)
     }
 
     bulkLink.bulkLinkList.forEach(bulkLink => {
         let esistingLink = portfolioDetail.bulkLink.bulkLinkList.find(b => b.uniqueId === bulkLink.uniqueId);
+        console.log(1)
         if (!esistingLink) {
             const uploadedFile = bulkLinkImages.find(uf => uf.uniqueId === bulkLink.uniqueId);
             if (uploadedFile) {
                 portfolioDetail.bulkLink.bulkLinkList.push({ ...bulkLink, image: { url: uploadedFile.result.secure_url, publicId: uploadedFile.result.public_id } });
+            } else {
+console.log("hello")
+                portfolioDetail.bulkLink.bulkLinkList.push({ ...bulkLink, image: { url: "", publicId: "" } });
             }
         } else {
             const uploadedFile = bulkLinkImages.find(uf => uf.uniqueId === esistingLink.uniqueId);
             if (uploadedFile) {
                 esistingLink.linkName = bulkLink.linkName;
-                esistingLink.link = bulkLink.link;
+                esistingLink.link = bulkLink.link; 
                 esistingLink.uniqueId = bulkLink.uniqueId;
                 esistingLink.image = { url: uploadedFile.result.secure_url, publicId: uploadedFile.result.public_id };
             } else {
