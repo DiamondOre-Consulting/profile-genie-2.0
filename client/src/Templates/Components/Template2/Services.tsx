@@ -56,8 +56,8 @@ const Services = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
             transition={{ duration: 0.25 }}
           >
             <motion.div
-          data-aos="flip-left" data-aos-duration="1000"
-
+              data-aos="flip-left"
+              data-aos-duration="1000"
               className="w-[96vw] max-w-[30rem] md:max-w-[62rem] relative  max-h-[90vh] bg-white rounded-lg shadow-xl overflow-hidden"
               initial={{ scale: 0.85, opacity: 0, y: 40 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
@@ -120,7 +120,11 @@ const Services = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
             className="w-full max-w-screen-xl px-4 pt-6 mx-auto md:px-10"
             id="service"
           >
-            <h2 data-aos="flip-left" data-aos-duration="1000" className="my-8 text-center ">
+            <h2
+              data-aos="flip-left"
+              data-aos-duration="1000"
+              className="my-8 text-center "
+            >
               <SparklesText
                 sparklesCount={3}
                 text={
