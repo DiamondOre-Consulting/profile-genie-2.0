@@ -15,7 +15,7 @@ const Nav = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
     };
 
     return (
-        <nav className="py-2.5 sm:py-4 md:py-6 relative overflow-x-hidden w-full">
+        <nav className="py-2.5 sm:py-4 md:py-6 relative z-100  w-full">
             <div className="flex flex-wrap items-center justify-between max-w-screen-xl px-4 mx-auto">
                 <a href="#" className="flex items-center">
                     <div className='w-6 h-6 rounded-full bg-blue'></div>
@@ -42,13 +42,15 @@ const Nav = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
                     </button>
                 </div>
                 <div
-                    className={`items-center justify-between duration-500 w-full bg-template2mainBg z-100 absolute lg:flex lg:static lg:w-auto lg:order-1 ${showMobileMenu ? 'right-0 cursor-pointer top-10' : 'top-10 -right-500'}`}
+                    className={`items-center justify-between duration-500 w-full bg-template2mainBg z-[100] absolute lg:flex lg:static lg:w-auto lg:order-1 ${showMobileMenu ? 'right-0 cursor-pointer top-14 h-screen backdrop-blur-sm' : 'top-14 -right-500'}`}
                     id="mobile-menu-2"
                 >
                     <ul className="flex flex-col mt-4 font-medium text-center lg:flex-row lg:space-x-8 lg:mt-0">
                             <Link
                                  smooth={true} duration={500} 
                                 to={`home`} 
+                                 onClick={() => setShowMobileMenu(false)}
+
                                 className="block py-2 pl-3 pr-4 rounded cursor-pointer text-pink lg:bg-transparent lg:text-cyan-600 lg:p-0"
                                 aria-current="page"
                             >
@@ -70,6 +72,8 @@ const Nav = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
                           
                                 <Link
                                     to="service"  smooth={true} duration={500} offset={20}
+                                 onClick={() => setShowMobileMenu(false)}
+
                                     className="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 cursor-pointer hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:p-0"
                                 >
                                     Services
@@ -81,6 +85,8 @@ const Nav = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
                                 <Link
                                 to="products" 
                                 smooth={true} duration={500} offset={40}
+                                 onClick={() => setShowMobileMenu(false)}
+
                                     className="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 cursor-pointer hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:p-0"
                                 >
                                     Products
@@ -90,6 +96,8 @@ const Nav = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
                       
                             <Link
                                  smooth={true} duration={500} offset={40}
+                                 onClick={() => setShowMobileMenu(false)}
+
                                 to="contact" 
                                 className="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 cursor-pointer hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:p-0"
                             >
