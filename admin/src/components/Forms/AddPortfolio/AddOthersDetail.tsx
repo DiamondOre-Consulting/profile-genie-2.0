@@ -21,10 +21,7 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { v4 as uuidv4 } from "uuid";
-import {
-  useAddOtherDetailsMutation,
-  useUpdateOtherDetailsMutation,
-} from "@/Redux/API/PortfolioApi";
+import { useUpdateOtherDetailsMutation } from "@/Redux/API/PortfolioApi";
 import TextEditor from "@/components/TextEditor";
 
 type othersProfileDetail = z.infer<typeof addOthersDetailSchema>;

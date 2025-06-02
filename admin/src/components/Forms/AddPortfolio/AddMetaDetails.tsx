@@ -12,10 +12,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  useAddMetaDetailsMutation,
-  useUpdateMetaDetailsMutation,
-} from "@/Redux/API/PortfolioApi";
+import { useUpdateMetaDetailsMutation } from "@/Redux/API/PortfolioApi";
 
 type metaDetails = z.infer<typeof addMetaDetailsSchema>;
 

@@ -24,10 +24,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { RiStarFill } from "@remixicon/react";
-import {
-  useAddContactDetailsMutation,
-  useUpdateContactDetailsMutation,
-} from "@/Redux/API/PortfolioApi";
+import { useUpdateContactDetailsMutation } from "@/Redux/API/PortfolioApi";
 import PhoneInput from "react-phone-input-2";
 import TextEditor from "@/components/TextEditor";
 
