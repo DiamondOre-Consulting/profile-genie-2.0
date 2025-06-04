@@ -14,6 +14,7 @@ import Products from "../Components/Template2/Products";
 import Testimonials from "../Components/Template2/Testimonials";
 import ContactUs from "../Components/Template2/ContactUs";
 import Footer from "../Components/Template2/Footer";
+import Loader from "@/components/Loader";
 
 const Template2 = ({
   setMetaDetails,
@@ -46,20 +47,24 @@ const Template2 = ({
 
   return (
     <>
-      {profileData && (
-        <div className="bg-[#fefbff] w-full  overflow-x-hidden">
-          <div id="home" className="bg-template2mainBg">
-            <Nav portfolioData={profileData} />
-            <Hero portfolioData={profileData} />
+      {isLoading || isFetching ? (
+        <Loader />
+      ) : (
+        profileData && (
+          <div className="bg-[#fefbff] w-full  overflow-x-hidden">
+            <div id="home" className="bg-template2mainBg">
+              <Nav portfolioData={profileData} />
+              <Hero portfolioData={profileData} />
+            </div>
+            <About portfolioData={profileData} />
+            <AboutmeBrands portfolioData={profileData} />
+            <Services portfolioData={profileData} />
+            <Products portfolioData={profileData} />
+            <Testimonials portfolioData={profileData} />
+            <ContactUs portfolioData={profileData} />
+            <Footer portfolioData={profileData} />
           </div>
-          <About portfolioData={profileData} />
-          <AboutmeBrands portfolioData={profileData} />
-          <Services portfolioData={profileData} />
-          <Products portfolioData={profileData} />
-          <Testimonials portfolioData={profileData} />
-          <ContactUs portfolioData={profileData} />
-          <Footer portfolioData={profileData} />
-        </div>
+        )
       )}
     </>
   );
