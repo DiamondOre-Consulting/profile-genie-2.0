@@ -62,7 +62,7 @@ const ContactUs = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
 
             {/* Phone Number Section */}
             {portfolioData?.contactData?.phoneList &&
-              portfolioData.contactData.phoneList[0].phone && (
+              portfolioData.contactData.phoneList[0]?.phone && (
                 <div className="flex items-start">
                   <div className="flex-shrink-0">
                     <div className="flex items-center justify-center w-12 h-12 text-white bg-[#0891B2] rounded-lg">
@@ -94,7 +94,7 @@ const ContactUs = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
 
             {/* Email Section */}
             {portfolioData?.contactData?.emailList &&
-              portfolioData?.contactData?.emailList[0].email && (
+              portfolioData?.contactData?.emailList[0]?.email && (
                 <div className="flex items-start">
                   <div className="flex-shrink-0">
                     <div className="flex items-center justify-center w-12 h-12 text-white bg-[#0891B2] rounded-lg">
