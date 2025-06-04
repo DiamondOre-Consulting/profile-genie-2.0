@@ -53,9 +53,9 @@ function App() {
 
       if (
         window.location.hostname !== "profilegenie.store" &&
-        location.pathname === "/profile/1/UM99"
+        location.pathname === "/profile/2/UM99"
       ) {
-        window.location.href = "https://profilegenie.in/profile/2/UM99";
+        window.location.href = "https://profilegenie.in/profile/1/UM99";
       }
 
       if (
@@ -95,6 +95,10 @@ function App() {
 
       if (location.pathname === "/profile/1/lp205") {
         window.location.href = "https://profilegenie.in/profile/1/lp115";
+      }
+
+      if (location.pathname === "/profile/1/lp140") {
+        window.location.href = "https://profilegenie.in/profile/1/lp211";
       }
     }, [location]);
 
