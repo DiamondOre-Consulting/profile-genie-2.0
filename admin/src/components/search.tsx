@@ -24,10 +24,10 @@ export default function Search({
   setDebouncedSearchValue: (value: string) => void;
 }) {
   const id = useId();
-  const [searchValue, setSearchValue] = useState('')
+  const [searchValue, setSearchValue] = useState("");
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const debouncedValue = useDebounce(searchValue, 800);
+  const debouncedValue = useDebounce(searchValue, 500);
 
   useEffect(() => {
     setIsLoading(true);
@@ -51,7 +51,7 @@ export default function Search({
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
         />
-        <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50 text-zinc-400/80">
+        <div className="absolute inset-y-0 flex items-center justify-center pointer-events-none start-0 ps-3 peer-disabled:opacity-50 text-zinc-400/80">
           {isLoading ? (
             <LoaderCircleIcon
               className="animate-spin"
