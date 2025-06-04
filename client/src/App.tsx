@@ -11,6 +11,7 @@ const Catalogue1Dashboard = lazy(
 
 import AOS from "aos";
 import "aos/dist/aos.css";
+import Template3 from "./Templates/templatePages/Template3";
 
 function App() {
   const location = useLocation();
@@ -201,6 +202,8 @@ function App() {
               />
             }
           />
+
+          <Route path="/template3" element={<Template3 />} />
         </Routes>
       </Suspense>
     </>

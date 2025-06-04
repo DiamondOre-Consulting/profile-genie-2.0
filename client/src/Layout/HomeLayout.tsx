@@ -3,6 +3,7 @@ import { ButtonColorful } from "@/components/ui/button-colorful";
 import { Footer } from "@/components/ui/footer";
 import { ReactNode } from "react";
 import { Link } from "react-router-dom";
+import logo from "./../assets/logo.png";
 
 const HomeLayout = ({ children }: { children: ReactNode }) => {
   return (
@@ -16,9 +17,9 @@ const HomeLayout = ({ children }: { children: ReactNode }) => {
           <nav className=" w-[95vw] max-w-[28rem] gap-2 mx-auto flex items-center justify-between">
             <Link
               to="/"
-              className="px-4 py-1 transition duration-300 rounded-full hover:bg-lightGray hover:text-gray-200"
+              className="transition duration-300 rounded-full  hover:bg-lightGray hover:text-gray-200"
             >
-              Profile Genie
+              <img src={logo} alt="Profile Genie logo" className="w-10" />
             </Link>
 
             <Link to="/" className="Btn ">

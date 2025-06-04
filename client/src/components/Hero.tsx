@@ -1,8 +1,7 @@
-
-import { SparklesCore } from './ui/sparkles';
-import { motion } from 'framer-motion'
-import { cn } from '@/lib/utils';
-import { ButtonColorful } from './ui/button-colorful';
+import { SparklesCore } from "./ui/sparkles";
+import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
+import { ButtonColorful } from "./ui/button-colorful";
 
 // const people = [
 //     {
@@ -48,63 +47,65 @@ import { ButtonColorful } from './ui/button-colorful';
 // ];
 
 const fadeUpVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: (i: number) => ({
-        opacity: 1,
-        y: 0,
-        transition: {
-            duration: 1,
-            delay: 0.5 + i * 0.2,
-            ease: [0.25, 0.4, 0.25, 1],
-        },
-    }),
+  hidden: { opacity: 0, y: 30 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 1,
+      delay: 0.5 + i * 0.2,
+      ease: [0.25, 0.4, 0.25, 1],
+    },
+  }),
 };
 
 const Hero = () => {
-    return (
-        <div className=' mx-auto text-white pt-50 pb-42 w-[97.5%] h-full relative overflow-hidden'>
-            <div className=' p-1 mx-auto  w-full  px-2 md:max-w-[50rem] text-center'>
-                <motion.div
-                    custom={1}
-                    variants={fadeUpVariants}
-                    initial="hidden"
-                    animate="visible"
-                >
-                    <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold mb-6 md:mb-8 tracking-tight">
-                        <span className="bg-clip-text inline-block pb-2 lg:pb-3 text-transparent bg-gradient-to-b from-white to-white/70">
-                            Ditch the Paper
-                        </span>
-                        <br />
-                        <span
-                            className={cn(
-                                "bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-white/90 to-rose-300 "
-                            )}
-                        >
-                            Elevate Your Networking!
-                        </span>
-                    </h1>
-                </motion.div>
+  return (
+    <div className=" mx-auto text-white pt-50 pb-42 w-[97.5%] h-full relative overflow-hidden">
+      <div className=" p-1 mx-auto  w-full  px-2 md:max-w-[50rem] text-center">
+        <motion.div
+          custom={1}
+          variants={fadeUpVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <h1 className="mb-6 text-3xl font-bold tracking-tight sm:text-5xl md:text-6xl md:mb-8">
+            <span className="inline-block pb-2 text-transparent bg-clip-text lg:pb-3 bg-gradient-to-b from-white to-white/70">
+              Ditch the Paper
+            </span>
+            <br />
+            <span
+              className={cn(
+                "bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-white/90 to-yellow-200 "
+              )}
+            >
+              Elevate Your Networking!
+            </span>
+          </h1>
+        </motion.div>
 
-                <motion.div
-                    custom={2}
-                    variants={fadeUpVariants}
-                    initial="hidden"
-                    animate="visible"
-                >
-                    <p className="text-base sm:text-md md:text-[1.05rem] text-white/70 mb-8  font-light tracking-wide max-w-xl mx-auto px-4">
-                        "Profile Genie – Your all-in-one digital identity, seamlessly shareable with a single click for smarter, paperless networking and connections.
-                    </p>
-                </motion.div>
+        <motion.div
+          custom={2}
+          variants={fadeUpVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <p className="text-base sm:text-md md:text-[1.05rem] text-white/70 mb-8  font-light tracking-wide max-w-xl mx-auto px-4">
+            "Profile Genie – Your all-in-one digital identity, seamlessly
+            shareable with a single click for smarter, paperless networking and
+            connections.
+          </p>
+        </motion.div>
 
-                <div className='relative z-100 space-x-3'>
-                    <ButtonColorful label='Get Demo!' />
-                    <ButtonColorful className='bg-[#5E10DE]' label='Contact Us' />
-                </div>
-            </div>
-            {/* <ShootingStars /> */}
-            <SparklesCore particleColor='#6C3AEF' />
-        </div >
-    )
-}
+        <div className="relative space-x-3 z-100">
+          <ButtonColorful label="Get Demo!" />
+          <ButtonColorful className="bg-[#5E10DE]" label="Contact Us" />
+        </div>
+      </div>
+      {/* <ShootingStars /> */}
+      <SparklesCore particleColor="#6C3AEF" />
+    </div>
+  );
+};
 
-export default Hero
+export default Hero;
