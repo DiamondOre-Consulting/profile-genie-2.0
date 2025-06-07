@@ -1,108 +1,120 @@
 import { Schema, model } from "mongoose";
 
-const portfolioSchema = new Schema({
+const portfolioSchema = new Schema(
+  {
     fullName: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     userName: {
-        type: String,
-        required: true,
-        unique: [true, "Username already exists!"]
+      type: String,
+      required: true,
+      unique: [true, "Username already exists!"],
     },
     tagline: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     email: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     phoneNumber: {
-        type: Number,
-        required: true
+      type: Number,
+      required: true,
+    },
+    views: {
+      type: Number,
+      default: 0,
     },
     image: {
-        publicId: {
-            type: String,
-            default: ""
-        },
-        url: {
-            type: String,
-            default: ""
-        }
+      publicId: {
+        type: String,
+        default: "",
+      },
+      url: {
+        type: String,
+        default: "",
+      },
     },
     shortDescription: {
-        type: String
+      type: String,
     },
     backgroundImage: {
-        publicId: {
-            type: String,
-            default: ""
-        },
-        url: {
-            type: String,
-            default: ""
-        }
+      publicId: {
+        type: String,
+        default: "",
+      },
+      url: {
+        type: String,
+        default: "",
+      },
     },
     logo: {
-        publicId: {
-            type: String,
-            default: ""
-        },
-        url: {
-            type: String,
-            default: ""
-        }
+      publicId: {
+        type: String,
+        default: "",
+      },
+      url: {
+        type: String,
+        default: "",
+      },
     },
     about: {
-        head: {
-            type: String,
-            required: true
-        },
-        body: {
-            type: String,
-            required: true
-        }
-    },
-    isPaid: {
-        type: Boolean,
-        default: false
-    },
-    isActive: {
-        type: Boolean,
-        default: false
-    },
-    isRecycled: {
-        type: Boolean,
-        default: false
-    },
-    paidDate: {
-        type: Date
-    },
-    template: {
+      head: {
         type: String,
         required: true,
-        default: "template1"
+      },
+      body: {
+        type: String,
+        required: true,
+      },
+    },
+    isPaid: {
+      type: Boolean,
+      default: false,
+    },
+    isActive: {
+      type: Boolean,
+      default: false,
+    },
+    isRecycled: {
+      type: Boolean,
+      default: false,
+    },
+    paidDate: {
+      type: Date,
+    },
+    template: {
+      type: String,
+      required: true,
+      default: "template1",
     },
     otherDetails: {
-        type: Schema.Types.ObjectId,
-        ref: "PortfolioDetail"
+      type: Schema.Types.ObjectId,
+      ref: "PortfolioDetail",
     },
     contactData: {
-        type: Schema.Types.ObjectId,
-        ref: "PortfolioContact"
+      type: Schema.Types.ObjectId,
+      ref: "PortfolioContact",
     },
     metaDetails: {
-        type: Schema.Types.ObjectId,
-        ref: "MetaData"
-    }
-}, {
-    timestamps: true
-})
+      type: Schema.Types.ObjectId,
+      ref: "MetaData",
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
 
-portfolioSchema.index({ phoneNumber: "text", userName: "text", fullName: "text", email: "text" })
+portfolioSchema.index({
+  phoneNumber: "text",
+  userName: "text",
+  fullName: "text",
+  email: "text",
+});
 
-const Portfolio = model("Portfolio", portfolioSchema)
+const Portfolio = model("Portfolio", portfolioSchema);
 
-export default Portfolio
+export default Portfolio;

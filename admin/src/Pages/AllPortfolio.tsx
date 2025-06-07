@@ -31,7 +31,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { BoltIcon, CircleUserRoundIcon, Layers2Icon } from "lucide-react";
+import { BoltIcon, CircleUserRoundIcon, Layers2Icon, View } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Search from "@/components/search";
 import Filter from "@/components/Filter";
@@ -392,14 +392,22 @@ const AllPortfolio = () => {
                         </div>
                         <div
                           onClick={() => window.open(`tel:${item.phoneNumber}`)}
-                          className="flex items-center gap-2 cursor-pointer"
+                          className="flex items-center justify-between gap-2 cursor-pointer"
                         >
                           <div className="flex items-center gap-2">
                             <div className="relative flex items-center justify-center w-8 h-8 rounded bg-purple-700/20">
-                              <IconPhone className="text-purple-600" />
+                              <IconPhone className="text-[#89AC46]" />
                             </div>
                             <span className="text-sm font-semibold">
                               {item.phoneNumber}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className="relative flex items-center justify-center w-8 h-8 rounded bg-[#7A1CAC]/40">
+                              <View className="text-[#EBD3F8]" />
+                            </div>
+                            <span className="text-sm font-semibold">
+                              {item?.views || 0}
                             </span>
                           </div>
                         </div>
