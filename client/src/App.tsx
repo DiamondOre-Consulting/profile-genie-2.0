@@ -100,6 +100,9 @@ function App() {
       if (location.pathname === "/profile/1/lp140") {
         window.location.href = "https://profilegenie.in/profile/1/lp211";
       }
+      if (location.pathname === "/profile/1/lp143") {
+        window.location.href = "https://profilegenie.in/profile/1/lp206";
+      }
     }, [location]);
 
     return null;
