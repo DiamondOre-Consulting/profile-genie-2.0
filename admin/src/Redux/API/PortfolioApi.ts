@@ -19,6 +19,15 @@ export const portfolioApi = createApi({
       providesTags: (result) =>
         result ? [{ type: "PORTFOLIO" as const }] : [],
     }),
+    getAllAdminDashboardData: builder.query({
+      query: () => ({
+        url: `/portfolio/admin-dashboard`,
+        method: "GET",
+        data: {},
+      }),
+      providesTags: (result) =>
+        result ? [{ type: "PORTFOLIO" as const }] : [],
+    }),
     addPortfolio: builder.mutation<object, AddAccessoriesProps>({
       query: ({ formData }) => ({
         url: "/portfolio",
@@ -170,4 +179,5 @@ export const {
   useGetRecycledPortfolioQuery,
   useUpdateActiveStatusMutation,
   useUpdatePaidStatusMutation,
+  useGetAllAdminDashboardDataQuery,
 } = portfolioApi;
