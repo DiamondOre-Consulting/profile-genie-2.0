@@ -153,7 +153,7 @@ const getAdminDashboardData = asyncHandler(async (req, res) => {
     "fullName userName views email"
   )
     .sort({ views: -1 })
-    .limit(5);
+    .limit(10);
 
   const thisMonth = await Portfolio.countDocuments({
     createdAt: {

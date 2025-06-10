@@ -1,9 +1,9 @@
 import axios from "axios";
 import { toast } from "sonner";
 
-// const BASE_URL = "http://localhost:8000/api/v1";
+const BASE_URL = "http://localhost:8000/api/v1";
 // const BASE_URL = "https://profile-genie-2-0-server.onrender.com/api/v1"
-const BASE_URL = "https://server.profilegenie.in/api/v1";
+// const BASE_URL = "https://server.profilegenie.in/api/v1";
 
 const axiosInstance = axios.create();
 

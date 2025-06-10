@@ -21,7 +21,7 @@ export const portfolioApi = createApi({
     }),
     getAllAdminDashboardData: builder.query({
       query: () => ({
-        url: `/portfolio/admin-dashboard`,
+        url: `/admin/admin-dashboard`,
         method: "GET",
         data: {},
       }),
