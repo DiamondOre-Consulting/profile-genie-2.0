@@ -1,18 +1,42 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/profilegenie.png" />
+    <script>
+      (function () {
+        const hostname = window.location.hostname;
+        const path = window.location.pathname;
 
-<head>
-  <meta charset="UTF-8" />
-  <link rel="icon"  href="/profilegenie.png" />
+        const redirects = {
+          "/profile/1/lp123": "https://profilegenie.in/profile/1/lp115",
+          "/profile/2/UM99": "https://profilegenie.in/profile/1/UM99",
+          "/profile/1/lp107": "https://profilegenie.in/profile/1/lp108",
+          "/profile/1/lp112": "https://profilegenie.in/profile/1/lp108",
+          "/profile/1/lp06": "https://profilegenie.in/profile/1/lp223",
+          "/profile/1/lp129": "https://profilegenie.in/profile/1/lp220",
+          "/profile/1/lp143": "https://profilegenie.in/profile/1/lp206",
+          "/profile/1/aa38": "https://profilegenie.in/profile/1/R2R3",
+          "/profile/1/lp132": "https://profilegenie.in/profile/1/lp222",
+          "/profile/1/lp207": "https://profilegenie.in/profile/1/lp04",
+          "/profile/1/lp126": "https://profilegenie.in/profile/1/lp214",
+          "/profile/1/lp205": "https://profilegenie.in/profile/1/lp115",
+          "/profile/1/lp140": "https://profilegenie.in/profile/1/lp211",
+        };
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Profile Genie</title>
-</head>
+        if (hostname !== "profilegenie.store" && redirects[path]) {
+          window.location.replace(redirects[path]);
+        }
+      })();
+    </script>
 
-<body>
-  <div id="root"></div>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile Genie</title>
+  </head>
 
-  <script type="module" src="/src/main.tsx"></script>
-</body>
+  <body>
+    <div id="root"></div>
 
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
