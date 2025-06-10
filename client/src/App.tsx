@@ -40,73 +40,30 @@ function App() {
     });
   }, [location.pathname]);
 
-  const RedirectToStore = () => {
-    const location = useLocation();
+  useEffect(() => {
+    const hostname = window.location.hostname;
+    const path = location.pathname;
 
-    useEffect(() => {
-      if (
-        window.location.hostname !== "profilegenie.store" &&
-        location.pathname === "/profile/1/lp123"
-      ) {
-        window.location.href = "https://profilegenie.in/profile/1/lp115";
-      }
+    const redirectionMap: { [key: string]: string } = {
+      "/profile/1/lp123": "https://profilegenie.in/profile/1/lp115",
+      "/profile/2/UM99": "https://profilegenie.in/profile/1/UM99",
+      "/profile/1/lp107": "https://profilegenie.in/profile/1/lp108",
+      "/profile/1/lp112": "https://profilegenie.in/profile/1/lp108",
+      "/profile/1/lp06": "https://profilegenie.in/profile/1/lp223",
+      "/profile/1/lp129": "https://profilegenie.in/profile/1/lp220",
+      "/profile/1/lp143": "https://profilegenie.in/profile/1/lp206",
+      "/profile/1/aa38": "https://profilegenie.in/profile/1/R2R3",
+      "/profile/1/lp132": "https://profilegenie.in/profile/1/lp222",
+      "/profile/1/lp207": "https://profilegenie.in/profile/1/lp04",
+      "/profile/1/lp126": "https://profilegenie.in/profile/1/lp214",
+      "/profile/1/lp205": "https://profilegenie.in/profile/1/lp115",
+      "/profile/1/lp140": "https://profilegenie.in/profile/1/lp211",
+    };
 
-      if (
-        window.location.hostname !== "profilegenie.store" &&
-        location.pathname === "/profile/2/UM99"
-      ) {
-        window.location.href = "https://profilegenie.in/profile/1/UM99";
-      }
-
-      if (
-        location.pathname === "/profile/1/lp107" ||
-        location.pathname === "/profile/1/lp112"
-      ) {
-        window.location.href = "https://profilegenie.in/profile/1/lp108";
-      }
-
-      if (location.pathname === "/profile/1/lp06") {
-        window.location.href = "https://profilegenie.in/profile/1/lp223";
-      }
-
-      if (location.pathname === "/profile/1/lp129") {
-        window.location.href = "https://profilegenie.in/profile/1/lp220";
-      }
-
-      if (location.pathname === "/profile/1/lp143") {
-        window.location.href = "https://profilegenie.in/profile/1/lp206";
-      }
-
-      if (location.pathname === "/profile/1/aa38") {
-        window.location.href = "https://profilegenie.in/profile/1/R2R3";
-      }
-
-      if (location.pathname === "/profile/1/lp132") {
-        window.location.href = "https://profilegenie.in/profile/1/lp222";
-      }
-
-      if (location.pathname === "/profile/1/lp207") {
-        window.location.href = "https://profilegenie.in/profile/1/lp04";
-      }
-
-      if (location.pathname === "/profile/1/lp126") {
-        window.location.href = "https://profilegenie.in/profile/1/lp214";
-      }
-
-      if (location.pathname === "/profile/1/lp205") {
-        window.location.href = "https://profilegenie.in/profile/1/lp115";
-      }
-
-      if (location.pathname === "/profile/1/lp140") {
-        window.location.href = "https://profilegenie.in/profile/1/lp211";
-      }
-      if (location.pathname === "/profile/1/lp143") {
-        window.location.href = "https://profilegenie.in/profile/1/lp206";
-      }
-    }, [location]);
-
-    return null;
-  };
+    if (hostname !== "profilegenie.store" && redirectionMap[path]) {
+      window.location.href = redirectionMap[path];
+    }
+  }, [location]);
 
   useEffect(() => {
     AOS.init();
@@ -163,7 +120,6 @@ function App() {
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
       <Suspense fallback={<Loader />}>
-        <RedirectToStore />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/demo" element={<Home />} />
