@@ -22,14 +22,22 @@ const Template2 = ({
   setMetaDetails: React.Dispatch<React.SetStateAction<metaDetails | undefined>>;
 }) => {
   const { username } = useParams();
+  const [shouldQuery, setShouldQuery] = useState(false);
 
   const [profileData, setProfileData] = useState<portfolioResponse>();
-  const { data, isFetching, isLoading, error } = useGetSinglePortfolioQuery({
-    username,
-  });
+  useEffect(() => {
+    if (username) {
+      setShouldQuery(true);
+    }
+  }, [username]);
+
+  const { data, isFetching, isLoading, error } = useGetSinglePortfolioQuery(
+    { username },
+    { skip: !shouldQuery }
+  );
 
   useEffect(() => {
-    if (!isFetching && !isLoading) {
+    if (!isFetching && !isLoading && data) {
       setProfileData(data?.data);
       setMetaDetails(data?.data?.metaDetails);
     }
@@ -39,11 +47,11 @@ const Template2 = ({
     window.scrollTo(0, 0);
   }, []);
 
-  if (!profileData && !isFetching && !isLoading) {
-    if (error) {
-      return (window.location.href = "https://profilegenie.in");
+  useEffect(() => {
+    if (error && !isFetching && !isLoading) {
+      window.location.href = "https://profilegenie.in";
     }
-  }
+  }, [error, isFetching, isLoading]);
 
   return (
     <>

@@ -5,7 +5,6 @@ import {
   createPortfolioContact,
   createPortfolioDetail,
   deletePortfolio,
-  getAdminDashboardData,
   getAllPortfolio,
   getRecycledPortfolio,
   getSinglePortfolio,
@@ -25,8 +24,6 @@ import {
 import { verifyJWT } from "../middleware/auth.middleware.js";
 
 const portfolioRouter = Router();
-
-portfolioRouter.route("/admin-dashboard", verifyJWT).get(getAdminDashboardData);
 
 portfolioRouter
   .route("/", verifyJWT)
