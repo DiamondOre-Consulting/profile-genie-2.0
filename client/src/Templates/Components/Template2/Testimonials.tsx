@@ -66,7 +66,7 @@ const Testimonials = ({
                     </svg>
                     <blockquote className="relative">
                       <p
-                        className="tracking-tight line-clamp-5 text-slate-900"
+                        className="tracking-tight text-slate-900"
                         dangerouslySetInnerHTML={{
                           __html: activeTestimonial?.detail,
                         }}
