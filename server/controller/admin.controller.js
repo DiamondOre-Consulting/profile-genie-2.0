@@ -260,29 +260,49 @@ async function getResponseTime() {
 
 // 4. Simple SEO score estimation
 async function getSeoScore(url) {
+  const apiKey = process.env.PSI_API_KEY; // Free Google API key from Google Cloud Console
+  const apiUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(
+    url
+  )}&category=performance&category=accessibility&category=best-practices&category=seo&strategy=desktop&key=${apiKey}`;
+
   try {
-    const res = await axios.get(url);
-    const html = res.data;
-    const hasTitle = /<title>(.*?)<\/title>/i.test(html);
-    const hasMetaDesc = /<meta[^>]*name=["']description["'][^>]*>/i.test(html);
-    const hasH1 = /<h1[^>]*>(.*?)<\/h1>/i.test(html);
+    const res = await axios.get(apiUrl);
+    const lighthouse = res.data.lighthouseResult;
 
-    let score = 0;
-    if (hasTitle) score += 30;
-    if (hasMetaDesc) score += 30;
-    if (hasH1) score += 30;
-    return score;
-  } catch {
-    return 0;
+    const seoScore = lighthouse.categories.seo.score * 100;
+    const performance = lighthouse.categories.performance.score * 100;
+    const accessibility = lighthouse.categories.accessibility.score * 100;
+    const bestPractices = lighthouse.categories["best-practices"].score * 100;
+
+    const audits = lighthouse.audits;
+    console.log(seoScore);
+    return {
+      seoScore,
+      performance,
+      accessibility,
+      bestPractices,
+      fullMetrics: {
+        title: lighthouse.finalUrl,
+        fetchedAt: res.data.analysisUTCTimestamp,
+        auditsSummary: {
+          titlePresent: audits["document-title"].score === 1,
+          metaDescPresent: audits["meta-description"].score === 1,
+          h1Present: audits["document-title"].score === 1, // H1 is usually part of semantic structure
+          robotsTxt: audits["robots-txt"].score === 1,
+          fontSizesOk: audits["font-size"].score === 1,
+        },
+      },
+    };
+  } catch (err) {
+    console.error("Lighthouse SEO fetch error:", err.message);
+    return {
+      seoScore: 0,
+      performance: 0,
+      accessibility: 0,
+      bestPractices: 0,
+      fullMetrics: null,
+    };
   }
-}
-
-// 5. Disk usage percent
-async function getDiskUsage() {
-  const path = process.platform === "win32" ? "C:\\" : "/";
-  const { size, free } = await checkDiskSpace(path);
-  const used = size - free;
-  return ((used / size) * 100).toFixed(2);
 }
 
 // 6. Memory and CPU stats
@@ -314,24 +334,20 @@ function getProcessStats() {
 // 🔁 Final function to emit data
 async function getAllSystemStats(io) {
   try {
-    const [siteUptime, apiUptime, responseTime, seoScore, diskUsage] =
-      await Promise.all([
-        checkApiUptime(),
-        getResponseTime(),
-        getSeoScore("https://profilegenie.in"),
-        getDiskUsage(),
-      ]);
+    const [apiUptime, responseTime, seoScore] = await Promise.all([
+      checkApiUptime(),
+      getResponseTime(),
+      getSeoScore("https://profilegenie.in"),
+    ]);
 
     const systemStats = getSystemStats();
     const errorRate = getErrorRate();
     const processStats = getProcessStats();
 
     const payload = {
-      siteUptime,
       apiUptime,
       responseTime,
       seoScore,
-      diskUsage,
       systemStats,
       processStats,
       errorRate,

@@ -27,3 +27,36 @@ export type loginValidation = z.infer<typeof loginValidationSchema>;
 export type forgotPasswordType = z.infer<typeof forgotPasswordSchema>;
 export type resetPasswordType = z.infer<typeof resetPasswordSchema>;
 export type sendMailType = z.infer<typeof sendMail>;
+
+export type HealthData = {
+  apiUptime: boolean;
+  responseTime: number;
+  seoScore: {
+    seoScore: number;
+    performance: number;
+    accessibility: number;
+    bestPractices: number;
+    fullMetrics: {
+      title: string;
+      fetchedAt: string;
+      auditsSummary: {
+        titlePresent: boolean;
+        metaDescPresent: boolean;
+        h1Present: boolean;
+        robotsTxt: boolean;
+        fontSizesOk: boolean;
+      };
+    };
+  };
+  systemStats: {
+    memoryUsagePercent: string;
+    cpuLoad: string;
+  };
+  processStats: {
+    nodeHeapUsedMB: string;
+    nodeRSSMB: string;
+    uptimeSeconds: string;
+  };
+  errorRate: string;
+  timestamp: string;
+};

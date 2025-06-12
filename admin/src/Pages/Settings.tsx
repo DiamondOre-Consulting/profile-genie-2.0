@@ -1,27 +1,11 @@
+import LiveSiteHealthDashboard from "@/components/HealthDashboard";
 import { Input } from "@/components/ui/input";
 import { socket } from "@/Helper/axiosInstance";
 import { HomeLayout } from "@/Layout/HomeLayout";
+import { HealthData } from "@/validations/AuthValidation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Label } from "react-aria-components";
-
-type HealthData = {
-  apiUptime: boolean;
-  responseTime: number;
-  seoScore: number;
-  diskUsage: string;
-  systemStats: {
-    memoryUsagePercent: string;
-    cpuLoad: string;
-  };
-  processStats: {
-    nodeHeapUsedMB: string;
-    nodeRSSMB: string;
-    uptimeSeconds: string;
-  };
-  errorRate: string;
-  timestamp: string;
-};
 
 const Settings = () => {
   const [data, setData] = useState<HealthData | null>(null);
@@ -249,90 +233,7 @@ const Settings = () => {
           </motion.div>
         </AnimatePresence>
       </div>
-      <div className="max-w-lg p-4 mx-auto bg-white shadow-lg rounded-xl">
-        <h2 className="mb-4 text-2xl font-semibold text-center text-indigo-700">
-          🔍 Live Site Health
-        </h2>
-
-        {data ? (
-          <div className="space-y-3 text-sm text-gray-800">
-            <div>
-              🛠 API Uptime:{" "}
-              <span
-                className={data.apiUptime ? "text-green-600" : "text-red-600"}
-              >
-                <strong>{data.apiUptime ? "✅ Up" : "❌ Down"}</strong>
-              </span>
-            </div>
-
-            <div>
-              ⚡ Response Time:{" "}
-              <strong className="text-blue-600">{data?.responseTime} ms</strong>
-            </div>
-
-            <div>
-              📈 SEO Score:{" "}
-              <strong className="text-green-700">{data?.seoScore}/90</strong>
-            </div>
-
-            <div>
-              💾 Disk Usage:{" "}
-              <strong className="text-orange-700">{data?.diskUsage}%</strong>
-            </div>
-
-            <div>
-              🧠 Memory Usage:{" "}
-              <strong className="text-purple-600">
-                {data.systemStats?.memoryUsagePercent}%
-              </strong>
-            </div>
-
-            <div>
-              🧮 CPU Load (1m):{" "}
-              <strong className="text-pink-600">
-                {data.systemStats?.cpuLoad}
-              </strong>
-            </div>
-
-            <div>
-              ❗ Error Rate:{" "}
-              <strong className="text-red-500">{data?.errorRate}%</strong>
-            </div>
-
-            <div>
-              🔧 Node Heap Used:{" "}
-              <strong className="text-teal-600">
-                {data.processStats?.nodeHeapUsedMB} MB
-              </strong>
-            </div>
-
-            <div>
-              📦 Node RSS:{" "}
-              <strong className="text-indigo-500">
-                {data.processStats?.nodeRSSMB} MB
-              </strong>
-            </div>
-
-            <div>
-              ⏱ Server Uptime:{" "}
-              <strong className="text-gray-700">
-                {Math.floor(
-                  Number(data?.processStats?.uptimeSeconds || 0) / 60
-                )}{" "}
-                min {Number(data?.processStats?.uptimeSeconds || 0) % 60} sec
-              </strong>
-            </div>
-
-            <p className="text-xs text-right text-gray-400">
-              Last Updated: {new Date(data.timestamp).toLocaleTimeString()}
-            </p>
-          </div>
-        ) : (
-          <p className="text-center text-gray-500 animate-pulse">
-            Waiting for data...
-          </p>
-        )}
-      </div>
+      {data && <LiveSiteHealthDashboard data={data} />}
     </HomeLayout>
   );
 };
