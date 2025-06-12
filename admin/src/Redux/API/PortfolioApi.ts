@@ -28,6 +28,15 @@ export const portfolioApi = createApi({
       providesTags: (result) =>
         result ? [{ type: "PORTFOLIO" as const }] : [],
     }),
+    sendCustomMail: builder.mutation({
+      query: (data) => ({
+        url: `/admin/send-custom-mail`,
+        method: "POST",
+        data: data,
+      }),
+      invalidatesTags: (result) =>
+        result ? [{ type: "PORTFOLIO" as const }] : [],
+    }),
     addPortfolio: builder.mutation<object, AddAccessoriesProps>({
       query: ({ formData }) => ({
         url: "/portfolio",
@@ -180,4 +189,5 @@ export const {
   useUpdateActiveStatusMutation,
   useUpdatePaidStatusMutation,
   useGetAllAdminDashboardDataQuery,
+  useSendCustomMailMutation,
 } = portfolioApi;

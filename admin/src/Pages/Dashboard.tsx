@@ -10,7 +10,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { HomeLayout } from "@/Layout/HomeLayout";
-import { useGetAllAdminDashboardDataQuery } from "@/Redux/API/PortfolioApi";
+import {
+  useGetAllAdminDashboardDataQuery,
+  useSendCustomMailMutation,
+} from "@/Redux/API/PortfolioApi";
 import { sendMail, sendMailType } from "@/validations/AuthValidation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IconWhirl } from "@tabler/icons-react";
@@ -39,6 +42,7 @@ const iconDown = <ArrowDownRight className="text-red-500" />;
 
 const Dashboard = () => {
   const { data } = useGetAllAdminDashboardDataQuery({});
+  const [sendCustomMail] = useSendCustomMailMutation();
 
   const {
     register,
@@ -54,8 +58,9 @@ const Dashboard = () => {
   const onSubmit = async (data: sendMailType) => {
     try {
       console.log(JSON.stringify(data));
-      const formData = new FormData();
-      formData.append("formData", JSON.stringify(data));
+      const sendMail = await sendCustomMail(data);
+
+      console.log(sendMail);
     } catch (error) {
       toast.error("Error submitting form");
     }

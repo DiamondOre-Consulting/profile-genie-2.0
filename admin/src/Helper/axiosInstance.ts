@@ -1,4 +1,5 @@
 import axios from "axios";
+import { io } from "socket.io-client";
 import { toast } from "sonner";
 
 // const BASE_URL = "http://localhost:8000/api/v1";
@@ -9,6 +10,8 @@ const axiosInstance = axios.create();
 
 axiosInstance.defaults.baseURL = BASE_URL;
 axiosInstance.defaults.withCredentials = true;
+
+const socket = io("http://localhost:8000");
 
 axiosInstance.interceptors.response.use(
   (response) => response,
@@ -36,4 +39,4 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-export { axiosInstance };
+export { axiosInstance, socket };

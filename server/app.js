@@ -61,6 +61,11 @@ app.use("/api/v1/portfolio", portfolioRouter);
 app.use("/api/v1/catalogue", catalogueRouter);
 app.use("/api/v1/admin", adminRouter);
 
+// app.get("/api/v1/system-stats", verifyJWT, (req, res) => {
+//   getAllSystemStats(io);
+//   res.status(200).json({ message: "System stats updated" });
+// });
+
 app.all("*", (req, res) => {
   res.status(404).send("OOPS! 404 Page not found");
 });
