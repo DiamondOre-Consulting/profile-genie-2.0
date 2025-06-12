@@ -337,7 +337,7 @@ async function getAllSystemStats(io) {
       errorRate,
       timestamp: new Date().toISOString(),
     };
-
+    console.log(payload);
     io.emit("health-data", payload);
   } catch (err) {
     console.error("Health check error:", err.message);

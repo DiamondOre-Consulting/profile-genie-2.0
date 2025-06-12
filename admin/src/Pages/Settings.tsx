@@ -27,9 +27,15 @@ const Settings = () => {
   const [data, setData] = useState<HealthData | null>(null);
   console.log(data);
   useEffect(() => {
-    socket.on("health-data", (health: HealthData) => {
+    const handleHealthData = (health: HealthData) => {
       setData(health);
-    });
+    };
+
+    socket.on("health-data", handleHealthData);
+
+    return () => {
+      socket.off("health-data", handleHealthData); // 🧼 Cleanup to prevent duplicates
+    };
   }, []);
 
   return (
