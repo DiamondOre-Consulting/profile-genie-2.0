@@ -83,7 +83,7 @@ const Template2 = ({
             {sosActive && (
               <div className="fixed inset-0 top-0 left-0 bg-black/50 backdrop-blur-sm z-[1000] flex items-center justify-center">
                 <RadioGroup
-                  className="gap-2 p-4 w-full max-w-[23rem] cursor-pointer pt-2 border-2 rounded-xl border-zinc-600 bg-gradient-to-bl from-zinc-300 relative via-zinc-200 to-zinc-300"
+                  className="gap-2 p-4 w-full max-w-[23rem] cursor-pointer pt-2 border-2 rounded-xl border-zinc-600  bg-zinc-300 relative "
                   defaultValue="1"
                 >
                   <div
