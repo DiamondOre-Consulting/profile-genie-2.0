@@ -7,14 +7,16 @@ import {
 } from "@/validations/PortfolioValidation";
 import {
   IconCamera,
+  IconPlus,
   IconRosetteDiscountCheckFilled,
   IconSquareRoundedArrowLeftFilled,
   IconSquareRoundedArrowRightFilled,
   IconWhirl,
+  IconX,
 } from "@tabler/icons-react";
 import React, { useEffect, useState } from "react";
 import { z } from "zod";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Switch } from "@/components/ui/switch";
 import { useUpdatePortfolioMutation } from "@/Redux/API/PortfolioApi";
@@ -124,6 +126,15 @@ const EditProfileDetail = ({
       toast.error("Error submitting form");
     }
   };
+
+  const {
+    fields: SOSFields,
+    append: SOSAppend,
+    remove: SOSRemove,
+  } = useFieldArray({
+    control,
+    name: "SOS",
+  });
 
   console.log(typeof new Date(watch("paidDate")));
 
@@ -300,6 +311,135 @@ const EditProfileDetail = ({
                 </div> */}
       </div>
 
+      <div className="mt-3">
+        <Label className=" text-neutral-300">SOS</Label>
+        <div className="grid grid-cols-1 space-y-3 sm:grid-cols-2 gap-x-6">
+          {SOSFields?.map((_, ind) => {
+            return (
+              <div
+                className="space-y-2  p-2 rounded bg-[#ff17a21b] border border-rose-800"
+                key={ind}
+              >
+                <div>
+                  <Label
+                    htmlFor={`SOS.${ind}.fullName`}
+                    className="text-neutral-300 "
+                  >
+                    Full name <span className="text-main">*</span>
+                  </Label>
+                  <Input
+                    {...register(`SOS.${ind}.fullName`)}
+                    placeholder="Enter service name..."
+                    type="text"
+                    className={`${
+                      errors.SOS?.[ind]?.fullName && "border-[#E11D48] "
+                    } py-[0.45rem] text-neutral-200`}
+                  />
+                  {errors.SOS?.[ind]?.fullName && (
+                    <p className="text-sm font-semibold tracking-wide text-main">
+                      {errors.SOS?.[ind]?.fullName.message}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <Label
+                    htmlFor={`services.${ind}.serviceName`}
+                    className="text-neutral-300 "
+                  >
+                    Phone Number <span className="text-main">*</span>
+                  </Label>
+
+                  <Controller
+                    name={`SOS.${ind}.phoneNumber`}
+                    control={control}
+                    rules={{
+                      required: "Phone number is required",
+                      validate: (value) =>
+                        (!isNaN(value) && value > 0) || "Invalid phone number",
+                    }}
+                    render={({ field: { onChange, value, ref } }) => (
+                      <PhoneInput
+                        country="in"
+                        placeholder="Enter phone number"
+                        inputProps={{
+                          name: `phoneList.${ind}.phone`,
+                          required: true,
+                          ref: (elm: HTMLElement | null) => {
+                            if (ref) {
+                              ref(elm instanceof HTMLElement ? elm : null);
+                            }
+                          },
+                        }}
+                        containerStyle={{
+                          backgroundColor: "#171717",
+                          color: "#ffffff",
+                        }}
+                        buttonStyle={{
+                          backgroundColor: "#2D2D2D",
+                          color: "#000000",
+                          border: "none",
+                        }}
+                        inputStyle={{
+                          width: "100%",
+                          border: "1px solid #01010100",
+                          fontSize: "12px",
+                          paddingTop: "8px",
+                          paddingBottom: "8px",
+                          height: "34px",
+                          borderRadius: "4px",
+                          backgroundColor: "#171717",
+                          color: "#ffffff",
+                        }}
+                        value={value ? value.toString() : ""}
+                        onChange={(phone) =>
+                          onChange(phone ? Number(phone) : 0)
+                        }
+                      />
+                    )}
+                  />
+                  {errors.SOS?.[ind]?.phoneNumber && (
+                    <p className="text-sm font-semibold tracking-wide text-main">
+                      {errors.SOS?.[ind]?.phoneNumber.message}
+                    </p>
+                  )}
+                </div>
+                <div className="flex gap-2 mt-3 justify-evenly">
+                  <div className="size-9 px-5 border border-[#E11D48] flex items-center text-white justify-center rounded bg-[#010101]">
+                    {ind + 1}
+                  </div>
+                  {SOSFields.length && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (SOSFields.length === 1) {
+                          setValue(`SOS.${ind}`, {
+                            fullName: "",
+                            phoneNumber: 0,
+                          });
+                        } else {
+                          SOSRemove(ind);
+                        }
+                      }}
+                      className="flex items-center justify-center w-full gap-2 px-2 text-white rounded bg-main"
+                    >
+                      <IconX className="size-4" />{" "}
+                      {SOSFields.length !== 1 ? "Remove" : "Clear"}
+                    </button>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+
+          <button
+            type="button"
+            className="flex items-center justify-center gap-2 p-2 px-4 my-3 text-white rounded cursor-pointer bg-main"
+            onClick={() => SOSAppend({ fullName: "", phoneNumber: 0 })}
+          >
+            <IconPlus className="size-4.5" /> Add more
+          </button>
+        </div>
+      </div>
       <div className="mt-3">
         <div className="mt-3">
           <Label htmlFor={"tagline"} className="text-neutral-300 ">

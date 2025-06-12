@@ -1,3 +1,4 @@
+import PhoneNumberDisplay from "@/components/FormatPhoneNumber";
 import { portfolioResponse } from "@/validations/PortfolioValidation";
 import { Contact, Mail, MapPin, Phone } from "lucide-react";
 import { useState } from "react";
@@ -77,13 +78,16 @@ const ContactUs = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
                       {portfolioData.contactData.phoneList.map(
                         (phoneItem, index) => (
                           <div key={index}>
-                            <a
-                              href={`tel:+91${phoneItem?.phone}`}
-                              className="text-base text-gray-600 hover:text-[#0891B2] transition-colors"
-                            >
-                              <span className="pb-1 text-lg">+</span>
-                              {phoneItem?.phone}
-                            </a>
+                            {phoneItem?.phone && (
+                              <a
+                                href={`tel:+${phoneItem?.phone}`}
+                                className="text-base text-gray-600 hover:text-[#0891B2] transition-colors"
+                              >
+                                <PhoneNumberDisplay
+                                  phoneNumber={phoneItem?.phone?.toString()}
+                                />
+                              </a>
+                            )}
                           </div>
                         )
                       )}

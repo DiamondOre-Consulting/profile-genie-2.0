@@ -34,6 +34,12 @@ export const addProfileDetailSchema = z.object({
   views: z.number().optional(),
   isPaid: z.boolean().default(false).optional(),
   isActive: z.boolean().default(false),
+  SOS: z.array(
+    z.object({
+      fullName: z.string().min(1, "Full name is required"),
+      phoneNumber: z.number().min(1, "Phone Number is required"),
+    })
+  ),
   shortDescription: z.string().optional(),
   image: z.object({
     publicId: z.string().optional(),

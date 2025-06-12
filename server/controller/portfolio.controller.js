@@ -26,6 +26,7 @@ const createPortfolio = asyncHandler(async (req, res) => {
     shortDescription,
     isActive,
     paidDate,
+    SOS,
   } = JSON.parse(formData);
 
   const uniquePortfolio = await Portfolio.findOne({ userName });
@@ -58,6 +59,7 @@ const createPortfolio = asyncHandler(async (req, res) => {
     paidDate: paidDate,
     isPaid: paidDate < oneYearBefore ? false : true,
     about,
+    SOS,
     backgroundImage: {
       publicId: "",
       url: "",
@@ -171,6 +173,7 @@ const updatePortfolio = asyncHandler(async (req, res) => {
     about,
     isActive,
     paidDate,
+    SOS,
     shortDescription,
   } = JSON.parse(formData);
   const { id } = req.params;
@@ -196,6 +199,7 @@ const updatePortfolio = asyncHandler(async (req, res) => {
   portfolio.about = await about;
   portfolio.isActive = await isActive;
   portfolio.paidDate = await paidDate;
+  portfolio.SOS = await SOS;
   const today = new Date();
   const oneYearBefore = new Date(
     today.getFullYear() - 1,

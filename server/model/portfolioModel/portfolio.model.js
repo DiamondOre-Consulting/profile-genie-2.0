@@ -102,6 +102,18 @@ const portfolioSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "MetaData",
     },
+    SOS: [
+      {
+        phoneNumber: {
+          type: Number,
+          default: "",
+        },
+        fullName: {
+          type: String,
+          default: "",
+        },
+      },
+    ],
   },
   {
     timestamps: true,
