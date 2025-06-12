@@ -239,12 +239,6 @@ const sendCustomMail = asyncHandler(async (req, res) => {
   });
 });
 
-// 1. Site uptime using ICMP ping
-async function checkSiteUptime() {
-  const res = await ping.promise.probe("profilegenie.in");
-  return res.alive;
-}
-
 // 2. API uptime via /ping route
 async function checkApiUptime() {
   try {
@@ -322,7 +316,6 @@ async function getAllSystemStats(io) {
   try {
     const [siteUptime, apiUptime, responseTime, seoScore, diskUsage] =
       await Promise.all([
-        checkSiteUptime(),
         checkApiUptime(),
         getResponseTime(),
         getSeoScore("https://profilegenie.in"),

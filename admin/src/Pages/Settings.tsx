@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { Label } from "react-aria-components";
 
 type HealthData = {
-  siteUptime: boolean;
   apiUptime: boolean;
   responseTime: number;
   seoScore: number;
@@ -251,15 +250,6 @@ const Settings = () => {
 
         {data ? (
           <div className="space-y-3 text-sm text-gray-800">
-            <div>
-              🌐 Site Uptime:{" "}
-              <span
-                className={data.siteUptime ? "text-green-600" : "text-red-600"}
-              >
-                <strong>{data.siteUptime ? "✅ Up" : "❌ Down"}</strong>
-              </span>
-            </div>
-
             <div>
               🛠 API Uptime:{" "}
               <span
