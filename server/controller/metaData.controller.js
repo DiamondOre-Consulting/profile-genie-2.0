@@ -28,8 +28,8 @@ const createMetaData = asyncHandler(async (req, res) => {
 
   if (req.file) {
     const file = await fileUpload(req.file);
-    metaData.favIcon.url = file.result.secure_url;
-    metaData.favIcon.publicId = file.result.public_id;
+    metaData.favIcon.url = file.secure_url;
+    metaData.favIcon.publicId = file.public_id;
   }
 
   const portfolio = await Portfolio.findById(id);
@@ -81,8 +81,8 @@ const updatedCatalogueMetaData = asyncHandler(async (req, res) => {
 
     if (req.file) {
       const file = await fileUpload(req.file, createMetaData.favIcon.publicId);
-      createMetaData.favIcon.url = file.result.secure_url;
-      createMetaData.favIcon.publicId = file.result.public_id;
+      createMetaData.favIcon.url = file.secure_url;
+      createMetaData.favIcon.publicId = file.public_id;
     }
 
     uniqueCatalogue.metaDetails = createMetaData._id;
@@ -113,8 +113,8 @@ const updatedCatalogueMetaData = asyncHandler(async (req, res) => {
 
     if (req.file) {
       const file = await fileUpload(req.file, uniqueMetaData?.favIcon.publicId);
-      metaData.favIcon.url = file.result.secure_url;
-      metaData.favIcon.publicId = file.result.public_id;
+      metaData.favIcon.url = file.secure_url;
+      metaData.favIcon.publicId = file.public_id;
     }
 
     await Catalogue.updateOne(
@@ -158,8 +158,8 @@ const updateMetaData = asyncHandler(async (req, res) => {
 
   if (req.file) {
     const file = await fileUpload(req.file, metaData.favIcon.publicId);
-    metaData.favIcon.url = file.result.secure_url;
-    metaData.favIcon.publicId = file.result.public_id;
+    metaData.favIcon.url = file.secure_url;
+    metaData.favIcon.publicId = file.public_id;
   }
 
   await metaData.save();
