@@ -62,10 +62,7 @@ function App() {
             content={`${metaDetails.title} | Profile Genie`}
           />
           <meta property="og:description" content={metaDetails.description} />
-          <meta
-            property="og:image"
-            content={metaDetails?.favIcon?.url || logo}
-          />
+          <meta property="og:image" content={metaDetails?.favIcon?.url} />
           <meta
             property="og:url"
             content={`https://profilegenie.in${location.pathname}`}
@@ -85,10 +82,7 @@ function App() {
             content={`${metaDetails.title} | Profile Genie`}
           />
           <meta name="twitter:description" content={metaDetails.description} />
-          <meta
-            name="twitter:image"
-            content={metaDetails?.favIcon?.url || logo}
-          />
+          <meta name="twitter:image" content={metaDetails?.favIcon?.url} />
           <meta name="twitter:site" content="@yourTwitterHandle" />
           <meta name="twitter:creator" content="@yourTwitterHandle" />
         </>
@@ -137,8 +131,8 @@ function App() {
 
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <meta name="robots" content="index, follow" />
-      <link rel="icon" href="/favicon.ico" sizes="any" />
-      <link rel="manifest" href="/manifest.json" />
+      <link rel="icon" href={metaDetails?.favIcon?.url} sizes="any" />
+      {/* <link rel="manifest" href="/manifest.json" /> */}
       <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
       <meta name="theme-color" content="#FFFFFF" />
       <meta name="rating" content="General" />

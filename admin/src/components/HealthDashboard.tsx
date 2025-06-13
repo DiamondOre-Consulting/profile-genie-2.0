@@ -91,21 +91,21 @@ const LiveSiteHealthDashboard = ({ data }: { data: HealthData }) => {
   )}m`;
 
   return (
-    <div className="p-6 mx-auto font-sans text-gray-100 bg-transparent max-w-7xl">
+    <div className="w-full mx-auto font-sans text-gray-100 bg-transparent">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="flex flex-col items-center justify-between mb-8 space-y-4 md:flex-row md:space-y-0"
       >
         <div className="flex items-center">
-          <div className="p-3 mr-4 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600">
+          <div className="p-3 mr-4 rounded-xl bg-gradient-to-r from-[#010101] to-purple-600">
             <FiActivity className="text-2xl text-white" />
           </div>
           <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">
             Live Site Health Dashboard
           </h2>
         </div>
-        <div className="px-4 py-2 text-sm text-gray-300 bg-gray-800 rounded-full">
+        <div className="px-4 py-2 text-sm text-gray-300 bg-[#010101] border border-neutral-700 rounded-full">
           Last Updated: {new Date(data.timestamp).toLocaleString()}
         </div>
       </motion.div>
@@ -115,7 +115,7 @@ const LiveSiteHealthDashboard = ({ data }: { data: HealthData }) => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="p-6 shadow-xl rounded-2xl bg-gradient-to-br from-gray-800 to-gray-850"
+          className="p-6 shadow-xl rounded-2xl bg-gradient-to-br from-[#010101] border border-neutral-700 to-gray-850"
         >
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center">
@@ -227,7 +227,7 @@ const LiveSiteHealthDashboard = ({ data }: { data: HealthData }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.1 }}
-          className="p-6 shadow-xl rounded-2xl bg-gradient-to-br from-gray-800 to-gray-850"
+          className="p-6 shadow-xl rounded-2xl bg-gradient-to-br from-[#010101] border border-neutral-700 to-gray-850"
         >
           <div className="flex items-center mb-6">
             <div className="p-2 mr-3 rounded-lg bg-purple-900/50">
@@ -304,7 +304,7 @@ const LiveSiteHealthDashboard = ({ data }: { data: HealthData }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="p-6 shadow-xl rounded-2xl bg-gradient-to-br from-gray-800 to-gray-850"
+          className="p-6 shadow-xl rounded-2xl bg-gradient-to-br from-[#010101] border border-neutral-700 to-gray-850"
         >
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center">
@@ -385,7 +385,7 @@ const LiveSiteHealthDashboard = ({ data }: { data: HealthData }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3 }}
-        className="p-6 mt-6 shadow-xl rounded-2xl bg-gradient-to-br from-gray-800 to-gray-850"
+        className="p-6 mt-6 shadow-xl rounded-2xl bg-gradient-to-br from-[#010101] border border-neutral-700 to-gray-850"
       >
         <div className="flex items-center mb-6">
           <div className="p-2 mr-3 rounded-lg bg-green-900/50">
@@ -552,7 +552,7 @@ const LiveSiteHealthDashboard = ({ data }: { data: HealthData }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.4 }}
-        className="p-6 mt-6 shadow-xl rounded-2xl bg-gradient-to-br from-gray-800 to-gray-850"
+        className="p-6 mt-6 shadow-xl rounded-2xl bg-gradient-to-br from-[#010101] border border-neutral-700 to-gray-850"
       >
         <div className="flex items-center mb-6">
           <div className="p-2 mr-3 rounded-lg bg-pink-900/50">
