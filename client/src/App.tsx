@@ -9,6 +9,7 @@ const Template3 = lazy(() => import("./Templates/templatePages/Template3"));
 const Catalogue1Dashboard = lazy(
   () => import("./Catalogue/Catalogue1Dashboard")
 );
+import logo from "./assets/logo.png";
 
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -44,6 +45,8 @@ function App() {
     AOS.init();
   }, []);
 
+  console.log(`hellow, https://profilegenie.in${location.pathname}`);
+
   return (
     <>
       {metaDetails ? (
@@ -59,9 +62,22 @@ function App() {
             content={`${metaDetails.title} | Profile Genie`}
           />
           <meta property="og:description" content={metaDetails.description} />
-          <meta property="og:image" content={"routeImage"} />
-          <meta property="og:url" content={"routeUrl"} />
-          <meta property="og:site_name" content="Profile Genie" />
+          <meta
+            property="og:image"
+            content={metaDetails?.favIcon?.url || logo}
+          />
+          <meta
+            property="og:url"
+            content={`https://profilegenie.in${location.pathname}`}
+          />
+          <meta
+            property="og:site_name"
+            content={`${metaDetails?.title} | Profile Genie`}
+          />
+          <link
+            rel="canonical"
+            href={`https://profilegenie.in${location.pathname}`}
+          />
 
           <meta name="twitter:card" content="summary_large_image" />
           <meta
@@ -69,7 +85,10 @@ function App() {
             content={`${metaDetails.title} | Profile Genie`}
           />
           <meta name="twitter:description" content={metaDetails.description} />
-          <meta name="twitter:image" content={"routeImage"} />
+          <meta
+            name="twitter:image"
+            content={metaDetails?.favIcon?.url || logo}
+          />
           <meta name="twitter:site" content="@yourTwitterHandle" />
           <meta name="twitter:creator" content="@yourTwitterHandle" />
         </>
@@ -91,11 +110,13 @@ function App() {
             property="og:title"
             content="Profile Genie - Create Professional Digital Profiles"
           />
+          <link rel="canonical" href="https://profilegenie.in" />
+
           <meta
             property="og:description"
             content="Create and manage your professional digital presence with Profile Genie"
           />
-          <meta property="og:image" content="/logo.png" />
+          <meta property="og:image" content={logo} />
           <meta property="og:url" content="https://profilegenie.in" />
           <meta property="og:site_name" content="Profile Genie" />
 
@@ -108,14 +129,13 @@ function App() {
             name="twitter:description"
             content="Create and manage your professional digital presence with Profile Genie"
           />
-          <meta name="twitter:image" content="/logo.png" />
+          <meta name="twitter:image" content={logo} />
           <meta name="twitter:site" content="@yourTwitterHandle" />
           <meta name="twitter:creator" content="@yourTwitterHandle" />
         </>
       )}
 
       <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <link rel="canonical" href="https://profilegenie.in" />
       <meta name="robots" content="index, follow" />
       <link rel="icon" href="/favicon.ico" sizes="any" />
       <link rel="manifest" href="/manifest.json" />
