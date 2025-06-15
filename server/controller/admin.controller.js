@@ -216,7 +216,6 @@ const getAdminDashboardData = asyncHandler(async (req, res) => {
 });
 
 const sendCustomMail = asyncHandler(async (req, res) => {
-  console.log(req.body);
   const { email, mailSubject, mailBody } = req.body;
 
   if (!mailSubject || !mailBody) {
@@ -275,7 +274,6 @@ async function getSeoScore(url) {
     const bestPractices = lighthouse.categories["best-practices"].score * 100;
 
     const audits = lighthouse.audits;
-    console.log(seoScore);
     return {
       seoScore,
       performance,
@@ -294,7 +292,6 @@ async function getSeoScore(url) {
       },
     };
   } catch (err) {
-    console.error("Lighthouse SEO fetch error:", err.message);
     return {
       seoScore: 0,
       performance: 0,
@@ -353,7 +350,6 @@ async function getAllSystemStats(io) {
       errorRate,
       timestamp: new Date().toISOString(),
     };
-    console.log(payload);
     io.emit("health-data", payload);
   } catch (err) {
     console.error("Health check error:", err.message);

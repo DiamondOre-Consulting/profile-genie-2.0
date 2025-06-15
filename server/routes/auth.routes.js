@@ -47,8 +47,6 @@ const handleSocialLoginFailure = (req, res) => {
   let redirectUrl =
     "https://profilegenie.in/login?error=Email is not registered!";
 
-  console.log(isAdminDomain, isCatalogueDomain, referer);
-
   if (isAdminDomain) {
     redirectUrl =
       "https://admin.profilegenie.in/login?error=Email is not registered!";

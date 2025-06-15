@@ -57,8 +57,6 @@ passport.use(
           },
         });
 
-        console.log("hello", user);
-
         return done(null, user);
       } catch (err) {
         done(err, null);

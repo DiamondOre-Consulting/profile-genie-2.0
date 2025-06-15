@@ -23,10 +23,10 @@ const io = new Server(server, {
   },
 });
 
-getAllSystemStats(io);
-setInterval(() => {
-  getAllSystemStats(io);
-}, 10000);
+// getAllSystemStats(io);
+// setInterval(() => {
+//   getAllSystemStats(io);
+// }, 10000);
 
 server.listen(PORT, async () => {
   await connectionToDB();

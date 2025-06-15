@@ -59,9 +59,7 @@ const updatedCatalogueMetaData = asyncHandler(async (req, res) => {
   const { title, description, keywords, canonical } = metaDetail;
 
   const uniqueMetaData = await MetaData.findOne({ portfolio: id }).lean();
-  console.log(uniqueMetaData);
   const uniqueCatalogue = await Catalogue.findById(id).lean();
-  console.log(uniqueCatalogue);
   if (!uniqueMetaData) {
     const createMetaData = await MetaData.create({
       title,
@@ -104,12 +102,10 @@ const updatedCatalogueMetaData = asyncHandler(async (req, res) => {
         runValidators: true,
       }
     );
-    console.log(1);
 
     if (!metaData) {
       throw new AppError("Something went wrong", 400);
     }
-    console.log(2);
 
     if (req.file) {
       const file = await fileUpload(req.file, uniqueMetaData?.favIcon.publicId);

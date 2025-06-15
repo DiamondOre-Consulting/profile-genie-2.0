@@ -14,7 +14,6 @@ import {
 } from "../utils/cronMessages.js";
 
 const createPortfolio = asyncHandler(async (req, res) => {
-  console.log(2);
   const { formData, template } = req.body;
   const {
     fullName,
@@ -80,16 +79,12 @@ const createPortfolio = asyncHandler(async (req, res) => {
 
   let uploadedFiles = [];
 
-  console.log(req.files);
-
   if (req?.files) {
     uploadedFiles = await multipleFileUpload(req?.files);
   }
 
   uploadedFiles.forEach((file) => {
-    console.log(2);
     if (file.uniqueId === "image") {
-      console.log(file);
       portfolio.image.url = file.result.secure_url;
       portfolio.image.publicId = file.result.public_id;
     } else if (file.uniqueId === "backgroundImage") {
@@ -189,7 +184,6 @@ const updatePortfolio = asyncHandler(async (req, res) => {
       throw new AppError("Username already exists!", 400);
     }
   }
-  console.log(paidDate);
 
   portfolio.fullName = await fullName;
   portfolio.userName = await userName;
@@ -395,8 +389,6 @@ const getSinglePortfolio = asyncHandler(async (req, res) => {
     throw new AppError("Portfolio not found!", 404);
   }
 
-  console.log(portfolio);
-
   if (!admin) {
     portfolio.views += 1;
   }
@@ -411,7 +403,6 @@ const getSinglePortfolio = asyncHandler(async (req, res) => {
 
 const getAllPortfolio = asyncHandler(async (req, res) => {
   const { search, filter } = req.query;
-  console.log(filter);
   const pipeline = [
     {
       $match: {
@@ -474,8 +465,6 @@ const getAllPortfolio = asyncHandler(async (req, res) => {
 
 const getRecycledPortfolio = asyncHandler(async (req, res) => {
   const portfolios = await Portfolio.find({ isRecycled: true });
-
-  console.log(portfolios);
 
   res.status(200).json({
     success: true,
@@ -711,7 +700,6 @@ const updatePortfolioDetail = asyncHandler(async (req, res) => {
 
   const otherData = JSON.parse(req.body.data);
   const { brands, bulkLink, services, products } = otherData;
-  console.log(bulkLink);
   const portfolioDetail = await PortfolioDetail.findOneAndUpdate(
     { portfolio: id },
     {
@@ -739,7 +727,6 @@ const updatePortfolioDetail = asyncHandler(async (req, res) => {
     let esistingLink = portfolioDetail.bulkLink.bulkLinkList.find(
       (b) => b.uniqueId === bulkLink.uniqueId
     );
-    console.log(1);
     if (!esistingLink) {
       const uploadedFile = bulkLinkImages.find(
         (uf) => uf.uniqueId === bulkLink.uniqueId
@@ -753,7 +740,6 @@ const updatePortfolioDetail = asyncHandler(async (req, res) => {
           },
         });
       } else {
-        console.log("hello");
         portfolioDetail.bulkLink.bulkLinkList.push({
           ...bulkLink,
           image: { url: "", publicId: "" },
@@ -789,9 +775,9 @@ const updatePortfolioDetail = asyncHandler(async (req, res) => {
           bulkLinkData.image.publicId,
           (error, result) => {
             if (error) {
-              console.error("Failed to destroy image:", error);
+              return;
             } else {
-              console.log("Image destroyed:", result);
+              return;
             }
           }
         );
@@ -804,8 +790,6 @@ const updatePortfolioDetail = asyncHandler(async (req, res) => {
   if (req?.files?.brands) {
     brandImages = await multipleFileUpload(req?.files?.brands);
   }
-
-  console.log(portfolioDetail.brands);
 
   brands.brandList.forEach((brand) => {
     let existingBrand = portfolioDetail.brands.brandList.find(
@@ -853,9 +837,9 @@ const updatePortfolioDetail = asyncHandler(async (req, res) => {
           brandData.image.publicId,
           (error, result) => {
             if (error) {
-              console.error("Failed to destroy image:", error);
+              return;
             } else {
-              console.log("Image destroyed:", result);
+              return;
             }
           }
         );
@@ -985,8 +969,6 @@ const updatePortfolioDetail = asyncHandler(async (req, res) => {
 
   await portfolioDetail.save();
 
-  console.log(portfolioDetail);
-
   if (!portfolioDetail) {
     throw new AppError("Portfolio detail not updated!", 400);
   }
@@ -1039,7 +1021,6 @@ const createPortfolioContact = asyncHandler(async (req, res) => {
   }
 
   let uploadedFiles = [];
-  console.log(req.files.otherSocial);
   if (req.files.otherSocial) {
     uploadedFiles = await multipleFileUpload(req.files.otherSocial);
   }
@@ -1052,7 +1033,6 @@ const createPortfolioContact = asyncHandler(async (req, res) => {
       const uploadedFile = uploadedFiles.find(
         (uf) => uf.uniqueId === social.uniqueId
       );
-      console.log(uploadedFile);
       if (uploadedFile) {
         portfolioContact.social.otherSocialList.push({
           ...social,
@@ -1109,7 +1089,6 @@ const updatePortfolioContact = asyncHandler(async (req, res) => {
     testimonial,
   } = contactData;
   const { id } = req.params;
-  console.log(contactData);
   const portfolioContact = await PortfolioContact.findOneAndUpdate(
     { portfolio: id },
     {
@@ -1135,8 +1114,6 @@ const updatePortfolioContact = asyncHandler(async (req, res) => {
       runValidators: true,
     }
   );
-
-  console.log(portfolioContact);
 
   if (!portfolioContact) {
     throw new AppError("Something went wrong!", 400);
@@ -1188,8 +1165,6 @@ const updatePortfolioContact = asyncHandler(async (req, res) => {
         (data) => data.uniqueId === socialData.uniqueId
       );
       if (!isExistingData && socialData.img.publicId) {
-        console.log(true);
-        console.log(socialData);
         cloudinary.v2.uploader.destroy(socialData.img.publicId);
       }
       return isExistingData;
