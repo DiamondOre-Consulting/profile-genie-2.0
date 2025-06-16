@@ -101,7 +101,7 @@ const Hero = () => {
           animate="visible"
         >
           <p className="text-base sm:text-md md:text-[1.05rem] text-white/70 mb-8  font-light tracking-wide max-w-xl mx-auto px-4">
-            "Profile Genie – Your all-in-one digital identity, seamlessly
+            Profile Genie – Your all-in-one digital identity, seamlessly
             shareable with a single click for smarter, paperless networking and
             connections.
           </p>

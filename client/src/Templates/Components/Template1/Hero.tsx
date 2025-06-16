@@ -14,8 +14,6 @@ const Hero = ({ portfolio }: { portfolio: portfolioResponse }) => {
     }
   };
 
-  console.log(portfolio);
-
   return (
     <div
       className={`relative bg-transparent pt-16 ${

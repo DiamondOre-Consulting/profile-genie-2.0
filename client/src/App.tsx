@@ -45,8 +45,6 @@ function App() {
     AOS.init();
   }, []);
 
-  console.log(`hellow, https://profilegenie.in${location.pathname}`);
-
   return (
     <>
       {metaDetails ? (

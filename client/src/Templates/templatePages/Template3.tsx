@@ -93,7 +93,7 @@ const Template3 = () => {
                         url: window.location.href,
                       });
                     } catch (error) {
-                      console.log("Error sharing:", error);
+                      return error;
                     }
                   }}
                   className="flex flex-col items-center justify-center w-full p-2 rounded-lg cursor-pointer bg-neutral-800"
@@ -134,7 +134,7 @@ const Template3 = () => {
                       url: window.location.href,
                     });
                   } catch (error) {
-                    console.log("Error sharing:", error);
+                    return error;
                   }
                 }}
                 className="flex flex-col items-center justify-center w-full p-2 mt-2 rounded-lg cursor-pointer bg-neutral-800"
