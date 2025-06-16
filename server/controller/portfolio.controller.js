@@ -366,10 +366,27 @@ const updateStatusPaid = asyncHandler(async (req, res) => {
   });
 });
 
+const botUserAgents = [
+  "facebookexternalhit",
+  "whatsapp",
+  "twitterbot",
+  "linkedinbot",
+  "slackbot",
+  "telegrambot",
+  "googlebot",
+  "bingbot",
+];
+
+function isBot(userAgent = "") {
+  return botUserAgents.some((bot) => userAgent.toLowerCase().includes(bot));
+}
+
 const getSinglePortfolio = asyncHandler(async (req, res) => {
   const { userName } = req.params;
 
   const { admin } = req.query;
+
+  const userAgent = req.get("User-Agent") || "";
 
   const portfolio = await Portfolio.findOne({ userName })
     .populate({
@@ -389,13 +406,55 @@ const getSinglePortfolio = asyncHandler(async (req, res) => {
     throw new AppError("Portfolio not found!", 404);
   }
 
+  const meta = portfolio.metaDetails;
+  const title = `${meta?.title || "Profile"} | Profile Genie`;
+  const description =
+    meta?.description || "Check this profile on Profile Genie.";
+  const keywords = meta?.keywords || "";
+  const image = meta?.favIcon?.url || "https://profilegenie.in/default-og.jpg";
+  const pathname = `/profile/1/${userName}`;
+  const url = `https://profilegenie.in${pathname}`;
+
+  if (isBot(userAgent)) {
+    return res.send(`
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8" />
+        <title>${title}</title>
+        <meta name="author" content="Profile Genie | Akash Kumar Singh" />
+        <meta name="description" content="${description}" />
+        <meta name="keywords" content="${keywords}" />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="${title}" />
+        <meta property="og:description" content="${description}" />
+        <meta property="og:image" content="${image}" />
+        <meta property="og:url" content="${url}" />
+        <meta property="og:site_name" content="${title}" />
+        <link rel="canonical" href="${url}" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="${title}" />
+        <meta name="twitter:description" content="${description}" />
+        <meta name="twitter:image" content="${image}" />
+        <meta name="twitter:site" content="@yourTwitterHandle" />
+        <meta name="twitter:creator" content="@yourTwitterHandle" />
+      </head>
+      <body>
+        <p>This is an Open Graph preview page.</p>
+      </body>
+      </html>
+    `);
+  }
+
   if (!admin) {
     portfolio.views += 1;
   }
 
   await portfolio.save();
 
-  res.status(200).json({
+  return res.status(200).json({
     success: true,
     data: portfolio,
   });
