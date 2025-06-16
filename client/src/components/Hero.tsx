@@ -2,49 +2,59 @@ import { SparklesCore } from "./ui/sparkles";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { ButtonColorful } from "./ui/button-colorful";
+import { AnimatedTooltip } from "./ui/animated-tooltip";
+import { Link } from "react-scroll";
 
-// const people = [
-//     {
-//         id: 1,
-//         name: "Github",
-//         designation: "webakash1806",
-//         link: "https://github.com/webakash1806",
-//         image:
-//             "https://images.unsplash.com/photo-1647166545674-ce28ce93bdca?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-//     },
-//     {
-//         id: 2,
-//         name: "Instagram",
-//         designation: "__its_akash.18",
-//         link: "https://www.instagram.com/__its_akash.18/",
-//         image:
-//             "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fGRvd25sb2FkJTIwaWNvbnxlbnwwfHwwfHx8MA%3D%3D",
-//     },
-//     {
-//         id: 3,
-//         name: "Whatsapp",
-//         designation: "+91 6207234759",
-//         link: "https://wa.me/916207234759",
-//         image:
-//             "https://images.unsplash.com/photo-1661862649743-2799867c32b0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8d2hhdHNhcHAlMjBsb2dvfGVufDB8fDB8fHww",
-//     },
-//     {
-//         id: 4,
-//         name: "Linkedin",
-//         designation: "itsakash18",
-//         link: "https://www.linkedin.com/in/itsakash18/",
-//         image:
-//             "https://images.unsplash.com/photo-1611944212129-29977ae1398c?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-//     },
-//     {
-//         id: 5,
-//         name: "CV",
-//         designation: "Download CV",
-//         link: "",
-//         image:
-//             "https://cdn-icons-png.freepik.com/256/10118/10118795.png?uid=R55011592&ga=GA1.1.774467265.1732693696",
-//     },
-// ];
+const people = [
+  {
+    id: 1,
+    name: "Ruksha Razdan",
+    designation: "Business Development",
+    link: "https://www.profilegenie.in/profile/1/R2R3",
+    image:
+      "https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3387&q=80",
+  },
+  {
+    id: 2,
+    name: "Robert Johnson",
+    designation: "Product Manager",
+    link: "https://www.profilegenie.in/profile/1/R2R3",
+    image:
+      "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YXZhdGFyfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60",
+  },
+  {
+    id: 3,
+    name: "Jane Smith",
+    designation: "Data Scientist",
+    link: "https://www.profilegenie.in/profile/1/R2R3",
+    image:
+      "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YXZhdGFyfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60",
+  },
+  {
+    id: 4,
+    name: "Emily Davis",
+    designation: "UX Designer",
+    link: "https://www.profilegenie.in/profile/1/R2R3",
+    image:
+      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGF2YXRhcnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60",
+  },
+  {
+    id: 5,
+    name: "Tyler Durden",
+    designation: "Soap Developer",
+    link: "https://www.profilegenie.in/profile/1/R2R3",
+    image:
+      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3540&q=80",
+  },
+  {
+    id: 6,
+    name: "Dora",
+    designation: "The Explorer",
+    link: "https://www.profilegenie.in/profile/1/R2R3",
+    image:
+      "https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3534&q=80",
+  },
+];
 
 const fadeUpVariants = {
   hidden: { opacity: 0, y: 30 },
@@ -54,14 +64,14 @@ const fadeUpVariants = {
     transition: {
       duration: 1,
       delay: 0.5 + i * 0.2,
-      ease: [0.25, 0.4, 0.25, 1],
+      ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number], // 👈 Fix ease typing
     },
   }),
 };
 
 const Hero = () => {
   return (
-    <div className=" mx-auto text-white pt-50 pb-42 w-[97.5%] h-full relative overflow-hidden">
+    <div className=" mx-auto text-white pt-40 pb-42 w-[97.5%] h-full relative overflow-hidden">
       <div className=" p-1 mx-auto  w-full  px-2 md:max-w-[50rem] text-center">
         <motion.div
           custom={1}
@@ -98,8 +108,15 @@ const Hero = () => {
         </motion.div>
 
         <div className="relative space-x-3 z-100">
-          <ButtonColorful label="Get Demo!" />
-          <ButtonColorful className="bg-[#5E10DE]" label="Contact Us" />
+          <Link to="demo" smooth={true} duration={500}>
+            <ButtonColorful label="Get Demo!" />
+          </Link>
+          <Link to="contact" smooth={true} duration={500}>
+            <ButtonColorful className="bg-[#5E10DE]" label="Contact Us" />
+          </Link>
+        </div>
+        <div className="relative flex flex-row items-center justify-center w-full mt-10 z-100">
+          <AnimatedTooltip items={people} />
         </div>
       </div>
       {/* <ShootingStars /> */}

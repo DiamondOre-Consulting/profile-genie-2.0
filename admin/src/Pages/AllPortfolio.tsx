@@ -47,7 +47,11 @@ const modalVariants = {
     opacity: 1,
     y: "0",
     scale: 1,
-    transition: { duration: 0.4, type: "spring", stiffness: 300 },
+    transition: {
+      duration: 0.4,
+      type: "spring" as const,
+      stiffness: 300,
+    },
   },
   exit: { opacity: 0, y: "50px", scale: 0.8, transition: { duration: 0.3 } },
 };
@@ -94,9 +98,7 @@ const AllPortfolio = () => {
   };
 
   return (
-    <HomeLayout>
-      <h2 className="mb-3 font-semibold text-white">All Portfolio</h2>
-
+    <HomeLayout pageName="All portfolio">
       <div className="flex items-center justify-center gap-1 my-2 ">
         <Search setDebouncedSearchValue={setDebouncedSearchValue} />
         <Filter setFilterValue={setFilterValue} />

@@ -67,9 +67,8 @@ const Dashboard = () => {
   };
 
   return (
-    <HomeLayout>
-      <h2 className="mb-3 font-semibold text-white">Dashboard</h2>
-      <main className="relative min-h-screen space-y-4 overflow-hidden rounded-2xl">
+    <HomeLayout pageName="Dashboard">
+      <main className="relative min-h-screen space-y-2 overflow-hidden rounded-2xl">
         <div className="flex items-start justify-between">
           <div className="flex flex-col w-full pl-0 md:p-4 md:space-y-4">
             <div className="grid grid-cols-1 gap-4 text-white sm:grid-cols-2 lg:grid-cols-4">
@@ -114,7 +113,7 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-1 gap-4 pt-0 md:p-4 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 pt-0 md:pt-0 md:p-4 lg:grid-cols-2">
           <div className="w-full overflow-hidden border rounded-md border-neutral-600 bg-[#0C0C0C]">
             <h2 className="p-3 text-xl text-center text-zinc-100">
               Top Portfolios

@@ -17,15 +17,15 @@ const HomeLayout = ({ children }: { children: ReactNode }) => {
           <nav className=" w-[95vw] max-w-[28rem] gap-2 mx-auto flex items-center justify-between">
             <Link
               to="/"
-              className="transition duration-300 rounded-full  hover:bg-lightGray hover:text-gray-200"
+              className="transition duration-300 rounded-full hover:bg-lightGray hover:text-gray-200"
             >
               <img src={logo} alt="Profile Genie logo" className="w-10" />
             </Link>
 
-            <Link to="/" className="Btn ">
+            <Link to={`tel:+${918750316743}`} className="Btn ">
               <ButtonColorful
                 className="py-1 rounded-full"
-                label="+91 1234567890"
+                label="+91 8750316743"
               />
             </Link>
           </nav>

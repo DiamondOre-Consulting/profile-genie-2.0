@@ -43,7 +43,11 @@ const modalVariants = {
     opacity: 1,
     y: "0",
     scale: 1,
-    transition: { duration: 0.4, type: "spring", stiffness: 300 },
+    transition: {
+      duration: 0.4,
+      type: "spring" as const,
+      stiffness: 300,
+    },
   },
   exit: { opacity: 0, y: "50px", scale: 0.8, transition: { duration: 0.3 } },
 };
@@ -88,9 +92,7 @@ const RecycledPortfolio = () => {
   // }, [debouncedSearchValue, filterValue])
 
   return (
-    <HomeLayout>
-      <h2 className="mb-3 font-semibold text-white">Recycled Portfolio</h2>
-
+    <HomeLayout pageName="Recycled Portfolio">
       <AnimatePresence>
         {deleteModalActive && (
           <motion.div

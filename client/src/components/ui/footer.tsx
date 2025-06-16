@@ -2,107 +2,65 @@
 
 import { DIcons } from "dicons";
 import { Link } from "react-router-dom";
-
-
-
-const navigation = {
-  categories: [
-    {
-      id: "women",
-      name: "Women",
-
-      sections: [
-        {
-          id: "about",
-          name: "About",
-          items: [
-            { name: "About", to: "/about" },
-            { name: "Works", to: "/agency/works" },
-            { name: "Pricing", to: "/pricing" },
-          ],
-        },
-        {
-          id: "features",
-          name: "Features",
-          items: [
-            { name: "Products", to: "/products" },
-            { name: "Agency", to: "/agency" },
-            { name: "Dashboard", to: "/dashboard" },
-          ],
-        },
-        {
-          id: "products",
-          name: "Products",
-          items: [
-            { name: "DIcons", to: "/products/dicons" },
-            { name: "DShapes", to: "/products/dshapes" },
-            { name: "Graaadients", to: "/products/graaadients" },
-          ],
-        },
-        {
-          id: "designs",
-          name: "Designs",
-          items: [
-            { name: "Design", to: "/designs" },
-            { name: "Components", to: "/components" },
-            { name: "Blogs", to: "/blogs" },
-          ],
-        },
-        {
-          id: "other",
-          name: "Others",
-          items: [
-            { name: "Graphic", to: "/graphic" },
-            { name: "3D Icons", to: "/products/3dicons" },
-            { name: "Colors", to: "/products/colors/generate" },
-          ],
-        },
-        {
-          id: "company",
-          name: "Company",
-          items: [
-            { name: "Contact", to: "/contact" },
-            { name: "Terms", to: "/terms" },
-            { name: "Privacy", to: "/privacy" },
-          ],
-        },
-      ],
-    },
-  ],
-};
+// const navigation = {
+//   categories: [
+//     {
+//       id: "main",
+//       name: "Main",
+//       sections: [
+//         {
+//           id: "company",
+//           name: "Company",
+//           items: [
+//             { name: "About Us", to: "about" },
+//             { name: "Contact", to: "contact" },
+//           ],
+//         },
+//         {
+//           id: "services",
+//           name: "Services",
+//           items: [
+//             { name: "Resume Builder", to: "/services/resume-builder" },
+//             { name: "LinkedIn Optimization", to: "/services/linkedin" },
+//           ],
+//         },
+//         {
+//           id: "legal",
+//           name: "Legal",
+//           items: [
+//             { name: "Terms of Service", to: "/terms" },
+//             { name: "Privacy Policy", to: "/privacy" },
+//             { name: "Cookie Policy", to: "/cookies" },
+//           ],
+//         },
+//       ],
+//     },
+//   ],
+// };
 
 const Underline = `hover:-translate-y-1 border border-neutral-700 bg-neutral-900 rounded-xl p-2.5 transition-transform `;
 
 export function Footer() {
   return (
-    <footer className="border-neutral-100/20 :px-4 mx-auto w-full border-b   border-t  px-2">
-      <div className="relative mx-auto grid  max-w-7xl items-center justify-center gap-6 p-10 pb-0 md:flex ">
-        <Link to="/">
-          <p className="flex items-center justify-center rounded-full  ">
-            <DIcons.Designali className="w-8 text-red-600" />
-          </p>
-        </Link>
-        <p className="bg-transparent text-center text-xs leading-4 text-neutral-300 md:text-left">
-          Welcome to Designali, where creativity meets strategy to bring your
-          vision to life. I am passionate about transforming ideas into
-          compelling visual experiences. I specialize in crafting unique brand
-          identities, immersive digital experiences, and engaging content that
-          resonates with your audience. My mission is to empower businesses and
-          brands to stand out in a crowded market. I believe in the power of
-          design to tell stories, evoke emotions, and drive meaningful
-          connections. I believe in quality, not quantity. Designali is actually
-          an agency of one. This means you'll work directly with me, founder of
-          Designali.
+    <footer className="w-full px-2 mx-auto border-t border-b border-neutral-100/20 :px-4">
+      <div className="relative grid items-center justify-center gap-6 p-10 pb-0 mx-auto max-w-7xl md:flex ">
+        <p className="text-sm leading-5 text-center bg-transparent text-neutral-300 ">
+          Welcome to Profile Genie, your all-in-one solution for professional
+          profile management. We specialize in helping individuals and
+          businesses optimize their online presence and create compelling
+          professional profiles. Our platform provides intelligent tools and
+          features to enhance your digital identity and make a lasting
+          impression in the professional world.
         </p>
       </div>
 
-      <div className="mx-auto max-w-7xl px-6 py-10">
+      {/* <div className="px-6 py-10 mx-auto max-w-7xl">
         <div className="border-b border-dotted"> </div>
         <div className="py-10">
           {navigation.categories.map((category) => (
             <div
               key={category.name}
-              className="grid grid-cols-3 flex-row justify-between gap-6 leading-6 md:flex"
+              className="grid flex-row justify-between grid-cols-3 gap-6 leading-6 md:flex"
             >
               {category.sections.map((section) => (
                 <div key={section.name}>
@@ -115,7 +73,7 @@ export function Footer() {
                       <li key={item.name} className="flow-root">
                         <Link
                           to={item.to}
-                          className="text-sm  text-slate-400 hover:text-white md:text-xs"
+                          className="text-sm text-slate-400 hover:text-white md:text-xs"
                         >
                           {item.name}
                         </Link>
@@ -128,99 +86,53 @@ export function Footer() {
           ))}
         </div>
         <div className="border-b border-dotted"> </div>
-      </div>
+      </div> */}
 
-      <div className="flex flex-wrap justify-center gap-y-6">
-        <div className="flex flex-wrap items-center justify-center gap-6 gap-y-4 px-6">
+      <div className="flex flex-wrap justify-center mt-8 gap-y-6">
+        <div className="flex flex-wrap items-center justify-center gap-6 px-6 gap-y-4">
           <Link
-            aria-label="Logo"
-            to="mailto:contact@designali.in"
+            aria-label="Email"
+            to="mailto:contact@profilegenie.com"
             rel="noreferrer"
             target="_blank"
             className={Underline}
           >
-            <DIcons.Mail strokeWidth={1.5} className="h-5 w-5" />
+            <DIcons.Mail strokeWidth={1.5} className="w-5 h-5 text-white" />
           </Link>
           <Link
-            aria-label="Logo"
-            to="https://x.com/designali_in"
+            aria-label="Twitter"
+            to="https://twitter.com/profilegenie"
             rel="noreferrer"
             target="_blank"
             className={Underline}
           >
-            <DIcons.X className="h-5 w-5 text-neutral-400 hover:text-white" />
+            <DIcons.X className="w-5 h-5 text-neutral-400 hover:text-white" />
           </Link>
           <Link
-            aria-label="Logo"
-            to="https://www.instagram.com/designali.in/"
+            aria-label="LinkedIn"
+            to="https://www.linkedin.com/company/profilegenie"
             rel="noreferrer"
             target="_blank"
             className={Underline}
           >
-            <DIcons.Instagram className="h-5 w-5" />
-          </Link>
-
-          <Link
-            aria-label="Logo"
-            to="https://chat.whatsapp.com/LWsNPcz5BlWDVOha41vzuh"
-            rel="noreferrer"
-            target="_blank"
-            className={Underline}
-          >
-            <DIcons.WhatsApp className="h-5 w-5" />
-          </Link>
-
-          <Link
-            aria-label="Logo"
-            to="https://www.facebook.com/designali.agency"
-            rel="noreferrer"
-            target="_blank"
-            className={Underline}
-          >
-            <DIcons.Facebook className="h-5 w-5" />
-          </Link>
-          <Link
-            aria-label="Logo"
-            to="https://www.linkedin.com/company/designali"
-            rel="noreferrer"
-            target="_blank"
-            className={Underline}
-          >
-            <DIcons.LinkedIn className="h-5 w-5" />
-          </Link>
-          <Link
-            aria-label="Logo"
-            to="https://www.youtube.com/@designali-in"
-            rel="noreferrer"
-            target="_blank"
-            className={Underline}
-          >
-            <DIcons.YouTube className="h-5 w-5" />
+            <DIcons.LinkedIn className="w-5 h-5" />
           </Link>
         </div>
-        {/* <ThemeToogle /> */}
       </div>
 
-      <div className="mx-auto mb-10 mt-10 flex flex-col justify-between text-center text-xs md:max-w-7xl">
+      <div className="flex flex-col justify-between mx-auto mt-10 text-xs text-center md:max-w-7xl">
         <div className="flex flex-row items-center justify-center gap-1 text-slate-400">
-          <span> © </span>
+          <span>©</span>
           <span>{new Date().getFullYear()}</span>
-          <span>Made with</span>
-          <DIcons.Heart className="text-red-600 mx-1 h-4 w-4 animate-pulse" />
-          <span> by </span>
-          <span className="hover:text-neutral-100 cursor-pointer text-white">
-            <Link
-              aria-label="Logo"
-              className="font-bold"
-              to="https://www.instagram.com/aliimam.in/"
-              target="_blank"
-            >
-              DOC LABZ
-            </Link>
-          </span>
-
+          <span>Profile Genie</span>
+          <span>•</span>
+          <span>All rights reserved</span>
         </div>
       </div>
+
+      <h2 className=" font-extrabold text-center text-transparent fontFooter text-[10vw] bg-clip-text bg-gradient-to-b from-neutral-100 via-neutral-200 to-neutral-500">
+        Profile~Genie
+      </h2>
     </footer>
   );
 }

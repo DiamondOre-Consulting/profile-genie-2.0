@@ -10,13 +10,12 @@ import {
   IconSettings,
   IconTrash,
 } from "@tabler/icons-react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { logout } from "@/Redux/Slice/AuthSlice";
 import { useDispatch } from "react-redux";
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
@@ -34,7 +33,13 @@ const tabs = [
   { link: "/other-settings", label: "Other Settings", icon: IconSettings },
 ];
 
-export function HomeLayout({ children }: { children: ReactNode }) {
+export function HomeLayout({
+  children,
+  pageName,
+}: {
+  children: ReactNode;
+  pageName: string;
+}) {
   const [collapsed, setCollapsed] = useState(
     window.innerWidth >= 820 ? false : true
   );
@@ -81,7 +86,7 @@ export function HomeLayout({ children }: { children: ReactNode }) {
                 ${collapsed ? "w-13" : "w-54"} `}
         >
           <div
-            className={`relative items-center flex left-${
+            className={`relative h-[3.25rem] items-center flex left-${
               collapsed ? "w-13" : "w-54"
             } transition-all p-3 duration-300 z-50`}
           >
@@ -91,19 +96,19 @@ export function HomeLayout({ children }: { children: ReactNode }) {
               ariaLabel="Toggle sidebar"
             />
             {!collapsed && (
-              <span className="ml-4 py-2 text-sm min-w-[10rem] font-semibold uppercase tracking-wide">
+              <span className="ml-4 py-1 text-sm min-w-[10rem] font-semibold uppercase tracking-wide">
                 Profile Genie
               </span>
             )}
           </div>
 
           <div
-            className={`px-1.5  border-t border-gray-800 flex flex-col w-full py-1 space-y-2`}
+            className={`px-1.5  border-t border-gray-800 flex flex-col w-full py-2 space-y-2.5`}
           >
             {tabs.map((item) => {
               return (
                 <div
-                  className={`flex items-center cursor-pointer w-full overflow-hidden space-y-2  space-x-2 h-[2.3rem]  rounded transition-all duration-300 
+                  className={`flex items-center cursor-pointer w-full overflow-hidden space-y-2  space-x-2 h-[2.5rem]  rounded transition-all duration-300 
                 ${
                   pathname === item.link
                     ? "bg-main text-white"
@@ -130,15 +135,6 @@ export function HomeLayout({ children }: { children: ReactNode }) {
           </div>
 
           <div className="px-1.5  border-t pt-1 border-gray-700">
-            {/* <a
-                        href="#"
-                        className={`${collapsed ? "p-2" : "p-3"} flex items-center space-x-2  rounded-md hover:bg-gray-700`}
-                        onClick={(event) => event.preventDefault()}
-                    >
-                        <IconSwitchHorizontal className="w-5 h-5" stroke={1.5} />
-                        {!collapsed && <span>Change account</span>}
-                    </a> */}
-
             <div
               className={`p-2  flex items-center space-x-2 w-full  rounded-md hover:bg-gray-700`}
               onClick={(event) => {
@@ -153,34 +149,32 @@ export function HomeLayout({ children }: { children: ReactNode }) {
         </nav>
         <header
           className={`${
-            collapsed ? " w-[calc(100vw-4.25rem)]" : " w-[calc(100vw-14.4rem)]"
-          }  px-4 bg-[#010101] md:px-6 fixed right-0 z-10 top-0 border-b border-l border-gray-800`}
+            collapsed ? " w-[calc(100%-3.25rem)]" : " w-[calc(100%-13.5rem)] "
+          }  px-4 bg-[#010101] flex h-[3.3rem] items-center justify-between gap-4 md:px-6 transition-all duration-300  fixed right-0 z-10 top-0 border-b border-l border-gray-800`}
         >
-          <div className="flex items-center justify-between gap-4 h-15">
-            {/* Left side */}
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem>
-                  <BreadcrumbLink href="#">
-                    <HomeIcon size={16} aria-hidden="true" />
-                    <span className="sr-only">Home</span>
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Reports</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
-            {/* Right side */}
-            <div className="relative flex items-center gap-2 size-10 ">
-              <img
-                src="https://originui.com/avatar.jpg"
-                className="rounded-full size-full"
-                alt="Admin logo"
-              />
-              <div className="absolute bg-green-600 rounded-full bottom-0.5 right-0.5 size-2 z-100"></div>
-            </div>
+          {/* Left side */}
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <Link to="/">
+                  <HomeIcon size={16} aria-hidden="true" />
+                  <span className="sr-only">Home</span>
+                </Link>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>{pageName}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+          {/* Right side */}
+          <div className="relative flex items-center gap-2 size-10 ">
+            <img
+              src="https://originui.com/avatar.jpg"
+              className="rounded-full size-full"
+              alt="Admin logo"
+            />
+            <div className="absolute bg-green-600 rounded-full bottom-0.5 right-0.5 size-2 z-100"></div>
           </div>
         </header>
       </div>
