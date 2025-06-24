@@ -21,6 +21,7 @@ import { SparklesText } from "@/components/ui/sparkles-text";
 import callGIF from "../../assets/call.gif";
 import { IconX } from "@tabler/icons-react";
 import PhoneNumberDisplay from "@/components/FormatPhoneNumber";
+import NotFoundPage from "@/components/page-not-found";
 
 const Template2 = ({
   setMetaDetails,
@@ -67,16 +68,16 @@ const Template2 = ({
     window.scrollTo(0, 0);
   }, []);
 
-  useEffect(() => {
-    if (error && !isFetching && !isLoading) {
-      window.location.href = "https://profilegenie.in";
-    }
-  }, [error, isFetching, isLoading]);
+  // Remove this useEffect, handle error rendering in the return statement instead
 
   return (
     <>
       {isLoading || isFetching ? (
         <Loader />
+      ) : error && !isFetching && !isLoading ? (
+        <div className="flex items-center justify-center w-full h-screen">
+          <NotFoundPage />
+        </div>
       ) : (
         profileData && (
           <div className="bg-[#fefbff] w-full  overflow-x-hidden">
@@ -128,15 +129,15 @@ const Template2 = ({
                   className="fixed  bottom-6 right-6 z-[10000]"
                   onClick={() => setSosActive(true)}
                 >
-                  <div className="sos-container">
-                    <button
-                      className={`sos-button shadow-md ${
+                  <div className="sos-container ">
+                    <div
+                      className={`sos-button shadow-md flex items-center justify-center ${
                         isActive ? "active" : ""
                       }`}
                       onClick={handleSOS}
                     >
                       <span>SOS</span>
-                    </button>
+                    </div>
 
                     <>
                       <div className="ripple-ring ring-1"></div>
