@@ -7,6 +7,7 @@ import errorMiddleware from "./middleware/error.middleware.js";
 import portfolioRouter from "./routes/portfolio.routes.js";
 import catalogueRouter from "./routes/catalgoue.routes.js";
 import adminRouter from "./routes/admin.routes.js";
+import templateRouter from "./routes/waRoutes/template.routes.js";
 import authRouter from "./routes/auth.routes.js";
 import session from "express-session";
 import { catalogueCrone, portfolioCrone } from "./croneJobs/portfolioCrone.js";
@@ -26,6 +27,7 @@ app.use(
     origin: [
       "https://www.profilegenie.in",
       "https://profilegenie.in",
+      "http://localhost:5173",
       process.env.FRONTEND_URL,
       process.env.CATALOGUE_ADMIN_URL,
       process.env.ADMIN_URL,
@@ -60,6 +62,7 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/portfolio", portfolioRouter);
 app.use("/api/v1/catalogue", catalogueRouter);
 app.use("/api/v1/admin", adminRouter);
+app.use("/api/v1/wa/user/template", templateRouter);
 
 app.all("*", (req, res) => {
   res.status(404).send("OOPS! 404 Page not found");
