@@ -14,8 +14,8 @@ import {
 import InfoMenu from "@/components/info-menu";
 import NotificationMenu from "@/components/notification-menu";
 import UserMenu from "@/components/user-menu";
-import { Home } from "lucide-react";
-import { BiBroadcast } from "react-icons/bi";
+import { Home, Wallet, Wallet2 } from "lucide-react";
+import { BiBroadcast, BiWallet } from "react-icons/bi";
 
 interface HomeLayoutProps {
   children: React.ReactNode;
@@ -112,6 +112,9 @@ const HomeLayout: React.FC<HomeLayoutProps> = ({ children }) => {
           {/* Right side */}
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
+              <button className="p-3 text-green-700 rounded-full bg-green-700/10">
+                <BiWallet className="size-4.5" />
+              </button>
               {/* Info menu */}
               <InfoMenu />
               {/* Notification */}

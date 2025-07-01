@@ -5,6 +5,7 @@ import { FaWhatsapp } from "react-icons/fa";
 import { GrShare } from "react-icons/gr";
 import { IoArrowBackSharp } from "react-icons/io5";
 import { MdBattery5Bar } from "react-icons/md";
+import waBg from "../../assets/waBg.webp";
 
 const TemplatePreview = ({
   template,
@@ -46,7 +47,7 @@ const TemplatePreview = ({
 
     if (template.header.format === "IMAGE" && template.header.media_url) {
       return (
-        <div className="p-1 rounded">
+        <div className="rounded">
           <img
             src={template.header.media_url}
             alt="Header"
@@ -156,6 +157,17 @@ const TemplatePreview = ({
               </div>
             );
           }
+          if (button.type === "OTP") {
+            return (
+              <div
+                key={idx}
+                className="px-3 flex gap-2 items-center border-t justify-center py-1.5 text-sm text-blue-400 bg-blue-50"
+              >
+                <Copy className="inline text-blue-500 size-3.5 mt-0.5" />
+                {button?.text || "Copy Code"}
+              </div>
+            );
+          }
 
           return null;
         })}
@@ -164,12 +176,12 @@ const TemplatePreview = ({
   };
 
   return (
-    <div className="w-full h-full py-2 bg-[#f5f5f5]">
+    <div className="w-full h-full py-2 bg-transparent">
       <h2 className="font-semibold text-center text-md text-neutral-600">
         Preview
       </h2>
 
-      <div className="bg-[#EDE4DB] h-[34rem] shadow-md overflow-hidden border-4 border-white mx-auto w-[18rem] rounded-2xl">
+      <div className="bg-[#EDE4DB] h-[34rem] relative shadow-md overflow-hidden border-4 border-white mx-auto w-[18rem] rounded-2xl">
         <div className="bg-[#001310] select-none text-white">
           <div className="flex items-center justify-between px-2 py-1">
             <div className="flex items-center gap-2">
@@ -208,33 +220,39 @@ const TemplatePreview = ({
             <EllipsisVertical className="w-4 h-4 text-white" />
           </div>
         </div>
-
-        <div className="px-3 pt-2 h-[28rem]  hide-scrollbar overflow-y-scroll mt-1">
+        <img
+          className="absolute object-cover w-full h-[34rem]"
+          src={waBg}
+          alt="Whatsapp bg"
+        />
+        <div className=" h-[28rem] relative z-10 pt-2 px-2 hide-scrollbar overflow-y-scroll mt-1 ">
           <div className="p-2 select-none mx-auto text-xs text-gray-600 bg-[#DBF2F1] rounded-md">
             <Info className="inline-block w-4 h-4 mr-1 text-gray-500" />
             This business uses a secure services from meta to manage this chat.
             Tap to <span className="underline">Learn More</span>.
           </div>
 
-          <div className="mt-2 overflow-hidden bg-white rounded-md rounded-tl-none w-[85%]">
+          <div className="mt-2 overflow-hidden bg-white rounded-md rounded-tl-none w-[90%]">
             <div className="p-1">{renderHeader()}</div>
             <div
-              className="p-2 text-sm text-gray-800 whitespace-pre-wrap"
+              className="p-2 py-0 text-[0.85rem] text-gray-800 whitespace-pre-wrap"
               dangerouslySetInnerHTML={{
                 __html: formatBody(template?.body?.text || ""),
               }}
             />
-            {template?.footer.text && (
-              <div className="p-1 mt-2 text-xs text-gray-500">
-                {template?.footer.text}
+            <div className="flex items-end justify-center gap-2 p-1 mt-2">
+              {template?.footer.text && (
+                <div className="py-1 text-xs text-gray-500">
+                  {template?.footer.text}
+                </div>
+              )}
+              <div className="text-[0.7rem] w-fit ml-auto  text-gray-500 uppercase ">
+                {new Date().toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: true,
+                })}
               </div>
-            )}
-            <div className="text-[0.7rem] w-fit ml-auto p-1 text-gray-500 uppercase ">
-              {new Date().toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: true,
-              })}
             </div>
             {renderButtons()}
           </div>

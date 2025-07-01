@@ -36,6 +36,13 @@ export const templateApi = createApi({
         data: data,
       }),
     }),
+    createAuthenticationTemplate: builder.mutation({
+      query: (data) => ({
+        url: `/template/authentication`,
+        method: "POST",
+        data: data,
+      }),
+    }),
   }),
 });
 
@@ -44,4 +51,5 @@ export const {
   useGetSingleTemplateQuery,
   useCreateTemplateMutation,
   useMetaFileUploadMutation,
+  useCreateAuthenticationTemplateMutation,
 } = templateApi;

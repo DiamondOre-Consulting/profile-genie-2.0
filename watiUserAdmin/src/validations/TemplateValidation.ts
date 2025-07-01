@@ -43,11 +43,16 @@ const bodyComponent = z.object({
 const footerComponent = z.object({
   type: z.string().default("FOOTER"),
   text: z.string().optional(),
+  code_expiration_minutes: z
+    .number()
+    .min(1, "Please enter between 1 to 90")
+    .max(90, "Please enter between 1 to 90")
+    .default(10)
+    .optional(),
 });
 
 const buttonComponent = z.object({
   type: z.string().default("BUTTONS"),
-  code_expiration_minutes: z.number().optional(),
   buttons: z
     .array(
       z.object({
@@ -56,7 +61,7 @@ const buttonComponent = z.object({
         text: z.string().optional(),
         url: z.string().optional(),
         type: z
-          .enum(["QUICK_REPLY", "URL", "PHONE_NUMBER", "COPY_CODE"])
+          .enum(["QUICK_REPLY", "URL", "PHONE_NUMBER", "COPY_CODE", "OTP"])
           .optional(),
         phone_number: z.string().optional(),
         example: z.string().optional(),
