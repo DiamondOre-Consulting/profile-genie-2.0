@@ -11,6 +11,7 @@ import templateRouter from "./routes/waRoutes/template.routes.js";
 import authRouter from "./routes/auth.routes.js";
 import session from "express-session";
 import { catalogueCrone, portfolioCrone } from "./croneJobs/portfolioCrone.js";
+import Portfolio from "./model/portfolioModel/portfolio.model.js";
 
 config();
 

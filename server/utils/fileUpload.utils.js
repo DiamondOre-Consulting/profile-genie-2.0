@@ -2,6 +2,7 @@ import fs from "fs/promises";
 import cloudinary from "cloudinary";
 import AppError from "./error.utils.js";
 import axios from "axios";
+import { statSync, readFileSync } from "fs";
 const avatarUpload = async (file, publicId = "") => {
   try {
     if (publicId) {
@@ -29,15 +30,19 @@ const fileUpload = async (file, publicId = "") => {
     if (publicId) {
       await cloudinary.v2.uploader.destroy(publicId);
     }
-
+    console.log(3);
     const result = await cloudinary.v2.uploader.upload(file.path, {
       folder: "profile-genie-2.0",
+      resource_type: "auto",
     });
+    console.log(2);
     if (result) {
+      console.log(4);
       fs.rm(`uploads/${file.filename}`);
       return result;
     }
   } catch (err) {
+    console.log(1);
     throw new AppError("File can not get uploaded", 500);
   }
 };
@@ -62,67 +67,129 @@ const multipleFileUpload = async (files, publicId = "") => {
 };
 
 const metaFileUpload = async (req, res) => {
-  const file = req.file;
-  if (!file) {
-    throw new AppError("No file provided", 400);
-  }
-
   try {
-    const fsStat = await fs.stat(file.path);
-    const fileLength = fsStat.size;
-    const fileName = file.filename;
-    const fileType = file.mimetype;
-
-    const accessToken = process.env.WA_ACCESS_TOKEN;
-    const phone_id = process.env.PHONE_NUMBER_ID;
-    if (!phone_id) {
-      throw new AppError("PHONE_NUMBER_ID environment variable not set", 500);
-    }
-    if (!accessToken) {
-      throw new AppError("WA_ACCESS_TOKEN environment variable not set", 500);
+    // Validate required file
+    if (!req.file) {
+      throw new Error("No file uploaded");
     }
 
-    // New URL for meta file upload
-    const url = `https://graph.facebook.com/v22.0/${phone_id}/media`;
+    const filePath = req.file.path;
+    const fileSize = statSync(filePath).size;
+    const fileType = req.file.mimetype;
+    const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB
 
-    // Prepare form data
-    const FormData = (await import("form-data")).default;
-    const form = new FormData();
-    form.append("file", await fs.readFile(file.path), {
-      filename: fileName,
-      contentType: fileType,
-      knownLength: fileLength,
-    });
-    form.append("messaging_product", "whatsapp");
+    // Validate environment variables
+    if (!process.env.WA_ACCESS_TOKEN || !process.env.APP_ID) {
+      throw new Error("Missing required environment variables");
+    }
 
-    const response = await axios.post(url, form, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        ...form.getHeaders(),
-      },
-      maxContentLength: Infinity,
-      maxBodyLength: Infinity,
-    });
-
-    const sample_url = await fileUpload(file);
-
-    console.log(sample_url);
-
-    if (response.status >= 200 && response.status < 300) {
-      res.status(200).json({
-        success: true,
-        data: {
-          meta_upload_id: response.data.id,
-          media_url: sample_url.secure_url,
-          media_id: sample_url.public_id,
+    // 1️⃣ Start upload session
+    const startResp = await axios.post(
+      `https://graph.facebook.com/v23.0/${process.env.APP_ID}/uploads`,
+      null,
+      {
+        params: {
+          file_name: req.file.originalname,
+          file_length: fileSize,
+          file_type: fileType,
+          access_token: process.env.WA_ACCESS_TOKEN,
         },
-        message: "File uploaded successfully",
-      });
+      }
+    );
+
+    const uploadSessionId = startResp.data.id;
+    console.log("Upload session ID:", uploadSessionId);
+
+    const buffer = readFileSync(filePath);
+    let fileHandle; // To store the final file handle
+
+    // 2️⃣ Upload file (chunked or single)
+    if (fileSize > CHUNK_SIZE) {
+      // Chunked upload for large files
+      let offset = 0;
+      while (offset < fileSize) {
+        const chunk = buffer.slice(
+          offset,
+          Math.min(offset + CHUNK_SIZE, fileSize)
+        );
+        const uploadResp = await axios.post(
+          `https://graph.facebook.com/v23.0/${uploadSessionId}`,
+          chunk,
+          {
+            headers: {
+              Authorization: `OAuth ${process.env.WA_ACCESS_TOKEN}`,
+              "Content-Type": "application/octet-stream",
+              file_offset: offset,
+            },
+          }
+        );
+
+        // Store the file handle if returned (final chunk)
+        if (uploadResp.data?.h) {
+          fileHandle = uploadResp.data.h;
+        }
+
+        offset += CHUNK_SIZE;
+        console.log(`Uploaded ${offset} of ${fileSize} bytes`);
+      }
     } else {
-      throw new AppError("Failed to upload file to WhatsApp", 500);
+      // Single upload for small files
+      const uploadResp = await axios.post(
+        `https://graph.facebook.com/v23.0/${uploadSessionId}`,
+        buffer,
+        {
+          headers: {
+            Authorization: `OAuth ${process.env.WA_ACCESS_TOKEN}`,
+            "Content-Type": "application/octet-stream",
+            file_offset: 0,
+          },
+        }
+      );
+      fileHandle = uploadResp.data.h;
     }
+
+    // 3️⃣ If we didn't get the handle during upload, finalize the session
+    if (!fileHandle) {
+      const finalizeResp = await axios.get(
+        `https://graph.facebook.com/v23.0/${uploadSessionId}`,
+        {
+          params: { access_token: process.env.WA_ACCESS_TOKEN },
+        }
+      );
+      fileHandle = finalizeResp.data.h;
+    }
+
+    console.log("File handle:", fileHandle);
+
+    // 4️⃣ Optional Cloudinary upload
+    let cloudinaryData = null;
+    try {
+      const sampleMedia = await fileUpload(req.file);
+      cloudinaryData = {
+        media_url: sampleMedia?.secure_url,
+        media_id: sampleMedia?.public_id,
+      };
+    } catch (cloudinaryError) {
+      console.warn("Cloudinary upload failed:", cloudinaryError.message);
+    }
+
+    // Success response
+    res.status(200).json({
+      success: true,
+      data: {
+        upload_session_id: uploadSessionId, // The full session ID
+        meta_upload_id: fileHandle, // The h value for API use
+        ...cloudinaryData, // Optional Cloudinary data
+      },
+      message: "File uploaded successfully",
+    });
   } catch (err) {
-    throw new AppError(`Error uploading file: ${err.message}`, 500);
+    console.error("Upload error:", err.response?.data || err.message);
+    res.status(500).json({
+      success: false,
+      error: err.message,
+      details: err.response?.data || null,
+    });
   }
 };
 

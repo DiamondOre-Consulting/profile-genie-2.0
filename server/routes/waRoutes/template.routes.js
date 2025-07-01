@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  createAuthenticationTemplate,
   createTemplate,
   deleteTemplate,
   getAllTemplates,
@@ -15,6 +16,8 @@ router
   .get(getAllTemplates)
   .post(createTemplate)
   .delete(deleteTemplate);
+
+router.route("/authentication").post(createAuthenticationTemplate);
 
 router.post("/meta/upload-media", upload.single("file"), metaFileUpload);
 

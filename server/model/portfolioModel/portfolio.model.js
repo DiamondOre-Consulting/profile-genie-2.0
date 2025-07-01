@@ -27,6 +27,11 @@ const portfolioSchema = new Schema(
       type: Number,
       default: 0,
     },
+    monthlyViews: {
+      type: Map,
+      of: Number,
+      default: {},
+    },
     image: {
       publicId: {
         type: String,

@@ -9,142 +9,84 @@ import ping from "ping";
 const getAdminDashboardData = asyncHandler(async (req, res) => {
   const totalPortfolio = await Portfolio.countDocuments();
 
-  const totalViews = await Portfolio.aggregate([
-    { $group: { _id: null, totalViews: { $sum: "$views" } } },
-  ]);
-
-  const currentMonth = new Date().getMonth();
-  const currentYear = new Date().getFullYear();
-
-  const totalMonthViews = await Portfolio.aggregate([
+  const result = await Portfolio.aggregate([
     {
-      $facet: {
-        thisMonth: [
-          {
-            $match: {
-              createdAt: {
-                $gte: new Date(currentYear, currentMonth, 1),
-                $lte: new Date(currentYear, currentMonth + 1, 0),
-              },
-            },
-          },
-          {
-            $group: {
-              _id: null,
-              totalViews: { $sum: "$views" },
-            },
-          },
-        ],
-        lastMonth: [
-          {
-            $match: {
-              createdAt: {
-                $gte: new Date(currentYear, currentMonth - 1, 1),
-                $lte: new Date(currentYear, currentMonth, 0),
-              },
-            },
-          },
-          {
-            $group: {
-              _id: null,
-              totalViews: { $sum: "$views" },
-            },
-          },
-        ],
+      $project: {
+        _id: 0,
+        viewsArray: { $objectToArray: "$monthlyViews" },
+      },
+    },
+    {
+      $unwind: "$viewsArray",
+    },
+    {
+      $group: {
+        _id: null,
+        overallTotalViews: { $sum: "$viewsArray.v" },
       },
     },
     {
       $project: {
-        count: {
-          $ifNull: [{ $arrayElemAt: ["$thisMonth.totalViews", 0] }, 0],
-        },
-        lastMonthViews: {
-          $ifNull: [{ $arrayElemAt: ["$lastMonth.totalViews", 0] }, 0],
-        },
-        difference: {
-          $let: {
-            vars: {
-              diff: {
-                $subtract: [
-                  {
-                    $ifNull: [
-                      { $arrayElemAt: ["$thisMonth.totalViews", 0] },
-                      0,
-                    ],
-                  },
-                  {
-                    $ifNull: [
-                      { $arrayElemAt: ["$lastMonth.totalViews", 0] },
-                      0,
-                    ],
-                  },
-                ],
-              },
-            },
-            in: {
-              $concat: [
-                { $cond: [{ $gt: ["$$diff", 0] }, "+", ""] },
-                { $toString: "$$diff" },
-              ],
-            },
-          },
-        },
+        _id: 0,
+        overallTotalViews: 1,
+      },
+    },
+  ]);
+
+  const totalViews = result.length > 0 ? result[0].overallTotalViews : 0;
+
+  console.log(totalViews);
+
+  const currentMonth = new Date().getMonth();
+  const currentYear = new Date().getFullYear();
+
+  // Calculate total views for the current month from monthlyViews field
+  const monthKey = `${new Date()
+    .toLocaleString("default", { month: "long" })
+    .toLowerCase()}${currentYear}`;
+  // Calculate total views for the current month and last month from monthlyViews field
+  const lastMonthDate = new Date(currentYear, currentMonth - 1, 1);
+  const lastMonthKey = `${lastMonthDate
+    .toLocaleString("default", { month: "long" })
+    .toLowerCase()}${lastMonthDate.getFullYear()}`;
+
+  const totalMonthViewsAgg = await Portfolio.aggregate([
+    {
+      $project: {
+        currentMonthViews: { $ifNull: [`$monthlyViews.${monthKey}`, 0] },
+        lastMonthViews: { $ifNull: [`$monthlyViews.${lastMonthKey}`, 0] },
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        count: { $sum: "$currentMonthViews" },
+        lastMonthViews: { $sum: "$lastMonthViews" },
+      },
+    },
+    {
+      $project: {
+        count: 1,
+        lastMonthViews: 1,
+        difference: { $subtract: ["$count", "$lastMonthViews"] },
         percentageChange: {
           $cond: [
+            { $eq: ["$lastMonthViews", 0] },
+            100,
             {
-              $eq: [
+              $round: [
                 {
-                  $ifNull: [{ $arrayElemAt: ["$lastMonth.totalViews", 0] }, 0],
-                },
-                0,
-              ],
-            },
-            {
-              $cond: [
-                {
-                  $gt: [
+                  $multiply: [
                     {
-                      $ifNull: [
-                        { $arrayElemAt: ["$thisMonth.totalViews", 0] },
-                        0,
+                      $divide: [
+                        { $subtract: ["$count", "$lastMonthViews"] },
+                        "$lastMonthViews",
                       ],
                     },
-                    0,
+                    100,
                   ],
                 },
-                100,
                 0,
-              ],
-            },
-            {
-              $multiply: [
-                {
-                  $divide: [
-                    {
-                      $subtract: [
-                        {
-                          $ifNull: [
-                            { $arrayElemAt: ["$thisMonth.totalViews", 0] },
-                            0,
-                          ],
-                        },
-                        {
-                          $ifNull: [
-                            { $arrayElemAt: ["$lastMonth.totalViews", 0] },
-                            0,
-                          ],
-                        },
-                      ],
-                    },
-                    {
-                      $ifNull: [
-                        { $arrayElemAt: ["$lastMonth.totalViews", 0] },
-                        0,
-                      ],
-                    },
-                  ],
-                },
-                100,
               ],
             },
           ],
@@ -152,6 +94,10 @@ const getAdminDashboardData = asyncHandler(async (req, res) => {
       },
     },
   ]);
+  const totalMonthViews =
+    totalMonthViewsAgg.length > 0
+      ? totalMonthViewsAgg
+      : [{ count: 0, lastMonthViews: 0, difference: 0, percentageChange: 0 }];
 
   const top5Portfolio = await Portfolio.find(
     {},
@@ -196,8 +142,8 @@ const getAdminDashboardData = asyncHandler(async (req, res) => {
       },
       {
         title: "Total Views",
-        count: totalViews[0]?.totalViews || 0,
         ...totalMonthViews[0],
+        count: result.length > 0 ? result[0].overallTotalViews : 0,
       },
       {
         title: `${new Date().toLocaleString("default", {

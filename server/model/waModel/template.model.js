@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+import { type } from "os";
 
 const headerSchema = new Schema(
   {
@@ -22,24 +23,24 @@ const headerSchema = new Schema(
     media_id: {
       type: String,
       required: function () {
-        return this.format !== "TEXT" || this.format !== "NONE";
+        return this.format !== "TEXT" && this.format !== "NONE";
       },
     },
     media_url: {
       type: String,
       required: function () {
-        return this.format !== "TEXT" || this.format !== "NONE";
+        return this.format !== "TEXT" && this.format !== "NONE";
       },
     },
     example: {
       header_handle: {
         type: [String],
         required: function () {
-          return this.format !== "TEXT" || this.format !== "NONE";
+          return this.format !== "TEXT" && this.format !== "NONE";
         },
       },
       header_text: {
-        type: String,
+        type: [String],
         required: function () {
           return this.format === "TEXT";
         },
@@ -109,6 +110,9 @@ const footerSchema = new Schema(
     },
     text: {
       type: String,
+    },
+    code_expiration_minutes: {
+      type: Number,
     },
   },
   {
@@ -195,6 +199,9 @@ const templateSchema = new Schema(
       body: bodySchema,
       footer: footerSchema,
       button: buttonsSchema,
+    },
+    templateId: {
+      type: String,
     },
     status: {
       type: String,

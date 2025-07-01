@@ -15,6 +15,8 @@ const createTemplate = asyncHandler(async (req, res) => {
     throw new AppError("Template language is required", 400);
   }
 
+  let bodyExample = "";
+
   if (component) {
     if (component.header) {
       if (!component.header.format === "TEXT") {
@@ -75,6 +77,10 @@ const createTemplate = asyncHandler(async (req, res) => {
                 400
               );
             }
+
+            bodyExample = {
+              body_text: component.body.example.body_text,
+            };
           }
 
           if (allStrings) {
@@ -111,6 +117,10 @@ const createTemplate = asyncHandler(async (req, res) => {
                   );
                 }
               }
+              bodyExample = {
+                body_text_named_params:
+                  component.body.example.body_text_named_params,
+              };
             }
           }
         }
@@ -195,11 +205,11 @@ const createTemplate = asyncHandler(async (req, res) => {
     metaTemplateComponent.push({
       type: "HEADER",
       format: component.header.format,
-      media: {
-        id: component.header.example.header_handle[0],
-      },
+      // media: {
+      //   id: component.header.example.header_handle[0],
+      // },
       example: {
-        header_handle: [component.header.media_url],
+        header_handle: [component.header.example.header_handle[0].toString()],
       },
     });
   }
@@ -207,15 +217,25 @@ const createTemplate = asyncHandler(async (req, res) => {
   if (component.body.text) {
     let replacedText = component.body.text;
     let varIndex = 1;
+    const hasVariables = /{{(.*?)}}/g.test(replacedText);
+
     replacedText = replacedText.replace(
       /{{(.*?)}}/g,
       () => `{{${varIndex++}}}`
     );
 
-    metaTemplateComponent.push({
+    const metaTemplateComponentItem = {
       type: "BODY",
       text: replacedText,
-      example: {
+    };
+
+    // Only include example if variables exist and example data is available
+    if (
+      hasVariables &&
+      component.body.example &&
+      component.body.example.body_text_named_params
+    ) {
+      metaTemplateComponentItem.example = {
         body_text: [
           Array.isArray(component.body.example.body_text_named_params)
             ? component.body.example.body_text_named_params.map(
@@ -223,10 +243,11 @@ const createTemplate = asyncHandler(async (req, res) => {
               )
             : [],
         ],
-      },
-    });
-  }
+      };
+    }
 
+    metaTemplateComponent.push(metaTemplateComponentItem);
+  }
   if (component.footer.text) {
     metaTemplateComponent.push({
       type: "FOOTER",
@@ -291,25 +312,180 @@ const createTemplate = asyncHandler(async (req, res) => {
       },
     });
 
-    console.log("Template created:", response.data);
+    const template = await templateModel.create({
+      ...req.body,
+      status: response.data.status,
+      category: response.data.category,
+      templateId: response.data.id,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Template created successfully",
+      data: template,
+    });
   } catch (error) {
-    console.error("Error creating template:", error);
+    console.log(error);
+    if (error.response) {
+      console.error(
+        "Error creating template:",
+        JSON.stringify(error.response.data, null, 2)
+      );
+    } else if (error.request) {
+      console.error(
+        "Error creating template: No response received",
+        error.request
+      );
+    } else {
+      console.error("Error creating template:", error.message);
+    }
+
     throw new AppError("Failed to create template", 500);
   }
+});
 
-  // const template = await templateModel.create(templateData);
+const createAuthenticationTemplate = asyncHandler(async (req, res) => {
+  const { category, language, component, name } = req.body;
 
-  res.status(201).json({
-    success: true,
-    message: "Template created successfully",
-    data: template,
+  if (category !== "AUTHENTICATION") {
+    throw new AppError("Authentication category is required", 400);
+  }
+
+  if (!language) {
+    throw new AppError("Language is required!");
+  }
+
+  if (!name) {
+    throw new AppError("Template name is required!");
+  }
+
+  let authenticationTemplates = [];
+
+  authenticationTemplates.push({
+    type: "FOOTER",
+    code_expiration_minutes: component.footer.code_expiration_minutes || 10,
   });
+
+  authenticationTemplates.push({
+    type: "BODY",
+    add_security_recommendation:
+      component.body.add_security_recommendation || false,
+  });
+
+  if (component.button.buttons[0].type === "OTP") {
+    authenticationTemplates.push({
+      type: "BUTTONS",
+      buttons: [
+        {
+          type: component.button.buttons[0].type,
+          otp_type: "COPY_CODE",
+          // text: component.button.buttons[0].text || "Copy code",
+        },
+      ],
+    });
+  }
+
+  const accessToken = process.env.WA_ACCESS_TOKEN;
+  const wabaId = process.env.WABA_ID;
+
+  const url = `https://graph.facebook.com/v22.0/${wabaId}/upsert_message_templates`;
+
+  const payload = {
+    name: name,
+    category: category,
+    languages: [language],
+    components: authenticationTemplates,
+  };
+
+  console.log(payload);
+
+  try {
+    const response = await axios.post(url, payload, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    console.log(response);
+
+    res.status(201).json({
+      success: true,
+      message: "Authentication template created successfully",
+      data: response.data,
+    });
+  } catch (error) {
+    if (error.response) {
+      console.error(
+        "Error creating authentication template:",
+        JSON.stringify(error.response.data, null, 2)
+      );
+    } else if (error.request) {
+      console.error(
+        "Error creating authentication template: No response received",
+        error.request
+      );
+    } else {
+      console.error("Error creating authentication template:", error.message);
+    }
+    throw new AppError("Failed to create authentication template", 500);
+  }
 });
 
 const deleteTemplate = asyncHandler(async (req, res) => {});
 
-const getAllTemplates = asyncHandler(async (req, res) => {});
+const getAllTemplates = asyncHandler(async (req, res) => {
+  const accessToken = process.env.WA_ACCESS_TOKEN;
+  const wabaId = process.env.WABA_ID;
+  const url = `https://graph.facebook.com/v22.0/${wabaId}/message_templates?fields=name,status,category,id`;
+
+  // Fetch all templates from DB
+  const dbTemplates = await templateModel.find();
+
+  // Fetch all templates from Meta API
+  let metaTemplates = [];
+  try {
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    metaTemplates = response.data.data || [];
+  } catch (error) {
+    console.error("Error fetching templates from Meta:", error.message);
+    // Continue with DB templates if Meta API fails
+  }
+
+  // Sync status if changed
+  const metaTemplateMap = {};
+  metaTemplates.forEach((tpl) => {
+    metaTemplateMap[tpl.id] = tpl;
+  });
+
+  for (const dbTpl of dbTemplates) {
+    if (dbTpl.templateId && metaTemplateMap[dbTpl.templateId]) {
+      const metaTpl = metaTemplateMap[dbTpl.templateId];
+      if (dbTpl.status !== metaTpl.status) {
+        dbTpl.status = metaTpl.status;
+        await dbTpl.save();
+      }
+    }
+  }
+
+  // Fetch updated templates
+  const updatedTemplates = await templateModel.find();
+
+  res.status(200).json({
+    success: true,
+    data: updatedTemplates,
+  });
+});
 
 const getTemplateById = asyncHandler(async (req, res) => {});
 
-export { createTemplate, deleteTemplate, getAllTemplates, getTemplateById };
+export {
+  createTemplate,
+  deleteTemplate,
+  getAllTemplates,
+  getTemplateById,
+  createAuthenticationTemplate,
+};

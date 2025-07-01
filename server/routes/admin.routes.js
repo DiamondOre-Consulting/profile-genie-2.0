@@ -8,7 +8,7 @@ import {
 
 const adminRouter = Router();
 
-adminRouter.route("/admin-dashboard", verifyJWT).get(getAdminDashboardData);
+adminRouter.route("/admin-dashboard").get(getAdminDashboardData);
 
 adminRouter.route("/send-custom-mail", verifyJWT).post(sendCustomMail);
 

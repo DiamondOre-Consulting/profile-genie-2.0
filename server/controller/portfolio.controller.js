@@ -449,7 +449,35 @@ const getSinglePortfolio = asyncHandler(async (req, res) => {
   }
 
   if (!admin) {
-    portfolio.views += 1;
+    const now = new Date();
+    const monthNames = [
+      "january",
+      "february",
+      "march",
+      "april",
+      "may",
+      "june",
+      "july",
+      "august",
+      "september",
+      "october",
+      "november",
+      "december",
+    ];
+
+    const monthYearKey = `${monthNames[now.getMonth()]}${now.getFullYear()}`;
+
+    if (!portfolio.monthlyViews || !(portfolio.monthlyViews instanceof Map)) {
+      portfolio.monthlyViews = new Map(
+        Object.entries(portfolio.monthlyViews || {})
+      );
+    }
+
+    let currentViews = portfolio.monthlyViews.get(monthYearKey) || 0;
+
+    portfolio.monthlyViews.set(monthYearKey, currentViews + 1);
+
+    portfolio.markModified("monthlyViews");
   }
 
   await portfolio.save();
