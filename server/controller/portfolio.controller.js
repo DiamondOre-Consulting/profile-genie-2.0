@@ -7,10 +7,12 @@ import AppError from "../utils/error.utils.js";
 import { multipleFileUpload } from "../utils/fileUpload.utils.js";
 import cloudinary from "cloudinary";
 import sendMail from "../utils/mail.utils.js";
+import { v4 as uuidv4 } from "uuid";
 import {
   getActiveMail,
   getConfirmPaidMail,
   getInactiveMail,
+  getOtpMail,
 } from "../utils/cronMessages.js";
 
 const createPortfolio = asyncHandler(async (req, res) => {
@@ -1281,6 +1283,189 @@ const updatePortfolioContact = asyncHandler(async (req, res) => {
   });
 });
 
+const otpStore = global.otpStore || (global.otpStore = new Map());
+const OTP_VALIDITY_MS = 5 * 60 * 1000;
+const OTP_MAX_ATTEMPTS = 5;
+const OTP_ATTEMPT_WINDOW_MS = 60 * 60 * 1000;
+
+const sendStatsOtp = asyncHandler(async (req, res) => {
+  const { userName } = req.params;
+
+  const { email, fullName } = await Portfolio.findOne({ userName }).select(
+    "email fullName"
+  );
+
+  console.log(email);
+
+  if (!email || !userName) {
+    throw new AppError("Email and username are required!", 400);
+  }
+
+  const key = `${email}:${userName}`;
+  let otpData = otpStore.get(key);
+
+  const now = Date.now();
+
+  if (otpData && otpData.attempts) {
+    otpData.attempts = otpData.attempts.filter(
+      (t) => now - t < OTP_ATTEMPT_WINDOW_MS
+    );
+    if (otpData.attempts.length >= OTP_MAX_ATTEMPTS) {
+      throw new AppError(
+        "Maximum OTP requests exceeded. Try again later.",
+        429
+      );
+    }
+  } else {
+    otpData = { attempts: [] };
+  }
+
+  const uuid = uuidv4().replace(/\D/g, "");
+  const otp = uuid.slice(0, 4).padEnd(4, "0");
+
+  otpData.otp = otp;
+  otpData.email = email;
+  otpData.userName = userName;
+  otpData.createdAt = now;
+  otpData.expiresAt = now + OTP_VALIDITY_MS;
+  otpData.attempts.push(now);
+
+  otpStore.set(key, otpData);
+
+  const { subject, message } = getOtpMail(fullName, userName, otp);
+
+  const sendOtpToMail = await sendMail(
+    email,
+    subject,
+    message,
+    "Authentication"
+  );
+
+  console.log(sendOtpToMail);
+
+  res.status(200).json({
+    success: true,
+    message: "OTP generated successfully!",
+    expiresIn: OTP_VALIDITY_MS / 1000,
+    email,
+  });
+});
+
+const verifyStatsOtp = asyncHandler(async (req, res) => {
+  const { userName } = req.params;
+  const { email, otp } = req.body;
+
+  const now = new Date();
+
+  if (!email || !userName || !otp) {
+    throw new AppError("Email, username, and OTP are required!", 400);
+  }
+
+  const key = `${email}:${userName}`;
+  const otpData = otpStore.get(key);
+
+  if (!otpData) {
+    throw new AppError("OTP not found or expired!", 400);
+  }
+
+  if (now > otpData.expiresAt) {
+    otpStore.delete(key);
+    throw new AppError("OTP expired!", 400);
+  }
+
+  if (otpData.otp !== otp) {
+    throw new AppError("Invalid OTP!", 400);
+  }
+
+  otpStore.delete(key);
+
+  const portfolioStats = await Portfolio.findOne({ userName }).select(
+    "paidDate isPaid isActive monthlyViews SOS fullName email phoneNumber"
+  );
+
+  if (!portfolioStats) {
+    return res.status(404).json({ message: "Portfolio not found" });
+  }
+
+  const monthlyViews =
+    portfolioStats.monthlyViews instanceof Map
+      ? Object.fromEntries(portfolioStats.monthlyViews)
+      : portfolioStats.monthlyViews || {};
+
+  const totalViews = Object.values(monthlyViews).reduce(
+    (acc, val) => acc + val,
+    0
+  );
+
+  const graphData = Object.entries(monthlyViews).map(([month, views]) => {
+    const match = month.match(/^([a-z]+)(\d{4})$/i);
+    let shortMonth = month;
+    if (match) {
+      const monthMap = {
+        january: "jan",
+        february: "feb",
+        march: "mar",
+        april: "apr",
+        may: "may",
+        june: "jun",
+        july: "jul",
+        august: "aug",
+        september: "sep",
+        october: "oct",
+        november: "nov",
+        december: "dec",
+      };
+      const [_, fullMonth, year] = match;
+      shortMonth = (monthMap[fullMonth.toLowerCase()] || fullMonth) + year;
+    }
+    return {
+      month: shortMonth,
+      views,
+    };
+  });
+
+  const monthNames = [
+    "january",
+    "february",
+    "march",
+    "april",
+    "may",
+    "june",
+    "july",
+    "august",
+    "september",
+    "october",
+    "november",
+    "december",
+  ];
+  const currentMonthKey = `${monthNames[now.getMonth()]}${now.getFullYear()}`;
+  const prev = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  const prevMonthKey = `${monthNames[prev.getMonth()]}${prev.getFullYear()}`;
+
+  const currentMonthViews = monthlyViews[currentMonthKey] || 0;
+  const previousMonthViews = monthlyViews[prevMonthKey] || 0;
+
+  const difference = currentMonthViews - previousMonthViews;
+  const percentChange =
+    previousMonthViews > 0
+      ? (difference / previousMonthViews) * 100
+      : currentMonthViews > 0
+      ? 100
+      : 0;
+
+  res.json({
+    success: true,
+    message: "OTP verified successfully!",
+    totalViews,
+    currentMonthViews,
+    previousMonthViews,
+    difference,
+    percentChange,
+    graphData,
+    portfolioStats,
+  });
+});
+
 export {
   createPortfolio,
   deletePortfolio,
@@ -1296,4 +1481,6 @@ export {
   getRecycledPortfolio,
   updateStatusActive,
   updateStatusPaid,
+  verifyStatsOtp,
+  sendStatsOtp,
 };

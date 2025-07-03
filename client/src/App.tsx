@@ -13,6 +13,7 @@ import logo from "./assets/logo.png";
 
 import AOS from "aos";
 import "aos/dist/aos.css";
+import UserStats from "./Pages/UserStats";
 
 function App() {
   const location = useLocation();
@@ -145,6 +146,7 @@ function App() {
             path="/profile/1/:username"
             element={<Template2 setMetaDetails={setMetaDetails} />}
           />
+          <Route path="/profile/1/:username/stats" element={<UserStats />} />
           <Route
             path="/profile/9510/:username"
             element={<Template1 setMetaDetails={setMetaDetails} />}

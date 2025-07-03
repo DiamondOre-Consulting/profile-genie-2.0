@@ -1,8 +1,7 @@
-
 export const getDueMail = (daysLeft, fullName, userName) => {
-    const dueMailSubject = `Reminder: Your Portfolio Payment is Due in ${daysLeft} Day(s)`
+  const dueMailSubject = `Reminder: Your Portfolio Payment is Due in ${daysLeft} Day(s)`;
 
-    const dueMailMessage = `
+  const dueMailMessage = `
                         <html>
                         <head>
                             <style>
@@ -118,15 +117,15 @@ export const getDueMail = (daysLeft, fullName, userName) => {
                     
                         </body>
                         </html>
-                        `
+                        `;
 
-    return { dueMailSubject, dueMailMessage }
-}
+  return { dueMailSubject, dueMailMessage };
+};
 
 export const getConfirmPaidMail = (fullName, userName) => {
-    const confirmMailSubject = `Reminder: Your Portfolio is renewed`
+  const confirmMailSubject = `Reminder: Your Portfolio is renewed`;
 
-    const confirmMailMessage = `
+  const confirmMailMessage = `
                         <html>
                         <head>
                             <style>
@@ -236,15 +235,15 @@ export const getConfirmPaidMail = (fullName, userName) => {
                     
                         </body>
                         </html>
-                        `
+                        `;
 
-    return { confirmMailSubject, confirmMailMessage }
-}
+  return { confirmMailSubject, confirmMailMessage };
+};
 
 export const getInactiveMail = (fullName, userName) => {
-    const subject = `Reminder: Your Portfolio is Inactive`
+  const subject = `Reminder: Your Portfolio is Inactive`;
 
-    const message = `
+  const message = `
                         <html>
                         <head>
                             <style>
@@ -358,15 +357,15 @@ export const getInactiveMail = (fullName, userName) => {
                     
                         </body>
                         </html>
-                        `
+                        `;
 
-    return { subject, message }
-}
+  return { subject, message };
+};
 
 export const getActiveMail = (fullName, userName) => {
-    const subject = `Reminder: Your Portfolio is active now`
+  const subject = `Reminder: Your Portfolio is active now`;
 
-    const message = `
+  const message = `
                         <html>
                         <head>
                             <style>
@@ -476,15 +475,15 @@ export const getActiveMail = (fullName, userName) => {
                     
                         </body>
                         </html>
-                        `
+                        `;
 
-    return { subject, message }
-}
+  return { subject, message };
+};
 
 export const getQuotationMail = (quotation, products, catalogueName, logo) => {
-    const subject = `New Quotation Received for Your Catalogue from ${quotation?.fullName}`
+  const subject = `New Quotation Received for Your Catalogue from ${quotation?.fullName}`;
 
-    const message = `
+  const message = `
                         <html>
                         <head>
                             <style>
@@ -573,7 +572,9 @@ export const getQuotationMail = (quotation, products, catalogueName, logo) => {
 <table style="width: 100%; border-collapse: collapse; border: 1px solid #ddd;">
   <tr>
     <th style="border: 1px solid #ddd; padding: 10px; text-align: left; background-color: #f4f4f4;">Full Name</th>
-    <td style="border: 1px solid #ddd; padding: 10px;">${quotation?.fullName}</td>
+    <td style="border: 1px solid #ddd; padding: 10px;">${
+      quotation?.fullName
+    }</td>
   </tr>
   <tr>
     <th style="border: 1px solid #ddd; padding: 10px; text-align: left; background-color: #f4f4f4;">Email</th>
@@ -585,7 +586,9 @@ export const getQuotationMail = (quotation, products, catalogueName, logo) => {
   </tr>
   <tr>
     <th style="border: 1px solid #ddd; padding: 10px; text-align: left; background-color: #f4f4f4;">Message</th>
-    <td style="border: 1px solid #ddd; padding: 10px;">${quotation?.message}</td>
+    <td style="border: 1px solid #ddd; padding: 10px;">${
+      quotation?.message
+    }</td>
   </tr>
 </table>
 
@@ -596,7 +599,9 @@ export const getQuotationMail = (quotation, products, catalogueName, logo) => {
     <tr>
       <td colspan="2" style="padding-top: 10px; text-align: center;">
         <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; padding: 10px;">
-          ${products?.map(item => `
+          ${products
+            ?.map(
+              (item) => `
             <div style="border: 1px solid #ddd; padding: 10px;">
   <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
     <!-- Item Name -->
@@ -621,7 +626,9 @@ export const getQuotationMail = (quotation, products, catalogueName, logo) => {
   </table>
 </div>
 
-          `).join('')}
+          `
+            )
+            .join("")}
         </div>
       </td>
     </tr>
@@ -651,15 +658,15 @@ export const getQuotationMail = (quotation, products, catalogueName, logo) => {
                     
                         </body>
                         </html>
-                        `
+                        `;
 
-    return { subject, message }
-}
+  return { subject, message };
+};
 
 export const sendQuotationRes = (quotation, products, catalogueName, logo) => {
-    const subject = `Quotation Received: Our Team Will Contact You Soon`;
+  const subject = `Quotation Received: Our Team Will Contact You Soon`;
 
-    const message = `
+  const message = `
                         <html>
                         <head>
                             <style>
@@ -752,7 +759,9 @@ export const sendQuotationRes = (quotation, products, catalogueName, logo) => {
     <tr>
       <td colspan="2" style="padding-top: 10px; text-align: center;">
         <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; padding: 10px;">
-          ${products?.map(item => `
+          ${products
+            ?.map(
+              (item) => `
             <div style="border: 1px solid #ddd; padding: 10px;">
   <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
     <!-- Item Name -->
@@ -777,7 +786,9 @@ export const sendQuotationRes = (quotation, products, catalogueName, logo) => {
   </table>
 </div>
 
-          `).join('')}
+          `
+            )
+            .join("")}
         </div>
       </td>
     </tr>
@@ -807,15 +818,20 @@ export const sendQuotationRes = (quotation, products, catalogueName, logo) => {
                     
                         </body>
                         </html>
-                        `
+                        `;
 
-    return { subject, message }
-}
+  return { subject, message };
+};
 
-export const getCatalogueDueMail = (daysLeft, fullName, userName, catalogueName) => {
-    const dueMailSubject = `Reminder: Your Catalogue Payment is Due in ${daysLeft} Day(s)`
+export const getCatalogueDueMail = (
+  daysLeft,
+  fullName,
+  userName,
+  catalogueName
+) => {
+  const dueMailSubject = `Reminder: Your Catalogue Payment is Due in ${daysLeft} Day(s)`;
 
-    const dueMailMessage = `
+  const dueMailMessage = `
                         <html>
                         <head>
                             <style>
@@ -931,15 +947,15 @@ export const getCatalogueDueMail = (daysLeft, fullName, userName, catalogueName)
                     
                         </body>
                         </html>
-                        `
+                        `;
 
-    return { dueMailSubject, dueMailMessage }
-}
+  return { dueMailSubject, dueMailMessage };
+};
 
 export const getCataloguePaidMail = (fullName, userName, catalogueName) => {
-    const confirmMailSubject = `Reminder: Your Catalogue is renewed`
+  const confirmMailSubject = `Reminder: Your Catalogue is renewed`;
 
-    const confirmMailMessage = `
+  const confirmMailMessage = `
                         <html>
                         <head>
                             <style>
@@ -1049,15 +1065,15 @@ export const getCataloguePaidMail = (fullName, userName, catalogueName) => {
                     
                         </body>
                         </html>
-                        `
+                        `;
 
-    return { confirmMailSubject, confirmMailMessage }
-}
+  return { confirmMailSubject, confirmMailMessage };
+};
 
 export const getCatalogueInactiveMail = (fullName, userName, catalogueName) => {
-    const subject = `Reminder: Your Catalogue is Inactive`
+  const subject = `Reminder: Your Catalogue is Inactive`;
 
-    const message = `
+  const message = `
                         <html>
                         <head>
                             <style>
@@ -1171,15 +1187,15 @@ export const getCatalogueInactiveMail = (fullName, userName, catalogueName) => {
                     
                         </body>
                         </html>
-                        `
+                        `;
 
-    return { subject, message }
-}
+  return { subject, message };
+};
 
 export const getCatalogueActiveMail = (fullName, userName, catalogueName) => {
-    const subject = `Reminder: Your Catalogue is active now`
+  const subject = `Reminder: Your Catalogue is active now`;
 
-    const message = `
+  const message = `
                         <html>
                         <head>
                             <style>
@@ -1289,7 +1305,141 @@ export const getCatalogueActiveMail = (fullName, userName, catalogueName) => {
                     
                         </body>
                         </html>
-                        `
+                        `;
 
-    return { subject, message }
-}
+  return { subject, message };
+};
+
+export const getOtpMail = (fullName, userName, otp, stats = {}) => {
+  const subject = `Your OTP Code for Profile Genie Verification`;
+
+  const statsHtml =
+    stats && Object.keys(stats).length > 0
+      ? `<div style="margin-top:20px;">
+                <h3 style="margin-bottom:10px;">Your Stats</h3>
+                <table style="width:100%;border-collapse:collapse;">
+                    ${Object.entries(stats)
+                      .map(
+                        ([key, value]) => `
+                        <tr>
+                            <td style="padding:8px;border:1px solid #ddd;font-weight:bold;background:#f4f4f4;">${key}</td>
+                            <td style="padding:8px;border:1px solid #ddd;">${value}</td>
+                        </tr>
+                    `
+                      )
+                      .join("")}
+                </table>
+           </div>`
+      : "";
+
+  const message = `
+        <html>
+        <head>
+            <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+                margin: 0;
+                padding: 0;
+            }
+            .container {
+                max-width: 500px;
+                margin: 5px auto;
+                background: #F2F6FC;
+                padding: 5px;
+                border-radius: 8px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+                overflow: hidden;
+                border: 1px solid #dddddd;
+            }
+            .header {
+                text-align: center;
+                background: linear-gradient(90deg, #0052D4, #4364F7, #6FB1FC);
+                color: #ffffff;
+                padding: 10px 5px;
+                font-size: 18px;
+                font-weight: bold;
+                border-radius: 8px 8px 0 0;
+            }
+            .header img {
+                max-width: 60px;
+                margin-bottom: 7px;
+            }
+            .content {
+                padding: 5px;
+                color: #333333;
+                font-size: 16px;
+                line-height: 1.4;
+            }
+            .otp-box {
+                margin: 20px auto;
+                padding: 15px 0;
+                background: #fff;
+                border-radius: 6px;
+                text-align: center;
+                font-size: 28px;
+                font-weight: bold;
+                letter-spacing: 8px;
+                color: #0052D4;
+                border: 2px dashed #0052D4;
+                width: 220px;
+            }
+            .footer {
+                text-align: center;
+                font-size: 16px;
+                color: #666666;
+                padding: 15px;
+                border-top: 1px solid #dddddd;
+                margin-top: 20px;
+            }
+            .social-icons {
+                text-align: center;
+                margin-top: 15px;
+            }
+            .social-icons a {
+                margin: 0 10px;
+                display: inline-block;
+            }
+            .social-icons img {
+                width: 30px;
+                height: 30px;
+            }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+            <div class="header">
+               
+                OTP Verification for Stats Access
+            </div>
+            <div class="content">
+                <p>Hello <strong>${fullName}</strong> (${userName}),</p>
+                <p>Your OTP code to view your stats details on the website is:</p>
+                <div class="otp-box">${otp}</div>
+                <p>This OTP is valid for a 5 minutes and is required to verify your identity before viewing your stats. Please do not share it with anyone.</p>
+                ${statsHtml}
+                <p>Thank you for choosing <strong>Profile Genie</strong>.</p>
+                <p>Best Regards,<br><strong>Profile Genie Team</strong></p>
+            </div>
+            <div class="footer">
+                Visit us at <a href="https://profilegenie.in" target="_blank">profilegenie.in</a>
+                <div class="social-icons">
+                <a href="https://www.facebook.com/profilegenie" target="_blank">
+                    <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook">
+                </a>
+                <a href="https://www.instagram.com/profilegenie" target="_blank">
+                    <img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" alt="Instagram">
+                </a>
+                <a href="https://www.linkedin.com/company/profilegenie" target="_blank">
+                    <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn">
+                </a>
+                </div>
+                &copy; 2024 Profile Genie. All rights reserved.
+            </div>
+            </div>
+        </body>
+        </html>
+        `;
+
+  return { subject, message };
+};

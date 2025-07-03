@@ -10,11 +10,13 @@ import {
   getSinglePortfolio,
   recyclePortfolio,
   restorePortfolio,
+  sendStatsOtp,
   updatePortfolio,
   updatePortfolioContact,
   updatePortfolioDetail,
   updateStatusActive,
   updateStatusPaid,
+  verifyStatsOtp,
 } from "../controller/portfolio.controller.js";
 
 import {
@@ -73,5 +75,8 @@ portfolioRouter
 portfolioRouter
   .route("/update-paid-status/:id", verifyJWT)
   .put(updateStatusPaid);
+
+portfolioRouter.route("/:userName/send-otp").get(sendStatsOtp);
+portfolioRouter.route("/:userName/verify-otp").post(verifyStatsOtp);
 
 export default portfolioRouter;
