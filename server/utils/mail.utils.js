@@ -13,9 +13,7 @@ const sendMail = async function (email, subject, message, type) {
   });
 
   await transporter.sendMail({
-    from: `${type ? type | "Profile Genie" : "Profile Genie"} <${
-      process.env.SMTP_FROM_EMAIL
-    }>`,
+    from: `Profile Genie <noreply@profilegenie.in>`,
     to: email,
     subject: subject,
     html: message,
