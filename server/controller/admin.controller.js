@@ -99,12 +99,36 @@ const getAdminDashboardData = asyncHandler(async (req, res) => {
       ? totalMonthViewsAgg
       : [{ count: 0, lastMonthViews: 0, difference: 0, percentageChange: 0 }];
 
-  const top5Portfolio = await Portfolio.find(
-    {},
-    "fullName userName views email"
-  )
-    .sort({ views: -1 })
-    .limit(10);
+  const top5Portfolio = await Portfolio.aggregate([
+    {
+      $addFields: {
+        totalViews: {
+          $sum: {
+            $map: {
+              input: { $objectToArray: "$monthlyViews" },
+              as: "mv",
+              in: "$$mv.v",
+            },
+          },
+        },
+      },
+    },
+    {
+      $sort: { totalViews: -1 },
+    },
+    {
+      $limit: 10,
+    },
+    {
+      $project: {
+        _id: 1,
+        fullName: 1,
+        userName: 1,
+        views: "$totalViews",
+        email: 1,
+      },
+    },
+  ]);
 
   const thisMonth = await Portfolio.countDocuments({
     createdAt: {
@@ -184,7 +208,6 @@ const sendCustomMail = asyncHandler(async (req, res) => {
   });
 });
 
-// 2. API uptime via /ping route
 async function checkApiUptime() {
   try {
     const res = await axios.get("https://server.profilegenie.in/ping");
@@ -194,7 +217,6 @@ async function checkApiUptime() {
   }
 }
 
-// 3. HTTP response time
 async function getResponseTime() {
   const start = Date.now();
   try {
@@ -203,9 +225,8 @@ async function getResponseTime() {
   return Date.now() - start;
 }
 
-// 4. Simple SEO score estimation
 async function getSeoScore(url) {
-  const apiKey = process.env.PSI_API_KEY; // Free Google API key from Google Cloud Console
+  const apiKey = process.env.PSI_API_KEY;
   const apiUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(
     url
   )}&category=performance&category=accessibility&category=best-practices&category=seo&strategy=desktop&key=${apiKey}`;
@@ -231,7 +252,7 @@ async function getSeoScore(url) {
         auditsSummary: {
           titlePresent: audits["document-title"].score === 1,
           metaDescPresent: audits["meta-description"].score === 1,
-          h1Present: audits["document-title"].score === 1, // H1 is usually part of semantic structure
+          h1Present: audits["document-title"].score === 1,
           robotsTxt: audits["robots-txt"].score === 1,
           fontSizesOk: audits["font-size"].score === 1,
         },
@@ -248,7 +269,6 @@ async function getSeoScore(url) {
   }
 }
 
-// 6. Memory and CPU stats
 function getSystemStats() {
   const total = os.totalmem();
   const free = os.freemem();
@@ -259,12 +279,10 @@ function getSystemStats() {
   return { memoryUsagePercent, cpuLoad: cpuLoad1m };
 }
 
-// 7. Simulated error rate (random for demo)
 function getErrorRate() {
   return (Math.random() * 5).toFixed(2);
 }
 
-// 8. Node process usage stats
 function getProcessStats() {
   const memory = process.memoryUsage();
   return {
@@ -274,7 +292,6 @@ function getProcessStats() {
   };
 }
 
-// 🔁 Final function to emit data
 async function getAllSystemStats(io) {
   try {
     const [apiUptime, responseTime, seoScore] = await Promise.all([

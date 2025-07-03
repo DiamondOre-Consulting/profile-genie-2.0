@@ -501,11 +501,13 @@ const getAllPortfolio = asyncHandler(async (req, res) => {
           ],
         }),
         ...(filter &&
-          ({
-            isActive:
-              filter === "active" ||
-              (filter === "inactive" && filter === "active"),
-          } || { isPaid: filter === "unpaid" && false })),
+          (filter === "active"
+            ? { isActive: true }
+            : filter === "inactive"
+            ? { isActive: false }
+            : filter === "unpaid"
+            ? { isPaid: false }
+            : {})),
       },
     },
     {
@@ -520,6 +522,19 @@ const getAllPortfolio = asyncHandler(async (req, res) => {
       $unwind: {
         path: "$contactData",
         preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $addFields: {
+        views: {
+          $sum: {
+            $map: {
+              input: { $objectToArray: "$monthlyViews" },
+              as: "month",
+              in: "$$month.v",
+            },
+          },
+        },
       },
     },
     {
