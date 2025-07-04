@@ -35,7 +35,7 @@ const HowItWorks = () => {
   return (
     <div
       id="demo"
-      className="min-h-screen mx-auto text-white w-[97.5%] relative overflow-hidden flex flex-col items-center justify-center"
+      className=" mx-auto text-white w-[97.5%] relative overflow-hidden flex flex-col items-center justify-center"
     >
       <div className="absolute top-0 w-full h-[39rem] productBg z-0"></div>
       <div className="relative z-[10] h-full max-w-[65rem] mt-16">
