@@ -108,9 +108,9 @@ const Hero = () => {
         </motion.div>
 
         <div className="relative space-x-3 z-100">
-          <Link to="demo" smooth={true} duration={500}>
-            <ButtonColorful label="Get Demo!" />
-          </Link>
+          <a href="https://profilegenie.store" target="_blank">
+            <ButtonColorful label="Get Your Smart Card !" />
+          </a>
           <Link to="contact" smooth={true} duration={500}>
             <ButtonColorful className="bg-[#5E10DE]" label="Contact Us" />
           </Link>

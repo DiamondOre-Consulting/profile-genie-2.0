@@ -7,7 +7,9 @@ import {
   FiActivity,
   FiTrendingDown,
   FiTrendingUp,
-  FiAlertTriangle,
+  FiCalendar,
+  FiAlertCircle,
+  FiArrowRight,
 } from "react-icons/fi";
 import {
   AreaChart,
@@ -225,7 +227,7 @@ const UserStats = () => {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen text-gray-100 bg-[#262626]">
+    <div className="flex items-center justify-center min-h-screen text-gray-100 bg-[#0A0A0A]">
       {data?.success && !statsData?.success && (
         <div className="sm:mx-auto w-[98vw] sm:max-w-[27rem]">
           <div className="flex flex-col items-center justify-center gap-4 mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -343,16 +345,13 @@ const UserStats = () => {
       )}
 
       {statsData?.success && (
-        <div className="container px-4 py-8 mx-auto">
+        <div className="container px-4 py-4 mx-auto">
           {/* Header */}
-          <header className="flex flex-col mb-8 md:flex-row md:items-center md:justify-between">
+          <header className="flex flex-col mb-4 md:flex-row md:items-center md:justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-white">
+              <h1 className="text-2xl font-bold text-white">
                 Portfolio Analytics
               </h1>
-              <p className="text-gray-400">
-                Detailed statistics for {statsData.portfolioStats?.fullName}
-              </p>
             </div>
             <div className="mt-4 md:mt-0">
               <span
@@ -379,10 +378,11 @@ const UserStats = () => {
           {/* Main Grid */}
           <div className="grid gap-6 mb-8 lg:grid-cols-3">
             {/* User Profile Card */}
-            <div className="p-6 bg-[#171717] rounded-xl lg:col-span-1">
-              <div className="flex items-center mb-6">
-                <div className="flex items-center justify-center w-16 h-16 mr-4 text-indigo-400 rounded-full bg-indigo-900/30">
-                  <FiUser className="w-6 h-6" />
+            <div className="p-6 bg-[#171717] rounded-xl border-[1.5px] border-[#2d2d2d] space-y-6">
+              {/* Profile Header */}
+              <div className="flex items-center gap-4">
+                <div className="flex items-center justify-center w-16 h-16 rounded-full bg-[#2d2d2d]">
+                  <FiUser className="w-6 h-6 text-gray-400" />
                 </div>
                 <div>
                   <h2 className="text-xl font-semibold text-white">
@@ -394,8 +394,9 @@ const UserStats = () => {
                 </div>
               </div>
 
-              <div className="space-y-4">
-                <div className="flex items-center">
+              {/* Contact Info */}
+              <div className="grid grid-cols-1 gap-2">
+                <div className="flex items-center p-3 py-2 rounded-md border border-[#313131] bg-[#212121]">
                   <FiPhone className="w-5 h-5 mr-3 text-gray-400" />
                   <p className="text-gray-300">
                     {formatPhoneNumber(
@@ -403,7 +404,8 @@ const UserStats = () => {
                     )}
                   </p>
                 </div>
-                <div className="flex items-center">
+
+                <div className="flex items-center p-3 py-2 rounded-md border border-[#313131] bg-[#212121]">
                   <FiDollarSign className="w-5 h-5 mr-3 text-gray-400" />
                   <p className="text-gray-300">
                     {statsData.portfolioStats?.isPaid
@@ -412,10 +414,11 @@ const UserStats = () => {
                     since {formatDate(statsData.portfolioStats?.paidDate || "")}
                   </p>
                 </div>
+
                 {statsData.portfolioStats?.isPaid &&
                   statsData.portfolioStats?.paidDate && (
-                    <div className="flex items-center">
-                      <FiDollarSign className="w-5 h-5 mr-3 text-gray-400" />
+                    <div className="flex items-center p-3 py-2 rounded-md border border-[#313131] bg-[#212121]">
+                      <FiCalendar className="w-5 h-5 mr-3 text-gray-400" />
                       <p className="text-gray-300">
                         Expiry:{" "}
                         {formatDate(
@@ -434,17 +437,19 @@ const UserStats = () => {
                   )}
               </div>
 
-              {statsData.portfolioStats &&
+              {/* Emergency Contacts */}
+              {statsData?.portfolioStats &&
                 statsData.portfolioStats?.SOS?.length > 0 && (
-                  <div className="mt-8">
-                    <h3 className="mb-4 text-lg font-medium text-white">
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-medium text-white">
+                      <FiAlertCircle className="inline w-5 h-5 mr-2 text-gray-400" />
                       Emergency Contacts
                     </h3>
-                    <div className="space-y-3">
+                    <div className="space-y-2">
                       {statsData.portfolioStats?.SOS.map((contact) => (
                         <div
-                          key={contact._id}
-                          className="p-3 transition-colors rounded-lg bg-gray-700/50 hover:bg-gray-700"
+                          key={contact?._id}
+                          className="flex items-center p-3 py-2 rounded-md border border-[#313131] bg-[#212121]"
                         >
                           <p className="font-medium text-white">
                             {contact.fullName}
@@ -458,15 +463,16 @@ const UserStats = () => {
                   </div>
                 )}
 
-              <div className="pt-10 bg-[#171717] rounded-xl">
-                <div className="flex items-center mb-4">
-                  <FiAlertTriangle className="w-5 h-5 mr-2 text-yellow-500" />
+              {/* Performance Insights */}
+              <div className="space-y-2">
+                <div className="flex items-center">
+                  <FiActivity className="w-5 h-5 mr-2 text-gray-400" />
                   <h2 className="text-lg font-semibold text-white">
                     Performance Insights
                   </h2>
                 </div>
 
-                <div className="prose-sm prose prose-invert max-w-none">
+                <div className=" p-3 py-2 rounded-md border border-[#313131] bg-[#212121]">
                   <p className="text-gray-300">
                     Your portfolio received{" "}
                     <strong>{statsData.previousMonthViews} views</strong> last
@@ -488,14 +494,16 @@ const UserStats = () => {
                     .
                   </p>
 
-                  <div className="p-4 mt-4 rounded-lg bg-gray-700/50">
+                  <div className="mt-4 pt-4 border-t border-[#3d3d3d]">
                     <h3 className="mb-2 font-medium text-white">
                       Recommendations
                     </h3>
-                    <ul className="pl-5 space-y-2 text-gray-300 list-disc">
-                      <li>
-                        <strong>Promotion:</strong> Share your portfolio link
-                        across professional networks
+                    <ul className="space-y-2 text-gray-300">
+                      <li className="flex items-start">
+                        <FiArrowRight className="flex-shrink-0 w-4 h-4 mt-1 mr-2 text-gray-400" />
+                        <span>
+                          Share your portfolio link across professional networks
+                        </span>
                       </li>
                     </ul>
                   </div>
@@ -507,7 +515,7 @@ const UserStats = () => {
             <div className="space-y-6 lg:col-span-2">
               <div className="grid gap-6 sm:grid-cols-3">
                 {/* Total Views */}
-                <div className="p-5 bg-[#171717] rounded-xl">
+                <div className="p-5 bg-[#171717]  border-[1.5px] border-[#2d2d2d] rounded-xl">
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="text-sm font-medium text-gray-400">
                       Total Views
@@ -523,7 +531,7 @@ const UserStats = () => {
                 </div>
 
                 {/* Current Month */}
-                <div className="p-5 bg-[#171717] rounded-xl">
+                <div className="p-5 bg-[#171717]  border-[1.5px] border-[#2d2d2d] rounded-xl">
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="text-sm font-medium text-gray-400">
                       Current Month
@@ -544,7 +552,7 @@ const UserStats = () => {
                 </div>
 
                 {/* Previous Month */}
-                <div className="p-5 bg-[#171717] rounded-xl">
+                <div className="p-5 bg-[#171717]  border-[1.5px] border-[#2d2d2d] rounded-xl">
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="text-sm font-medium text-gray-400">
                       Previous Month
@@ -564,7 +572,7 @@ const UserStats = () => {
               </div>
 
               {/* 12-Month Area Chart */}
-              <div className="p-6 bg-[#171717] rounded-xl">
+              <div className="p-6 bg-[#171717]  border-[1.5px] border-[#2d2d2d] rounded-xl">
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-lg font-semibold text-white">
                     12-Month View Trend

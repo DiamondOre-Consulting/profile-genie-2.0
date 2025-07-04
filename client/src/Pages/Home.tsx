@@ -1,9 +1,10 @@
 import Contact from "@/components/Contact";
 import { FeaturesSectionDemo } from "@/components/Features";
 import Hero from "@/components/Hero";
-import Preview from "@/components/Preview";
+import HowItWorks from "@/components/HowItWorks";
+// import Preview from "@/components/Preview";
 import Testimonial from "@/components/Testimonial";
-import VideoSection from "@/components/VideoSection";
+// import VideoSection from "@/components/VideoSection";
 import HomeLayout from "@/Layout/HomeLayout";
 
 const Home = () => {
@@ -11,9 +12,10 @@ const Home = () => {
     <div className="bg-[#010101] ">
       <HomeLayout>
         <Hero />
-        <Preview />
+        {/* <Preview /> */}
+        <HowItWorks />
         <FeaturesSectionDemo />
-        <VideoSection />
+        {/* <VideoSection /> */}
         <Contact />
         <Testimonial />
       </HomeLayout>
