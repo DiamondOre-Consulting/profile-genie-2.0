@@ -864,35 +864,33 @@ catalogueSchema.index({ catalogueOwner: 1 });
 ```http
 # Homepage
 GET /
+https://profilegenie.in
 Description: Main landing page with features, testimonials, and contact
-Component: Home
-
-# Demo Page
-GET /demo
-Description: Demo version of the homepage
 Component: Home
 
 # Portfolio Templates
 GET /profile/1/:username
 Description: Template 2 portfolio view (main template)
 Component: Template2
-Example: https://profilegenie.in/profile/1/john_doe
+Example: https://profilegenie.in/profile/1/UM99
 
 GET /profile/9510/:username
 Description: Template 1 portfolio view (alternative template)
 Component: Template1
-Example: https://profilegenie.in/profile/9510/jane_smith
+Example: https://profilegenie.in/profile/9510/UM99
+In Development
 
 # Portfolio Statistics (OTP Protected)
 GET /profile/1/:username/stats
 Description: Portfolio analytics dashboard with OTP verification
 Component: UserStats
-Example: https://profilegenie.in/profile/1/john_doe/stats
+Example: https://profilegenie.in/profile/1/UM99/stats
 
 # Template Preview
 GET /template3
 Description: Template 3 preview page
 Component: Template3
+In Development
 ```
 
 #### Catalogue Routes
@@ -1496,4 +1494,4 @@ Made with ❤️ by [Akash Kumar Singh](https://github.com/webakash1806)
 
 📧 Contact: [contact@profilegenie.in](mailto:contact@profilegenie.in)  
 🌐 Website: [https://profilegenie.in](https://profilegenie.in)  
-📱 Demo: [https://profilegenie.in/demo](https://profilegenie.in/demo)
+📱 Admin: [https://admin.profilegenie.in](https://admin.profilegenie.in)
