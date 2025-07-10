@@ -386,9 +386,8 @@ function isBot(userAgent = "") {
 const getSinglePortfolio = asyncHandler(async (req, res) => {
   const { userName } = req.params;
 
-  const { admin } = req.query;
-
   const userAgent = req.get("User-Agent") || "";
+  const { admin } = req.query;
 
   const portfolio = await Portfolio.findOne({ userName })
     .populate({
@@ -403,6 +402,10 @@ const getSinglePortfolio = asyncHandler(async (req, res) => {
       path: "metaDetails",
       model: "MetaData",
     });
+
+  if (!admin && portfolio && portfolio.isActive === false) {
+    throw new AppError("Portfolio is inactive!", 403);
+  }
 
   if (!portfolio) {
     throw new AppError("Portfolio not found!", 404);

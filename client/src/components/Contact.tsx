@@ -43,21 +43,21 @@ const Contact = () => {
               "flex flex-col border py-10 bg-[#010102] group/feature border-neutral-800  transition-all duration-500  h-full w-full hover:bg-gradient-to-t hover:from-[#6738e7]/80 via-[#4826A7]/20  to-transparent "
             }
           >
-            <div className="relative z-10 px-10 mb-4 text-neutral-400">
+            <span className="relative z-10 px-10 mb-4 text-neutral-400">
               <IconPhone />
-            </div>
-            <div className="relative z-10 px-10 mb-2 text-lg font-bold">
-              <div className="absolute left-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tr-full rounded-br-full bg-neutral-700 group-hover/feature:bg-[#6E3DEF] transition-all duration-200 origin-center" />
+            </span>
+            <span className="relative z-10 px-10 mb-2 text-lg font-bold">
+              <span className="absolute left-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tr-full rounded-br-full bg-neutral-700 group-hover/feature:bg-[#6E3DEF] transition-all duration-200 origin-center" />
               <span className="inline-block transition duration-200 group-hover/feature:translate-x-2 text-neutral-100">
                 Call Us
               </span>
-            </div>
+            </span>
             <p className="relative z-10 max-w-xs px-10 text-sm text-neutral-300">
               We&apos;re available Mon-Fri, 9am-5pm.
             </p>
-            <Link to="" className="px-10 font-semibold hover:underline">
+            <span className="px-10 font-semibold hover:underline">
               +91 87503 16743
-            </Link>
+            </span>
           </Link>{" "}
           <Link
             to={""}
@@ -77,9 +77,9 @@ const Contact = () => {
             <p className="relative z-10 max-w-xs px-10 text-sm text-neutral-300">
               Our team is ready to assist.
             </p>
-            <Link to="" className="px-10 font-semibold hover:underline">
+            <span className="px-10 font-semibold hover:underline">
               social@diamondore.in
-            </Link>
+            </span>
           </Link>
         </div>
         <iframe
