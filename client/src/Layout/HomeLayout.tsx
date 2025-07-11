@@ -7,7 +7,7 @@ import logo from "./../assets/logo.png";
 
 const HomeLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="bg-[#0c0d17]">
+    <div className="bg-[#151515]">
       <div className="bg-transparent top-0 z-[1000] fixed  left-1/2 transform -translate-x-1/2 mx-auto flex justify-center items-center py-3">
         <div
           className={

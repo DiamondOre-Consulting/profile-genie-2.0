@@ -9,9 +9,16 @@ import HomeLayout from "@/Layout/HomeLayout";
 
 const Home = () => {
   return (
-    <div className="bg-[#010101] ">
+    <div className="bg-[#151515] w-full overflow-x-hidden">
       <HomeLayout>
         <Hero />
+        <div className="fixed z-[2000] bottom-0 right-4">
+          <iframe
+            src="https://my.spline.design/greetingrobot-QpnzkZv9sC2rdtzgWVHN7Aim/"
+            width="165%"
+            height="150%"
+          ></iframe>
+        </div>
         {/* <Preview /> */}
         <HowItWorks />
         <FeaturesSectionDemo />
