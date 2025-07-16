@@ -29,6 +29,46 @@
     #fff 100%
   );
 }
+.productBgDown {
+  left: 0;
+  bottom: 0;
+  content: "";
+  border-radius: 30px;
+  background: radial-gradient(
+    140% 107.13% at 50% 10%,
+    transparent 37.41%,
+    #63e 69.27%,
+    #fff 100%
+  );
+  /* background: radial-gradient(120% 120% at 50% 100%, transparent 40%, #63e 70%, #fff 100%); */
+}
+
+.bg-custom-radial {
+  background-image: radial-gradient(
+    140% 107.13% at 50% 10%,
+    transparent 37.41%,
+    #63e 69.27%,
+    #fff 100%
+  );
+}
+
+.group:hover .group-hover\:bg-custom-radial {
+  background-image: radial-gradient(
+    140% 107.13% at 60% 10%,
+    #0b0828 37.41%,
+    #63e 69.27%,
+    #fff 100%
+  ) !important;
+}
+
+.bg-custom-radial-full {
+  background-image: radial-gradient(
+    140% 107.13% at 60% 10%,
+    #0b0828 37.41%,
+    #63e 69.27%,
+    #fff 100%
+  );
+}
 
 .text-pink {
   color: #f43f5e;

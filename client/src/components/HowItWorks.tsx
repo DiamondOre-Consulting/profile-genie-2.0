@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
 import { cn } from "@/lib/utils";
-import { Badge } from "@/Templates/Components/Template1/ui/badge";
 
 const HowItWorks = () => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -35,14 +34,14 @@ const HowItWorks = () => {
   return (
     <div
       id="demo"
-      className=" mx-auto text-white w-[97.5%] relative overflow-hidden flex flex-col items-center justify-center"
+      className=" mx-auto text-white w-[97.5%] p-4 relative overflow-hidden flex flex-col items-center justify-center"
     >
-      <div className="absolute top-0 w-full h-[39rem] productBg z-0"></div>
-      <div className="relative z-[10] h-full max-w-[65rem] mt-16">
+      <div className="absolute bottom-0 z-0 w-full h-[39rem] productBgDown"></div>
+      <div className="relative z-[10] h-full max-w-[65rem] mb-16 md:mb-24">
         <div className="flex w-[98%] mx-auto flex-col items-center gap-3 text-center">
-          <Badge className="bg-[#1b1638] border border-[#2e2e2e]">
+          {/* <Badge className="bg-[#1b1638] border border-[#2e2e2e]">
             Still Confused?
-          </Badge>
+          </Badge> */}
           <h1 className="mb-2 text-3xl font-bold tracking-tight sm:text-5xl md:text-6xl">
             <span
               className={cn(
@@ -53,14 +52,14 @@ const HowItWorks = () => {
             </span>
           </h1>
 
-          <p className="text-muted-foreground">
+          {/* <p className="text-muted-foreground">
             See how it works and unlock new ways to elevate your portfolio,
             expand your network, and stand out from the crowd.
-          </p>
+          </p> */}
 
           <div
             ref={containerRef}
-            className="relative w-full max-w-[70rem] rounded-lg overflow-hidden mx-auto mt-4 bg-black "
+            className="relative max-w-[60rem] mx-auto mt-4 overflow-hidden bg-black rounded-lg aspect-video "
           >
             {!isPlaying ? (
               <div

@@ -176,10 +176,12 @@ export const addContactDetailSchema = z.object({
       .array(
         z.object({
           uniqueId: z.string().optional(),
-          img: z.object({
-            publicId: z.string().optional(),
-            url: z.string(),
-          }),
+          img: z
+            .object({
+              publicId: z.string().optional(),
+              url: z.string().optional(),
+            })
+            .optional(),
           link: z.string().optional(),
         })
       )
