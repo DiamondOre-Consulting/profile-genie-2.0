@@ -201,7 +201,7 @@ const Products = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
                               className="absolute bottom-0 right-0 bg-white pl-1 text-[#0891B2] font-semibold cursor-pointer hover:underline"
                               onClick={() => setActiveProduct(product)}
                             >
-                              Learn More
+                              Read More
                             </span>
                           )}
                         </div>
