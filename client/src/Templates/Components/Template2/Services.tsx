@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { portfolioResponse } from "@/validations/PortfolioValidation";
@@ -20,7 +20,35 @@ const Services = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
   const servicesRef = useRef<(HTMLDivElement | null)[]>([]);
 
   const [activeService, setActiveService] = useState<Service | null>(null);
+  const [showLearnMore, setShowLearnMore] = useState<boolean[]>([]);
+  const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
 
+  // Initialize or update showLearnMore array only when needed
+  const updateTruncationState = useCallback(
+    (index: number, isTruncated: boolean) => {
+      setShowLearnMore((prev) => {
+        if (prev[index] === isTruncated) return prev;
+        const newState = [...prev];
+        newState[index] = isTruncated;
+        return newState;
+      });
+    },
+    []
+  );
+
+  const handleContentRef = useCallback(
+    (el: HTMLDivElement | null, index: number) => {
+      contentRefs.current[index] = el;
+      if (el) {
+        // Use requestAnimationFrame to avoid state updates during render
+        requestAnimationFrame(() => {
+          const isTruncated = el.scrollHeight > el.clientHeight;
+          updateTruncationState(index, isTruncated);
+        });
+      }
+    },
+    [updateTruncationState]
+  );
   useEffect(() => {
     servicesRef.current.forEach((el, index) => {
       if (el) {
@@ -153,19 +181,33 @@ const Services = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
                       <h2 className="text-xl font-bold md:text-2xl line-clamp-2">
                         {service?.title || ""}
                       </h2>
-                      <p
-                        className="text-sm md:text-base line-clamp-4"
-                        dangerouslySetInnerHTML={{
-                          __html: service?.detail || "",
-                        }}
-                      ></p>
+                      <div className="relative w-full">
+                        <div
+                          ref={(el) => handleContentRef(el, index)}
+                          className="relative mb-4 text-sm md:text-base line-clamp-5"
+                          style={{
+                            display: "-webkit-box",
+                            WebkitBoxOrient: "vertical",
+                            WebkitLineClamp: 5,
+                            overflow: "hidden",
+                          }}
+                        >
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: service?.detail || "",
+                            }}
+                          />
+                          {showLearnMore[index] && (
+                            <span
+                              className="absolute bottom-0 right-0 bg-[#FEFBFF] pl-1 text-[#0891B2] font-semibold cursor-pointer hover:underline"
+                              onClick={() => setActiveService(service)}
+                            >
+                              Read More
+                            </span>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                    <button
-                      onClick={() => setActiveService(service)}
-                      className="bg-[#0891B2] m-3 mt-2  p-2 text-white font-semibold cursor-pointer rounded"
-                    >
-                      Learn More
-                    </button>
                   </div>
                 )
               )}

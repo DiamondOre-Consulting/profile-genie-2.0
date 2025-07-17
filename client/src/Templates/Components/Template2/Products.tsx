@@ -1,135 +1,220 @@
-import { useEffect, useRef, useState } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { portfolioResponse } from '@/validations/PortfolioValidation';
-import { AnimatePresence,motion } from 'framer-motion';
-import { IconX } from '@tabler/icons-react';
-import { SparklesText } from '@/components/ui/sparkles-text';
+import { useCallback, useEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { portfolioResponse } from "@/validations/PortfolioValidation";
+import { AnimatePresence, motion } from "framer-motion";
+import { IconX } from "@tabler/icons-react";
+import { SparklesText } from "@/components/ui/sparkles-text";
 
 gsap.registerPlugin(ScrollTrigger);
 
 interface Product {
-    title?: string;
-    detail?: string;
-    image?: {
-        url?: string;
-        publicId?: string;
-    };
+  title?: string;
+  detail?: string;
+  image?: {
+    url?: string;
+    publicId?: string;
+  };
 }
 
 const Products = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
-    const productsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const productsRef = useRef<(HTMLDivElement | null)[]>([]);
 
-    const [activeProduct, setActiveProduct] = useState<Product | null>(null);
+  const [activeProduct, setActiveProduct] = useState<Product | null>(null);
+  const [showLearnMore, setShowLearnMore] = useState<boolean[]>([]);
+  const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-    useEffect(() => {
-        productsRef.current.forEach((el, index) => {
-            if (el) {
-                gsap.fromTo(
-                    el,
-                    { opacity: 0, y: 50 },
-                    {
-                        opacity: 1,
-                        y: 0,
-                        scrollTrigger: {
-                            trigger: el,
-                            start: 'top 80%',
-                            end: 'top 30%',
-                            toggleActions: 'play none none reverse',
-                        },
-                        delay: index * 0.2,
-                        duration: 1,
-                    }
-                );
-            }
+  // Initialize or update showLearnMore array only when needed
+  const updateTruncationState = useCallback(
+    (index: number, isTruncated: boolean) => {
+      setShowLearnMore((prev) => {
+        if (prev[index] === isTruncated) return prev;
+        const newState = [...prev];
+        newState[index] = isTruncated;
+        return newState;
+      });
+    },
+    []
+  );
+
+  const handleContentRef = useCallback(
+    (el: HTMLDivElement | null, index: number) => {
+      contentRefs.current[index] = el;
+      if (el) {
+        // Use requestAnimationFrame to avoid state updates during render
+        requestAnimationFrame(() => {
+          const isTruncated = el.scrollHeight > el.clientHeight;
+          updateTruncationState(index, isTruncated);
         });
-    }, []);
+      }
+    },
+    [updateTruncationState]
+  );
+  useEffect(() => {
+    productsRef.current.forEach((el, index) => {
+      if (el) {
+        gsap.fromTo(
+          el,
+          { opacity: 0, y: 50 },
+          {
+            opacity: 1,
+            y: 0,
+            scrollTrigger: {
+              trigger: el,
+              start: "top 80%",
+              end: "top 30%",
+              toggleActions: "play none none reverse",
+            },
+            delay: index * 0.2,
+            duration: 1,
+          }
+        );
+      }
+    });
+  }, []);
 
-    return (
-         <>
-                 <AnimatePresence>
-                 {activeProduct && (
-                     <motion.div
-                     className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/60"
-                     initial={{ opacity: 0 }}
-                     animate={{ opacity: 1 }}
-                     exit={{ opacity: 0 }}
-                     transition={{ duration: 0.25 }}
-                     >
-                     <motion.div
-                         className="w-[96vw] max-w-[30rem] md:max-w-[62rem] relative  max-h-[90vh] bg-white rounded-xl shadow-lg overflow-hidden"
-                         initial={{ scale: 0.85, opacity: 0, y: 40 }}
-                         animate={{ scale: 1, opacity: 1, y: 0 }}
-                         exit={{ scale: 0.85, opacity: 0, y: 40 }}
-                         transition={{ type: "spring", stiffness: 300, damping: 30, duration: 0.35 }}
-                         onWheel={e => e.stopPropagation()}
-                     >
-                         <div
-                         onClick={() => setActiveProduct(null)}
-                         className="absolute flex items-center justify-center bg-red-100 rounded-md shadow-lg cursor-pointer z-1 w-9 h-9 top-1 right-1"
-                         >
-                         <IconX className="w-6 h-6 text-red-500" />
-                         </div>
-                         <div className="flex flex-col h-full md:flex-row lg:gap-4">
-                         <div className="sticky top-0 bg-black flex-shrink-0 w-full h-[15rem] md:w-[45%] lg:w-[27rem] md:h-[23rem]">
-                             <img
-                             src={activeProduct.image?.url}
-                             alt={activeProduct.title}
-                             className="w-full h-[15rem] md:h-[23rem] object-cover"
-                             />
-                         </div>
-                         <div
-                             className="flex-1 p-4 overflow-y-auto md:py-10 md:pr-8 lg:pr-15"
-                             style={{
-                             maxHeight: '23rem',
-                             msOverflowStyle: 'none',
-                             }}
-                             onWheel={e => e.stopPropagation()}
-                         >
-                             <style>
-                             {`
+  return (
+    <>
+      <AnimatePresence>
+        {activeProduct && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/60"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+          >
+            <motion.div
+              className="w-[96vw] max-w-[30rem] md:max-w-[62rem] relative  max-h-[90vh] bg-white rounded-xl shadow-lg overflow-hidden"
+              initial={{ scale: 0.85, opacity: 0, y: 40 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.85, opacity: 0, y: 40 }}
+              transition={{
+                type: "spring",
+                stiffness: 300,
+                damping: 30,
+                duration: 0.35,
+              }}
+              onWheel={(e) => e.stopPropagation()}
+            >
+              <div
+                onClick={() => setActiveProduct(null)}
+                className="absolute flex items-center justify-center bg-red-100 rounded-md shadow-lg cursor-pointer z-1 w-9 h-9 top-1 right-1"
+              >
+                <IconX className="w-6 h-6 text-red-500" />
+              </div>
+              <div className="flex flex-col h-full md:flex-row lg:gap-4">
+                <div className="sticky top-0 bg-black flex-shrink-0 w-full h-[15rem] md:w-[45%] lg:w-[27rem] md:h-[23rem]">
+                  <img
+                    src={activeProduct.image?.url}
+                    alt={activeProduct.title}
+                    className="w-full h-[15rem] md:h-[23rem] object-cover"
+                  />
+                </div>
+                <div
+                  className="flex-1 p-4 overflow-y-auto md:py-10 md:pr-8 lg:pr-15"
+                  style={{
+                    maxHeight: "23rem",
+                    msOverflowStyle: "none",
+                  }}
+                  onWheel={(e) => e.stopPropagation()}
+                >
+                  <style>
+                    {`
                                  .no-scrollbar::-webkit-scrollbar {
                                  display: none;
                                  }
                              `}
-                             </style>
-                             <h2 className="mb-4 text-2xl font-bold md:text-3xl">{activeProduct.title}</h2>
-                             <p dangerouslySetInnerHTML={{ __html: activeProduct.detail || '' }}></p>
-                         </div>
-                         </div>
-                     </motion.div>
-                     </motion.div>
-                 )}
-                 </AnimatePresence>
-     
-                 {portfolioData?.otherDetails?.products?.productList && portfolioData?.otherDetails?.products?.productList?.length > 0 && (
-                 <div className="w-full max-w-screen-xl px-4 pt-20 mx-auto md:px-10" id='products'>
-                         <h2 data-aos="flip-left" data-aos-duration="1000" className="my-8 text-center ">
-                                                          <SparklesText sparklesCount={3} text={portfolioData?.otherDetails?.products?.tagline || "Our Products"} />
-                                                      </h2>
-     
-                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                     {portfolioData?.otherDetails?.products?.productList?.map((product, index) => (
-                         <div
-                         key={product?.uniqueId||index}
-                         ref={el => {
-                             if (el) productsRef.current[index] = el;
-                         }}
-                         className="flex flex-col justify-between h-full overflow-hidden transition-shadow duration-300 border border-gray-300 rounded-lg shadow-md hover:shadow-lg"
-                         >
-                         <img src={product?.image?.url} alt={product?.title} className='aspect-[4/2.3] w-full object-cover' />
-                         <div className="flex flex-col items-start justify-between h-full px-4 py-2">
-                             <h2 className="text-xl font-bold md:text-2xl line-clamp-2">{product?.title || ''}</h2>
-                             <p className="text-sm md:text-base line-clamp-4" dangerouslySetInnerHTML={{ __html: product?.detail || '' }}></p>
-                         </div>
-                         <button onClick={() => setActiveProduct(product)} className='bg-[#0891B2] m-3 mt-2  p-2 text-white font-semibold cursor-pointer rounded'>Learn More</button>
-                         </div>
-                     ))}
-                     </div>
-                 </div>
-                 )}
-             </>
-    );
+                  </style>
+                  <h2 className="mb-4 text-2xl font-bold md:text-3xl">
+                    {activeProduct.title}
+                  </h2>
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: activeProduct.detail || "",
+                    }}
+                  ></p>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {portfolioData?.otherDetails?.products?.productList &&
+        portfolioData?.otherDetails?.products?.productList?.length > 0 && (
+          <div
+            className="w-full max-w-screen-xl px-4 pt-20 mx-auto md:px-10"
+            id="products"
+          >
+            <h2
+              data-aos="flip-left"
+              data-aos-duration="1000"
+              className="my-8 text-center "
+            >
+              <SparklesText
+                sparklesCount={3}
+                text={
+                  portfolioData?.otherDetails?.products?.tagline ||
+                  "Our Products"
+                }
+              />
+            </h2>
+
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {portfolioData?.otherDetails?.products?.productList?.map(
+                (product, index) => (
+                  <div
+                    key={product?.uniqueId || index}
+                    ref={(el) => {
+                      if (el) productsRef.current[index] = el;
+                    }}
+                    className="flex flex-col justify-between h-full overflow-hidden transition-shadow duration-300 border border-gray-300 rounded-lg shadow-md hover:shadow-lg"
+                  >
+                    <img
+                      src={product?.image?.url}
+                      alt={product?.title}
+                      className="aspect-[4/2.3] w-full object-cover"
+                    />
+                    <div className="flex flex-col items-start justify-between h-full px-4 py-2">
+                      <h2 className="text-xl font-bold md:text-2xl line-clamp-2">
+                        {product?.title || ""}
+                      </h2>
+                      <div className="relative w-full">
+                        <div
+                          ref={(el) => handleContentRef(el, index)}
+                          className="relative mb-4 text-sm md:text-base line-clamp-5"
+                          style={{
+                            display: "-webkit-box",
+                            WebkitBoxOrient: "vertical",
+                            WebkitLineClamp: 5,
+                            overflow: "hidden",
+                          }}
+                        >
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: product?.detail || "",
+                            }}
+                          />
+                          {showLearnMore[index] && (
+                            <span
+                              className="absolute bottom-0 right-0 bg-white pl-1 text-[#0891B2] font-semibold cursor-pointer hover:underline"
+                              onClick={() => setActiveProduct(product)}
+                            >
+                              Learn More
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )
+              )}
+            </div>
+          </div>
+        )}
+    </>
+  );
 };
 
 export default Products;

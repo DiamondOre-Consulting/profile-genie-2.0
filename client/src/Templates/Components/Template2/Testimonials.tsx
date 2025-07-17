@@ -146,7 +146,7 @@ const Testimonials = ({
                           className="flex flex-col gap-y-6 sm:gap-y-8"
                         >
                           <li>
-                            <figure className="relative p-6 border shadow-xl bg-slate-50 border-slate-200 rounded-2xl shadow-slate-900/10">
+                            <figure className="relative p-6 bg-transparent border shadow-xl border-slate-200 rounded-2xl ">
                               <svg
                                 aria-hidden="true"
                                 width="105"
