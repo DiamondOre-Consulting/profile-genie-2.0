@@ -4,6 +4,7 @@ import { verifyJWT } from "../middleware/auth.middleware.js";
 import {
   getAdminDashboardData,
   sendCustomMail,
+  sendCvMail,
 } from "../controller/admin.controller.js";
 
 const adminRouter = Router();
