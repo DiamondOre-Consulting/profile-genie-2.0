@@ -28,6 +28,7 @@ app.use(
     origin: [
       "https://www.profilegenie.in",
       "https://profilegenie.in",
+      "https://cvgenie.in",
       "http://localhost:5173",
       process.env.FRONTEND_URL,
       process.env.CATALOGUE_ADMIN_URL,

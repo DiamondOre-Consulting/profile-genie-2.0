@@ -325,7 +325,14 @@ const sendCvMail = asyncHandler(async (req, res) => {
   const mailData = await newCallbackRequestMail(phoneNumber);
 
   await sendMail(
-    "itsakash18.06@gmail.com",
+    "munindermani.diamondore@gmail.com",
+    mailData.subject,
+    mailData.message,
+    "callback"
+  );
+
+  await sendMail(
+    "rahul@diamondore.in",
     mailData.subject,
     mailData.message,
     "callback"
