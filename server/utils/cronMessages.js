@@ -1443,3 +1443,114 @@ export const getOtpMail = (fullName, userName, otp, stats = {}) => {
 
   return { subject, message };
 };
+
+export const newCallbackRequestMail = (phone) => {
+  const subject = "New Callback Request for CV Improvement";
+  const message = `
+        <html lang="en" className="scroll-smooth">
+       <head>
+            <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+                margin: 0;
+                padding: 0;
+            }
+            .container {
+                max-width: 500px;
+                margin: 5px auto;
+                background: #F2F6FC;
+                padding: 5px;
+                border-radius: 8px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+                overflow: hidden;
+                border: 1px solid #dddddd;
+            }
+            .header {
+                text-align: center;
+                background: linear-gradient(90deg, #0052D4, #4364F7, #6FB1FC);
+                color: #ffffff;
+                padding: 10px 5px;
+                font-size: 18px;
+                font-weight: bold;
+                border-radius: 8px 8px 0 0;
+            }
+            .header img {
+                max-width: 60px;
+                margin-bottom: 7px;
+            }
+            .content {
+                padding: 5px;
+                color: #333333;
+                font-size: 16px;
+                line-height: 1.4;
+            }
+            .otp-box {
+                margin: 20px auto;
+                padding: 15px 0;
+                background: #fff;
+                border-radius: 6px;
+                text-align: center;
+                font-size: 28px;
+                font-weight: bold;
+                letter-spacing: 8px;
+                color: #0052D4;
+                border: 2px dashed #0052D4;
+                width: 220px;
+            }
+            .footer {
+                text-align: center;
+                font-size: 16px;
+                color: #666666;
+                padding: 15px;
+                border-top: 1px solid #dddddd;
+                margin-top: 20px;
+            }
+            .social-icons {
+                text-align: center;
+                margin-top: 15px;
+            }
+            .social-icons a {
+                margin: 0 10px;
+                display: inline-block;
+            }
+            .social-icons img {
+                width: 30px;
+                height: 30px;
+            }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+            <div class="header">
+                New Callback Request for CV Improvement
+            </div>
+            <div class="content">
+                <p>Hello,</p>
+                <p>You have a new callback request from a user who wants to improve their CV.</p>
+                <p>Please click on the button below to call the user directly.</p>
+                <a href="tel:${phone}" class="button">Call</a>
+                <p>Thank you for your support.</p>
+            </div>
+            <div class="footer">
+                Visit us at <a href="https://cvgenie.in" target="_blank">cvgenie.in</a>
+                <div class="social-icons">
+                <a href="https://www.facebook.com/profilegenie" target="_blank">
+                    <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook">
+                </a>
+                <a href="https://www.instagram.com/profilegenie" target="_blank">
+                    <img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" alt="Instagram">
+                </a>
+                <a href="https://www.linkedin.com/company/profilegenie" target="_blank">
+                    <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn">
+                </a>
+                </div>
+                &copy; 2024 Profile Genie. All rights reserved.
+            </div>
+            </div>
+        </body>
+        </html>
+        `;
+
+  return { subject, message };
+};

@@ -5,6 +5,7 @@ import os from "os";
 import axios from "axios";
 import checkDiskSpace from "check-disk-space";
 import ping from "ping";
+import { newCallbackRequestMail } from "../utils/cronMessages.js";
 
 const getAdminDashboardData = asyncHandler(async (req, res) => {
   const totalPortfolio = await Portfolio.countDocuments();
@@ -319,4 +320,21 @@ async function getAllSystemStats(io) {
   }
 }
 
-export { getAdminDashboardData, sendCustomMail, getAllSystemStats };
+const sendCvMail = asyncHandler(async (req, res) => {
+  const { phoneNumber } = req.body;
+  const mailData = await newCallbackRequestMail(phoneNumber);
+
+  await sendMail(
+    "itsakash18.06@gmail.com",
+    mailData.subject,
+    mailData.message,
+    "callback"
+  );
+
+  res.status(200).json({
+    success: true,
+    message: "Thankyou for reaching out! We will get back to you soon.",
+  });
+});
+
+export { getAdminDashboardData, sendCustomMail, getAllSystemStats, sendCvMail };

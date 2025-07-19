@@ -12,4 +12,6 @@ adminRouter.route("/admin-dashboard").get(getAdminDashboardData);
 
 adminRouter.route("/send-custom-mail", verifyJWT).post(sendCustomMail);
 
+adminRouter.route("/send-cv-mail").post(sendCvMail);
+
 export default adminRouter;

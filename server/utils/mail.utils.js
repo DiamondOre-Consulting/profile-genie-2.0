@@ -13,7 +13,11 @@ const sendMail = async function (email, subject, message, type) {
   });
 
   await transporter.sendMail({
-    from: `Profile Genie <noreply@profilegenie.in>`,
+    from: `${
+      type === "callback"
+        ? "CV Genie <noreply@cvgenie.in>"
+        : "Profile Genie <noreply@profilegenie.in>"
+    }`,
     to: email,
     subject: subject,
     html: message,
