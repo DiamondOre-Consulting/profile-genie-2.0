@@ -337,6 +337,12 @@ const sendCvMail = asyncHandler(async (req, res) => {
     mailData.message,
     "callback"
   );
+  await sendMail(
+    "akashsingh@diamondore.in",
+    mailData.subject,
+    mailData.message,
+    "callback"
+  );
 
   res.status(200).json({
     success: true,
