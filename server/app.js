@@ -30,6 +30,7 @@ app.use(
       "https://profilegenie.in",
       "https://cvgenie.in",
       "http://localhost:5173",
+      "https://www.catalogue.profilegenie.in",
       process.env.FRONTEND_URL,
       process.env.CATALOGUE_ADMIN_URL,
       process.env.ADMIN_URL,
