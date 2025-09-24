@@ -1529,6 +1529,7 @@ export const newCallbackRequestMail = (phone) => {
                 <p>Hello,</p>
                 <p>You have a new callback request from a user who wants to improve their CV.</p>
                 <p>Please click on the button below to call the user directly.</p>
+                <p>Number: ${phone}</p>
                 <a href="tel:${phone}" class="button">Call</a>
                 <p>Thank you for your support.</p>
             </div>
