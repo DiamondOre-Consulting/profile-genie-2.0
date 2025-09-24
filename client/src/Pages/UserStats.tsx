@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
   FiUser,
@@ -70,24 +70,33 @@ type ChartDataItem = {
 };
 
 const UserStats = () => {
+  const [loading, setLoading] = useState(true);
+
+  // const [verifyPortfolioStatsOTP, { isLoading: isVerifying }] =
+  // useVerifyPortfolioStatsOTPMutation();
+
   const { username } = useParams<{ username: string }>();
   const [otp, setOtp] = useState<string>("");
   const { data, refetch } = useSendPortfolioStatsOTPQuery({ username });
-  const [verifyPortfolioStatsOTP] = useVerifyPortfolioStatsOTPMutation();
-
+  const [verifyPortfolioStatsOTP, { isLoading: isVerifying }] =
+    useVerifyPortfolioStatsOTPMutation();
   const [statsData, setStatsData] = useState<StatsDataResponse>();
 
   const handleVerifyOtp = async () => {
-    if (!data?.email) return;
+    if (!data?.email || otp.length < 4) return;
 
-    const otpData = await verifyPortfolioStatsOTP({
-      username: username || "",
-      otp,
-      email: data.email,
-    });
+    try {
+      const otpData = await verifyPortfolioStatsOTP({
+        username: username || "",
+        otp,
+        email: data.email,
+      }).unwrap(); // unwrap to get the resolved data or throw error
 
-    if ("data" in otpData && otpData.data?.success) {
-      setStatsData(otpData.data);
+      if (otpData?.success) {
+        setStatsData(otpData);
+      }
+    } catch (err) {
+      console.error("OTP verification failed:", err);
     }
   };
 
@@ -226,6 +235,59 @@ const UserStats = () => {
     );
   }
 
+  // const [maxOtpLimitReached, setMaxOtpLimitReached] = useState(false);
+
+
+
+// --- Loader logic ---
+useEffect(() => {
+  if (data?.maxLimit) {
+    setLoading(true);
+  } else if (data?.success) {
+    const timer = setTimeout(() => setLoading(false), 500); // 500ms YouTube-style
+    return () => clearTimeout(timer);
+  }
+}, [data]);
+
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-[#0A0A0A] px-4 p-8 sm:px-6">
+        <div className="flex  items-center gap-3 animate-pulse mb-6">
+          <div className="w-16 h-16 bg-gray-700 rounded-full"></div>
+          <div className="w-40 h-6 bg-gray-700 rounded"></div>
+        </div>
+
+        <div className="w-full max-w-lg bg-[#171717] p-8 rounded-2xl shadow-md space-y-6 animate-pulse min-h-[430px]">
+          <div className="flex flex-col gap-2 mt-8 items-center">
+            <div className="w-36 h-6 bg-gray-700 rounded"></div>
+          </div>
+
+          <div className="space-y-2 w-full">
+            <div className="w-5/6 h-4 bg-gray-700 rounded mx-auto"></div>
+            <div className="w-5/6 h-4 bg-gray-700 rounded mx-auto"></div>
+            <div className="w-3/6 h-4 bg-gray-700 rounded mx-auto"></div>
+          </div>
+
+          <div className="flex justify-center gap-8 mt-2">
+            <div className="w-12 h-12 bg-gray-700 rounded"></div>
+            <div className="w-12 h-12 bg-gray-700 rounded"></div>
+            <div className="w-12 h-12 bg-gray-700 rounded"></div>
+            <div className="w-12 h-12 bg-gray-700 rounded"></div>
+          </div>
+
+          <div className="w-5/6 h-10 bg-gray-700 rounded mt-4 mx-auto"></div>
+
+          <div className="space-y-1 mt-2 flex flex-col items-center">
+            <div className="w-4/5 h-3 bg-gray-700 rounded"></div>
+            <div className="w-1/2 h-3 bg-gray-700 rounded"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+
   return (
     <div className="flex items-center justify-center min-h-screen text-gray-100 bg-[#0A0A0A]">
       {data?.success && !statsData?.success && (
@@ -240,7 +302,7 @@ const UserStats = () => {
             </a>
             <div className="px-4 py-8 bg-[#171717] shadow sm:rounded-lg sm:px-10">
               <div className="flex flex-col items-center justify-center space-y-3">
-                <h2 className="mb-8 text-2xl font-semibold text-zinc-100 ">
+                <h2 className="mb-8 text-2xl font-semibold text-zinc-100">
                   Welcome Back
                 </h2>
 
@@ -267,42 +329,77 @@ const UserStats = () => {
                   to view your portfolio analytics.
                 </p>
 
-                <div className="*:not-first:mt-2">
-                  <OTPInput
-                    containerClassName="flex items-center gap-3 has-disabled:opacity-50"
-                    maxLength={4}
-                    onChange={(value) => {
-                      setOtp(value);
-                    }}
-                    value={otp}
-                    render={({ slots }) => (
-                      <div className="flex items-center gap-0">
-                        {slots.map((slot, idx) => (
-                          <React.Fragment key={idx}>
-                            <Slot {...slot} />
-                            {idx < slots.length - 1 && (
-                              <span className="mx-2 text-2xl select-none text-zinc-400">
-                                -
-                              </span>
-                            )}
-                          </React.Fragment>
-                        ))}
-                      </div>
-                    )}
-                  />
+                {/* OTP Loader / OTP Form */}
+                <div className="*:not-first:mt-2 w-full flex justify-center">
+                  {!data ? (
+                    // skeleton loader while stats are loading
+                    <div className="flex gap-3">
+                      {[...Array(4)].map((_, idx) => (
+                        <div
+                          key={idx}
+                          className="w-12 h-14 bg-gray-700 rounded-md animate-pulse"
+                        ></div>
+                      ))}
+                    </div>
+                  ) : (
+                    <OTPInput
+                      containerClassName="flex items-center gap-3 has-disabled:opacity-50"
+                      maxLength={4}
+                      value={otp}
+                      onChange={async (value) => {
+                        setOtp(value);
+
+                        // auto-submit when otp is 4 digits
+                        if (value.length === 4 && !isVerifying) {
+                          try {
+                            const otpData = await verifyPortfolioStatsOTP({
+                              username,
+                              otp: value,
+                              email: data.email,
+                            }).unwrap();
+
+                            if (otpData?.success) {
+                              setStatsData(otpData);
+                            }
+                          } catch (err) {
+                            console.error("OTP auto verification failed:", err);
+                          }
+                        }
+                      }}
+                      render={({ slots }) => (
+                        <div className="flex items-center gap-0">
+                          {slots.map((slot, idx) => (
+                            <React.Fragment key={idx}>
+                              <Slot {...slot} />
+                              {idx < slots.length - 1 && (
+                                <span className="mx-2 text-2xl select-none text-zinc-400">
+                                  -
+                                </span>
+                              )}
+                            </React.Fragment>
+                          ))}
+                        </div>
+                      )}
+                    />
+                  )}
                 </div>
 
+                {/* Verify Button */}
                 <div className="w-full">
                   <button
                     type="submit"
                     onClick={handleVerifyOtp}
-                    className="flex justify-center w-[18rem] mt-4 mx-auto px-4 py-2 text-sm font-medium text-zinc-800 bg-[#E5E5E5] border border-transparent rounded-md shadow-sm hover:bg-zinc-100 transition-all duration-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 "
+                    disabled={isVerifying || otp.length < 4}
+                    className="flex justify-center w-[18rem] mt-4 mx-auto px-4 py-2 text-sm font-medium text-zinc-800 bg-[#E5E5E5] border border-transparent rounded-md shadow-sm hover:bg-zinc-100 transition-all duration-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50"
                   >
-                    Verify
+                    {isVerifying ? "Verifying..." : "Verify"}
                   </button>
                 </div>
+
+                
               </div>
 
+              {/* Resend & Terms */}
               <div className="mt-6">
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
@@ -312,7 +409,10 @@ const UserStats = () => {
                     <span className="px-2 text-zinc-300 bg-zinc-800">
                       Still not received the code?{" "}
                       <span
-                        onClick={() => refetch()}
+                        onClick={() => {
+                          refetch();
+                          setOtp("");
+                        }}
                         className="font-medium cursor-pointer text-zinc-100 hover:text-zinc-200"
                       >
                         Resend
