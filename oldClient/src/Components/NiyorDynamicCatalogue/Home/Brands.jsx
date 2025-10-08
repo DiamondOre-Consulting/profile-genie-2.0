@@ -15,10 +15,13 @@ import img11 from "../../../assets/Niyor/brands/brand12.png";
 import img12 from "../../../assets/Niyor/brands/brand13.png"; 
 import img13 from '../../../assets/Niyor/brands/brand14.png';
 import img14 from '../../../assets/Niyor/brands/brand15.png'
+import img15 from '../../../assets/Niyor/brands/jlr.png'
+import img16 from '../../../assets/Niyor/brands/hdfc.png'
+
 
 const Brands = () => {
   // Array of brand logos (you can add more)
-  const brandLogos = [taj ,img1 , img2 , img3 , img4 ,img5 ,img6  , img7 ,img8 , img9 , img10 , img11 , img12 , img13 , img14];
+  const brandLogos = [taj ,img1 , img2 , img3 , img4 ,img5 ,img6  , img7 ,img8 , img9 , img10 , img11 , img12 , img13 , img14 , img15 , img16];
 
   return (
     <div

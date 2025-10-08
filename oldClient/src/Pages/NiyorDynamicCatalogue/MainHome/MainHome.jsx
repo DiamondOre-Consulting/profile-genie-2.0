@@ -17,6 +17,8 @@ import Accommodation from "../../../Components/NiyorDynamicCatalogue/Home/Accomm
 import PaymentTerms from "../../../Components/NiyorDynamicCatalogue/Home/PaymentTerms";
 import Brands from "../../../Components/NiyorDynamicCatalogue/Home/Brands";
 import ChangesAndCancellation from "../../../Components/NiyorDynamicCatalogue/Home/ChangesAndCancellation";
+import img1 from '../../../assets/PerfumeBarPackageSection2.jpg'
+
 
 const MainHome = () => {
   const { userName } = useParams();
@@ -68,6 +70,7 @@ const MainHome = () => {
     <div className="bg-c2 ">
       <Hero myprofile={myprofile} allproducts={productsinfo} />
       <Section2 />
+      <img src={img1} alt="" className="w-full " />
       <Products allproducts={productsinfo} />
       <Section3 />
       <Section4 />
