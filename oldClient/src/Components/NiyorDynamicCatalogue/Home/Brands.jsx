@@ -15,7 +15,7 @@ import img11 from "../../../assets/Niyor/brands/brand12.png";
 import img12 from "../../../assets/Niyor/brands/brand13.png"; 
 import img13 from '../../../assets/Niyor/brands/brand14.png';
 import img14 from '../../../assets/Niyor/brands/brand15.png'
-import img15 from '../../../assets/Niyor/brands/jlr.png'
+import img15 from '../../../assets/Niyor/brands/JLR.png'
 import img16 from '../../../assets/Niyor/brands/hdfc.png'
 
 
