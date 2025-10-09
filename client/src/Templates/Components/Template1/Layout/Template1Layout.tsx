@@ -27,7 +27,7 @@ const Template1Layout = ({
   const shareOnWhatsApp = () => {
     const personalMessage = `Hi! Let's connect.`;
     const encodedMessage = encodeURIComponent(personalMessage);
-    const whatsappUrl = `https://wa.me/${918750316743}?text=${encodedMessage}`;
+    const whatsappUrl = `https://wa.me/${917838738916}?text=${encodedMessage}`;
     window.open(whatsappUrl, "_blank");
   };
 
@@ -234,7 +234,7 @@ const Template1Layout = ({
 
             <li>
               <a
-                href={`tel:${918750316743}`}
+                href={`tel:${917838738916}`}
                 rel="noreferrer"
                 target="_blank"
                 className="text-gray-200 transition hover:text-gray-100/75"

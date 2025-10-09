@@ -11,7 +11,7 @@ const Home = ({ portfolioData }) => {
   const { name, tagline } = portfolioData;
   const logoUrl = portfolioData.profileImage;
   const [translatedName, setTranslatedName] = useState(name);
-  const phone = "+918750316743"; 
+  const phone = "+917838738916"; 
 
   const handleWhatsAppChat = () => {
     const url = `https://api.whatsapp.com/send?phone=${encodeURIComponent(

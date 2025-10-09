@@ -56,7 +56,7 @@ const UMFooter = () => {
             profilegenie.in
           </Link>
         </p>
-        <p className="text-center font-medium pb-4 ">Contact us on +91 8750316743</p>
+        <p className="text-center font-medium pb-4 ">Contact us on +91 7838738916</p>
       </footer>
     );
   };

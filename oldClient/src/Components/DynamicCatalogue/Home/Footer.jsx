@@ -112,7 +112,7 @@ const Footer = ({ myprofile }) => {
         </span>
 
         <p className="text-center text-gray-200 font-medium pt-4">
-              Contact us on +91 8750316743
+              Contact us on +91 7838738916
             </p>
       </div>
     </footer>

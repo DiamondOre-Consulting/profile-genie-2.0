@@ -2,7 +2,7 @@ import React from "react";
 import logo from "../../assets/QR~Genie logo.png";
 
 const Footer = ({portfolioData}) => {
-  const phone = "+918750316743"; 
+  const phone = "+917838738916"; 
     const handleWhatsAppChat = () => {
         const url = `https://api.whatsapp.com/send?phone=${encodeURIComponent(
           phone
@@ -26,7 +26,7 @@ const Footer = ({portfolioData}) => {
 
         <div>
           <p className="font-bold text-2xl">PHONE</p>
-          <p className="font-semibold text-xl">+91 8750316743</p>
+          <p className="font-semibold text-xl">+91 7838738916</p>
         </div>
 
         <div className="flex items-center">

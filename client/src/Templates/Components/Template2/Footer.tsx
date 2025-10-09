@@ -127,7 +127,7 @@ const Footer = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
             </Link>
           </p>
           <p className="hidden pb-4 mt-2 font-medium text-center md:block ">
-            Contact us on +91 8750316743
+            Contact us on +91 7838738916
           </p>
           {/* This will display on small screens (e.g., mobile) */}
           <p
@@ -142,7 +142,7 @@ const Footer = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
             >
               profilegenie.in
             </Link>{" "}
-            (+91 8750316743)
+            (+91 7838738916)
           </p>
         </div>
       </footer>

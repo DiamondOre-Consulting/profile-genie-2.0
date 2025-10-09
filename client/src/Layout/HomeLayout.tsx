@@ -22,10 +22,10 @@ const HomeLayout = ({ children }: { children: ReactNode }) => {
               <img src={logo} alt="Profile Genie logo" className="w-10" />
             </Link>
 
-            <Link to={`tel:+${918750316743}`} className="Btn ">
+            <Link to={`tel:+${917838738916}`} className="Btn ">
               <ButtonColorful
                 className="py-1 rounded-full"
-                label="+91 8750316743"
+                label="+91 7838738916"
               />
             </Link>
           </nav>

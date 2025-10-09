@@ -92,7 +92,7 @@ export function Footer() {
         <div className="flex flex-wrap items-center justify-center gap-6 px-6 gap-y-4">
           <Link
             aria-label="Email"
-            to="mailto:contact@profilegenie.com"
+            to="mailto:social@diamondore.in"
             rel="noreferrer"
             target="_blank"
             className={Underline}

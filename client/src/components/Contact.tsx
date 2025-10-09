@@ -38,7 +38,7 @@ const Contact = () => {
             </Link>
           </div>
           <Link
-            to={`tel:+${918750316743}`}
+            to={`tel:+${917838738916}`}
             className={
               "flex flex-col border py-10 bg-[#010102] group/feature border-neutral-800  transition-all duration-500  h-full w-full hover:bg-gradient-to-t hover:from-[#6738e7]/80 via-[#4826A7]/20  to-transparent "
             }

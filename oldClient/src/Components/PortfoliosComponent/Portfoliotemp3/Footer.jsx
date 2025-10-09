@@ -85,7 +85,7 @@ const Footer = ({portfolioData}) => {
       
     </p>
 
-    <p className="text-center text-gray-900 font-medium pb-4 ">Contact us on +91 8750316743</p>
+    <p className="text-center text-gray-900 font-medium pb-4 ">Contact us on +91 7838738916</p>
   </footer>
   )
 }
