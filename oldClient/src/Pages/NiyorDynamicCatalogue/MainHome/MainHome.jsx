@@ -18,6 +18,10 @@ import PaymentTerms from "../../../Components/NiyorDynamicCatalogue/Home/Payment
 import Brands from "../../../Components/NiyorDynamicCatalogue/Home/Brands";
 import ChangesAndCancellation from "../../../Components/NiyorDynamicCatalogue/Home/ChangesAndCancellation";
 import img1 from '../../../assets/PerfumeBarPackageSection2.jpg'
+import c1 from '../../../assets/Niyor/c1.jpg'
+import c2 from '../../../assets/Niyor/c2.jpg'
+import c3 from '../../../assets/Niyor/c3.jpg'
+
 
 
 const MainHome = () => {
@@ -72,6 +76,10 @@ const MainHome = () => {
       <Section2 />
       <img src={img1} alt="" className="w-full " />
       <Products allproducts={productsinfo} />
+      <img src={c1} alt=""  className="w-full"/>
+      <img src={c2} alt=""  className="w-full"/>
+      <img src={c3} alt=""  className="w-full"/>
+
       <Section3 />
       <Section4 />
       <Brands />
