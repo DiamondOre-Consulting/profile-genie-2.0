@@ -6,7 +6,7 @@ const Footer = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
     <>
       <footer className="flex flex-col justify-center space-y-4">
         {portfolioData?.contactData?.social && (
-          <div className="flex items-center justify-center mt-4 ml-10 mr-10 space-x-5">
+          <div className="flex flex-wrap items-center justify-center mt-4 ml-10 mr-10 space-x-5 space-y-4">
             {portfolioData?.contactData?.social?.facebook && (
               <Link
                 to={portfolioData?.contactData?.social?.facebook}
