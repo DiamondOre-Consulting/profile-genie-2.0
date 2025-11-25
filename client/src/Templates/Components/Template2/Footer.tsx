@@ -4,11 +4,13 @@ import { Link } from "react-router-dom";
 const Footer = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
   return (
     <>
-      <footer className="flex flex-col justify-center space-y-4">
+      <footer className="flex flex-col items-center justify-center space-y-4 ">
         {portfolioData?.contactData?.social && (
-          <div className="flex flex-wrap items-center justify-center mt-4 ml-10 mr-10 space-x-5 space-y-4">
+          <div className="flex flex-wrap items-center justify-center gap-5 mt-4 ml-10 mr-10 ">
             {portfolioData?.contactData?.social?.facebook && (
               <Link
+              className="w-10 h-10"
+
                 to={portfolioData?.contactData?.social?.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -16,13 +18,15 @@ const Footer = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
                 <img
                   src="https://img.icons8.com/?size=100&id=uLWV5A9vXIPu&format=png&color=000000"
                   alt="Facebook"
-                  className="w-10"
+                  className="w-10 h-10"
 
                 />
               </Link>
             )}
             {portfolioData?.contactData?.social?.linkedin && (
               <Link
+              className="w-10 h-10"
+
                 to={portfolioData?.contactData?.social?.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -30,13 +34,15 @@ const Footer = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
                 <img
                   src="https://img.icons8.com/?size=100&id=xuvGCOXi8Wyg&format=png&color=000000"
                   alt="LinkedIn"
-                  className="w-10"
+                  className="w-10 h-10"
 
                 />
               </Link>
             )}
             {portfolioData?.contactData?.social?.instagram && (
               <Link
+              className="w-10 h-10"
+
                 to={portfolioData?.contactData?.social?.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -44,13 +50,14 @@ const Footer = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
                 <img
                   src="https://img.icons8.com/?size=100&id=BrU2BBoRXiWq&format=png&color=000000"
                   alt="Instagram"
-                  className="w-10"
+                  className="w-10 h-10"
 
                 />
               </Link>
             )}
             {portfolioData?.contactData?.social?.twitter && (
               <Link
+              className="w-10 h-10"
                 to={portfolioData?.contactData?.social?.twitter}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -58,13 +65,15 @@ const Footer = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
                 <img
                   src="https://img.icons8.com/?size=100&id=phOKFKYpe00C&format=png&color=000000"
                   alt="Twitter"
-                  className="w-10"
+                  className="w-10 h-10"
 
                 />
               </Link>
             )}
             {portfolioData?.contactData?.social?.youtube && (
               <Link
+              className="w-10 h-10"
+
                 to={portfolioData?.contactData?.social?.youtube}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -72,13 +81,15 @@ const Footer = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
                 <img
                   src="https://img.icons8.com/?size=100&id=omVNNE6wkyP7&format=png&color=000000"
                   alt="Youtube"
-                  className="w-10"
+                  className="w-10 h-10"
 
                 />
               </Link>
             )}
             {portfolioData?.contactData?.social?.googleLink && (
               <Link
+              className="w-10 h-10"
+
                 to={portfolioData?.contactData?.social?.googleLink}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -86,7 +97,7 @@ const Footer = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
                 <img
                   src="https://img.icons8.com/?size=100&id=17949&format=png&color=000000"
                   alt="Google"
-                  className="w-10"
+                  className="w-10 h-10"
 
                 />
               </Link>
@@ -94,6 +105,8 @@ const Footer = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
             {
               portfolioData?.contactData?.social?.otherSocialList?.map((social,index) => (
                 <Link
+              className="w-10 h-10"
+
                 key={social?.uniqueId|| index}
                   to={social?.link as string}
                   target="_blank"
@@ -102,7 +115,7 @@ const Footer = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
                   <img
                     src={social?.img?.url}
                     alt={social?.img?.publicId}
-                    className="w-10"
+                    className="w-10 h-10"
 
                   />
                 </Link>
