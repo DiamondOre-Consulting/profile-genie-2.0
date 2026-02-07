@@ -17,6 +17,12 @@ const EditProductPopUp = ({ productId, closePopup, handleClose }) => {
     ],
   });
   const [showLoader, setShowLoader] = useState(false);
+  const [imageLoaders, setImageLoaders] = useState([
+    false,
+    false,
+    false,
+    false,
+  ]);
 
   // Fetch product data on popup open
   useEffect(() => {
@@ -97,20 +103,39 @@ const EditProductPopUp = ({ productId, closePopup, handleClose }) => {
     const file = e.target.files[0];
     const updatedImages = [...editProductForm.productImages];
 
-    if (file) {
-      // Handle file upload and get the URL
-      const uploadedUrl = await handleProfileImagesUpload([file]);
-      if (uploadedUrl && uploadedUrl.length > 0) {
-        updatedImages[index] = uploadedUrl[0]; // Replace the URL in the correct index
-      }
-    } else {
-      updatedImages[index] = null; // Reset if no file is selected
-    }
+    // Set loader for this specific image index
+    setImageLoaders((prev) => {
+      const newLoaders = [...prev];
+      newLoaders[index] = true;
+      return newLoaders;
+    });
 
-    setEditProductForm((prev) => ({
-      ...prev,
-      productImages: updatedImages,
-    }));
+    try {
+      if (file) {
+        // Handle file upload and get the URL
+        const uploadedUrl = await handleProfileImagesUpload([file]);
+        if (uploadedUrl && uploadedUrl.length > 0) {
+          updatedImages[index] = uploadedUrl[0]; // Replace the URL in the correct index
+        }
+      } else {
+        updatedImages[index] = null; // Reset if no file is selected
+      }
+
+      setEditProductForm((prev) => ({
+        ...prev,
+        productImages: updatedImages,
+      }));
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      alert("Failed to upload image");
+    } finally {
+      // Turn off loader
+      setImageLoaders((prev) => {
+        const newLoaders = [...prev];
+        newLoaders[index] = false;
+        return newLoaders;
+      });
+    }
   };
 
   // Submit updated product data
@@ -202,7 +227,7 @@ const EditProductPopUp = ({ productId, closePopup, handleClose }) => {
   // Function to delete a specific product image
 
   const handleDeleteProductImage = async (imageField, index) => {
-    console.log(imageField, productId)
+    console.log(imageField, productId);
     const token = localStorage.getItem("token");
 
     try {
@@ -313,23 +338,29 @@ const EditProductPopUp = ({ productId, closePopup, handleClose }) => {
                     type="file"
                     onChange={(e) => handleEditProductImageChange(e, i)}
                   />
-                  {editProductForm.productImages[i] && (
-                    <>
-                      <img
-                        src={editProductForm.productImages[i]}
-                        alt={`product-img-${i}`}
-                        className="w-24 h-24 object-cover rounded-lg"
-                      />
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault(); // Prevent page reload
-                          handleDeleteProductImage(`productImage${i + 1}`, i);
-                        }}
-                        className="text-red-500 underline mt-1"
-                      >
-                        Delete Image
-                      </button>
-                    </>
+                  {imageLoaders[i] ? (
+                    <div className="flex items-center justify-center w-24 h-24 border border-gray-300 rounded-lg">
+                      <p className="text-sm text-gray-500">Loading...</p>
+                    </div>
+                  ) : (
+                    editProductForm.productImages[i] && (
+                      <>
+                        <img
+                          src={editProductForm.productImages[i]}
+                          alt={`product-img-${i}`}
+                          className="w-24 h-24 object-cover rounded-lg"
+                        />
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault(); // Prevent page reload
+                            handleDeleteProductImage(`productImage${i + 1}`, i);
+                          }}
+                          className="text-red-500 underline mt-1"
+                        >
+                          Delete Image
+                        </button>
+                      </>
+                    )
                   )}
                 </div>
               ))}
@@ -424,7 +455,11 @@ const EditProductPopUp = ({ productId, closePopup, handleClose }) => {
             <button
               type="button"
               onClick={handleUpdateProduct}
-              className="bg-black text-white py-2 px-4 rounded-lg"
+              disabled={showLoader || imageLoaders.some((loading) => loading)}
+              className={`py-2 px-4 rounded-lg text-white ${showLoader || imageLoaders.some((loading) => loading)
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-black"
+                }`}
             >
               {showLoader ? "Updating..." : "Update Product"}
             </button>

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
-
 const AdminCreateCatalogue = () => {
   const [popup, setPopUp] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
@@ -11,54 +10,25 @@ const AdminCreateCatalogue = () => {
   const navigate = useNavigate();
   const { userName } = useParams();
 
-
-  // console.log(catalogueFetchedDetails.templateId)
-  //  {catalogueFetchedDetails&& console.log(catalogueFetchedDetails.brand.brandName)}
-  //  {catalogueFetchedDetails&& console.log(catalogueFetchedDetails.brand.brandTagline)}
-
-
-
-
-
-
-
   useEffect(() => {
-
     const fetchCatalogueDetails = async () => {
-
-
       try {
-
-        const response = await axios.get(`https://api.profilegenie.in/api/admin/catalogue/${userName}`);
+        const response = await axios.get(
+          `https://api.profilegenie.in/api/admin/catalogue/${userName}`
+        );
         if (!response.data) {
-
           console.log("Something went wrong while fetching catalogue details");
-
         }
-        console.log("respose", response.data)
+        console.log("respose", response.data);
         setCatalogueFetchedDetails(response.data);
-
-      }
-      catch (error) {
-
+      } catch (error) {
         console.log(error.message, error);
-
-
       }
-
-    }
+    };
     fetchCatalogueDetails();
-  }, [userName])
-
-
-
-
-
-
-
+  }, [userName]);
 
   const handleProfileImageUpload = async (file) => {
-
     try {
       const formData = new FormData();
       formData.append("myFile", file);
@@ -74,13 +44,11 @@ const AdminCreateCatalogue = () => {
       );
 
       if (!response.data) {
-
         throw new Error("Error uploading profile image");
       }
-      console.log("response url", response.data)
+      console.log("response url", response.data);
       const url = response.data;
       return response.data;
-
 
       // URL of the uploaded imagee
     } catch (error) {
@@ -98,15 +66,30 @@ const AdminCreateCatalogue = () => {
 
     if (profileImage) {
       profileImageUrl = await handleProfileImageUpload(profileImage);
-    }
 
+      // Update the catalogueFetchedDetails with the new logo URL
+      if (profileImageUrl) {
+        setCatalogueFetchedDetails((prevDetails) => ({
+          ...prevDetails,
+          brand: {
+            ...prevDetails.brand,
+            brandLogo: profileImageUrl,
+          },
+        }));
+      }
+    }
 
     try {
       const response = await axios.put(
         // link route change
         `https://api.profilegenie.in/api/client/edit-client-dynamic-catalogue/${userName}`,
-        catalogueFetchedDetails,
-
+        profileImageUrl ? {
+          ...catalogueFetchedDetails,
+          brand: {
+            ...catalogueFetchedDetails.brand,
+            brandLogo: profileImageUrl,
+          },
+        } : catalogueFetchedDetails,
 
         {
           headers: {
@@ -125,10 +108,9 @@ const AdminCreateCatalogue = () => {
   };
 
   const handleProfileImageChange = (e) => {
-
     const file = e.target.files[0];
     setProfileImage(file);
-    console.log(profileImage)
+    console.log(profileImage);
   };
 
   return (
@@ -142,26 +124,33 @@ const AdminCreateCatalogue = () => {
         <div className="p-6 space-y-6">
           <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-6 gap-6">
-
               <div className="col-span-6 sm:col-span-3">
-                <label htmlFor="templateId" className="text-sm font-medium text-gray-900 block mb-2">
+                <label
+                  htmlFor="templateId"
+                  className="text-sm font-medium text-gray-900 block mb-2"
+                >
                   Template Id
                 </label>
                 <input
                   type="text"
                   name="templateId"
                   id="templateId"
-                  onChange={(e) => setCatalogueFetchedDetails(prevDetails => ({
-                    ...prevDetails,
-                    templateId: e.target.value
-                  }))}
+                  onChange={(e) =>
+                    setCatalogueFetchedDetails((prevDetails) => ({
+                      ...prevDetails,
+                      templateId: e.target.value,
+                    }))
+                  }
                   value={catalogueFetchedDetails?.templateId}
                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                 />
               </div>
               {/* Name */}
               <div className="col-span-6 sm:col-span-3">
-                <label htmlFor="name" className="text-sm font-medium text-gray-900 block mb-2">
+                <label
+                  htmlFor="name"
+                  className="text-sm font-medium text-gray-900 block mb-2"
+                >
                   Name
                 </label>
                 <input
@@ -169,17 +158,22 @@ const AdminCreateCatalogue = () => {
                   name="name"
                   id="name"
                   value={catalogueFetchedDetails?.name}
-                  onChange={(e) => setCatalogueFetchedDetails(prevDetails => ({
-                    ...prevDetails,
-                    name: e.target.value
-                  }))}
+                  onChange={(e) =>
+                    setCatalogueFetchedDetails((prevDetails) => ({
+                      ...prevDetails,
+                      name: e.target.value,
+                    }))
+                  }
                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                 />
               </div>
 
               {/* Email */}
               <div className="col-span-6 sm:col-span-3">
-                <label htmlFor="email" className="text-sm font-medium text-gray-900 block mb-2">
+                <label
+                  htmlFor="email"
+                  className="text-sm font-medium text-gray-900 block mb-2"
+                >
                   Email
                 </label>
                 <input
@@ -187,16 +181,21 @@ const AdminCreateCatalogue = () => {
                   name="email"
                   id="email"
                   value={catalogueFetchedDetails?.email}
-                  onChange={(e) => setCatalogueFetchedDetails(prevDetails => ({
-                    ...prevDetails,
-                    email: e.target.value
-                  }))}
+                  onChange={(e) =>
+                    setCatalogueFetchedDetails((prevDetails) => ({
+                      ...prevDetails,
+                      email: e.target.value,
+                    }))
+                  }
                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                 />
               </div>
               {/* Phone */}
               <div className="col-span-6 sm:col-span-3">
-                <label htmlFor="phone" className="text-sm font-medium text-gray-900 block mb-2">
+                <label
+                  htmlFor="phone"
+                  className="text-sm font-medium text-gray-900 block mb-2"
+                >
                   Phone
                 </label>
                 <input
@@ -204,18 +203,22 @@ const AdminCreateCatalogue = () => {
                   name="phone"
                   id="phone"
                   value={catalogueFetchedDetails?.phone}
-                  onChange={(e) => setCatalogueFetchedDetails(prevDetails => ({
-                    ...prevDetails,
-                    phone: e.target.value
-                  }))}
+                  onChange={(e) =>
+                    setCatalogueFetchedDetails((prevDetails) => ({
+                      ...prevDetails,
+                      phone: e.target.value,
+                    }))
+                  }
                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                 />
               </div>
 
-
               {/* Brand Name */}
               <div className="col-span-6 sm:col-span-3">
-                <label htmlFor="brandName" className="text-sm font-medium text-gray-900 block mb-2">
+                <label
+                  htmlFor="brandName"
+                  className="text-sm font-medium text-gray-900 block mb-2"
+                >
                   Brand Name
                 </label>
                 <input
@@ -223,20 +226,24 @@ const AdminCreateCatalogue = () => {
                   name="brandName"
                   id="brandName"
                   value={catalogueFetchedDetails?.brand?.brandName}
-                  onChange={(e) => setCatalogueFetchedDetails(prevDetails => ({
-                    ...prevDetails,
-                    brand: {
-                      ...prevDetails.brand,
-                      brandName: e.target.value
-                    }
-                  }))}
-
+                  onChange={(e) =>
+                    setCatalogueFetchedDetails((prevDetails) => ({
+                      ...prevDetails,
+                      brand: {
+                        ...prevDetails.brand,
+                        brandName: e.target.value,
+                      },
+                    }))
+                  }
                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                 />
               </div>
               {/* Brand Logo  */}
               <div className="col-span-6 sm:col-span-3">
-                <label htmlFor="image" className="text-sm font-medium text-gray-900 block mb-2">
+                <label
+                  htmlFor="image"
+                  className="text-sm font-medium text-gray-900 block mb-2"
+                >
                   Upload Brand Image
                 </label>
                 {catalogueFetchedDetails?.brand?.brandLogo && (
@@ -251,17 +258,16 @@ const AdminCreateCatalogue = () => {
                   type="file"
                   name="image"
                   id="image"
-
                   onChange={handleProfileImageChange}
-
                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-
-
                 />
               </div>
               {/* Brand Tagline */}
               <div className="col-span-6 sm:col-span-3">
-                <label htmlFor="brandTagline" className="text-sm font-medium text-gray-900 block mb-2">
+                <label
+                  htmlFor="brandTagline"
+                  className="text-sm font-medium text-gray-900 block mb-2"
+                >
                   Brand Tagline
                 </label>
                 <input
@@ -270,20 +276,23 @@ const AdminCreateCatalogue = () => {
                   id="brandTagline"
                   value={catalogueFetchedDetails?.brand?.brandTagline}
                   onChange={(e) => {
-                    setCatalogueFetchedDetails(prevDetails => ({
+                    setCatalogueFetchedDetails((prevDetails) => ({
                       ...prevDetails,
                       brand: {
                         ...prevDetails.brand,
-                        brandTagline: e.target.value
-                      }
-                    }))
+                        brandTagline: e.target.value,
+                      },
+                    }));
                   }}
                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                 />
               </div>
               {/* Brand Description */}
               <div className="col-span-6 sm:col-span-3">
-                <label htmlFor="brandDescription" className="text-sm font-medium text-gray-900 block mb-2">
+                <label
+                  htmlFor="brandDescription"
+                  className="text-sm font-medium text-gray-900 block mb-2"
+                >
                   Brand Description
                 </label>
                 <input
@@ -292,20 +301,23 @@ const AdminCreateCatalogue = () => {
                   id="brandDescription"
                   value={catalogueFetchedDetails?.brand?.brandDescription}
                   onChange={(e) => {
-                    setCatalogueFetchedDetails(prevDetails => ({
+                    setCatalogueFetchedDetails((prevDetails) => ({
                       ...prevDetails,
                       brand: {
                         ...prevDetails.brand,
-                        brandDescription: e.target.value
-                      }
-                    }))
+                        brandDescription: e.target.value,
+                      },
+                    }));
                   }}
                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                 />
               </div>
               {/* Brand Website */}
               <div className="col-span-6 sm:col-span-3">
-                <label htmlFor="brandWebsite" className="text-sm font-medium text-gray-900 block mb-2">
+                <label
+                  htmlFor="brandWebsite"
+                  className="text-sm font-medium text-gray-900 block mb-2"
+                >
                   Brand Website
                 </label>
                 <input
@@ -314,20 +326,23 @@ const AdminCreateCatalogue = () => {
                   id="brandWebsite"
                   value={catalogueFetchedDetails?.brand?.brandWebsite}
                   onChange={(e) => {
-                    setCatalogueFetchedDetails(prevDetails => ({
+                    setCatalogueFetchedDetails((prevDetails) => ({
                       ...prevDetails,
                       brand: {
                         ...prevDetails.brand,
-                        brandWebsite: e.target.value
-                      }
-                    }))
+                        brandWebsite: e.target.value,
+                      },
+                    }));
                   }}
                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                 />
               </div>
               {/* Brand Address */}
               <div className="col-span-6 sm:col-span-3">
-                <label htmlFor="brandAddress" className="text-sm font-medium text-gray-900 block mb-2">
+                <label
+                  htmlFor="brandAddress"
+                  className="text-sm font-medium text-gray-900 block mb-2"
+                >
                   Brand Address
                 </label>
                 <input
@@ -336,20 +351,23 @@ const AdminCreateCatalogue = () => {
                   id="brandAddress"
                   value={catalogueFetchedDetails?.brand?.brandAddress}
                   onChange={(e) => {
-                    setCatalogueFetchedDetails(prevDetails => ({
+                    setCatalogueFetchedDetails((prevDetails) => ({
                       ...prevDetails,
                       brand: {
                         ...prevDetails.brand,
-                        brandAddress: e.target.value
-                      }
-                    }))
+                        brandAddress: e.target.value,
+                      },
+                    }));
                   }}
                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                 />
               </div>
               {/* Brand Socials */}
               <div className="col-span-6 sm:col-span-3 space-y-2">
-                <label htmlFor="brandSocials" className="text-sm font-medium text-gray-900 block mb-2">
+                <label
+                  htmlFor="brandSocials"
+                  className="text-sm font-medium text-gray-900 block mb-2"
+                >
                   Brand Socials
                 </label>
                 <input
@@ -357,18 +375,20 @@ const AdminCreateCatalogue = () => {
                   name="brandSocials.instagram"
                   placeholder="Instagram"
                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5 mb-2"
-                  value={catalogueFetchedDetails?.brand?.brandSocials?.instagram}
+                  value={
+                    catalogueFetchedDetails?.brand?.brandSocials?.instagram
+                  }
                   onChange={(e) => {
-                    setCatalogueFetchedDetails(prevDetails => ({
+                    setCatalogueFetchedDetails((prevDetails) => ({
                       ...prevDetails,
                       brand: {
                         ...prevDetails.brand,
                         brandSocials: {
                           ...prevDetails.brand.brandSocials,
-                          instagram: e.target.value
-                        }
-                      }
-                    }))
+                          instagram: e.target.value,
+                        },
+                      },
+                    }));
                   }}
                 />
                 <input
@@ -378,16 +398,16 @@ const AdminCreateCatalogue = () => {
                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5 mb-2"
                   value={catalogueFetchedDetails?.brand?.brandSocials?.facebook}
                   onChange={(e) => {
-                    setCatalogueFetchedDetails(prevDetails => ({
+                    setCatalogueFetchedDetails((prevDetails) => ({
                       ...prevDetails,
                       brand: {
                         ...prevDetails.brand,
                         brandSocials: {
                           ...prevDetails.brand.brandSocials,
-                          facebook: e.target.value
-                        }
-                      }
-                    }))
+                          facebook: e.target.value,
+                        },
+                      },
+                    }));
                   }}
                 />
                 <input
@@ -397,16 +417,16 @@ const AdminCreateCatalogue = () => {
                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5 mb-2"
                   value={catalogueFetchedDetails?.brand?.brandSocials?.youtube}
                   onChange={(e) => {
-                    setCatalogueFetchedDetails(prevDetails => ({
+                    setCatalogueFetchedDetails((prevDetails) => ({
                       ...prevDetails,
                       brand: {
                         ...prevDetails.brand,
                         brandSocials: {
                           ...prevDetails.brand.brandSocials,
-                          youtube: e.target.value
-                        }
-                      }
-                    }))
+                          youtube: e.target.value,
+                        },
+                      },
+                    }));
                   }}
                 />
                 <input
@@ -416,16 +436,16 @@ const AdminCreateCatalogue = () => {
                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5 mb-2"
                   value={catalogueFetchedDetails?.brand?.brandSocials?.twitter}
                   onChange={(e) => {
-                    setCatalogueFetchedDetails(prevDetails => ({
+                    setCatalogueFetchedDetails((prevDetails) => ({
                       ...prevDetails,
                       brand: {
                         ...prevDetails.brand,
                         brandSocials: {
                           ...prevDetails.brand.brandSocials,
-                          twitter: e.target.value
-                        }
-                      }
-                    }))
+                          twitter: e.target.value,
+                        },
+                      },
+                    }));
                   }}
                 />
                 <input
@@ -435,16 +455,16 @@ const AdminCreateCatalogue = () => {
                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                   value={catalogueFetchedDetails?.brand?.brandSocials?.linkedIn}
                   onChange={(e) => {
-                    setCatalogueFetchedDetails(prevDetails => ({
+                    setCatalogueFetchedDetails((prevDetails) => ({
                       ...prevDetails,
                       brand: {
                         ...prevDetails.brand,
                         brandSocials: {
                           ...prevDetails.brand.brandSocials,
-                          linkedIn: e.target.value
-                        }
-                      }
-                    }))
+                          linkedIn: e.target.value,
+                        },
+                      },
+                    }));
                   }}
                 />
               </div>
@@ -472,11 +492,10 @@ const AdminCreateCatalogue = () => {
           onClick={() => setPopUp(false)}
         >
           <div className="bg-white p-6 rounded-lg shadow-lg w-1/3 text-center">
-            <p className="text-lg font-semibold mb-4">Catalogue Editted Successfully!</p>
-            <button
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700"
-
-            >
+            <p className="text-lg font-semibold mb-4">
+              Catalogue Editted Successfully!
+            </p>
+            <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700">
               Ok
             </button>
           </div>
