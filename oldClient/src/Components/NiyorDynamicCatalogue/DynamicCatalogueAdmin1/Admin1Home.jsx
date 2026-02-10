@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
 import axios from "axios";
-import EditProductPopup from "../DynamicCatalogueAdmin1/EditproductPopUp";
-import p1 from "../../../assets/p1.jpg";
-import AdminGalllery from "./AdminGalllery";
+import React, { useEffect, useState } from "react";
 import dummyimage from "../../../assets/dummyimg.png";
+import EditProductPopup from "../DynamicCatalogueAdmin1/EditproductPopUp";
 
 const Admin1Home = () => {
   const [deleteProductPopup, setDeleteProductPopUp] = useState(false);
@@ -121,6 +119,14 @@ const Admin1Home = () => {
   };
 
   const handleAddProductClick = () => {
+    setAddProductPopup(true);
+  };
+
+  const handleAddProductToCategory = (categoryName) => {
+    setProductForm((prev) => ({
+      ...prev,
+      categoryName: categoryName,
+    }));
     setAddProductPopup(true);
   };
 
@@ -443,14 +449,14 @@ const Admin1Home = () => {
 
   return (
     <div>
-      <div className="px-10 flex justify-between py-4 text-gray-900 items-center">
+      <div className="flex items-center justify-between px-10 py-4 text-gray-900">
         <p className="text-5xl font-bold">Welcome Admin</p>
       </div>
 
       <div className="px-10 py-10 border">
-        <div className="flex justify-end items-center mb-6">
+        <div className="flex items-center justify-end mb-6">
           <button
-            className="px-10 py-4 bg-black hover:bg-gray-800 text-gray-100 cursor-pointer rounded-lg"
+            className="px-10 py-4 text-gray-100 bg-black rounded-lg cursor-pointer hover:bg-gray-800"
             onClick={handleAddProductClick}
           >
             Add Products
@@ -482,23 +488,31 @@ const Admin1Home = () => {
                         <tr>
                           <td
                             colSpan="8"
-                            className="bg-gray-300 text-lg font-semibold px-6 py-3 border"
+                            className="px-6 py-3 text-lg font-semibold bg-gray-300 border"
                           >
                             Category : - {category.categoryName}
                             <span
-                              className="font-semibold text-red-500 ml-10 text-md  underline cursor-pointer"
+                              className="ml-10 font-semibold text-red-500 underline cursor-pointer text-md"
                               onClick={() =>
                                 handleEditproductClick(category?.categoryName)
                               }
                             >
                               Edit
                             </span>
+                            <span
+                              className="ml-5 font-semibold text-green-500 underline cursor-pointer text-md"
+                              onClick={() =>
+                                handleAddProductToCategory(category.categoryName)
+                              }
+                            >
+                              Add
+                            </span>
                           </td>
                         </tr>
                         {category.products.map((product) => (
                           <tr
                             key={product._id}
-                            className="odd:bg-white even:bg-gray-50 border-b"
+                            className="border-b odd:bg-white even:bg-gray-50"
                           >
                             <td>
                               <img
@@ -550,7 +564,7 @@ const Admin1Home = () => {
                 )
               ) : (
                 <tr>
-                  <td colSpan="8" className="text-center px-6 py-4">
+                  <td colSpan="8" className="px-6 py-4 text-center">
                     No products available
                   </td>
                 </tr>
@@ -562,9 +576,9 @@ const Admin1Home = () => {
 
       {/* Add Product Popup */}
       {addProductPopup && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-7xl w-full h-screen overflow-y-auto">
-            <h3 className="text-lg font-semibold mb-4">Add New Product</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
+          <div className="w-full h-screen p-6 overflow-y-auto bg-white rounded-lg shadow-lg max-w-7xl">
+            <h3 className="mb-4 text-lg font-semibold">Add New Product</h3>
             <div className="grid grid-cols-7 gap-4">
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-900">
@@ -575,7 +589,7 @@ const Admin1Home = () => {
                   name="categoryName"
                   value={productForm.categoryName}
                   onChange={handleProductFormChange}
-                  className="block w-full mt-1 p-2 border border-gray-300 rounded-lg"
+                  className="block w-full p-2 mt-1 border border-gray-300 rounded-lg"
                 />
               </div>
               <div className="mb-4">
@@ -587,7 +601,7 @@ const Admin1Home = () => {
                   name="productName"
                   value={productForm.productName}
                   onChange={handleProductFormChange}
-                  className="block w-full mt-1 p-2 border border-gray-300 rounded-lg"
+                  className="block w-full p-2 mt-1 border border-gray-300 rounded-lg"
                 />
               </div>
               <div className="mb-4">
@@ -599,7 +613,7 @@ const Admin1Home = () => {
                   name="hsnCode"
                   value={productForm.hsnCode}
                   onChange={handleProductFormChange}
-                  className="block w-full mt-1 p-2 border border-gray-300 rounded-lg"
+                  className="block w-full p-2 mt-1 border border-gray-300 rounded-lg"
                 />
               </div>
 
@@ -612,7 +626,7 @@ const Admin1Home = () => {
                   name="productQuantity"
                   value={productForm.productQuantity}
                   onChange={handleProductFormChange}
-                  className="block w-full mt-1 p-2 border border-gray-300 rounded-lg"
+                  className="block w-full p-2 mt-1 border border-gray-300 rounded-lg"
                 />
               </div>
               <div className="mb-4">
@@ -624,7 +638,7 @@ const Admin1Home = () => {
                   name="minOrderQty"
                   value={productForm.minOrderQty}
                   onChange={handleProductFormChange}
-                  className="block w-full mt-1 p-2 border border-gray-300 rounded-lg"
+                  className="block w-full p-2 mt-1 border border-gray-300 rounded-lg"
                 />
               </div>
               <div className="mb-4">
@@ -636,7 +650,7 @@ const Admin1Home = () => {
                   name="price"
                   value={productForm.price}
                   onChange={handleProductFormChange}
-                  className="block w-full mt-1 p-2 border border-gray-300 rounded-lg"
+                  className="block w-full p-2 mt-1 border border-gray-300 rounded-lg"
                 />
               </div>
               <div className="mb-4">
@@ -648,7 +662,7 @@ const Admin1Home = () => {
                   name="stock"
                   value={productForm.stock}
                   onChange={handleProductFormChange}
-                  className="block w-full mt-1 p-2 border border-gray-300 rounded-lg"
+                  className="block w-full p-2 mt-1 border border-gray-300 rounded-lg"
                 />
               </div>
             </div>
@@ -656,13 +670,13 @@ const Admin1Home = () => {
             {productForm.quantityAndPrice.map((item, index) => (
               <div
                 key={index}
-                className="quantity-price-row grid grid-cols-5 gap-6"
+                className="grid grid-cols-5 gap-6 quantity-price-row"
               >
                 <div>
                   <label>Quantity</label>
                   <input
                     type="number"
-                    className="block w-full mt-1 p-2 border border-gray-300 rounded-lg"
+                    className="block w-full p-2 mt-1 border border-gray-300 rounded-lg"
                     name="qty"
                     placeholder="Quantity"
                     value={item.qty}
@@ -678,7 +692,7 @@ const Admin1Home = () => {
                   <input
                     type="number"
                     name="platinum"
-                    className="block w-full mt-1 p-2 border border-gray-300 rounded-lg"
+                    className="block w-full p-2 mt-1 border border-gray-300 rounded-lg"
                     placeholder="Platinum Price"
                     value={item.platinum}
                     onChange={(e) =>
@@ -697,7 +711,7 @@ const Admin1Home = () => {
                   <input
                     type="number"
                     name="gold"
-                    className="block w-full mt-1 p-2 border border-gray-300 rounded-lg"
+                    className="block w-full p-2 mt-1 border border-gray-300 rounded-lg"
                     placeholder="Gold Price"
                     value={item.gold}
                     onChange={(e) =>
@@ -716,7 +730,7 @@ const Admin1Home = () => {
                   <input
                     type="number"
                     name="silver"
-                    className="block w-full mt-1 p-2 border border-gray-300 rounded-lg"
+                    className="block w-full p-2 mt-1 border border-gray-300 rounded-lg"
                     placeholder="Silver Price"
                     value={item.silver}
                     onChange={(e) =>
@@ -732,7 +746,7 @@ const Admin1Home = () => {
                 {index > 0 && (
                   <button
                     type="button"
-                    className="bg-red-500 rounded-md mt-4 px-2 py-2 text-gray-100 "
+                    className="px-2 py-2 mt-4 text-gray-100 bg-red-500 rounded-md "
                     onClick={() => removeQuantityAndPrice(index)}
                   >
                     Remove
@@ -742,7 +756,7 @@ const Admin1Home = () => {
             ))}
             <button
               type="button"
-              className="bg-gray-700 rounded-md mt-4 px-2 py-2 text-gray-100 "
+              className="px-2 py-2 mt-4 text-gray-100 bg-gray-700 rounded-md "
               onClick={addQuantityAndPrice}
             >
               Add Quantity & Price
@@ -756,7 +770,7 @@ const Admin1Home = () => {
                 name="description"
                 value={productForm.description}
                 onChange={handleProductFormChange}
-                className="block w-full mt-1 p-2 border border-gray-300 rounded-lg"
+                className="block w-full p-2 mt-1 border border-gray-300 rounded-lg"
               />
             </div>
             <div className="mb-4">
@@ -772,7 +786,7 @@ const Admin1Home = () => {
                           productForm.productImages[index]
                         )}
                         alt={`Product Image ${index + 1}`}
-                        className="w-16 h-16 object-cover border border-gray-300 rounded"
+                        className="object-cover w-16 h-16 border border-gray-300 rounded"
                       />
 
                       <button
@@ -796,7 +810,7 @@ const Admin1Home = () => {
             <div className="flex justify-end">
               <button
                 onClick={handleAddProductSubmit}
-                className="px-4 py-2 bg-black text-white rounded-lg"
+                className="px-4 py-2 text-white bg-black rounded-lg"
               >
                 {" "}
                 {showLoader ? (
@@ -822,7 +836,7 @@ const Admin1Home = () => {
               </button>
               <button
                 onClick={() => setAddProductPopup(false)}
-                className="ml-4 px-4 py-2 bg-gray-300 rounded-lg"
+                className="px-4 py-2 ml-4 bg-gray-300 rounded-lg"
               >
                 Cancel
               </button>
@@ -833,15 +847,15 @@ const Admin1Home = () => {
 
       {/* Delete Product Popup */}
       {deleteProductPopup && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
-            <h3 className="text-lg font-semibold mb-4">Delete Product</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
+          <div className="w-full max-w-lg p-6 bg-white rounded-lg shadow-lg">
+            <h3 className="mb-4 text-lg font-semibold">Delete Product</h3>
             <p className="mb-4">
               Are you sure you want to delete this product?
             </p>
             <div className="flex justify-end">
               <button
-                className="px-4 py-2 bg-red-600 text-white rounded-lg"
+                className="px-4 py-2 text-white bg-red-600 rounded-lg"
                 onClick={deleteProducts}
               >
                 {deleteloader ? (
@@ -867,7 +881,7 @@ const Admin1Home = () => {
               </button>
               <button
                 onClick={handleCloseDeletePopup}
-                className="ml-4 px-4 py-2 bg-gray-300 rounded-lg"
+                className="px-4 py-2 ml-4 bg-gray-300 rounded-lg"
               >
                 Cancel
               </button>
@@ -877,9 +891,9 @@ const Admin1Home = () => {
       )}
 
       {editproductcategorypopup && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl w-full">
-            <h3 className="text-lg font-semibold mb-4">Edit Product</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
+          <div className="w-full max-w-2xl p-6 bg-white rounded-lg shadow-lg">
+            <h3 className="mb-4 text-lg font-semibold">Edit Product</h3>
             <div className="grid grid-cols-2 gap-4">
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-900">
@@ -890,7 +904,7 @@ const Admin1Home = () => {
                   name="newCategoryName"
                   value={newCategoryName}
                   onChange={(e) => setnewCategoryName(e.target.value)} // Update state correctly
-                  className="block w-full mt-1 p-2 border border-gray-300 rounded-lg"
+                  className="block w-full p-2 mt-1 border border-gray-300 rounded-lg"
                 />
               </div>
             </div>
@@ -898,7 +912,7 @@ const Admin1Home = () => {
             <div className="flex justify-end">
               <button
                 onClick={handleEditCategory}
-                className="px-4 py-2 bg-black text-white rounded-lg"
+                className="px-4 py-2 text-white bg-black rounded-lg"
               >
                 {" "}
                 {showLoader ? (
@@ -924,7 +938,7 @@ const Admin1Home = () => {
               </button>
               <button
                 onClick={() => setEditProductCategoryPopup(false)}
-                className="ml-4 px-4 py-2 bg-gray-300 rounded-lg"
+                className="px-4 py-2 ml-4 bg-gray-300 rounded-lg"
               >
                 Cancel
               </button>
@@ -935,13 +949,13 @@ const Admin1Home = () => {
 
       {/* Edit Product Form */}
       {/* {editProductPopup && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50">
-          <div className="bg-white p-8 rounded-lg shadow-lg max-w-5xl w-full">
-            <h3 className="text-xl font-bold mb-4 text-gray-800">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
+          <div className="w-full max-w-5xl p-8 bg-white rounded-lg shadow-lg">
+            <h3 className="mb-4 text-xl font-bold text-gray-800">
               Edit Product
             </h3>
             <form onSubmit={handleEditProductSubmit} className="space-y-4">
-              <div className="grid grid-cols-6 items-center gap-4">
+              <div className="grid items-center grid-cols-6 gap-4">
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-900">
                     Product Name
@@ -951,7 +965,7 @@ const Admin1Home = () => {
                     name="productName"
                     value={editProductForm.productName}
                     onChange={handleEditProductFormChange}
-                    className="block w-full mt-1 p-2 border border-gray-300 rounded-lg"
+                    className="block w-full p-2 mt-1 border border-gray-300 rounded-lg"
                   />
                 </div>
                 <div className="mb-4">
@@ -963,7 +977,7 @@ const Admin1Home = () => {
                     name="hsnCode"
                     value={editProductForm.hsnCode}
                     onChange={handleEditProductFormChange}
-                    className="block w-full mt-1 p-2 border border-gray-300 rounded-lg"
+                    className="block w-full p-2 mt-1 border border-gray-300 rounded-lg"
                   />
                 </div>
 
@@ -976,7 +990,7 @@ const Admin1Home = () => {
                     name="productQuantity"
                     value={editProductForm.productQuantity}
                     onChange={handleEditProductFormChange}
-                    className="block w-full mt-1 p-2 border border-gray-300 rounded-lg"
+                    className="block w-full p-2 mt-1 border border-gray-300 rounded-lg"
                   />
                 </div>
                 <div className="mb-4">
@@ -988,7 +1002,7 @@ const Admin1Home = () => {
                     name="minOrderQty"
                     value={editProductForm.minOrderQty}
                     onChange={handleEditProductFormChange}
-                    className="block w-full mt-1 p-2 border border-gray-300 rounded-lg"
+                    className="block w-full p-2 mt-1 border border-gray-300 rounded-lg"
                   />
                 </div>
                 <div className="mb-4">
@@ -1000,7 +1014,7 @@ const Admin1Home = () => {
                     name="price"
                     value={editProductForm.price}
                     onChange={handleEditProductFormChange}
-                    className="block w-full mt-1 p-2 border border-gray-300 rounded-lg"
+                    className="block w-full p-2 mt-1 border border-gray-300 rounded-lg"
                   />
                 </div>
                 <div className="mb-4">
@@ -1012,7 +1026,7 @@ const Admin1Home = () => {
                     name="stock"
                     value={editProductForm.stock}
                     onChange={handleEditProductFormChange}
-                    className="block w-full mt-1 p-2 border border-gray-300 rounded-lg"
+                    className="block w-full p-2 mt-1 border border-gray-300 rounded-lg"
                   />
                 </div>
               </div>
@@ -1020,11 +1034,11 @@ const Admin1Home = () => {
               {editProductForm.quantityAndPrice.map((item, index) => (
                 <div
                   key={index}
-                  className="quantity-price-row grid grid-cols-4 gap-6"
+                  className="grid grid-cols-4 gap-6 quantity-price-row"
                 >
                   <input
                     type="number"
-                    className="block w-full mt-1 p-2 border border-gray-300 rounded-lg"
+                    className="block w-full p-2 mt-1 border border-gray-300 rounded-lg"
                     name="qty"
                     placeholder="Quantity"
                     value={item.qty}
@@ -1036,7 +1050,7 @@ const Admin1Home = () => {
                   <input
                     type="number"
                     name="platinum"
-                    className="block w-full mt-1 p-2 border border-gray-300 rounded-lg"
+                    className="block w-full p-2 mt-1 border border-gray-300 rounded-lg"
                     placeholder="Platinum Price"
                     value={item.platinum}
                     onChange={(e) =>
@@ -1051,7 +1065,7 @@ const Admin1Home = () => {
                   <input
                     type="number"
                     name="gold"
-                    className="block w-full mt-1 p-2 border border-gray-300 rounded-lg"
+                    className="block w-full p-2 mt-1 border border-gray-300 rounded-lg"
                     placeholder="Gold Price"
                     value={item.gold}
                     onChange={(e) =>
@@ -1066,7 +1080,7 @@ const Admin1Home = () => {
                   {index > 0 && (
                     <button
                       type="button"
-                      className="bg-red-500 rounded-md mt-4 px-2 py-2 text-gray-100"
+                      className="px-2 py-2 mt-4 text-gray-100 bg-red-500 rounded-md"
                       onClick={() => removeQuantityAndPrice(index)}
                     >
                       Remove
@@ -1076,7 +1090,7 @@ const Admin1Home = () => {
               ))}
               <button
                 type="button"
-                className="bg-gray-700 rounded-md mt-4 px-2 py-2 text-gray-100"
+                className="px-2 py-2 mt-4 text-gray-100 bg-gray-700 rounded-md"
                 onClick={addQuantityAndPrice}
               >
                 Add Quantity & Price
@@ -1090,7 +1104,7 @@ const Admin1Home = () => {
                   name="description"
                   value={editProductForm.description}
                   onChange={handleEditProductFormChange}
-                  className="block w-full mt-1 p-2 border border-gray-300 rounded-lg"
+                  className="block w-full p-2 mt-1 border border-gray-300 rounded-lg"
                 />
               </div>
               <div className="mb-4">
@@ -1106,7 +1120,7 @@ const Admin1Home = () => {
                             editProductForm.productImages[index]
                           )}
                           alt={`Product Image ${index + 1}`}
-                          className="w-16 h-16 object-cover border border-gray-300 rounded"
+                          className="object-cover w-16 h-16 border border-gray-300 rounded"
                         />
                         <button
                           onClick={() => handleRemoveImage(index)}
@@ -1140,7 +1154,7 @@ const Admin1Home = () => {
                 </button>
 
                 <button
-                  className="bg-gray-300 px-4 py-2 text-black ml-3 rounded-md"
+                  className="px-4 py-2 ml-3 text-black bg-gray-300 rounded-md"
                   onClick={() => setEditProductPopUp(false)}
                 >
                   Cancel
