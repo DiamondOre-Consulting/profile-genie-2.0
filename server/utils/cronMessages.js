@@ -88,7 +88,7 @@ export const getDueMail = (daysLeft, fullName, userName) => {
                                 <p>We hope you are doing well and using the services efficiently. The subscription of your landing page is about to expire in <strong>${daysLeft} day(s)</strong>. To avoid any interruptions, please renew it before the deadline.</p>
                     
                                 <p style="text-align: center;">
-                                    <a href="https://wa.me/916207234759?text=Hi%20I%20need%20to%20renew%20my%20landing%20page%20subscription.%20Please%20help%20me%20with%20the%20process.%20Thanks.%0A%0AReference%20USERNAME:%20${userName}" class="button" target="_blank">Renew Now</a>
+                                    <a href="https://wa.me/917838738916?text=Hi%20I%20need%20to%20renew%20my%20landing%20page%20subscription.%20Please%20help%20me%20with%20the%20process.%20Thanks.%0A%0AReference%20USERNAME:%20${userName}" class="button" target="_blank">Renew Now</a>
                                 </p>
                     
                                 <p>Kindly ignore this message if you have already renewed your subscription.</p>
@@ -330,7 +330,7 @@ export const getInactiveMail = (fullName, userName) => {
                                 <p>We regret to inform you that your 'Landing Page' has been made inactive due to non-compliance with our terms of service. We understand that this may cause inconvenience and hope you are doing well. Contact us for more information</p>
 
                                 <p style="text-align: center;">
-                                    <a href="https://wa.me/916207234759?text=Hi%20I%20have%20received%20a%20notification%20that%20my%20landing%20page%20has%20been%20made%20inactive.%20Please%20help%20me%20with%20the%20process.%20Thanks.%0A%0AReference%20USERNAME:%20${userName}" class="button" target="_blank">Contact Us</a>
+                                    <a href="https://wa.me/917838738916?text=Hi%20I%20have%20received%20a%20notification%20that%20my%20landing%20page%20has%20been%20made%20inactive.%20Please%20help%20me%20with%20the%20process.%20Thanks.%0A%0AReference%20USERNAME:%20${userName}" class="button" target="_blank">Contact Us</a>
                                 </p>
                     
                                 <p>Thank you for choosing <strong>Profile Genie</strong>.</p>
@@ -918,7 +918,7 @@ export const getCatalogueDueMail = (
                                 <p>We hope you are doing well and using the services efficiently. The subscription of your <strong>${catalogueName}</strong> Catalogue page is about to expire in <strong>${daysLeft} day(s)</strong>. To avoid any interruptions, please renew it before the deadline.</p>
                     
                                 <p style="text-align: center;">
-                                    <a href="https://wa.me/916207234759?text=Hi%20I%20need%20to%20renew%20my%20landing%20page%20subscription.%20Please%20help%20me%20with%20the%20process.%20Thanks.%0A%0AReference%20USERNAME:%20${userName}" class="button" target="_blank">Renew Now</a>
+                                    <a href="https://wa.me/917838738916?text=Hi%20I%20need%20to%20renew%20my%20landing%20page%20subscription.%20Please%20help%20me%20with%20the%20process.%20Thanks.%0A%0AReference%20USERNAME:%20${userName}" class="button" target="_blank">Renew Now</a>
                                 </p>
                     
                                 <p>Kindly ignore this message if you have already renewed your subscription.</p>
@@ -1160,7 +1160,7 @@ export const getCatalogueInactiveMail = (fullName, userName, catalogueName) => {
                                 <p>We regret to inform you that your <strong>${catalogueName}</strong> has been made inactive due to non-compliance with our terms of service. We understand that this may cause inconvenience and hope you are doing well. Contact us for more information</p>
 
                                 <p style="text-align: center;">
-                                    <a href="https://wa.me/916207234759?text=Hi%20I%20have%20received%20a%20notification%20that%20my%20landing%20page%20has%20been%20made%20inactive.%20Please%20help%20me%20with%20the%20process.%20Thanks.%0A%0AReference%20USERNAME:%20${userName}" class="button" target="_blank">Contact Us</a>
+                                    <a href="https://wa.me/917838738916?text=Hi%20I%20have%20received%20a%20notification%20that%20my%20landing%20page%20has%20been%20made%20inactive.%20Please%20help%20me%20with%20the%20process.%20Thanks.%0A%0AReference%20USERNAME:%20${userName}" class="button" target="_blank">Contact Us</a>
                                 </p>
                     
                                 <p>Thank you for choosing <strong>Profile Genie</strong>.</p>
