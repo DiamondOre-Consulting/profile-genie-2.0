@@ -51,6 +51,10 @@ const EditContactDetails = ({
   const [openedItem, setOpenedItem] = useState<string>("1");
   const [updateContactDetails] = useUpdateContactDetailsMutation();
 
+  const getUniqueCode = (): string => {
+    return uuidv4().slice(0, 10);
+  };
+
   const {
     register,
     handleSubmit,
@@ -69,7 +73,7 @@ const EditContactDetails = ({
         ...contactDetails?.social,
         otherSocialList:
           contactDetails?.social?.otherSocialList &&
-          contactDetails?.social?.otherSocialList?.length > 1
+            contactDetails?.social?.otherSocialList?.length > 0
             ? contactDetails.social.otherSocialList
             : [{ uniqueId: "", link: "", img: { publicId: "", url: "" } }],
       },
@@ -77,35 +81,63 @@ const EditContactDetails = ({
         ...contactDetails?.testimonial,
         testimonialList:
           contactDetails?.testimonial?.testimonialList &&
-          contactDetails?.testimonial?.testimonialList?.length > 1
+            contactDetails?.testimonial?.testimonialList?.length > 0
             ? contactDetails.testimonial.testimonialList
-            : [{ uniqueId: "", star: 0, detail: "", name: "" }],
+            : [{ uniqueId: getUniqueCode(), star: 0, detail: "", name: "" }],
       },
       emailList:
-        contactDetails?.emailList && contactDetails?.emailList?.length > 1
+        contactDetails?.emailList && contactDetails?.emailList?.length > 0
           ? contactDetails?.emailList
           : [{ email: "" }],
       phoneList:
-        contactDetails?.phoneList && contactDetails?.phoneList?.length > 1
+        contactDetails?.phoneList && contactDetails?.phoneList?.length > 0
           ? contactDetails?.phoneList
           : [{ phone: 0 }],
       address:
-        contactDetails?.address && contactDetails?.address?.length > 1
+        contactDetails?.address && contactDetails?.address?.length > 0
           ? contactDetails?.address
           : [{ title: "", detail: "" }],
     },
   });
 
   useEffect(() => {
-    reset(contactDetails);
+    reset({
+      ...contactDetails,
+      social: {
+        ...contactDetails?.social,
+        otherSocialList:
+          contactDetails?.social?.otherSocialList &&
+          contactDetails?.social?.otherSocialList?.length > 0
+            ? contactDetails.social.otherSocialList
+            : [{ uniqueId: "", link: "", img: { publicId: "", url: "" } }],
+      },
+      testimonial: {
+        ...contactDetails?.testimonial,
+        testimonialList:
+          contactDetails?.testimonial?.testimonialList &&
+          contactDetails?.testimonial?.testimonialList?.length > 0
+            ? contactDetails.testimonial.testimonialList
+            : [{ uniqueId: getUniqueCode(), star: 0, detail: "", name: "" }],
+      },
+      emailList:
+        contactDetails?.emailList && contactDetails?.emailList?.length > 0
+          ? contactDetails?.emailList
+          : [{ email: "" }],
+      phoneList:
+        contactDetails?.phoneList && contactDetails?.phoneList?.length > 0
+          ? contactDetails?.phoneList
+          : [{ phone: 0 }],
+      address:
+        contactDetails?.address && contactDetails?.address?.length > 0
+          ? contactDetails?.address
+          : [{ title: "", detail: "" }],
+    });
   }, [contactDetails, reset]);
 
   const id = useId();
   const [socialFiles, setSocialFiles] = useState<File[] | null>(null);
 
-  const getUniqueCode = (): string => {
-    return uuidv4().slice(0, 10);
-  };
+
 
   const getFileExtension = (fileName: string) => {
     return fileName.split(".").pop();
@@ -193,7 +225,7 @@ const EditContactDetails = ({
   const removeTestimonial = (ind: number) => {
     if (testimonialFields.length === 1) {
       setValue(`testimonial.testimonialList.${ind}`, {
-        uniqueId: "",
+        uniqueId: getUniqueCode(),
         name: "",
         detail: "",
         star: 0,
@@ -282,9 +314,8 @@ const EditContactDetails = ({
               {...register("testimonial.tagline")}
               placeholder="Enter tagline..."
               type="text"
-              className={`${
-                errors.testimonial?.tagline && "border-[#E11D48] "
-              } py-[0.45rem] text-neutral-200`}
+              className={`${errors.testimonial?.tagline && "border-[#E11D48] "
+                } py-[0.45rem] text-neutral-200`}
             />
             {errors.testimonial?.tagline && (
               <p className="text-sm font-semibold tracking-wide text-main">
@@ -310,10 +341,9 @@ const EditContactDetails = ({
                       {...register(`testimonial.testimonialList.${ind}.name`)}
                       placeholder="Enter brand name..."
                       type="text"
-                      className={`${
-                        errors.testimonial?.testimonialList?.[ind]?.name &&
+                      className={`${errors.testimonial?.testimonialList?.[ind]?.name &&
                         "border-[#E11D48] "
-                      } py-[0.45rem] text-neutral-200`}
+                        } py-[0.45rem] text-neutral-200`}
                     />
                     {errors.testimonial?.testimonialList?.[ind]?.name && (
                       <p className="text-sm font-semibold tracking-wide text-main">
@@ -380,16 +410,15 @@ const EditContactDetails = ({
                             />
                             <RiStarFill
                               size={24}
-                              className={`transition-all ${
-                                (getValues(
+                              className={`transition-all ${(getValues(
+                                `testimonial.testimonialList.${ind}.star`
+                              ) ||
+                                getValues(
                                   `testimonial.testimonialList.${ind}.star`
-                                ) ||
-                                  getValues(
-                                    `testimonial.testimonialList.${ind}.star`
-                                  )) >= value
-                                  ? "text-amber-500"
-                                  : "text-input"
-                              } group-hover:scale-110`}
+                                )) >= value
+                                ? "text-amber-500"
+                                : "text-input"
+                                } group-hover:scale-110`}
                             />
                             <span className="sr-only">
                               {value} star
@@ -423,7 +452,7 @@ const EditContactDetails = ({
               className="flex items-center justify-center gap-2 p-2 px-4 my-3 text-white rounded cursor-pointer bg-main"
               onClick={() =>
                 testimonialAppend({
-                  uniqueId: "",
+                  uniqueId: getUniqueCode(),
                   name: "",
                   detail: "",
                   star: 0,
@@ -451,9 +480,8 @@ const EditContactDetails = ({
                 {...register("social.facebook")}
                 placeholder="Enter bulk link tagline..."
                 type="text"
-                className={`${
-                  errors.social?.facebook && "border-[#E11D48] "
-                } py-[0.45rem] text-neutral-200`}
+                className={`${errors.social?.facebook && "border-[#E11D48] "
+                  } py-[0.45rem] text-neutral-200`}
               />
               {errors.social?.facebook && (
                 <p className="text-sm font-semibold tracking-wide text-main">
@@ -469,9 +497,8 @@ const EditContactDetails = ({
                 {...register("social.instagram")}
                 placeholder="Enter bulk link tagline..."
                 type="text"
-                className={`${
-                  errors.social?.instagram && "border-[#E11D48] "
-                } py-[0.45rem] text-neutral-200`}
+                className={`${errors.social?.instagram && "border-[#E11D48] "
+                  } py-[0.45rem] text-neutral-200`}
               />
               {errors.social?.instagram && (
                 <p className="text-sm font-semibold tracking-wide text-main">
@@ -487,9 +514,8 @@ const EditContactDetails = ({
                 {...register("social.linkedin")}
                 placeholder="Enter bulk link tagline..."
                 type="text"
-                className={`${
-                  errors.social?.linkedin && "border-[#E11D48] "
-                } py-[0.45rem] text-neutral-200`}
+                className={`${errors.social?.linkedin && "border-[#E11D48] "
+                  } py-[0.45rem] text-neutral-200`}
               />
               {errors.social?.linkedin && (
                 <p className="text-sm font-semibold tracking-wide text-main">
@@ -505,9 +531,8 @@ const EditContactDetails = ({
                 {...register("social.twitter")}
                 placeholder="Enter bulk link tagline..."
                 type="text"
-                className={`${
-                  errors.social?.twitter && "border-[#E11D48] "
-                } py-[0.45rem] text-neutral-200`}
+                className={`${errors.social?.twitter && "border-[#E11D48] "
+                  } py-[0.45rem] text-neutral-200`}
               />
               {errors.social?.twitter && (
                 <p className="text-sm font-semibold tracking-wide text-main">
@@ -523,9 +548,8 @@ const EditContactDetails = ({
                 {...register("social.youtube")}
                 placeholder="Enter bulk link tagline..."
                 type="text"
-                className={`${
-                  errors.social?.youtube && "border-[#E11D48] "
-                } py-[0.45rem] text-neutral-200`}
+                className={`${errors.social?.youtube && "border-[#E11D48] "
+                  } py-[0.45rem] text-neutral-200`}
               />
               {errors.social?.youtube && (
                 <p className="text-sm font-semibold tracking-wide text-main">
@@ -544,9 +568,8 @@ const EditContactDetails = ({
                 {...register("social.googleLink")}
                 placeholder="Enter bulk link tagline..."
                 type="text"
-                className={`${
-                  errors.social?.googleLink && "border-[#E11D48] "
-                } py-[0.45rem] text-neutral-200`}
+                className={`${errors.social?.googleLink && "border-[#E11D48] "
+                  } py-[0.45rem] text-neutral-200`}
               />
               {errors.social?.googleLink && (
                 <p className="text-sm font-semibold tracking-wide text-main">
@@ -602,10 +625,9 @@ const EditContactDetails = ({
                         {...register(`social.otherSocialList.${ind}.link`)}
                         placeholder="Enter brand name..."
                         type="text"
-                        className={`${
-                          errors.social?.otherSocialList?.[ind]?.link &&
+                        className={`${errors.social?.otherSocialList?.[ind]?.link &&
                           "border-[#E11D48] "
-                        } py-[0.45rem] text-neutral-200`}
+                          } py-[0.45rem] text-neutral-200`}
                       />
                       {errors.social?.otherSocialList?.[ind]?.link && (
                         <p className="text-sm font-semibold tracking-wide text-main">
@@ -674,9 +696,8 @@ const EditContactDetails = ({
               {...register("mapLink")}
               placeholder="Enter service tagline..."
               type="text"
-              className={`${
-                errors.mapLink && "border-[#E11D48] "
-              } py-[0.45rem] text-neutral-200`}
+              className={`${errors.mapLink && "border-[#E11D48] "
+                } py-[0.45rem] text-neutral-200`}
             />
             {errors.mapLink && (
               <p className="text-sm font-semibold tracking-wide text-main">
@@ -702,9 +723,8 @@ const EditContactDetails = ({
                       {...register(`emailList.${ind}.email`)}
                       placeholder="Enter service name..."
                       type="text"
-                      className={`${
-                        errors.emailList?.[ind]?.email && "border-[#E11D48] "
-                      } py-[0.45rem] text-neutral-200`}
+                      className={`${errors.emailList?.[ind]?.email && "border-[#E11D48] "
+                        } py-[0.45rem] text-neutral-200`}
                     />
                     {errors.emailList?.[ind]?.email && (
                       <p className="text-sm font-semibold tracking-wide text-main">
@@ -864,9 +884,8 @@ const EditContactDetails = ({
                       {...register(`address.${ind}.title`)}
                       placeholder="Enter service name..."
                       type="text"
-                      className={`${
-                        errors.address?.[ind]?.title && "border-[#E11D48] "
-                      } py-[0.45rem] text-neutral-200`}
+                      className={`${errors.address?.[ind]?.title && "border-[#E11D48] "
+                        } py-[0.45rem] text-neutral-200`}
                     />
                     {errors.address?.[ind]?.title && (
                       <p className="text-sm font-semibold tracking-wide text-main">
@@ -885,9 +904,8 @@ const EditContactDetails = ({
                       {...register(`address.${ind}.detail`)}
                       placeholder="Enter service name..."
                       type="text"
-                      className={`${
-                        errors.address?.[ind]?.detail && "border-[#E11D48] "
-                      } py-[0.45rem] text-neutral-200`}
+                      className={`${errors.address?.[ind]?.detail && "border-[#E11D48] "
+                        } py-[0.45rem] text-neutral-200`}
                     />
                     {errors.address?.[ind]?.detail && (
                       <p className="text-sm font-semibold tracking-wide text-main">
@@ -940,9 +958,8 @@ const EditContactDetails = ({
                 {...register("brochureLink.tagline")}
                 placeholder="Enter service tagline..."
                 type="text"
-                className={`${
-                  errors?.brochureLink?.tagline && "border-[#E11D48] "
-                } py-[0.45rem] text-neutral-200`}
+                className={`${errors?.brochureLink?.tagline && "border-[#E11D48] "
+                  } py-[0.45rem] text-neutral-200`}
               />
               {errors?.brochureLink?.tagline && (
                 <p className="text-sm font-semibold tracking-wide text-main">
@@ -958,9 +975,8 @@ const EditContactDetails = ({
                 {...register("brochureLink.link")}
                 placeholder="Enter service tagline..."
                 type="text"
-                className={`${
-                  errors?.brochureLink?.link && "border-[#E11D48] "
-                } py-[0.45rem] text-neutral-200`}
+                className={`${errors?.brochureLink?.link && "border-[#E11D48] "
+                  } py-[0.45rem] text-neutral-200`}
               />
               {errors?.brochureLink?.link && (
                 <p className="text-sm font-semibold tracking-wide text-main">
@@ -976,9 +992,8 @@ const EditContactDetails = ({
                 {...register("contactCSV")}
                 placeholder="Enter contact VCF..."
                 type="text"
-                className={`${
-                  errors?.contactCSV && "border-[#E11D48] "
-                } py-[0.45rem] text-neutral-200`}
+                className={`${errors?.contactCSV && "border-[#E11D48] "
+                  } py-[0.45rem] text-neutral-200`}
               />
               {errors?.contactCSV && (
                 <p className="text-sm font-semibold tracking-wide text-main">
@@ -1072,11 +1087,10 @@ const EditContactDetails = ({
       </Accordion>
       <div className="flex justify-between mt-6 space-x-4">
         <button
-          className={`bg-[#1c1c1c] border border-[#565656]   text-white flex items-center gap-3 py-1.5 text-sm px-4 rounded ${
-            currentStep === 1
-              ? "blur-[1px] cursor-not-allowed"
-              : "cursor-pointer"
-          }`}
+          className={`bg-[#1c1c1c] border border-[#565656]   text-white flex items-center gap-3 py-1.5 text-sm px-4 rounded ${currentStep === 1
+            ? "blur-[1px] cursor-not-allowed"
+            : "cursor-pointer"
+            }`}
           onClick={() => setCurrentStep((prev) => prev - 1)}
           disabled={currentStep === 1}
         >

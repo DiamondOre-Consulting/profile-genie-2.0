@@ -129,7 +129,7 @@ export const addContactDetailSchema = z.object({
     tagline: z.string().optional(),
     testimonialList: z.array(
       z.object({
-        uniqueId: z.string(),
+        uniqueId: z.string().optional(),
         name: z.string(),
         detail: z.string(),
         star: z.number(),
