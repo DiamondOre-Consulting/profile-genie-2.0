@@ -1,5 +1,3 @@
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { portfolioResponse } from "@/validations/PortfolioValidation";
 import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group";
 import { RiStarFill } from "@remixicon/react";
@@ -8,8 +6,6 @@ import { SparklesText } from "@/components/ui/sparkles-text";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { IconX } from "@tabler/icons-react";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const Testimonials = ({
   portfolioData,

@@ -5,8 +5,6 @@ import { portfolioResponse } from "@/validations/PortfolioValidation";
 import { IconX } from "@tabler/icons-react";
 import { AnimatePresence, motion } from "framer-motion";
 
-gsap.registerPlugin(ScrollTrigger);
-
 interface Gallery {
   image?: {
     url?: string;
@@ -24,6 +22,7 @@ const AboutmeBrands = ({
   const [activeGallery, setActiveGallery] = useState<Gallery | null>(null);
 
   useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
     brandsRef.current.forEach((el, index) => {
       gsap.fromTo(
         el,

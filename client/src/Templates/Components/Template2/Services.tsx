@@ -6,8 +6,6 @@ import { IconX } from "@tabler/icons-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { SparklesText } from "@/components/ui/sparkles-text";
 
-gsap.registerPlugin(ScrollTrigger);
-
 interface Service {
   title?: string;
   detail?: string;
@@ -50,6 +48,7 @@ const Services = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
     [updateTruncationState]
   );
   useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
     servicesRef.current.forEach((el, index) => {
       if (el) {
         gsap.fromTo(

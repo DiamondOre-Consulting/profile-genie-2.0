@@ -13,7 +13,9 @@ interface registerData {
 
 const initialState = {
     user: null as null | undefined,
-    isLoggedIn: localStorage.getItem("isLoggedIn") === "true" ? true : false,
+    isLoggedIn:
+        typeof window !== "undefined" &&
+        localStorage.getItem("isLoggedIn") === "true",
 }
 
 export const login = createAsyncThunk("auth/signin", async (data: loginValidation) => {

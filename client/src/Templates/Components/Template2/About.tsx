@@ -1,9 +1,5 @@
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { portfolioResponse } from "@/validations/PortfolioValidation";
 import { SparklesText } from "@/components/ui/sparkles-text";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const About = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
   return portfolioData?.about?.body ? (

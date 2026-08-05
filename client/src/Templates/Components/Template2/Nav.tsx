@@ -1,10 +1,6 @@
 import {  useState } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { portfolioResponse } from '@/validations/PortfolioValidation';
 import { Link } from 'react-scroll';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const Nav = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
     const [showMobileMenu, setShowMobileMenu] = useState(false);

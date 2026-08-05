@@ -6,8 +6,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { IconX } from "@tabler/icons-react";
 import { SparklesText } from "@/components/ui/sparkles-text";
 
-gsap.registerPlugin(ScrollTrigger);
-
 interface Product {
   title?: string;
   detail?: string;
@@ -51,6 +49,7 @@ const Products = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
     [updateTruncationState]
   );
   useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
     productsRef.current.forEach((el, index) => {
       if (el) {
         gsap.fromTo(

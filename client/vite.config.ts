@@ -17,7 +17,7 @@ export default defineConfig({
   ssr: {
     // dicons is CommonJS but is imported with named exports by the templates.
     // Bundle it so Node's ESM loader does not try to resolve those exports.
-    noExternal: ["dicons"],
+    noExternal: ["dicons", "gsap"],
   },
 
   resolve: {
