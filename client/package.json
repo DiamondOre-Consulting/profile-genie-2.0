@@ -69,7 +69,7 @@
     "@types/react-dom": "^19.0.3",
     "@types/react-scroll": "^1.8.10",
     "@types/swiper": "^5.4.3",
-    "@vitejs/plugin-react": "^4.3.4",
+    "@vitejs/plugin-react": "^6.0.5",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.19.0",
     "eslint-plugin-react-hooks": "^5.0.0",
