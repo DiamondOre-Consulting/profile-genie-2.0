@@ -211,7 +211,7 @@ const sendCustomMail = asyncHandler(async (req, res) => {
 
 async function checkApiUptime() {
   try {
-    const res = await axios.get("https://server.profilegenie.in/ping");
+    const res = await axios.get("https://api.profilegenie.in/ping");
     return res.status === 200;
   } catch {
     return false;
@@ -229,7 +229,7 @@ async function getResponseTime() {
 async function getSeoScore(url) {
   const apiKey = process.env.PSI_API_KEY;
   const apiUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(
-    url
+    url,
   )}&category=performance&category=accessibility&category=best-practices&category=seo&strategy=desktop&key=${apiKey}`;
 
   try {
@@ -328,20 +328,20 @@ const sendCvMail = asyncHandler(async (req, res) => {
     "muninder.diamondore@gmail.com",
     mailData.subject,
     mailData.message,
-    "callback"
+    "callback",
   );
 
   await sendMail(
     "rahul@diamondore.in",
     mailData.subject,
     mailData.message,
-    "callback"
+    "callback",
   );
   await sendMail(
     "akashsingh@diamondore.in",
     mailData.subject,
     mailData.message,
-    "callback"
+    "callback",
   );
 
   res.status(200).json({

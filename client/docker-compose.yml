@@ -7,7 +7,7 @@ services:
     environment:
       NODE_ENV: production
       PORT: 3000
-      SSR_API_URL: ${SSR_API_URL:-https://server.profilegenie.in/api/v1}
+      SSR_API_URL: ${SSR_API_URL:-https://api.profilegenie.in/api/v1}
       PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:-https://profilegenie.in}
     ports:
       - "${HOST_PORT:-3000}:3000"

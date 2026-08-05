@@ -5,8 +5,12 @@ import App, { type SsrPageData } from "./App";
 import store from "./Redux/store";
 import SmoothScrollProvider from "./components/SmoothScrollProvider";
 
-const API_URL = (process.env.SSR_API_URL ?? "https://server.profilegenie.in/api/v1").replace(/\/$/, "");
-const PUBLIC_ORIGIN = (process.env.PUBLIC_ORIGIN ?? "https://profilegenie.in").replace(/\/$/, "");
+const API_URL = (
+  process.env.SSR_API_URL ?? "https://api.profilegenie.in/api/v1"
+).replace(/\/$/, "");
+const PUBLIC_ORIGIN = (
+  process.env.PUBLIC_ORIGIN ?? "https://profilegenie.in"
+).replace(/\/$/, "");
 
 type PageResult = {
   status: number;
@@ -14,9 +18,17 @@ type PageResult = {
 };
 
 const escapeHtml = (value: string) =>
-  value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;");
+  value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\"/g, "&quot;");
 
-const safeJson = (value: unknown) => JSON.stringify(value).replace(/</g, "\\u003c").replace(/>/g, "\\u003e").replace(/&/g, "\\u0026");
+const safeJson = (value: unknown) =>
+  JSON.stringify(value)
+    .replace(/</g, "\\u003c")
+    .replace(/>/g, "\\u003e")
+    .replace(/&/g, "\\u0026");
 
 async function apiPage(pathname: string): Promise<PageResult> {
   const profileMatch = pathname.match(/^\/profile\/(?:1|9510)\/([^/]+)\/?$/);
@@ -37,9 +49,12 @@ async function apiPage(pathname: string): Promise<PageResult> {
 
     const payload = await response.json();
     const data = payload?.data;
-    if (!data || data.isActive === false || data.isPaid === false) return { status: 404 };
+    if (!data || data.isActive === false || data.isPaid === false)
+      return { status: 404 };
 
-    const metaDetails = profileMatch ? data.metaDetails : data.data?.metaDetails;
+    const metaDetails = profileMatch
+      ? data.metaDetails
+      : data.data?.metaDetails;
     return {
       status: 200,
       pageData: {
@@ -57,17 +72,49 @@ function seoHead(pathname: string, pageData?: SsrPageData) {
   const content = pageData?.data as Record<string, any> | undefined;
   const entity = pageData?.kind === "catalogue" ? content?.data : content;
   const meta = pageData?.metaDetails;
-  const title = meta?.title ? `${meta.title} | Profile Genie` : entity?.fullName || entity?.name || "Profile Genie";
-  const description = meta?.description || entity?.shortDescription || entity?.description || "Create and manage your professional digital presence with Profile Genie.";
-  const image = pageData?.kind === "portfolio"
-    ? meta?.favIcon?.url || entity?.image?.url || `${PUBLIC_ORIGIN}/profilegenie.png`
-    : meta?.favIcon?.url || entity?.heroImage?.url || entity?.logo?.url || `${PUBLIC_ORIGIN}/profilegenie.png`;
+  const title = meta?.title
+    ? `${meta.title} | Profile Genie`
+    : entity?.fullName || entity?.name || "Profile Genie";
+  const description =
+    meta?.description ||
+    entity?.shortDescription ||
+    entity?.description ||
+    "Create and manage your professional digital presence with Profile Genie.";
+  const image =
+    pageData?.kind === "portfolio"
+      ? meta?.favIcon?.url ||
+        entity?.image?.url ||
+        `${PUBLIC_ORIGIN}/profilegenie.png`
+      : meta?.favIcon?.url ||
+        entity?.heroImage?.url ||
+        entity?.logo?.url ||
+        `${PUBLIC_ORIGIN}/profilegenie.png`;
   const canonical = `${PUBLIC_ORIGIN}${pathname}`;
-  const schema = pageData?.kind === "catalogue"
-    ? { "@context": "https://schema.org", "@type": "Organization", name: entity?.name, description, url: canonical, logo: entity?.logo?.url }
-    : pageData?.kind === "portfolio"
-      ? { "@context": "https://schema.org", "@type": "Person", name: entity?.fullName, description, url: canonical, image: entity?.image?.url }
-      : { "@context": "https://schema.org", "@type": "WebSite", name: "Profile Genie", url: PUBLIC_ORIGIN };
+  const schema =
+    pageData?.kind === "catalogue"
+      ? {
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: entity?.name,
+          description,
+          url: canonical,
+          logo: entity?.logo?.url,
+        }
+      : pageData?.kind === "portfolio"
+        ? {
+            "@context": "https://schema.org",
+            "@type": "Person",
+            name: entity?.fullName,
+            description,
+            url: canonical,
+            image: entity?.image?.url,
+          }
+        : {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            name: "Profile Genie",
+            url: PUBLIC_ORIGIN,
+          };
 
   return `
     <title>${escapeHtml(title)}</title>
@@ -97,7 +144,7 @@ export async function render(url: string) {
           <App ssrPageData={pageData} />
         </SmoothScrollProvider>
       </StaticRouter>
-    </Provider>
+    </Provider>,
   );
 
   return {

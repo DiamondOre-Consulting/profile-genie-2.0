@@ -47,22 +47,23 @@ Profile Genie 2.0 follows a **microservices architecture** with clear separation
 
 ### Tech Stack Overview
 
-| Component | Technology | Version | Purpose |
-|-----------|------------|---------|----------|
-| **Frontend** | React | 19.0.0 | UI Framework |
-| **Language** | TypeScript | 5.7.2 | Type Safety |
-| **Styling** | TailwindCSS | 4.0.6 | Styling Framework |
-| **Build Tool** | Vite | 6.1.0 | Fast Build Tool |
-| **State Management** | Redux Toolkit | 2.5.1+ | Global State |
-| **Backend** | Node.js + Express | 18.14.2 | Server Framework |
-| **Database** | MongoDB + Mongoose | 8.10.1 | Database & ODM |
-| **File Storage** | Cloudinary | 2.5.1 | Media Management |
-| **Email Service** | Nodemailer | 6.10.0 | Email Delivery |
-| **Real-time** | Socket.IO | 4.8.1 | Live Updates |
+| Component            | Technology         | Version | Purpose           |
+| -------------------- | ------------------ | ------- | ----------------- |
+| **Frontend**         | React              | 19.0.0  | UI Framework      |
+| **Language**         | TypeScript         | 5.7.2   | Type Safety       |
+| **Styling**          | TailwindCSS        | 4.0.6   | Styling Framework |
+| **Build Tool**       | Vite               | 6.1.0   | Fast Build Tool   |
+| **State Management** | Redux Toolkit      | 2.5.1+  | Global State      |
+| **Backend**          | Node.js + Express  | 18.14.2 | Server Framework  |
+| **Database**         | MongoDB + Mongoose | 8.10.1  | Database & ODM    |
+| **File Storage**     | Cloudinary         | 2.5.1   | Media Management  |
+| **Email Service**    | Nodemailer         | 6.10.0  | Email Delivery    |
+| **Real-time**        | Socket.IO          | 4.8.1   | Live Updates      |
 
 ## ⚡ Quick Start
 
 ### Prerequisites
+
 - Node.js (v18.14.2+)
 - MongoDB (v5.0+)
 - npm/pnpm
@@ -138,6 +139,7 @@ CATALOGUE_ADMIN_URL=http://localhost:5175
 ## 🔐 Authentication System
 
 ### Features
+
 - **Multi-role Authentication**: USER, CATALOGUE_OWNER, SUPERADMIN
 - **JWT Token Management**: Access & Refresh tokens with automatic renewal
 - **OAuth Integration**: Google authentication with Passport.js
@@ -147,11 +149,11 @@ CATALOGUE_ADMIN_URL=http://localhost:5175
 
 ### User Roles
 
-| Role | Permissions | Access |
-|------|-------------|--------|
-| **USER** | Basic user access | Limited features |
-| **CATALOGUE_OWNER** | Catalogue management | Catalogue Admin Dashboard |
-| **SUPERADMIN** | Full system access | Admin Dashboard + All features |
+| Role                | Permissions          | Access                         |
+| ------------------- | -------------------- | ------------------------------ |
+| **USER**            | Basic user access    | Limited features               |
+| **CATALOGUE_OWNER** | Catalogue management | Catalogue Admin Dashboard      |
+| **SUPERADMIN**      | Full system access   | Admin Dashboard + All features |
 
 ### API Endpoints
 
@@ -232,6 +234,7 @@ GET /google/callback
 ## 👤 Portfolio Management
 
 ### Core Features
+
 - **Multi-template Support**: Multiple professional portfolio templates
 - **Media Management**: Profile images, background images, logos via Cloudinary
 - **Content Sections**: About, Services, Products, Testimonials, Contact
@@ -258,25 +261,25 @@ interface Portfolio {
   views: number;
   monthlyViews: Map<string, number>; // "january2024": 150
   paidDate?: Date;
-  
+
   // Media Assets
   image: { url: string; publicId: string };
   backgroundImage: { url: string; publicId: string };
   logo: { url: string; publicId: string };
-  
+
   // Content
   about: {
     head: string;
     body: string;
   };
   shortDescription?: string;
-  
+
   // Emergency Contacts
   SOS: Array<{
     phoneNumber: number;
     fullName: string;
   }>;
-  
+
   // Relations
   contactData: ObjectId; // PortfolioContact
   otherDetails: ObjectId; // PortfolioDetail
@@ -353,7 +356,7 @@ POST /:userName/verify-otp
 ```typescript
 interface PortfolioDetail {
   portfolio: ObjectId;
-  
+
   brands: {
     tagline: string;
     brandList: Array<{
@@ -362,7 +365,7 @@ interface PortfolioDetail {
       image: { url: string; publicId: string };
     }>;
   };
-  
+
   services: {
     tagline: string;
     serviceList: Array<{
@@ -372,7 +375,7 @@ interface PortfolioDetail {
       image: { url: string; publicId: string };
     }>;
   };
-  
+
   products: {
     tagline: string;
     productList: Array<{
@@ -382,7 +385,7 @@ interface PortfolioDetail {
       image: { url: string; publicId: string };
     }>;
   };
-  
+
   bulkLink: {
     tagline: string;
     bulkLinkList: Array<{
@@ -400,7 +403,7 @@ interface PortfolioDetail {
 ```typescript
 interface PortfolioContact {
   portfolio: ObjectId;
-  
+
   // Contact Information
   whatsappNo: number;
   mapLink: string;
@@ -410,7 +413,7 @@ interface PortfolioContact {
     title: string;
     detail: string;
   }>;
-  
+
   // Social Media
   social: {
     facebook: string;
@@ -425,7 +428,7 @@ interface PortfolioContact {
       img: { url: string; publicId: string };
     }>;
   };
-  
+
   // Testimonials
   testimonial: {
     tagline: string;
@@ -436,7 +439,7 @@ interface PortfolioContact {
       star: number;
     }>;
   };
-  
+
   // Additional
   brochureLink: {
     tagline: string;
@@ -474,6 +477,7 @@ FormData:
 ## 🛍️ Catalogue Management
 
 ### Core Features
+
 - **Product Catalogue Creation**: Comprehensive product management system
 - **Category Management**: Dynamic product categorization
 - **Owner Management**: Catalogue owner profiles with authentication
@@ -493,27 +497,27 @@ interface Catalogue {
   userName: string; // Unique identifier
   tagline: string;
   description: string;
-  
+
   // Styling
   backgroundColor: string;
   textColor: string;
-  
+
   // Media
   logo: { url: string; publicId: string };
   heroImage: { url: string; publicId: string };
-  
+
   // Status
   isActive: boolean;
   isPaid: boolean;
   isRecycled: boolean;
   paidDate?: Date;
-  
+
   // Categories
   category: Array<{
     id: string;
     text: string;
   }>;
-  
+
   // Relations
   product: ObjectId[]; // CatalogueProduct
   catalogueOwner: ObjectId; // CatalogueOwner
@@ -523,7 +527,7 @@ interface Catalogue {
 interface CatalogueOwner {
   _id: string;
   authAccount: ObjectId; // User
-  
+
   // Contact Information
   mapLink: string;
   whatsappNo: number;
@@ -544,13 +548,13 @@ interface CatalogueProduct {
   stock: boolean;
   description: string;
   owner: string; // CatalogueOwner ID
-  
+
   // Categories
   category: Array<{
     id: string;
     text: string;
   }>;
-  
+
   // Images
   image: Array<{
     uniqueId: string;
@@ -679,6 +683,7 @@ Content-Type: application/json
 ## 📊 Admin Dashboard
 
 ### Features
+
 - **Analytics Dashboard**: Comprehensive system statistics
 - **Portfolio Management**: View and manage all portfolios
 - **Email Marketing**: Send custom emails to users
@@ -760,6 +765,7 @@ The admin dashboard includes real-time system health monitoring:
 ## 🏷️ Metadata Management
 
 ### Features
+
 - **SEO Optimization**: Title, description, keywords management
 - **Favicon Support**: Custom favicon upload for portfolios/catalogues
 - **Canonical URLs**: SEO-friendly URL management
@@ -811,17 +817,17 @@ Authorization: Bearer <access_token>
 
 ### Collections Overview
 
-| Collection | Purpose | Key Fields |
-|------------|---------|------------|
-| **users** | User authentication | email, password, role, OAuth data |
-| **portfolios** | Portfolio data | userName, template, views, status |
-| **portfoliocontacts** | Contact information | social, phone, email, testimonials |
-| **portfoliodetails** | Portfolio content | services, products, brands |
-| **catalogues** | Catalogue data | userName, categories, styling |
-| **catalogueowners** | Catalogue owner info | contact details, business info |
-| **catalogueproducts** | Product data | HSN code, price, stock, images |
-| **metadatas** | SEO metadata | title, description, favicon |
-| **templates** | WhatsApp templates | components, status, approval |
+| Collection            | Purpose              | Key Fields                         |
+| --------------------- | -------------------- | ---------------------------------- |
+| **users**             | User authentication  | email, password, role, OAuth data  |
+| **portfolios**        | Portfolio data       | userName, template, views, status  |
+| **portfoliocontacts** | Contact information  | social, phone, email, testimonials |
+| **portfoliodetails**  | Portfolio content    | services, products, brands         |
+| **catalogues**        | Catalogue data       | userName, categories, styling      |
+| **catalogueowners**   | Catalogue owner info | contact details, business info     |
+| **catalogueproducts** | Product data         | HSN code, price, stock, images     |
+| **metadatas**         | SEO metadata         | title, description, favicon        |
+| **templates**         | WhatsApp templates   | components, status, approval       |
 
 ### Indexes
 
@@ -831,7 +837,7 @@ portfolioSchema.index({
   phoneNumber: "text",
   userName: "text",
   fullName: "text",
-  email: "text"
+  email: "text",
 });
 
 // User Authentication
@@ -851,10 +857,10 @@ catalogueSchema.index({ catalogueOwner: 1 });
 
 ### Application URLs
 
-| Application | Local URL | Production URL | Port |
-|-------------|-----------|----------------|----- |
-| **Main Client** | http://localhost:5173 | https://profilegenie.in | 5173 |
-| **Admin Dashboard** | http://localhost:5174 | https://admin.profilegenie.in | 5174 |
+| Application         | Local URL             | Production URL                    | Port |
+| ------------------- | --------------------- | --------------------------------- | ---- |
+| **Main Client**     | http://localhost:5173 | https://profilegenie.in           | 5173 |
+| **Admin Dashboard** | http://localhost:5174 | https://admin.profilegenie.in     | 5174 |
 | **Catalogue Admin** | http://localhost:5175 | https://catalogue.profilegenie.in | 5175 |
 
 ### 🏠 Main Client Routes (`/`)
@@ -1147,6 +1153,7 @@ http://localhost:5175/catalogue/
 ### 🎯 Route Protection
 
 #### Public Routes
+
 - Homepage (`/`)
 - Demo page (`/demo`)
 - Portfolio views (`/profile/**`)
@@ -1155,6 +1162,7 @@ http://localhost:5175/catalogue/
 - Password reset (`/forgot-password`, `/reset-password/**`)
 
 #### Protected Routes
+
 - **Admin Dashboard**: Requires SUPERADMIN role
 - **Catalogue Admin**: Requires CATALOGUE_OWNER role
 - **Portfolio Statistics**: Requires OTP verification
@@ -1179,17 +1187,20 @@ interface ProtectedRouteProps {
 ### 🔄 Navigation Flow
 
 #### User Journey - Portfolio
+
 1. **Discovery**: `/` → Browse homepage
 2. **View Portfolio**: `/profile/1/:username` → View portfolio
 3. **View Statistics**: `/profile/1/:username/stats` → OTP verification → Analytics
 
 #### User Journey - Catalogue
+
 1. **Browse Catalogue**: `/catalogue/1/:userName` → Product listing
 2. **View Product**: `/catalogue/1/:userName/product/:id` → Product details
 3. **Add to Cart**: Continue shopping or checkout
 4. **View Cart**: `/catalogue/1/:userName/cart` → Review items
 
 #### Admin Journey
+
 1. **Login**: `/login` → Authentication
 2. **Dashboard**: `/` → System overview
 3. **Manage Content**: `/all-portfolio` or `/all-catalogue` → Content management
@@ -1198,9 +1209,10 @@ interface ProtectedRouteProps {
 ## 🛠️ API Endpoints
 
 ### Base URL
+
 ```
 Local: http://localhost:5500/api/v1
-Production: https://server.profilegenie.in/api/v1
+Production: https://api.profilegenie.in/api/v1
 ```
 
 ### Authentication Headers
@@ -1245,17 +1257,17 @@ interface APIResponse<T> {
 
 ### Error Codes
 
-| Status Code | Description | Common Causes |
-|-------------|-------------|---------------|
-| **200** | OK | Successful operation |
-| **201** | Created | Resource created successfully |
-| **400** | Bad Request | Invalid input data |
-| **401** | Unauthorized | Missing or invalid token |
-| **403** | Forbidden | Insufficient permissions |
-| **404** | Not Found | Resource doesn't exist |
-| **409** | Conflict | Duplicate resource (username, email) |
-| **429** | Too Many Requests | Rate limiting (OTP requests) |
-| **500** | Internal Server Error | Server-side error |
+| Status Code | Description           | Common Causes                        |
+| ----------- | --------------------- | ------------------------------------ |
+| **200**     | OK                    | Successful operation                 |
+| **201**     | Created               | Resource created successfully        |
+| **400**     | Bad Request           | Invalid input data                   |
+| **401**     | Unauthorized          | Missing or invalid token             |
+| **403**     | Forbidden             | Insufficient permissions             |
+| **404**     | Not Found             | Resource doesn't exist               |
+| **409**     | Conflict              | Duplicate resource (username, email) |
+| **429**     | Too Many Requests     | Rate limiting (OTP requests)         |
+| **500**     | Internal Server Error | Server-side error                    |
 
 ## 🔧 Development Setup
 

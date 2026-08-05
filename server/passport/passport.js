@@ -10,7 +10,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "https://server.profilegenie.in/api/v1/auth/google/callback",
+      callbackURL: "https://api.profilegenie.in/api/v1/auth/google/callback",
     },
     async (_, __, profile, done) => {
       try {
@@ -61,8 +61,8 @@ passport.use(
       } catch (err) {
         done(err, null);
       }
-    }
-  )
+    },
+  ),
 );
 
 passport.serializeUser((user, done) => {
