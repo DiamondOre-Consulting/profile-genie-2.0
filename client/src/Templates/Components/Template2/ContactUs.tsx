@@ -1,15 +1,18 @@
 import PhoneNumberDisplay from "@/components/FormatPhoneNumber";
 import { portfolioResponse } from "@/validations/PortfolioValidation";
 import { Contact, Mail, MapPin, Phone } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaDownload } from "react-icons/fa";
-import PhoneInput from "react-phone-input-2";
-import "react-phone-input-2/lib/style.css";
+import PhoneInput from "@/components/PhoneInput";
 
 const ContactUs = ({ portfolioData }: { portfolioData: portfolioResponse }) => {
   const [whatsAppNumber, setWhatsAppNumber] = useState<number | null>(null);
 
-  const portfolioUrl = window.location.href;
+  const [portfolioUrl, setPortfolioUrl] = useState("https://profilegenie.in");
+
+  useEffect(() => {
+    setPortfolioUrl(window.location.href);
+  }, []);
   const message = `Hello, find my portfolio here:\n\n${portfolioUrl}\n\n📌 Click the link above to view my portfolio!`;
   const encodedMessage = encodeURIComponent(message);
 

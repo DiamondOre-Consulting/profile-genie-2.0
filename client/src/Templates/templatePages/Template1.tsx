@@ -12,10 +12,10 @@ import { metaDetails, portfolioResponse } from '../../validations/PortfolioValid
 import loading from "../../assets/loading.webm"
 import { IconAlertTriangle } from '@tabler/icons-react'
 
-const Template1 = ({ setMetaDetails }: { setMetaDetails: React.Dispatch<React.SetStateAction<metaDetails | undefined>> }) => {
+const Template1 = ({ setMetaDetails, initialData }: { setMetaDetails: React.Dispatch<React.SetStateAction<metaDetails | undefined>>, initialData?: portfolioResponse }) => {
     const { username } = useParams()
 
-    const [profileData, setProfileData] = useState<portfolioResponse>()
+    const [profileData, setProfileData] = useState<portfolioResponse | undefined>(initialData)
 
     const { data, isFetching, isLoading, error } = useGetSinglePortfolioQuery({ username })
 

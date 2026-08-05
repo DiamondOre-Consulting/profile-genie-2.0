@@ -5,7 +5,7 @@ import { Server } from "socket.io";
 import http from "http";
 import { getAllSystemStats } from "./controller/admin.controller.js";
 
-const PORT = process.env.PORT || 5500;
+const PORT = process.env.PORT || 8000;
 
 cloudinary.v2.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -28,7 +28,23 @@ const io = new Server(server, {
 //   getAllSystemStats(io);
 // }, 10000);
 
-server.listen(PORT, async () => {
+const start = async () => {
   await connectionToDB();
-  console.log("App is running at :" + PORT);
+  server.listen(PORT, "0.0.0.0", () => {
+    console.log("App is running at :" + PORT);
+  });
+};
+
+const shutdown = (signal) => {
+  console.log(`${signal} received. Closing server...`);
+  server.close(() => process.exit(0));
+  setTimeout(() => process.exit(1), 10000).unref();
+};
+
+process.on("SIGTERM", () => shutdown("SIGTERM"));
+process.on("SIGINT", () => shutdown("SIGINT"));
+
+start().catch((error) => {
+  console.error("Unable to start server", error);
+  process.exit(1);
 });

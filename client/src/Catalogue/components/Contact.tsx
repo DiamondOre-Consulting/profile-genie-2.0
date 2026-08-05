@@ -8,7 +8,7 @@ import {
 } from "@tabler/icons-react";
 import { useState } from "react";
 
-import PhoneInput from "react-phone-input-2";
+import PhoneInput from "@/components/PhoneInput";
 import "react-phone-input-2/lib/style.css";
 import { lightenColor } from "../Hooks/calculations";
 import { catalogueResponse } from "@/validations/CatalogueValidation";
@@ -23,7 +23,9 @@ const Contact = ({
   fullName: string;
 }) => {
   const [whatsappNo, setWhatsAppNo] = useState("");
-  const url = encodeURIComponent(window.location.href);
+  const url = encodeURIComponent(
+    typeof window === "undefined" ? "https://profilegenie.in" : window.location.href
+  );
 
   // const message = `*${"Hello"}*%0A%0A${"description"}%0A%0A🔗 ${url}`;
   // const whatsappUrl = `https://wa.me/?text=${message}`;

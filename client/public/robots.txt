@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /profile/1/*/stats
+Disallow: /catalogue/1/*/cart
+Disallow: /dynamic-catalogue/admin/
+Disallow: /dynamic-catalogue/admin-login/
+
+Sitemap: https://profilegenie.in/sitemap.xml

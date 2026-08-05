@@ -7,16 +7,16 @@ import Catalogue1Cart from './Page/Catalogue1Cart';
 import ProductDetail from './Page/ProductDetail';
 import { catalogueResponse, metaDetails } from '@/validations/CatalogueValidation';
 
-const Catalogue1Dashboard = ({ setMetaDetails }: { setMetaDetails: React.Dispatch<React.SetStateAction<metaDetails | undefined>> }) => {
+const Catalogue1Dashboard = ({ setMetaDetails, initialData }: { setMetaDetails: React.Dispatch<React.SetStateAction<metaDetails | undefined>>, initialData?: catalogueResponse }) => {
 
     const [cart, setCart] = useState(() => {
-        const savedCart = localStorage.getItem("cart");
+        const savedCart = typeof window === "undefined" ? null : localStorage.getItem("cart");
         return savedCart ? JSON.parse(savedCart) : [];
     });
 
     const { userName } = useParams()
 
-    const [catalogueData, setCatalogueData] = useState<catalogueResponse>()
+    const [catalogueData, setCatalogueData] = useState<catalogueResponse | undefined>(initialData)
 
     useEffect(() => {
         localStorage.setItem("cart", JSON.stringify(cart));

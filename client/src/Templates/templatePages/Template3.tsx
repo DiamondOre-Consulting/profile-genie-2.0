@@ -12,7 +12,7 @@ import {
 import { DIcons } from "dicons";
 import { ArrowRightCircle } from "lucide-react";
 import { useEffect, useState } from "react";
-import PhoneInput from "react-phone-input-2";
+import PhoneInput from "@/components/PhoneInput";
 import { Link } from "react-router-dom";
 
 const Template3 = () => {

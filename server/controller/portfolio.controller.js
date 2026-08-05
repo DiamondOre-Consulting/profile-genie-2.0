@@ -416,7 +416,10 @@ const getSinglePortfolio = asyncHandler(async (req, res) => {
   const description =
     meta?.description || "Check this profile on Profile Genie.";
   const keywords = meta?.keywords || "";
-  const image = meta?.favIcon?.url || "https://profilegenie.in/default-og.jpg";
+  const image =
+    meta?.favIcon?.url ||
+    portfolio.image?.url ||
+    "https://profilegenie.in/profilegenie.png";
   const pathname = `/profile/1/${userName}`;
   const url = `https://profilegenie.in${pathname}`;
 

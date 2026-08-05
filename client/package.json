@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && vite build --configLoader runner --ssr src/entry-server.tsx --outDir dist/server",
+    "start": "node ssr-server.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
     "check-unused": "ts-prune -p tsconfig.app.json"
@@ -78,6 +79,6 @@
     "tailwindcss": "^4.0.6",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.22.0",
-    "vite": "^6.1.0"
+    "vite": "^8.2.0"
   }
 }

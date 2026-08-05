@@ -1,0 +1,19 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: profile-genie-api:latest
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      PORT: 8000
+    ports:
+      - "${HOST_PORT:-8000}:8000"
+    volumes:
+      - api_uploads:/app/uploads
+    restart: unless-stopped
+
+volumes:
+  api_uploads:

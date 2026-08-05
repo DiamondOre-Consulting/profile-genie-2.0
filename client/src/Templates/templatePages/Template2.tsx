@@ -25,8 +25,10 @@ import NotFoundPage from "@/components/page-not-found";
 
 const Template2 = ({
   setMetaDetails,
+  initialData,
 }: {
   setMetaDetails: React.Dispatch<React.SetStateAction<metaDetails | undefined>>;
+  initialData?: portfolioResponse;
 }) => {
   const { username } = useParams();
   const [shouldQuery, setShouldQuery] = useState(false);
@@ -45,7 +47,7 @@ const Template2 = ({
     // Auto-reset after 3 seconds
     setTimeout(() => setIsActive(false), 3000);
   };
-  const [profileData, setProfileData] = useState<portfolioResponse>();
+  const [profileData, setProfileData] = useState<portfolioResponse | undefined>(initialData);
   useEffect(() => {
     if (username) {
       setShouldQuery(true);

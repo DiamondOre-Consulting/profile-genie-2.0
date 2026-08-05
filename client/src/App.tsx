@@ -1,23 +1,31 @@
-import { lazy, Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { metaDetails } from "./validations/CatalogueValidation";
+import type { catalogueResponse } from "./validations/CatalogueValidation";
+import type { portfolioResponse } from "./validations/PortfolioValidation";
 import Loader from "./components/Loader";
-const Home = lazy(() => import("./Pages/Home"));
-const Template1 = lazy(() => import("./Templates/templatePages/Template1"));
-const Template2 = lazy(() => import("./Templates/templatePages/Template2"));
-const Template3 = lazy(() => import("./Templates/templatePages/Template3"));
-const Catalogue1Dashboard = lazy(
-  () => import("./Catalogue/Catalogue1Dashboard")
-);
+import Home from "./Pages/Home";
+import Template1 from "./Templates/templatePages/Template1";
+import Template2 from "./Templates/templatePages/Template2";
+import Template3 from "./Templates/templatePages/Template3";
+import Catalogue1Dashboard from "./Catalogue/Catalogue1Dashboard";
 import logo from "./assets/logo.png";
 
 import AOS from "aos";
 import "aos/dist/aos.css";
 import UserStats from "./Pages/UserStats";
 
-function App() {
+export type SsrPageData = {
+  kind: "portfolio" | "catalogue";
+  data: unknown;
+  metaDetails?: metaDetails;
+};
+
+function App({ ssrPageData }: { ssrPageData?: SsrPageData }) {
   const location = useLocation();
-  const [metaDetails, setMetaDetails] = useState<metaDetails>();
+  const [metaDetails, setMetaDetails] = useState<metaDetails | undefined>(
+    ssrPageData?.metaDetails
+  );
 
   useEffect(() => {
     if (metaDetails?.favIcon?.url) {
@@ -144,16 +152,16 @@ function App() {
           <Route path="/demo" element={<Home />} />
           <Route
             path="/profile/1/:username"
-            element={<Template2 setMetaDetails={setMetaDetails} />}
+            element={<Template2 setMetaDetails={setMetaDetails} initialData={ssrPageData?.kind === "portfolio" ? ssrPageData.data as portfolioResponse : undefined} />}
           />
           <Route path="/profile/1/:username/stats" element={<UserStats />} />
           <Route
             path="/profile/9510/:username"
-            element={<Template1 setMetaDetails={setMetaDetails} />}
+            element={<Template1 setMetaDetails={setMetaDetails} initialData={ssrPageData?.kind === "portfolio" ? ssrPageData.data as portfolioResponse : undefined} />}
           />
           <Route
             path="/catalogue/1/:userName/*"
-            element={<Catalogue1Dashboard setMetaDetails={setMetaDetails} />}
+            element={<Catalogue1Dashboard setMetaDetails={setMetaDetails} initialData={ssrPageData?.kind === "catalogue" ? ssrPageData.data as catalogueResponse : undefined} />}
           />
           <Route
             path="/dynamic-catalogue/1/Ishan_Niyor_Perfumes"
