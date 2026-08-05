@@ -14,6 +14,11 @@ export default defineConfig({
   optimizeDeps: {
     include: ["@splinetool/runtime", "@splinetool/react-spline"],
   },
+  ssr: {
+    // dicons is CommonJS but is imported with named exports by the templates.
+    // Bundle it so Node's ESM loader does not try to resolve those exports.
+    noExternal: ["dicons"],
+  },
 
   resolve: {
     alias: {
